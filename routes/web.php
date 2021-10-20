@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Authentication\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +17,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/signup', function () {
-    return view('Auth.SignUp');
-});
-Route::get('/login', function () {
-    return view('Auth.Login');
+
+
+
+Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
+Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.loginin');
+
+Route::group(['middleware' => ['auth:sanctum']], function(){
+
+    Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
