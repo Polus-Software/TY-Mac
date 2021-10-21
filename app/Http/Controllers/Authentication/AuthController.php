@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Gmail;
 use App\Models\User;
 use Session;
 use Hash;
@@ -25,7 +27,7 @@ class AuthController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|max:12',
+            'password' => 'required|confirmed|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             'privacy_policy' =>'accepted'
         ]);
 
@@ -33,7 +35,16 @@ class AuthController extends Controller
         $user = $this->createUser($data);
 
         $user = Auth::user();
+        $email= $request->get('email');
      
+       
+        $details =[
+            'title' => 'Thank you for registering',
+            'body' => 'You have successfully registered'
+        ];
+
+        Mail::to($email)->send( new \App\Mail\Gmail($details));
+        
         return redirect('login')->withSuccess('Successfully registered!');
         
     }
@@ -59,6 +70,8 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required',
             'password' => 'required',
+            'remember_me' =>'accepted',
+            
         ]);
 
         $credentials = $request->only('email', 'password');

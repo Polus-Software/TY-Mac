@@ -26,9 +26,6 @@
                                     
                                 </div>
                                 
-                                    
-
-
                                 <div class="form-group">
                                     <label for="lastName" class="lastname-label">Last Name</label>
                                     <input type="text"  name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev"
@@ -40,8 +37,6 @@
                                     
                                 </div>
                                     
-                                    
-                                   
                                 <div class="form-group">
                                     <label for="email" class="email-label">Email</label>
                                     <input type="email"  name="email" class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
@@ -54,10 +49,20 @@
                                 
                                 <div class="form-group">
                                     <label for="inputPassword" class="password-label">Password</label>
-                                    <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
+                                    <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password">
                                     <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
                                     @if ($errors->has('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>
+                                    @endif
+                                   
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="password-label">Confirm Password</label>
+                                    <input type="password"  name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
+                                    <span><i class="fas fa-eye-slash"  id="confirm_togglePassword" onClick="showPassword()"></i></span>
+                                    @if ($errors->has('password_confirmation'))
+                                    <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
                                     @endif
                                    
                                 </div>

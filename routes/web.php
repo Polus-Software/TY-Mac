@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 
 
+Route::group(['middleware' => 'prevent-back-history'],function(){
 
 Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
 Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
@@ -26,8 +27,10 @@ Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('use
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.loginin');
 
-Route::group(['middleware' => ['auth:sanctum']], function(){
+
+Route::group(['middleware' => ['auth:web']], function(){
 
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 });
