@@ -1,39 +1,57 @@
 body{
     background:gray;
 }
-.signupform{
+/* .signupform{
     margin-top: 50px;
     margin-bottom: 50px;;
     background: #fff;
     width:488px;
     height:730px;
     
-}
+} */
 .loginform{
     margin-top: 50px;
     margin-bottom: 50px;;
     background: #fff;
     width:488px;
-    height:600px;
+    height:500px;
 
 }
 .form-group{
-    margin-left: 40px;
-    margin-right: 40px;
-    padding-top:15px;
+    margin: 25px 40px;
     
 }
-.heading{
+
+.form-control.error small{
+    color:red;
+    visibility: visible;
+}
+
+.form-control.error input{
+  border:2px solid red;
+}
+.form-group small{
+    color:red;
+    visibility: hidden;
+    position: absolute;
+}
+
+.form-group input:focus{
+    border: 1px solid grey;
+    box-shadow: none;
+}
+/* .heading{
     padding-left: 40px;
-    padding-top: 70px;
+    padding-top: 60px;
     font-family: 'Lato', sans-serif;
     font-size: 30px;
     color: #2C3443;
-}
+} */
 .firstname-label{
     font-family:'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
+    margin-top: 10px;
 }
 .lastname-label{
     font-family:'Roboto', sans-serif;
@@ -58,7 +76,7 @@ body{
     font-size: 13px;
     line-height: 21px;
     padding-top: 5px;
-    
+    padding-bottom: 15px;
 }
 
 .checkbox-text a{
@@ -69,23 +87,21 @@ body{
     font-family:'Lato', sans-serif;
     font-weight: bold;
     background-color: #868E96;
-    
 }
+
 .button{
 color: white;
+
 }
 
 .bottom-text p{
     font-family:'Lato', sans-serif;
     font-size:14px;
     padding-top: 20px;
-
 }
 .login{
     font-weight: bold;
     color:#007BFF;
-   
-    
 }
 .login a{
     text-decoration: none;
@@ -115,4 +131,33 @@ form i {
     z-index: 2;
     margin-right:20px;
     cursor: pointer;
+}
+/* @media only screen and (max-width: 769px) {
+    .signupform {
+      width: 300px;
+      height:730px;
+    }
+    
+} */
+
+.custom-container {
+    width: 488px;
+    height: max-content;
+    background-color: #fff;
+}
+
+.custom-form-header {
+    font-family: 'Lato', 'Roboto', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    color: #2C3443;
+}
+
+@media only screen and (max-width: 600px) {
+    .custom-container {
+        width: 90vw;
+    }
+    .custom-form-header {
+    font-size: 22px;
+}
 }

@@ -28,6 +28,7 @@ class AuthController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'confirm_password' =>'required|same',
             'privacy_policy' =>'accepted'
         ]);
 
@@ -70,15 +71,19 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required',
             'password' => 'required',
-            'remember_me' =>'accepted',
+           
             
         ]);
 
         $credentials = $request->only('email', 'password');
+        $remember_me = ( !empty( $request->remember_me) ) ? TRUE :FALSE ;
+
         if (Auth::attempt($credentials)) {
             
+          
            $user = Auth::user();
            $token = $user->createToken('token')->plainTextToken;
+           Auth::login($user, $remember_me);
 
            return redirect('dashboard')->withSuccess('Logged-in');
        
