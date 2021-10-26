@@ -6,7 +6,7 @@
     <div class="custom-container mx-auto p-3 border rounded">
         <div class="wrapper row flex-column my-5">
             <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Create an account</div>
-                <form id="signupform" class="form" method="POST" action="{{ route('user.create') }}">
+                <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
                     @csrf
                     <input type="hidden" name ="_method" value ="POST">
                                 
@@ -86,5 +86,74 @@
             </div>              
         </div>            
     </div>        
-</div>       
+</div>    
+
+<script>
+    document.querySelector('#signupForm').addEventListener('submit', (e) => {
+    //e.preventDefault();
+        if(firstname.value === '') {
+            showError(firstname,'First name is required');
+        } else {
+          removeError(firstname)
+        }
+        if(lastname.value === '') {
+            showError(lastname,'Last name is required');
+        } else {
+          removeError(lastname)
+        }
+        if(email.value === '') {
+            showError(email,'Email is required');
+        }else if(!isValidEmail(email.value)){
+            showError(email,'Email is not valid');
+        } else {
+          removeError(email)
+        }
+        if(password.value === '') {
+            showError(password,'Password is required');
+        } else {
+          removeError(password)
+        }
+        if(passwordconfirm.value === ''){
+            showError(passwordconfirm,'Confirm password is required');
+        } else {
+          removeError(passwordconfirm)
+        }
+        
+        if (password.value != passwordconfirm.value) {
+            showError(password,'The two passwords do not match');
+        } else if (password.value == passwordconfirm.value && password.value != '') {
+          removeError(password)
+        }
+        
+});
+
+  const form = document.getElementById('signupForm');
+  const firstname = document.getElementById('firstName');
+  const lastname = document.getElementById('lastName');
+  const email = document.getElementById('inputEmail');
+  const password = document.getElementById('inputPassword');
+  const passwordconfirm = document.getElementById('password_confirmation');
+  
+
+  function showError(input,message){
+    input.style.borderColor = 'red';
+    const formControl=input.parentElement;
+    const small=formControl.querySelector('small');
+    small.innerText=message;
+    small.style.visibility = 'visible';
+}
+
+function removeError(input){
+  input.style.borderColor = '#ced4da';
+  const formControl=input.parentElement;
+  const small=formControl.querySelector('small');
+  small.style.visibility = 'hidden';
+}
+
+function isValidEmail(email)
+{
+    const re= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+</script>
 @endsection('content')

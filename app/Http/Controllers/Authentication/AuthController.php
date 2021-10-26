@@ -22,23 +22,22 @@ class AuthController extends Controller
 
     
     public function signupProcess(Request $request)
-    {  
-        $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-            'confirm_password' =>'required|same',
-            'privacy_policy' =>'accepted'
-        ]);
+    {
+        // $request->validate([
+        //     'firstname' => 'required',
+        //     'lastname' => 'required',
+        //     'email' => 'required|email|unique:users',
+        //     'password' => 'required|confirmed|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+        //     'confirm_password' =>'required|same',
+        //     'privacy_policy' =>'accepted'
+        // ]);
 
         $data = $request->all();
         $user = $this->createUser($data);
-
         $user = Auth::user();
+
+
         $email= $request->get('email');
-     
-       
         $details =[
             'title' => 'Thank you for registering',
             'body' => 'You have successfully registered'
@@ -52,6 +51,8 @@ class AuthController extends Controller
 
     public function createUser(array $data)
     {
+
+
       return User::create([
         'firstname' => $data['firstname'],
         'lastname' => $data['lastname'],
@@ -68,13 +69,13 @@ class AuthController extends Controller
 
     public function loginProcess(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-           
-            
-        ]);
+        // $request->validate([
+        //     'email' => 'required',
+        //     'password' => 'required', 
+        // ]);
 
+
+     
         $credentials = $request->only('email', 'password');
         $remember_me = ( !empty( $request->remember_me) ) ? TRUE :FALSE ;
 
@@ -82,12 +83,11 @@ class AuthController extends Controller
             
           
            $user = Auth::user();
+           
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
 
            return redirect('dashboard')->withSuccess('Logged-in');
-       
-    
         }
         return redirect('login')->withSuccess('Credentials are wrong.');
     }
