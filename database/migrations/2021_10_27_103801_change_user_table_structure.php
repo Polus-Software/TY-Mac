@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeUsersTable extends Migration
+class ChangeUserTableStructure extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,9 @@ class ChangeUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('user_type');
-            $table->dropColumn('email_verified_at');
+            $table->foreign('role_id')->references('id')->on('user_types')->onUpdate('cascade')->onDelete('cascade');
         });
+        
     }
 
     /**
@@ -27,8 +27,6 @@ class ChangeUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-           $table->dropColumn('role_id');
-        });
+        //
     }
 }

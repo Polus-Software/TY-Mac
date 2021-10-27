@@ -29,10 +29,8 @@ class Gmail extends Mailable
      */
     public function build()
     {
-        //return $this->view('view.name');
-
         return $this->subject('Confirmation mail')
                     ->view('Emails.confirmationMail')
-                    ->from('tvanjalikrishna@gmail.com');
+                    ->from('ashishbabythoppil@gmail.com');
     }
 }

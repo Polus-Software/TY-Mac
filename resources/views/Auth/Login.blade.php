@@ -54,15 +54,15 @@
 </div>
 <script>
     document.querySelector('#loginForm').addEventListener('submit', (e) => {
-//   e.preventDefault();
-     
       if(loginemail.value === '') {
-          showError(loginemail,'Email is required');
+        e.preventDefault();
+        showError(loginemail,'Email is required');
       }else {
         removeError(loginemail)
       }
       if(loginpassword.value === '') {
-          showError(loginpassword,'Password is required');
+        e.preventDefault();
+        showError(loginpassword,'Password is required');
       } else {
         removeError(loginpassword)
       }
@@ -87,7 +87,6 @@ const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
-
 
 </script>           
 @endsection('content')

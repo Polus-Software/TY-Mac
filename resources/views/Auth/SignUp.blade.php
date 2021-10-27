@@ -72,6 +72,9 @@
                             <label class="form-check-label checkbox-text">
                             <input  class="form-check-input" name="privacy_policy" type="checkbox" > By creationg an account , you agree to the 
                             <a href="#">Terms of Service</a><br> &nbsp; and Conditions, and Privacy Policy</label>
+                            @if ($errors->has('privacy_policy'))
+                                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
+                            @endif   
                     </div>
 
                     <div class="d-grid form-group mx-sm-5 mx-0">
@@ -90,36 +93,42 @@
 
 <script>
     document.querySelector('#signupForm').addEventListener('submit', (e) => {
-    //e.preventDefault();
         if(firstname.value === '') {
+            e.preventDefault();
             showError(firstname,'First name is required');
         } else {
           removeError(firstname)
         }
         if(lastname.value === '') {
+            e.preventDefault();
             showError(lastname,'Last name is required');
         } else {
           removeError(lastname)
         }
         if(email.value === '') {
+            e.preventDefault();
             showError(email,'Email is required');
         }else if(!isValidEmail(email.value)){
+            e.preventDefault();
             showError(email,'Email is not valid');
         } else {
           removeError(email)
         }
         if(password.value === '') {
+            e.preventDefault();
             showError(password,'Password is required');
         } else {
           removeError(password)
         }
         if(passwordconfirm.value === ''){
+            e.preventDefault();
             showError(passwordconfirm,'Confirm password is required');
         } else {
           removeError(passwordconfirm)
         }
         
         if (password.value != passwordconfirm.value) {
+            e.preventDefault();
             showError(password,'The two passwords do not match');
         } else if (password.value == passwordconfirm.value && password.value != '') {
           removeError(password)
