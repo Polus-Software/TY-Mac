@@ -13,11 +13,11 @@ class CreateTopicTable extends Migration
      */
     public function up()
     {
-        Schema::create('topic', function (Blueprint $table) {
+        Schema::create('topics', function (Blueprint $table) {
             $table->id('topic_id');
             $table->string('topic_title');
             $table->unsignedBigInteger('course_id');
-            $table->foreign('course_id')->references('course_id')->on('course');
+            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('description');
             $table->timestamps();
         });
