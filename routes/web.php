@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authentication\AuthController;
+use App\Http\Controllers\EditProfile\EditController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,4 +27,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.loginin');
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
+    Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
 });
+

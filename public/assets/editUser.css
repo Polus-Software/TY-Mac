@@ -1,0 +1,159 @@
+body{
+    background:grey;
+}
+
+.custom-container{
+   margin-top: 100px;
+    left: 218px;
+    width: auto;
+    background: #FFFFFF;
+    height: max-content;
+    border-radius: 4px;
+}
+.sidebar{
+    padding : 25px 0px 25px 25px ;
+    background:#FFFDF7;
+    width:max-content;
+    height: max-content;  
+}
+
+.heading-1{
+    margin-left: -8px;
+    padding-top:23px;
+    font-size: 24px;
+    font-family: 'Lato', sans-serif;
+    font-weight:900 ;
+    line-height: 24px;
+    color: #2C3443;
+    
+}
+.link-1{
+    
+    padding-top:50px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight:bold ; */
+    line-height: 24px;
+    /* color:#141414; */
+    
+}
+.link-1,.link-2,.link-3, .link-4, .link-5{
+color:#868E96;
+
+}
+
+.nav-link:hover {
+    color: #141414;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}
+
+.nav i{
+    padding-left: 20px;
+    visibility: hidden;
+}
+
+.nav i.active {
+    visibility : visible;
+}
+
+.nav-link.active {
+    color: #141414;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}
+ 
+
+
+.content-page{
+    width: auto;
+    height: auto;
+    /* background: greenyellow; */
+   padding-top:50px;
+}
+.card img{
+    width: 90px;
+    height: 90px;
+    border: 1px solid #707070;
+  
+}
+.card{
+   
+    width: auto; 
+    height:auto;
+    border: none;
+}
+.card-title{
+    text-decoration: none;
+    color:#6E7687;
+}
+.card-text-1{
+    width: 117px;
+    height: 25px;
+    background:#F8F8F8;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+}
+.card-text-1 a:hover, .card-text-1 a:active{
+
+    color:#6E7687;
+} 
+.card-text-2{
+    font-family: 'Roboto', sans-serif;
+    font-weight:800 ;
+    font-size: 18px;
+    margin-bottom: auto;
+    margin-top: 19px;
+
+
+}
+.card-text-3{
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+    font-size: 18px;
+}
+.border-bottom{
+    margin: 0px 30px 0px 25px;
+}
+.back-btn{
+    border: 1px solid #2C3443;
+}
+.update-btn{
+    background-color:#2C3443;
+    color: white;
+    margin-left: 16px;
+}
+.update-btn:hover{
+    color: white;
+}
+
+
+.buttons{
+    padding-top: 30px;
+}
+.firstname-label, .lastname-label, .email-label{
+    font-family:'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+  
+}
+.form{
+    padding: 18px 28px 20px 26px;
+}
+.form-group{
+    padding: 20px 15px 15px 15px;
+}
+.form-group input:focus{
+    border: 1px solid grey;
+    box-shadow: none;
+}
+
+@media only screen and (max-width:768px) {
+    .sidebar {
+        width:auto;
+        height:auto;
+    }
+    
+}
