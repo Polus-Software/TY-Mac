@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\EditProfile\EditController;
+use App\Http\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,5 +32,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
+
+    Route::get('/admin/index', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+   
 });
 

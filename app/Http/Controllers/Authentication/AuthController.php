@@ -27,7 +27,7 @@ class AuthController extends Controller
      * Register a student user
      */
     public function signupProcess(Request $request) {
-        $userType = UserType::where('user_role', 'Student')->first()->value('id');
+        $userType = UserType::where('user_role', 'Student')->value('id');
         
         $request->validate([
             'firstname' => 'required',

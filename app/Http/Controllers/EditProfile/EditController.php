@@ -14,7 +14,7 @@ class EditController extends Controller
 
 
     public function edituser()
-    {
+    { 
         return view('Auth.EditUser');
     } 
 

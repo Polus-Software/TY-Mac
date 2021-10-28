@@ -38,7 +38,7 @@
 
                            </div>
                        </div>
-                       <form class="form"  id="editUserForm" method="POST" action="{{ route('profileUpdate') }}">
+                       <form class="form"  id="editUserForm" method="PUT" action="{{ route('profileUpdate') }}">
                            @csrf
                            <div class="row">
                              <div class="form-group col-md-6 col-sm-6 col-xs-2">

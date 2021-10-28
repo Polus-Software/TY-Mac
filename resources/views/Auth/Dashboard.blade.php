@@ -2,10 +2,13 @@
 @section('content')
  <nav class="navbar navbar-expand-sm bg-dark">
   <ul class="navbar-nav">
-    
-    <li class="nav-item">
-      <a class="nav-link" href="#">change password</a>
+
+  <li class="nav-item">
+      <a class="nav-link" href="{{ route('admin.viewall') }}">manage user</a>
     </li>
+    
+   
+    
     <li class="nav-item">
       <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname.' '.Auth::user()->lastname}}</a>
     </li>

@@ -28,18 +28,12 @@ document.querySelector('#editUserForm').addEventListener('submit', (e) => {
   if(firstname.value === '') {
     e.preventDefault();
       showError(firstname,'First name is required');
-  }else if(!isValidFirstName(firstname.value)){
-    e.preventDefault();
-    showError(firstname,'First name must contain only letters');
   }else {
     removeError(firstname)
   }
   if(lastname.value === '') {
     e.preventDefault();
     showError(lastname,'Last name is required');
-  } else if(!isValidLastName(lastname.value)){
-    e.preventDefault();
-    showError(lastname,'Last name must contain only letters');
   }else {
   removeError(lastname)
   }
@@ -82,12 +76,12 @@ function isValidEmail(email)
 
 
 
-function isValidFirstName(firstname){
-  const regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
-  return regName.test(String(firstname));
-}
+// function isValidFirstName(firstname){
+//   const regName = /^[a-zA-Z ]*$/;
+//   return regName.test(String(firstname));
+// }
 
-function isValidLastName(lastname){
-  const regName = /^[a-zA-Z]$/;
-  return regName.test(String(lastname));
-}
+// function isValidLastName(lastname){
+//   const regName = /^[a-zA-Z]$/;
+//   return regName.test(String(lastname));
+// }
