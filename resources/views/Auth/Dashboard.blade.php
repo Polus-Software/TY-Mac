@@ -1,5 +1,3 @@
-
-
 @extends('Layouts.Profile')
 @section('content')
  <nav class="navbar navbar-expand-sm bg-dark">

@@ -19,14 +19,15 @@ class EditController extends Controller
     } 
 
     public function profileUpdate(Request $request){
-        
+       
 
         $request->validate([
             'firstname' =>'required',
             'lastname' =>'required',
-            'email' =>'required|email',
+            'email' => 'required|email|unique:users,email,'.Auth::user()->id
             
         ]);
+        
         $user =Auth::user();
         $user->firstname = $request['firstname'];
         $user->lastname = $request['lastname'];
