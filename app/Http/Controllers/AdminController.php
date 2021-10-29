@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\User;
-//use app\Models\UserType;
+use Auth;
+
 
 class AdminController extends Controller
 {
@@ -15,6 +17,52 @@ class AdminController extends Controller
         return view('Auth.Admin.AdminDashboard', compact('students'));
     }
 
+    public function showStudent($id){
+        //dd($id);
+        $students =User::findOrFail($id);
+        //return $students;
+        return view ('Auth.Admin.ShowStudent', compact('students'));
+
+    }
+
+    public function editStudent($id){
+        //dd($id);
+       $students = User::findOrFail($id);
+        //return $students;
+       return view ('Auth.Admin.EditStudents', compact('students'));
+
+    }
+
+    public function updateStudent(Request $request, $id){   
+       
+
+        $updateData = $request->validate([
+            'firstname' =>'required',
+            'lastname' =>'required',
+            'email' => 'required|email|'
+            
+        ]);
+  
+        //User::whereId($id)->update($updateData);
+   $student = User::findOrFail($id);
    
+    $student->firstname = $request['firstname'];
+    $student->lastname = $request['lastname'];
+    $student->email = $request['email'];
+    $student->save();
+    return redirect()->route('admin.viewall')->with('message','Profile Updated');
+    
+    }  
+   
+    
+    public function destroyStudent($id){
+
+        $student = User::findOrFail($id);
+       
+        $student->delete();
+        
+    }
+
+    
 }
 

@@ -31,9 +31,17 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
-    Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
+    Route::put('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
 
-    Route::get('/admin/index', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+    Route::group(['prefix' => 'admin'], function() {
+        Route::get('/students', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+        Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
+        Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
+        Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
+       
+        Route::delete('/students/delete/{student}', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    });
+   
    
 });
 

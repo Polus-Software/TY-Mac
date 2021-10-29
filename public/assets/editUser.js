@@ -21,7 +21,7 @@ for (var j = 0; j < navlink.length; j++) {
 }
 
 
-
+//validation
 document.querySelector('#editUserForm').addEventListener('submit', (e) => {
   
   

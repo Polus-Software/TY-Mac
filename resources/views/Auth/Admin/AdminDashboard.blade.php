@@ -1,4 +1,5 @@
 @extends('Layouts.app')
+@section('content')
 <h1 class="text-center">student details</h1>
 
 <!-- <ul>
@@ -26,15 +27,18 @@
             <td>{{$student->firstname}}</td>
             <td>{{$student->lastname}}</td>
             <td>{{$student->email}}</td>
-           
+            
             <td class="text-center">
-                <a href="{{route('admin.edit',$student->id)}}" class="btn btn-success btn-sm">Edit</a>
-                <a href="#" class="btn btn-primary btn-sm">View</a>
-                <form action="#" method="post" style="display: inline-block">
+        
+                <a href="{{ route('admin.editstudent', $student->id) }}" class="btn btn-success btn-sm">Edit</a>
+                <a href="{{ route('admin.showstudent', $student->id) }}" class="btn btn-primary btn-sm">View</a>
+                
+                <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                <!-- <form action="{{ route('admin.deletestudent', $student->id) }}" method="post" style="display: inline-block">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-                  </form>
+                  </form> -->
             </td>
         </tr>
         @endforeach
@@ -42,3 +46,8 @@
   </table>
  
 </div>
+<div class="d-flex justify-content-center">
+            {!! $students->links() !!}
+</div>
+@endsection
+

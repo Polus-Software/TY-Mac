@@ -38,8 +38,9 @@
 
                            </div>
                        </div>
-                       <form class="form"  id="editUserForm" method="PUT" action="{{ route('profileUpdate') }}">
+                       <form class="form"  id="editUserForm" method="POST" action="{{ route('profileUpdate') }}">
                            @csrf
+                           <input type="hidden" name="_method" value="PUT">
                            <div class="row">
                              <div class="form-group col-md-6 col-sm-6 col-xs-2">
                                <label for="fname" class="firstname-label">First Name</label>
