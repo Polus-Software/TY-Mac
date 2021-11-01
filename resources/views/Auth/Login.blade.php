@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="text-center forgotpass">
-                        <span class="forgotpwd"><a href="">Forgot password? </a></span>
+                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
                         
                     </div>
 

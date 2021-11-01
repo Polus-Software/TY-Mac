@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\EditProfile\EditController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +34,13 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::put('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
 
-    Route::group(['prefix' => 'admin'], function() {
-        Route::get('/students', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
-        Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
-        Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
-        Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
-       
-        Route::delete('/students/delete/{student}', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
-    });
+
+    Route::get('/students', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+    Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
+    Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
+    Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
+    Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
    
    
 });

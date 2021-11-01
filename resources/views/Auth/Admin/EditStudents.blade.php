@@ -2,7 +2,7 @@
 @section('content')
            <div class="container">
              <div class="row"> 
-               <div class= "col-lg-6">   
+               <div class= "col-md-6 mt-4 m-auto" style="background:white;">   
                 <form  class="form"  id="editStudentsForm" action="{{ route('admin.updatestudent', $students->id)}}" method="POST">
                         @csrf 
                         <input type="hidden" name="_method" value="PUT">

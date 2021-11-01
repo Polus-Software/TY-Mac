@@ -13,7 +13,7 @@ class AdminController extends Controller
 {
     public function viewAllStudents(){
        
-        $students =User::where('role_id', 2)->orderBy('id', 'asc')->get();
+        $students =User::where('role_id', 2)->paginate(10);
         return view('Auth.Admin.AdminDashboard', compact('students'));
     }
 
@@ -54,12 +54,15 @@ class AdminController extends Controller
     
     }  
    
-    
-    public function destroyStudent($id){
-
-        $student = User::findOrFail($id);
+     
+    public function destroyStudent(Request $request){
        
-        $student->delete();
+        $studentId = $request->studentId;
+        $students = user::find( $studentId);
+        $students->delete();
+      
+        return response()->json(['status' => 'success', 'message' => ' Record Deleted successfully']);
+        
         
     }
 
