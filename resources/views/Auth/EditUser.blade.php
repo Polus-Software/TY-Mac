@@ -14,12 +14,12 @@
                        <div class="text-left">
                           <nav class="nav flex-column" id="navmenu">
                            <a class="nav-link link-1 active" aria-current="page" href="#">My Profile<span><i class="fas fa-arrow-right active"></i></span></a>
-                           <a class="nav-link link-2" href="#">Change Password<span><i class="fas fa-arrow-right"></i></span></a>
+                           <a class="nav-link link-2" href="{{ route('change.password.get') }}">Change Password<span><i class="fas fa-arrow-right"></i></span></a>
                            <a class="nav-link link-3" href="#">Email Notifications<span><i class="fas fa-arrow-right"></i></span></a>
                            <a class="nav-link link-4" href="#">My Favorite Courses<span><i class="fas fa-arrow-right"></i></span></a>
                            <a class="nav-link link-5" href="#">My Courses<span><i class="fas fa-arrow-right"></i></span></a>
                          </nav>
-                          </ul>
+                         
                        </div>
                    </div>
                </div>
@@ -33,12 +33,10 @@
                                    <p class="card-text-2">{{Auth::user()->firstname.' '. Auth::user()->lastname}}</p>
                                    <p class="card-text-3">{{Auth::user()->email}}</p>
                                </div>
-                           </div>
-                           <div class="border-bottom">
-
-                           </div>
-                       </div>
-                       <form class="form"  id="editUserForm" method="POST" action="{{ route('profileUpdate') }}">
+                            </div>
+                            <div class="border-bottom"></div>
+                        </div>
+                       <form class="form"id="editUserForm" method="POST" action="{{ route('profileUpdate') }}">
                            @csrf
                            <input type="hidden" name="_method" value="PUT">
                            <div class="row">

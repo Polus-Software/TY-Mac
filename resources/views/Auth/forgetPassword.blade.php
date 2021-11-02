@@ -7,12 +7,12 @@
         <div class="wrapper row flex-column my-5" >  
             <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Reset Password</div>
             
-            @if (Session::has('message'))
+                    @if (Session::has('message'))
                          <div class="alert alert-success" role="alert">
                             {{ Session::get('message') }}
                         </div>
-            @endif
-                <form id="passwordResetLink" class="form" method="POST" action="">
+                    @endif
+                <form id="passwordResetLink" class="form" method="POST" action="{{ route('forget.password.post') }}">
                     @csrf
                                 
                     <div class="form-group mx-sm-5 mx-0">
@@ -23,7 +23,7 @@
                         <span class="text-danger">{{ $errors->first('email') }}</span>
                         @endif        
                     </div>
-                    <div class="d-grid form-group  mx-sm-5 mx-0">
+                    <div class="d-grid form-group pt-2 mx-sm-5 mx-0">
                     <button type="submit" class="btn btn-block"><span class="button">Send Password Reset Link</span></button>
                     </div>
                 </form>
