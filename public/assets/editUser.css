@@ -97,7 +97,10 @@ color:#868E96;
 .card-text-1 a:hover, .card-text-1 a:active{
 
     color:#6E7687;
+    
 } 
+
+
 .card-text-2{
     font-family: 'Roboto', sans-serif;
     font-weight:800 ;
@@ -105,8 +108,8 @@ color:#868E96;
     margin-bottom: auto;
     margin-top: 19px;
 
-
 }
+
 .card-text-3{
     font-family: 'Roboto', sans-serif;
     font-weight:400;

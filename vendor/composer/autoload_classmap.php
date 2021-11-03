@@ -12,6 +12,7 @@ return array(
     'App\\Http\\Controllers\\Authentication\\AuthController' => $baseDir . '/app/Http/Controllers/Authentication/AuthController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\EditProfile\\EditController' => $baseDir . '/app/Http/Controllers/EditProfile/EditController.php',
+    'App\\Http\\Controllers\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/ForgotPasswordController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',

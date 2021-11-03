@@ -39,11 +39,13 @@ class EditController extends Controller
         
     }
 
-    public function showChangePasswordForm() { 
+    public function showChangePasswordForm() 
+    { 
        return view('Auth.changePassword');
-     }
+    }
 
-    public function submitChangePasswordForm(Request $request){
+    public function submitChangePasswordForm(Request $request)
+    {
         //dd($request->all());
         
         $user = $request->validate([
@@ -64,6 +66,26 @@ class EditController extends Controller
         Auth::logout();
         return redirect('login')->withSuccess('Your password has been changed!');
 
-      }
+    }
+
+    public function uploadImage(Request $request)
+    {
+    //dd($request->all());
+    $request->validate([
+        'image' => 'required | mimes:jpeg,jpg,png | max:1000',
+    ]);
+
+        if($request->hasFile('image')){
+            $filename = $request->image->getClientOriginalName();
+            
+            $request->image->storeAs('images',$filename,'public');
+           
+            $user = Auth::user();
+            $user->image = $filename;
+            $user->save();
+        }
+        //return response()->json(['status' => 'success', 'message' => 'image uploded successfully']);
+        return redirect()->back();
+    }
 
 }

@@ -12,6 +12,7 @@
                             {{ Session::get('message') }}
                         </div>
                     @endif
+                   
                 <form id="passwordResetLink" class="form" method="POST" action="{{ route('forget.password.post') }}">
                     @csrf
                                 

@@ -527,6 +527,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Http\\Controllers\\Authentication\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Authentication/AuthController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\EditProfile\\EditController' => __DIR__ . '/../..' . '/app/Http/Controllers/EditProfile/EditController.php',
+        'App\\Http\\Controllers\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/ForgotPasswordController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',

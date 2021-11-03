@@ -75,13 +75,21 @@ function isValidEmail(email)
 }
 
 
-
-// function isValidFirstName(firstname){
-//   const regName = /^[a-zA-Z ]*$/;
-//   return regName.test(String(firstname));
-// }
-
-// function isValidLastName(lastname){
-//   const regName = /^[a-zA-Z]$/;
-//   return regName.test(String(lastname));
-// }
+    
+    // document.getElementById('uploadButton').addEventListener('click', function (event) {
+    // let image = document.getElementById('image');
+    // let path = "{{ route('change.avatar.post') }}?image=" + image;
+    
+    // console.log(path);
+    // fetch(path, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             "X-CSRF-Token": document.querySelector('input[name=_token]').value
+    //         },
+    //        body: JSON.stringify({})
+    //     }).then((response) => response.json()).then((data) => {
+    //        console.log(data); 
+    //     });
+    // });

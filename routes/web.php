@@ -5,6 +5,8 @@ use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\EditProfile\EditController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ForgotPasswordController;
+use Illuminate\Support\Facades\Input;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +50,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::get('change-password', [EditController::class, 'showChangePasswordForm'])->name('change.password.get');
     Route::put('change-password', [EditController::class, 'submitChangePasswordForm'])->name('change.password.post');
+
+    Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
 });
 
