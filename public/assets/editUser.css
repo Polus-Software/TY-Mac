@@ -175,3 +175,12 @@ button a , a:hover{
     }
     
 }
+
+
+.dashboard-navbar a {
+    color: azure;
+}
+
+.dashboard-navbar a:hover {
+    color:grey;
+}
