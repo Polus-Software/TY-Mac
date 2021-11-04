@@ -7,6 +7,10 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\CourseCategory\CourseCategoryController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\Creator\CreatorController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ForgotPasswordController;
+use Illuminate\Support\Facades\Input;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,5 +67,23 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
     Route::post('/update-creator', [CreatorController::class, 'updateCreator'])->name('update-creator');
     Route::post('/delete-creator', [CreatorController::class, 'deleteCreator'])->name('delete-creator');
+    Route::put('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
+
+
+    Route::get('/students', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+    Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
+    Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
+    Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
+    Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    
+    Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+    Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+    Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+    Route::get('change-password', [EditController::class, 'showChangePasswordForm'])->name('change.password.get');
+    Route::put('change-password', [EditController::class, 'submitChangePasswordForm'])->name('change.password.post');
+
+    Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
 });
 

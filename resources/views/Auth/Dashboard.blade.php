@@ -17,6 +17,9 @@
     </li>
     @elseif($userType == 'admin')
     <li class="nav-item">
+      <a class="nav-link" href="{{ route('admin.viewall') }}">manage user</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="{{ route('manage-course-categories') }}">Manage Course Categories</a>
     </li>
     <li class="nav-item">
@@ -37,7 +40,6 @@
   @else
     <li class="nav-item">
       <a class="nav-link" href="#">change password</a>
-    </li>
     <li class="nav-item">
       <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
     </li>
