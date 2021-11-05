@@ -178,3 +178,12 @@ form i {
         height:auto;
     }  
 }
+
+
+.dashboard-navbar a {
+    color: azure;
+}
+
+.dashboard-navbar a:hover {
+    color:grey;
+}

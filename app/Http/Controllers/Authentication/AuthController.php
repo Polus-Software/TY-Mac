@@ -79,11 +79,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
 
            $user = Auth::user();
-           
+           $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-
-           return redirect('dashboard')->withSuccess('Logged-in');
+           return view('Auth.Dashboard', [
+            'userType' => $userType
+           ]);
         }
         return redirect('login')->withSuccess('Credentials are wrong.');
     }
@@ -91,10 +92,13 @@ class AuthController extends Controller
     /**
      * Render dashboard after login
      */
-    public function dashboardView()
-    {
+    public function dashboardView() {
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
         if(Auth::check()) {
-            return view('Auth.Dashboard');
+            return view('Auth.Dashboard', [
+                'userType' => $userType
+            ]);
         }
         return redirect('login')->withSuccess('Access is not permitted');
     }
