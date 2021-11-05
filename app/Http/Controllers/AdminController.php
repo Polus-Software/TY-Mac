@@ -32,12 +32,10 @@ class AdminController extends Controller
 
     public function updateStudent(Request $request, $id){   
        
-
         $updateData = $request->validate([
             'firstname' =>'required',
             'lastname' =>'required',
             'email' => 'required|email|'
-            
         ]);
   
    $student = User::findOrFail($id);
