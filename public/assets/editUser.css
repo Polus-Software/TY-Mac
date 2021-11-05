@@ -25,21 +25,15 @@ body{
     font-weight:900 ;
     line-height: 24px;
     color: #2C3443;
-    
 }
 .link-1{
-    
     padding-top:50px;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
-    /* font-weight:bold ; */
     line-height: 24px;
-    /* color:#141414; */
-    
 }
 .link-1,.link-2,.link-3, .link-4, .link-5{
 color:#868E96;
-
 }
 
 .nav-link:hover {
@@ -66,14 +60,12 @@ color:#868E96;
 .content-page{
     width: auto;
     height: auto;
-    /* background: greenyellow; */
    padding-top:50px;
 }
 .card img{
     width: 90px;
     height: 90px;
     border: 1px solid #707070;
-  
 }
 .card{
    
@@ -95,11 +87,8 @@ color:#868E96;
     border-radius: 4px;
 }
 .card-text-1 a:hover, .card-text-1 a:active{
-
     color:#6E7687;
-    
 } 
-
 
 .card-text-2{
     font-family: 'Roboto', sans-serif;
@@ -107,7 +96,6 @@ color:#868E96;
     font-size: 18px;
     margin-bottom: auto;
     margin-top: 19px;
-
 }
 
 .card-text-3{
@@ -133,8 +121,6 @@ button a , a:hover{
 .update-btn:hover{
     color: white;
 }
-
-
 .buttons{
     padding-top: 30px;
 }
@@ -143,7 +129,6 @@ button a , a:hover{
     font-family:'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
-  
 }
 .form{
     padding: 18px 28px 20px 26px;
@@ -168,6 +153,15 @@ button a , a:hover{
     visibility: hidden;
     position: absolute;
 }
+.modal-body.error small{
+    color:red;
+    visibility: visible;
+}
+.modal-body small{
+    color:red;
+    visibility: hidden;
+    position: absolute;
+}
 form i {
     float: right;
     margin-top: -25px;
@@ -182,6 +176,5 @@ form i {
     .sidebar {
         width:auto;
         height:auto;
-    }
-    
+    }  
 }

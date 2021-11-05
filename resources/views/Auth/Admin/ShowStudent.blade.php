@@ -5,7 +5,7 @@
   <div class="card-body">
     <h1 class="card-title">{{$students->id}}</h1>
    
-    <p class="card-text">First nmae : {{$students->firstname}}</p>
+    <p class="card-text">First name : {{$students->firstname}}</p>
     <p> Last name : {{$students->lastname}}</p>
     <p> Email : {{$students->email}}</p>
    

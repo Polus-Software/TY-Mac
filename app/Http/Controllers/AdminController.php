@@ -18,17 +18,14 @@ class AdminController extends Controller
     }
 
     public function showStudent($id){
-        //dd($id);
         $students =User::findOrFail($id);
-        //return $students;
         return view ('Auth.Admin.ShowStudent', compact('students'));
 
     }
 
     public function editStudent($id){
-        //dd($id);
+        
        $students = User::findOrFail($id);
-        //return $students;
        return view ('Auth.Admin.EditStudents', compact('students'));
 
     }
@@ -43,7 +40,6 @@ class AdminController extends Controller
             
         ]);
   
-        //User::whereId($id)->update($updateData);
    $student = User::findOrFail($id);
    
     $student->firstname = $request['firstname'];

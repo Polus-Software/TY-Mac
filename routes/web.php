@@ -5,7 +5,6 @@ use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\EditProfile\EditController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ForgotPasswordController;
-use Illuminate\Support\Facades\Input;
 use App\User;
 
 /*

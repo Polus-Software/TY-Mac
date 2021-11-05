@@ -29,7 +29,6 @@
 
 <div class="container">
     <h1 class="text-center">student details</h1>
-   
     <table class="table table-dark table-hover">
         <thead>
             <tr class="table-dark">
@@ -47,22 +46,18 @@
                     <td>{{$student->firstname}}</td>
                     <td>{{$student->lastname}}</td>
                     <td>{{$student->email}}</td>
-            
-                        <td class="text-center">
-                
-                            <a href="{{ route('admin.editstudent', $student->id) }}" class="btn btn-success btn-sm">Edit</a>
-                            <a href="{{ route('admin.showstudent', $student->id) }}" class="btn btn-primary btn-sm">View</a>
-                        
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $student->id }}">Delete</button>
-
-               
-                        </td>
+                    <td class="text-center">
+                        <a href="{{ route('admin.editstudent', $student->id) }}" class="btn btn-success btn-sm">Edit</a>
+                        <a href="{{ route('admin.showstudent', $student->id) }}" class="btn btn-primary btn-sm">View</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $student->id }}">Delete</button>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
  
 </div>
+
 <div class="d-flex justify-content-center">
      {!! $students->links() !!}      
 </div>
@@ -75,17 +70,12 @@
     var modalBodyButton = deleteModal.querySelector('.modal-footer .delete');
     modalBodyButton.value = recipient;
 
-    console.log(modalBodyButton.value);
-
 });
     
     document.getElementById('deleteButton').addEventListener('click', function (event) {
     let deleteButton = document.getElementById('deleteButton').value;
-
-    console.log(deleteButton);
     let path = "{{ route('admin.deletestudent')}}?studentId=" + deleteButton;
     
-    console.log(path);
     fetch(path, {
             method: 'POST',
             headers: {
@@ -95,10 +85,19 @@
             },
            body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
-           console.log(data); 
+           console.log(data);
+           closeModal('deleteModal');
+           window.location.reload();
         });
     });
+
+
+    function closeModal(modalId) {
+        const truck_modal = document.querySelector('#' + modalId);
+        const modal = bootstrap.Modal.getInstance(truck_modal);    
+        modal.hide();
+}  
 </script>
 
-@endsection
+@endsection('content')
 

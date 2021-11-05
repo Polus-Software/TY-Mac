@@ -22,7 +22,7 @@ class ForgotPasswordController extends Controller
 
    public function submitForgetPasswordForm(Request $request)
    {
-          //dd($request->all());
+        
 
       $request->validate([
          'email' => 'required|email|exists:users',
@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
 
    public function submitResetPasswordForm(Request $request)
    {
-         //dd($request->all());
+        
 
       $request->validate([
          'email' => 'required|email|exists:users',
@@ -66,7 +66,7 @@ class ForgotPasswordController extends Controller
          'token' => $request->token
       ])->first();
          
-        //dd($updatePassword);
+       
 
       if(!$updatePassword)
       {

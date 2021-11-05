@@ -21,7 +21,7 @@ for (var j = 0; j < navlink.length; j++) {
 }
 
 
-//validation
+//validation for edit form
 document.querySelector('#editUserForm').addEventListener('submit', (e) => {
   
   
@@ -75,21 +75,40 @@ function isValidEmail(email)
 }
 
 
-    
-    // document.getElementById('uploadButton').addEventListener('click', function (event) {
-    // let image = document.getElementById('image');
-    // let path = "{{ route('change.avatar.post') }}?image=" + image;
-    
-    // console.log(path);
-    // fetch(path, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             "X-CSRF-Token": document.querySelector('input[name=_token]').value
-    //         },
-    //        body: JSON.stringify({})
-    //     }).then((response) => response.json()).then((data) => {
-    //        console.log(data); 
-    //     });
-    // });
+//validation for file uploadong
+document.getElementById('uploadButton').addEventListener('click',function(e){
+
+var image = document.getElementById('image');
+var filepath = image.value;
+
+  if(filepath == ''){
+    e.preventDefault();
+    showError(image,'Please upload  an image');
+  }else {
+    removeError(image)
+    closeModal('uploadModal')
+  }
+
+});
+
+function showError(input,message){
+  input.style.borderColor = 'red';
+  const small=document.getElementById('profile_picture_error');
+  small.innerText=message;
+  small.style.visibility = 'visible';
+}
+
+function removeError(input){
+input.style.borderColor = '#ced4da';
+const small=document.getElementById('profile_picture_error');
+small.style.visibility = 'hidden';
+}
+
+
+function closeModal(modalId) {
+
+  const truck_modal = document.querySelector('#' + modalId);
+  const modal = bootstrap.Modal.getInstance(truck_modal);    
+  modal.hide();
+}  
+  

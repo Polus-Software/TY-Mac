@@ -14,7 +14,6 @@ use Session;
 class EditController extends Controller
 {
 
-
     public function edituser()
     { 
         return view('Auth.EditUser');
@@ -55,9 +54,6 @@ class EditController extends Controller
         ]);
 
         $user = Auth::user();
-
-        //dd($user);
-
         $user->password = Hash::make($request->newPassword);
         $user->save();
 
@@ -70,7 +66,7 @@ class EditController extends Controller
 
     public function uploadImage(Request $request)
     {
-    //dd($request->all());
+    
     $request->validate([
         'image' => 'required | mimes:jpeg,jpg,png | max:1000',
     ]);
@@ -84,7 +80,7 @@ class EditController extends Controller
             $user->image = $filename;
             $user->save();
         }
-        //return response()->json(['status' => 'success', 'message' => 'image uploded successfully']);
+
         return redirect()->back();
     }
 
