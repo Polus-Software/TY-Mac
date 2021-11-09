@@ -1,5 +1,44 @@
 @extends('Layouts.Profile')
 @section('content')
+<!-- New sub modal -->
+<div id="new_sub_modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add a new course</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form enctype="multipart/form-data" method="POST" action="{{ route('add-sub-topic') }}">
+          @csrf
+          <div class="mb-3">
+            <label for="course" class="col-form-label">Course</label>
+            <select class="form-control" id="course" name="course">
+                <option value="">Please select a course</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="topic_title" class="col-form-label">Topic Title</label>
+            <input type="text" class="form-control" id="topic_title" name="topic_title">
+          </div>
+          <div class="mb-3">
+            <label for="topic_description" class="col-form-label">Topic Description</label>
+            <textarea class="form-control" id="topic_description" name="topic_description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="course_description" class="col-form-label">Upload study material (if any)</label>
+            <input type="file" name="study_material" id="study_material"> 
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" id="save_sub" class="btn btn-success">Add sub topic</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- New sub modal ends here -->
 <!-- New course modal -->
 <div id="new_course_modal" class="modal fade" tabindex="-1">
   <div class="modal-dialog">
@@ -155,7 +194,8 @@
                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 m-auto">
                    <div class="content-page">
                     <div class="mb-3">
-                        <button id="add_new_course" data-bs-toggle="modal" data-bs-target="#new_course_modal" class="btn btn-success add_new_course_btn">Add new course</button>
+                        <button id="add_new_course" data-bs-toggle="modal" data-bs-target="#new_course_modal" class="btn btn-success add_new_course_btn">Add New Course</button>
+                        <button id="add_sub_topics" data-bs-toggle="modal" data-bs-target="#new_sub_modal" class="btn btn-warning add_new_topics_btn ml-5">Add Sub Topics</button>
                     </div>
                    <table class="table table-striped table-hover table-bordered">
                     <thead class="thead-dark">
@@ -207,6 +247,10 @@
         }).then((response) => response.json()).then((data) => {
             document.getElementById('course_tbody').innerHTML = '';
             document.getElementById('course_tbody').innerHTML = data.html;
+            document.getElementById('course_title').value = '';
+            document.getElementById('course_description').value = '';
+            document.getElementById('course_category').value = '';
+            document.getElementById('course_instructor').value = '';
             closeModal('new_course_modal');
         });
     });
@@ -299,6 +343,22 @@
             document.getElementById('course_tbody').innerHTML = '';
             document.getElementById('course_tbody').innerHTML = data.html;
             closeModal('delete_course_modal');
+        });
+    });
+
+    document.getElementById('new_sub_modal').addEventListener('show.bs.modal', function (event) {
+      let path = "{{ route('load-courses') }}";
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            document.getElementById('course').innerHTML = '';
+            document.getElementById('course').innerHTML = data.html;
         });
     });
 

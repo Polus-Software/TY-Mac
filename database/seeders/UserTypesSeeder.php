@@ -16,10 +16,9 @@ class UserTypesSeeder extends Seeder
     public function run()
     {
        DB::table('user_types')->insert([
-           
-           'user_role' => 'admin',
-           'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-           'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        'user_role' => 'admin',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
        ]);
 
        DB::table('user_types')->insert([

@@ -82,9 +82,10 @@ class AuthController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           return view('Auth.Dashboard', [
-            'userType' => $userType
-           ]);
+        //    return view('Auth.Dashboard', [
+        //     'userType' => $userType
+        //    ]);
+           return redirect('dashboard');
         }
         return redirect('login')->withSuccess('Credentials are wrong.');
     }

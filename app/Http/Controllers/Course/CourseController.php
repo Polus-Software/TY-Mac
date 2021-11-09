@@ -9,6 +9,8 @@ use App\Models\CourseCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserType;
 use App\Models\AssignedCourse;
+use App\Models\Topic;
+use App\Models\TopicContent;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -165,5 +167,36 @@ class CourseController extends Controller
             }
         }
         return response()->json(['status' => 'failed', 'message' => 'Some error']);
+    }
+
+    public function loadCourse(Request $request) {
+        $html = '<option value="">Please select a course</option>';
+        $courses = Course::all();
+
+        foreach($courses as $course) {
+            $html = $html . '<option value="' . $course->id . '">' . $course->course_title . '</option>';
+        }
+        return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
+    }
+
+    public function saveSubTopic(Request $request) {
+        $topic = new Topic;
+        $topic->topic_title = $request->topic_title;
+        $topic->course_id = $request->course;
+        $topic->description = $request->topic_description;
+        $topic->save();
+        if($request->hasFile('study_material')){
+            $filename = $request->study_material->getClientOriginalName();
+            $request->study_material->storeAs('study_material',$filename,'public');
+            $content = new TopicContent;
+            $content->topic_title = $request->topic_title;
+            $content->topic_id = $topic->id;
+            $content->description = $request->topic_description;
+            $content->content_type = $request->study_material->extension();
+            $content->document = $filename;
+            $content->save();
+        }
+
+        return redirect()->back();
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\CourseCategory\CourseCategoryController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\Creator\CreatorController;
+use App\Http\Controllers\AgoraIntegrations\InstructorSessionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\User;
@@ -45,6 +46,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
     Route::post('/delete-course', [CourseController::class, 'deleteCourse'])->name('delete-course');
+    Route::post('/load-courses', [CourseController::class, 'loadCourse'])->name('load-courses');
 
     Route::get('/manage-course-categories', [CourseCategoryController::class, 'index'])->name('manage-course-categories');
     Route::post('/add-course-category', [CourseCategoryController::class, 'saveCourseCategory'])->name('add-course-category');
@@ -84,5 +86,11 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::put('change-password', [EditController::class, 'submitChangePasswordForm'])->name('change.password.post');
 
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
+    Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
+
+
+    Route::get('instructor-session-view', [InstructorSessionController::class, 'index'])->name('instructor-session-view');
+    Route::get('host-session', [InstructorSessionController::class, 'hostSession'])->name('host-session');
+    
 });
 
