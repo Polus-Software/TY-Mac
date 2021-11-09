@@ -27,7 +27,7 @@ class AuthController extends Controller
      * Register a student user
      */
     public function signupProcess(Request $request) {
-        $userType = UserType::where('user_role', 'Student')->first()->value('id');
+        $userType = UserType::where('user_role', 'Student')->value('id');
         
         $request->validate([
             'firstname' => 'required',
@@ -79,11 +79,13 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
 
            $user = Auth::user();
-           
+           $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-
-           return redirect('dashboard')->withSuccess('Logged-in');
+        //    return view('Auth.Dashboard', [
+        //     'userType' => $userType
+        //    ]);
+           return redirect('dashboard');
         }
         return redirect('login')->withSuccess('Credentials are wrong.');
     }
@@ -91,10 +93,13 @@ class AuthController extends Controller
     /**
      * Render dashboard after login
      */
-    public function dashboardView()
-    {
+    public function dashboardView() {
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
         if(Auth::check()) {
-            return view('Auth.Dashboard');
+            return view('Auth.Dashboard', [
+                'userType' => $userType
+            ]);
         }
         return redirect('login')->withSuccess('Access is not permitted');
     }
