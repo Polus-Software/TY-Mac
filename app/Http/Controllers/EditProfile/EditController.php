@@ -45,7 +45,7 @@ class EditController extends Controller
 
     public function submitChangePasswordForm(Request $request)
     {
-        //dd($request->all());
+        
         
         $user = $request->validate([
             'currentPassword'=>'required',

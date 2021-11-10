@@ -59,6 +59,9 @@
       <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link" href="{{ route('student.courses.get') }}">courses</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="{{ route('logout') }}">logout</a>
     </li>
   @endif
