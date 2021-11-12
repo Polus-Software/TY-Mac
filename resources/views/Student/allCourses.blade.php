@@ -45,20 +45,20 @@
         </div>
 
         <div class="row">
-          @foreach($courseDetails as $courseDetail)
+          @foreach($courseDatas as $courseData)
             <div class="col-lg-6">
               <div class="card mb-4">
                 <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
                     <h5 class="card-title text-center">
-                      {{$courseDetail['course_title']}}
+                      {{$courseData['course_title']}}
                     </h5>
                     <p class="card-text">
-                      {{\Illuminate\Support\Str::limit($courseDetail['description'],
+                      {{\Illuminate\Support\Str::limit($courseData['description'],
                          $limit = 150, $end = '....')}} 
-                         <a href="{{ route('student.course.show') }}" class="">Read More</a>
+                         <a href="{{ route('student.course.show',$courseData['id']) }}" class="">Read More</a>
                     </p>
-                    <div class="row p-1">
+                    <div class="row pt-1">
                       <div class="col-lg-6 col-sm-6 col-6">
                         <i class="fas fa-star rateCourse"></i>
                         <i class="fas fa-star rateCourse"></i>
@@ -68,7 +68,7 @@
                       </div>
                         
                       <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
-                        <i class="fas fa-tag fa-flip-horizontal"></i>{{$courseDetail['course_category']}}
+                        <i class="fas fa-tag fa-flip-horizontal"></i>{{$courseData['course_category']}}
                       </div>
                     </div>
                   </div>
@@ -77,9 +77,9 @@
                       <div class="row">
                         <div class="col-lg-4 col-4 item-1"><i class="far fa-clock"></i>duration</div>
                         <div class="col-lg-4 col-4 item-2"><i class="far fa-user"></i>
-                        {{$courseDetail['instructorfirstname']}} {{$courseDetail['instructorlastname']}}
+                        {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
                         </div>
-                        <div class="col-lg-4 col-4 item-3">{{$courseDetail['course_difficulty']}}</div>
+                        <div class="col-lg-4 col-4 item-3">{{$courseData['course_difficulty']}}</div>
                       </div>
                     </li>
                   </ul>
@@ -88,7 +88,7 @@
                       <div class="btn-group border-top" role="group" aria-label="Basic example">
                       <button type="button card-link" class="btn border-end">Register Now</button>
                       <button type="button card-link" class="btn">
-                        <a href="{{ route('student.course.show') }}">Go to details<i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ route('student.course.show', $courseData['id'])}}">Go to details<i class="fas fa-arrow-right"></i></a>
                       </button>
                     </div>
                   </div>
@@ -96,14 +96,26 @@
             </div>
             </div>
            @endforeach
+           <div class="d-flex justify-content-center">
+        {{ $courseDatas->links() }}
+        </div>
            </div>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
 </section>
-<div class="d-flex justify-content-center">
-         
-</div>
+<script>
+  document.getElementsByClassName('page-item')[0].addEventListener('click', function(event){
+
+  console.log('works');
+
+});
+</script>
+
+
+
+
 @endsection('content')

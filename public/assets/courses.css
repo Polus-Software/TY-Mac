@@ -4,15 +4,11 @@
     background-image: url("/courselist/Illustration/Background.svg");
 }
 
-
-
 .filter{
     background:lightblue;
     height: 800px;
-
 }
   
-
 .text-content-wrapper li{
     list-style-type: none;
     text-align: left;
@@ -23,29 +19,23 @@
 }
 
 .text-content-wrapper i:before {
-   
     padding-right: 15px;
 }
 
 .text-content-wrapper i{
     color: #6E7687;
-
 }
 .text-content-wrapper p{
-
-
-font-weight:bold ;
-font-family: 'Roboto', sans-serif;
-letter-spacing: 1.6px;
-font-size:20px;
-color: #AF7E00;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1.6px;
+    font-size:20px;
+    color: #AF7E00;
 }
 .text-content-wrapper h1{
-
-/* text-align: left; */
-font-weight:bold ;
-font-family: 'Roboto', sans-serif;
-color: #2C3443;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+    color: #2C3443;
 }
 .card-title{
     font-size: 16px;
@@ -80,8 +70,10 @@ color: #2C3443;
     padding: 15px;
 }
 
-.rateCourse:hover{
-    color: yellow;
+.rateCourse{
+    color:#F5BC29;
+    
+    
 }
 .fa-tag{
    color:#6E7687;
@@ -118,4 +110,16 @@ select{
     color: inherit;
     
 }
-
+.page-item.active .page-link{
+    z-index: 3;
+    color: #fff;
+    background-color:#F5BC29;
+    
+}
+.page-link {
+    position: relative;
+    display: block;
+    color: #2C3443;
+    text-decoration: none;
+    background-color: #fff;
+}
