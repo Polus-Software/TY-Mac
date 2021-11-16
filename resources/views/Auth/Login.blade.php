@@ -6,7 +6,7 @@
     <div class="custom-container mx-auto p-3 border rounded">
         <div class="wrapper row flex-column my-5" >  
             <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
-                <form id="loginForm" class="form" method="POST" action="{{route('user.loginin')}}">
+                <form id="loginForm" class="form" method="POST" action="{{route('user.login')}}">
                     @csrf
                                 
                     <div class="form-group mx-sm-5 mx-0">
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="d-grid form-group  mx-sm-5 mx-0">
-                    <button type="submit" class="btn btn-block"><span class="button">login</span></button>
+                    <button type="submit" class="btn btn-block"><span class="button">Login</span></button>
                     </div>
 
                     <div class="text-center forgotpass">

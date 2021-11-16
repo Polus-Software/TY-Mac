@@ -10,6 +10,7 @@ use App\Http\Controllers\Creator\CreatorController;
 use App\Http\Controllers\AgoraIntegrations\InstructorSessionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Student\CoursesCatalogController;
 use App\User;
 
 /*
@@ -33,7 +34,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
     Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
     Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.loginin');
+    Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.login');
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -91,6 +92,17 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::get('instructor-session-view', [InstructorSessionController::class, 'index'])->name('instructor-session-view');
     Route::get('host-session', [InstructorSessionController::class, 'hostSession'])->name('host-session');
+    
+    Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
+   
+    Route::get('/show-course/{course}', [CoursesCatalogController::class, 'showCourse'])->name('student.course.show');
+    Route::get('/enroll-course', [CoursesCatalogController::class, 'enrollCourse'])->name('student.course.enroll');
+    Route::get('/register-course', [CoursesCatalogController::class, 'registerCourse'])->name('student.course.register');
+    Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
+    
+    // Route::get('/register-course', function () {
+    //     return view('Student.enrollCourse');
+    // });
     
 });
 
