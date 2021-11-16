@@ -1,0 +1,73 @@
+header .card-1{
+    
+    border-radius: 20px;
+    box-shadow: 0px 1px 8px #00000029;
+    background: #FFFFFF;
+   
+}
+.card-image{
+    border-radius:20px;
+}
+section .card-2:hover, .card-2:active{
+    border: 1px solid #AF7E00;
+    border-radius: 10px;
+    background:#FFF9E8;
+}
+section .card-2{
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+}
+.fa-calendar-alt{
+    color: #F5BC29;
+    font-size: 30px;
+}
+.btn{
+background-color:#2C3443;
+color: white;
+font-size: 16px;
+width: 175px;
+height: 38px;
+font-family: 'Lato', sans-serif;
+font-weight: bold;
+
+}
+.btn:hover{
+    color: white;
+}
+.fa-tag:before, .fa-user:before, .fa-clock:before{
+    padding: 8px;
+}
+.card-1 h5{
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+    font-size: 18px;
+}
+.card-1 p{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #6E7687;  
+
+}
+small{
+     font-size: 16px;
+     color:#6E7687;
+     font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+section h1{
+    font-size: 30px;
+    color: #2C3443;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+.card-2 p{
+    font-size: 16px;
+    color: #6E7687;
+}
+.card-text-1{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}

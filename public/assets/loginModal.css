@@ -1,0 +1,119 @@
+.custom-container {
+    width: 488px;
+    height: max-content;
+    background-color: #fff;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.custom-form-header {
+    font-family: 'Lato', 'Roboto', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    color: #2C3443;
+}
+.form-group{
+    margin: 25px 40px;
+    
+}
+
+.form-control.error small{
+    color:red;
+    visibility: visible;
+}
+
+.form-control.error input{
+  border:2px solid red;
+}
+.form-group small{
+    color:red;
+    visibility: hidden;
+    position: absolute;
+}
+
+.form-group input:focus{
+    border: 1px solid grey;
+    box-shadow: none;
+}
+
+.firstname-label{
+    font-family:'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.lastname-label{
+    font-family:'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.email-label{
+    font-family:'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.password-label{
+    font-family:'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+.rememberme{
+    font-family:'Roboto', sans-serif;
+    font-weight:400;
+    font-size: 13px;
+    line-height: 21px;
+
+}
+.loginBtn{
+    font-size: 16px;
+    font-family:'Lato', sans-serif;
+    font-weight: bold;
+    background-color:#2C3443;
+    color: white;
+    
+}
+.loginBtn:hover{
+    color:white;
+}
+
+
+.bottom-text p{
+    font-family:'Lato', sans-serif;
+    font-size:14px;
+    padding-top: 20px;
+}
+.login{
+    font-weight: bold;
+    color:#007BFF;
+}
+.login a{
+    text-decoration: none;
+
+}
+
+
+.forgotpass a{
+    color:inherit;
+    font-family:'Roboto', sans-serif;
+    font-weight:400;
+    font-size: 14px;
+    line-height: 21px;
+   
+}
+
+.forgotpwd a{
+   
+    text-decoration: none;
+}
+
+form i {
+    float: right;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+    margin-right:20px;
+    cursor: pointer;
+}
+

@@ -19,7 +19,7 @@
     font-weight:bold ;
     font-family: 'Roboto', sans-serif;
 }
-.btn{
+.enroll-button{
     color:#2C3443;
     background:#FFFFFF ;
     border-radius: 10px;
@@ -130,6 +130,10 @@
 }
 .fa-star{
     color: #F5BC29;
+}
+.btn a{
+    text-decoration: none;
+    color: inherit;
 }
 
 

@@ -86,8 +86,9 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="btn-group border-top" role="group" aria-label="Basic example">
-                      <button type="button card-link" class="btn border-end">Register Now</button>
-                      <button type="button card-link" class="btn">
+                      <button type="button" class=" card-link btn border-end">
+                        <a href="">Register now</a></button>
+                      <button type="button" class="card-link btn">
                         <a href="{{ route('student.course.show', $courseData['id'])}}">Go to details<i class="fas fa-arrow-right"></i></a>
                       </button>
                     </div>
@@ -97,8 +98,8 @@
             </div>
            @endforeach
            <div class="d-flex justify-content-center">
-        {{ $courseDatas->links() }}
-        </div>
+              {{ $courseDatas->links() }}
+            </div>
            </div>
           </div>
         </div>
@@ -107,15 +108,5 @@
     </div>
   </div>
 </section>
-<script>
-  document.getElementsByClassName('page-item')[0].addEventListener('click', function(event){
-
-  console.log('works');
-
-});
-</script>
-
-
-
 
 @endsection('content')

@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\UserType;
+use App\Models\CohortBatch;
 use App\Models\CourseCategory;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
@@ -88,4 +91,77 @@ class CoursesCatalogController extends Controller
         ]);
 
     }
+    public function enrollCourse(){
+
+        if (Auth::check() == true) {
+            return response()->json(
+                ['status' => 'success', 'message' => 'User logged in !']);
+       }else{
+        return response()->json(
+                ['status' => 'failed', 'message' => 'Not Logged in']);
+       }
+    }
+    
+    public function loginModalProcess(Request $request) {
+        
+        
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required', 
+        ]);
+        
+        $credentials = $request->only('email', 'password');
+        $remember_me = ( !empty( $request->remember_me) ) ? TRUE :FALSE ;
+        if (Auth::attempt($credentials)) {
+
+           $user = Auth::user();
+           
+           $userType =  UserType::find($user->role_id)->user_role;
+           $token = $user->createToken('token')->plainTextToken;
+           Auth::login($user, $remember_me);
+           return redirect()->back()->with(['success' => 'Successfully logged in!']);
+        //return redirect('/register-course');
+        }
+    }
+
+    public function registerCourse(Request $request){
+
+        $singleCourseDetails =[];
+        $course = Course::findOrFail($request->id);
+        
+        $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+       
+        $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+       
+        $instructorfirstname = User::where('id', $assigned)->value('firstname');
+        $instructorlastname = User::where('id', $assigned)->value('lastname');
+        $batchname = CohortBatch::where('course_id',  $course->id)->value('batchname');
+        $batch_start_time = CohortBatch::where('course_id',  $course->id)->value('start_time');
+        $batch_end_time = CohortBatch::where('course_id',  $course->id)->value('end_time');
+    
+        $singleCourseData =  array (
+            'id' => $course->id,
+            'course_title' => $course->course_title,
+            'course_category' => $courseCategory,
+            'description' => $course->description,
+            'course_difficulty' => $course->course_difficulty,
+            'instructor_firstname' => $instructorfirstname,
+            'instructor_lastname' => $instructorlastname,
+           
+            
+        );
+        array_push($singleCourseDetails, $singleCourseData);
+   
+        return view('Student.registerCourse', [
+            'singleCourseDetails' => $singleCourseDetails
+        ]);
+
+    }
+
+    public function registerCourseProcess(){
+
+
+    }
+
+
 }

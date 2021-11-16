@@ -123,3 +123,9 @@ select{
     text-decoration: none;
     background-color: #fff;
 }
+.page-link:hover{
+    color:#2C3443;
+}
+.page-item.active .page-link {
+    border-color:#F5BC29 ;
+}
