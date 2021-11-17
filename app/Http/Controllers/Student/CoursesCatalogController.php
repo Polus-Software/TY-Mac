@@ -17,6 +17,9 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StudentMailAfterEnrolling;
+use App\Mail\InstructorMailAfterEnrolling;
 
 
 
@@ -161,15 +164,31 @@ class CoursesCatalogController extends Controller
     public function registerCourseProcess(Request $request){
        
        $courseId = $request->course_id;
+       
        $batchId = $request->batch_id;
        $user = Auth::user();
        $userId = $user->id;
+       $studentEmail= $user->email;
+       $assigned = DB::table('assigned_courses')->where('course_id',  $courseId)->value('user_id');
+       $instructorEmail = User::where('id', $assigned)->value('email');
        $enrolledCourse = new EnrolledCourse;
        $enrolledCourse->user_id = $userId;
        $enrolledCourse->batch_id = $batchId;
        $enrolledCourse->course_id = $courseId;
        $enrolledCourse->save();
 
+       $mailDetails =[
+        'title' => 'Thank you for enrolling the course',
+        'body' => 'You have successfully enrolled the course... Happy learning!!!'
+    ];
+    Mail::to($studentEmail)->send(new StudentMailAfterEnrolling($mailDetails));
+
+    $data =[
+        'title' => 'student enrolled  your course',
+        'body' => 'student enrolled  your course'
+    ];
+    Mail::to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
+  
        return response()->json([
            'status' => 'success', 
            'message' => 'Enrolled successfully'
