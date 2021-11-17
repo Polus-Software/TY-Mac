@@ -12,4 +12,5 @@ class CohortBatch extends Model
     protected $casts = [
         'duration' => 'hh:mm:ss'
     ];
+   
 }

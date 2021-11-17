@@ -117,7 +117,7 @@
                 </div>
                 <div class="row pt-2">
                     <div class="col-lg-4">
-                        <a class="btn enroll-button" type="button"  id="enrollButton">
+                        <a class="btn enroll-button" id="enrollButton">
                             Enroll now
                         </a>
                         <input type="hidden" id="course_id" value="{{$singleCourseDetail['id']}}">
@@ -141,7 +141,7 @@
                         <div class="card-body p-4">
                           <h5 class="card-title">Course description</h5>
                           @foreach($singleCourseDetails as $singleCourseDetail)
-                            <p class="card-text-1"> {{$singleCourseDetail['description']}}</p>
+                            <p class="card-text-1">{{$singleCourseDetail['description']}}</p>
                           @endforeach
                         </div>
                     </div>
@@ -288,43 +288,6 @@
                                 </div>
                             </div>
                         @endforeach
-
-
-                    <!-- <div class="row g-0 border-bottom mt-3">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                                <img src="courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Carole Franklin</h5>
-                                    <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
-                                </div>
-                            </div>
-                    </div>
-
-                    <div class="row g-0 border-bottom mt-3">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                            <img src="courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
-                        </div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Carole Franklin</h5>
-                                <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
-                            </div>
-                        </div>
-                </div>
-                <div class="row g-0 border-bottom mt-3">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                        <img src="courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Carole Franklin</h5>
-                            <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
-                        </div>
-                    </div>
-            </div>
-            <div class="row g-0 border-bottom mt-3 mb-3">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-4">
                     <img src="courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
                 </div>
@@ -475,41 +438,36 @@
                             </p>
                         </div>  
                     </div>
-            </div>
-
-             
-            <div class="row">
-                            <div class="col-lg-8 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:54px; height:54px;">
-                                <div class="card-body">
-                                    <h5 class="card-title text-left">James Parker</h5>
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i> 2 days ago
-                                        </div>
-                                    
+                </div>
+                <div class="row">
+                        <div class="col-lg-8 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+                            <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:54px; height:54px;">
+                            <div class="card-body">
+                                <h5 class="card-title text-left">James Parker</h5>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i> 2 days ago
                                     </div>
                                 </div>
-                            
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <p class="card-text-1 p-2 review border-bottom">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
-                                    totam rem aperiam, eaque ipsa quae ab illo inventore
-                                    veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit 
-                                    aut fugit, sed quia consequuntur magni dolores eos qui ratione 
-                                    voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem 
-                                    ipsum quia dolor sit amet, consectetur, adipisci velit, sed .
-                                    </p>
-                                </div>  
-                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p class="card-text-1 p-2 review border-bottom">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
+                                totam rem aperiam, eaque ipsa quae ab illo inventore
+                                veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit 
+                                aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+                                voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem 
+                                ipsum quia dolor sit amet, consectetur, adipisci velit, sed .
+                                </p>
+                            </div>  
+                        </div>
                     </div>
-             
                     </div>
                 </div> 
             </div>
@@ -527,7 +485,7 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]')
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
             },
             
         }).then((response) => response.json()).then((data) => {

@@ -99,10 +99,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/enroll-course', [CoursesCatalogController::class, 'enrollCourse'])->name('student.course.enroll');
     Route::get('/register-course', [CoursesCatalogController::class, 'registerCourse'])->name('student.course.register');
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
-    
-    // Route::get('/register-course', function () {
-    //     return view('Student.enrollCourse');
-    // });
-    
+    Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
+    Route::get('/enrolled-course', [CoursesCatalogController::class, 'afterEnrollView'])->name('student.course.enrolled');
 });
 
