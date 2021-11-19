@@ -105,10 +105,8 @@ select{
     font-weight: bold;
     color: #2C3443;
 }
-.btn a{
-    text-decoration: none;
-    color: inherit;
-    
+.btn:focus{
+    box-shadow: none;
 }
 .page-item.active .page-link{
     z-index: 3;

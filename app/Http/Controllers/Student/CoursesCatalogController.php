@@ -12,6 +12,7 @@ use App\Models\UserType;
 use App\Models\CohortBatch;
 use App\Models\CourseCategory;
 use App\Models\EnrolledCourse;
+use App\Models\GeneralCourseFeedback;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -20,7 +21,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentMailAfterEnrolling;
 use App\Mail\InstructorMailAfterEnrolling;
-
 
 
 
@@ -69,13 +69,32 @@ class CoursesCatalogController extends Controller
     public function showCourse($id){
 
         $singleCourseDetails =[];
+        $singleCourseFeedbacks = [];
         $course = Course::findOrFail($id);
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
         $instructorlastname = User::where('id', $assigned)->value('lastname');
         $profilePhoto = User::where('id', $assigned)->value('image');
-    
+
+        $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
+        foreach($generalCourseFeedbacks as $generalCourseFeedback){
+            $studentFirstname = User::where('id', $generalCourseFeedback->user_id )->value('firstname');
+            $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');
+            $studentProfilePhoto = User::where('id', $generalCourseFeedback->user_id)->value('image');
+
+           
+        array_push($singleCourseFeedbacks, array(
+            'user_id' => $generalCourseFeedback->user_id,
+            'rating' => $generalCourseFeedback->rating,
+            'comment' => $generalCourseFeedback->comment,
+            'created_at' => Carbon::parse($generalCourseFeedback->created_at)->diffForHumans(),
+            'studentFirstname' => $studentFirstname,
+            'studentLastname' => $studentLastname,
+            'studentProfilePhoto' => $studentProfilePhoto,
+            ));   
+        }
+
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -89,7 +108,8 @@ class CoursesCatalogController extends Controller
         array_push($singleCourseDetails, $singleCourseData);
    
         return view('Student.showCourse', [
-            'singleCourseDetails' => $singleCourseDetails
+            'singleCourseDetails' => $singleCourseDetails,
+            'singleCourseFeedbacks' => $singleCourseFeedbacks
         ]);
 
     }
@@ -105,8 +125,7 @@ class CoursesCatalogController extends Controller
     }
     
     public function loginModalProcess(Request $request) {
-        
-        
+
         $request->validate([
             'email' => 'required',
             'password' => 'required', 
@@ -138,11 +157,12 @@ class CoursesCatalogController extends Controller
             $singleCourseData =  array (
             'batch_id' => $batch->id,
             'batchname' => $batch->batchname,
-            'start_date' => $batch->start_date,
-            'start_time'=> $batch->start_time,
-            'end_time' => $batch->end_time,
+            'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
+            'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
+            'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
             'region' => $batch->region,
         );
+        
         array_push($singleCourseDetails, $singleCourseData);
       }
       $courseDetails = array (
@@ -195,9 +215,30 @@ class CoursesCatalogController extends Controller
         ]);
         
     }
+
     public function afterEnrollView(){
         return view('Student.enrolledCoursePage');
     }
+    
 
+    public function courseReviewProcess(Request $request){
+
+        $courseId = $request->course_id;
+        $userId = $request->user_id;
+        $comment = $request->input('comment');
+        $rating = $request->input('rating');
+
+        $generalCourseFeedback = new GeneralCourseFeedback;
+        $generalCourseFeedback->user_id = $userId;
+        $generalCourseFeedback->course_id = $courseId;
+        $generalCourseFeedback->comment = $comment;
+        $generalCourseFeedback->rating = $rating;
+        $generalCourseFeedback->save();
+
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
+    }
 
 }

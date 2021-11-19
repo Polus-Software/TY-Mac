@@ -1,9 +1,6 @@
 
 @extends('Layouts.enrollCourse')
 @section('content')
-
-
-
 <header class="d-flex align-items-center mb-3">
     <div class="container">
         <div class="row">
@@ -93,6 +90,7 @@
     </div>
 </div>
 </section>
+
 <script>
     let cards = document.getElementsByClassName('card-2');
     for(var index = 0; index < cards.length; index++) {
