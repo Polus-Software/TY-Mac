@@ -1,7 +1,54 @@
-@extends('layouts.app')
+@extends('Layouts.app')
 @section('content')
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TY-Mac</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <form class="mb-2 mb-lg-0 d-flex me-auto">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      </form>
 
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">All Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+        <!-- <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li> -->
+        <!-- <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li> -->
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 <div class="container-overlay">
     <div class="custom-container mx-auto p-3 border rounded">
         <div class="wrapper row flex-column my-5" >  
@@ -52,6 +99,21 @@
         </div>      
     </div>          
 </div>
+<style>
+    #search-btn {
+        background-color:#fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+    }
+
+    .navbar-nav li {
+        margin : 0px 5px !important;
+    }
+
+    .me-auto {
+        margin-left: auto !important;
+    }
+</style>
 <script>
     document.querySelector('#loginForm').addEventListener('submit', (e) => {
       if(loginemail.value === '') {
