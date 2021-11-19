@@ -80,16 +80,21 @@ class CourseController extends Controller
     }
 
     public function viewCourse(Request $request) {
-        $courseId = $request->input('course_id');
-        if ($courseId) {
-            $course = Course::where('id', $courseId);
-            if ($course) {
-                $categoryName = CourseCategory::where('id', $course->value('category'))->value('category_name');
-                $data = ['course_name' => $course->value('course_title'), 'course_category' => $categoryName, 'course_description' => $course->value('description')];
-                return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
+        try {
+            $courseId = $request->input('course_id');
+            if ($courseId) {
+                $course = Course::where('id', $courseId);
+                if ($course) {
+                    $categoryName = CourseCategory::where('id', $course->value('category'))->value('category_name');
+                    $data = ['course_name' => $course->value('course_title'), 'course_category' => $categoryName, 'course_description' => $course->value('description')];
+                    return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
+                }
             }
+            return response()->json(['status' => 'failed', 'message' => 'Some error']);
+        } catch (Exception $exception) {
+            return($exception->getMessage());
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
+        
     }
 
     public function editCourse(Request $request) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,6 +28,8 @@ class AuthController extends Controller
      * Register a student user
      */
     public function signupProcess(Request $request) {
+
+        try {
         $userType = UserType::where('user_role', 'Student')->value('id');
         
         $request->validate([
@@ -52,9 +55,13 @@ class AuthController extends Controller
             'title' => 'Thank you for registering',
             'body' => 'You have successfully registered'
         ];
-
         Mail::to($email)->send(new Gmail($details));
         return redirect('login')->withSuccess('Successfully registered!');
+
+        } catch (Exception $exception) {
+            return redirect('login')->withSuccess('Successfully registered!');
+        }
+        
         
     }
 
@@ -82,9 +89,6 @@ class AuthController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-        //    return view('Auth.Dashboard', [
-        //     'userType' => $userType
-        //    ]);
            return redirect('dashboard');
         }
         return redirect('login')->withSuccess('Credentials are wrong.');
