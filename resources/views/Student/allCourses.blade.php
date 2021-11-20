@@ -24,8 +24,120 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-        <div class="filter m-4">
-          <h1>filter</h1>
+        <div class="filter m-4 pt-2 p-4">
+          <h6>Filter</h6>
+          <div class="accordion" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item filter-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        <h6>Topics</h6>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+      <div class="form-check">
+        <input class="form-check-input category_filter" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Default checkbox
+        </label>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item filter-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+        Learning Levels
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+      <div class="form-check">
+        <input class="form-check-input category_filter" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Default checkbox
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input category_filter" type="checkbox" value="0" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          All levels
+        </label>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item filter-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+      <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+        Ratings
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
+      <div class="accordion-body">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            Default radio
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            Default radio
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            Default radio
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            <i class="fas fa-star filter-star"></i>
+            <i class="fas fa-star filter-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            Default radio
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            <i class="fas fa-star filter-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            <i class="far fa-star filter-no-star"></i>
+            Default radio
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
       </div>
 

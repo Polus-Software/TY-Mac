@@ -5,8 +5,21 @@
 }
 
 .filter{
-    background:lightblue;
+    background:#f8f7fc;   
     height: 800px;
+}
+
+.filter-button:not(.collapsed)::after
+
+.filter-button {
+    color: #000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0px;
+}
+
+.accordion-body {
+    padding-left: 0px;
 }
   
 .text-content-wrapper li{
@@ -71,9 +84,18 @@
 }
 
 .rateCourse{
-    color:#F5BC29;
-    
-    
+    color:#F5BC29;   
+}
+.filter-star {
+    color: #F5BC29;
+}
+.filter-no-star {
+    color: #d8d8d8;
+}
+.filter-item {
+    background-color: transparent !important;
+    border:none !important;
+    border-bottom: 1px solid rgba(0,0,0,.125) !important;
 }
 .fa-tag{
    color:#6E7687;
