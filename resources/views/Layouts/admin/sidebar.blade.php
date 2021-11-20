@@ -3,9 +3,7 @@
   <ul class="nav nav-pills flex-column mb-auto mt-5 llp-sidebar">
     <li class="nav-item">
       <a class="nav-link link-dark active" href="{{ route('dashboard') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#speedometer2" />
-        </svg>
+      <i class="fas fa-home"></i>
         Dashboard</a>
     </li>
     <li class="nav-item">
@@ -14,52 +12,38 @@
     @if($userType == 'content_creator')
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-course-categories') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
+      <i class="fas fa-clipboard-list"></i>
         Course Categories</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-courses') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
+      <i class="fas fa-book-reader"></i>
         Courses</a>
     </li>
     @elseif($userType == 'admin')
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('admin.viewall') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#people-circle" />
-        </svg>
+      <i class="fas fa-users"></i>
         Users</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-instructors') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#people-circle" />
-        </svg>
+      <i class="fas fa-user-friends"></i>
         Instructors</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-creators') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#people-circle" />
-        </svg>
+      <i class="fas fa-users-cog"></i>
         Content Creators</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-course-categories') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
+      <i class="fas fa-clipboard-list"></i>
         Course Categories</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-courses') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
+      <i class="fas fa-book-reader"></i>
         Courses</a>
     </li>
     @elseif($userType == 'instructor')
@@ -90,9 +74,7 @@
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('student.courses.get') }}">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
+      <i class="fas fa-book-reader"></i>
         courses</a>
     </li>
     @endif

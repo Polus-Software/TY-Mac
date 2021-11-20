@@ -2,7 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-content-mt">
+<div class="container llp-container">
   <div class="row">
     <div class="col-2 position-fixed">
       <!-- include sidebar here -->
@@ -37,21 +37,15 @@
                 <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
                 <td class="align-middle">{{$creator->email}} </td>
                 <td class="align-middle"></td>
-                <td class="align-middle">
+                <td class="align-middle text-center">
                   <a href="#" title="View creator" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#eye-fill" />
-                    </svg>
+                  <i class="fas fa-eye"></i>
                   </a>
                   <a href="#" title="Edit creator" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#pencil-fill" />
-                    </svg>
+                  <i class="fas fa-pen"></i>
                   </a>
                   <a href="#" title="Delete creator" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#trash-fill" />
-                    </svg>
+                  <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>
                 <!-- <td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">View</button></td>
@@ -71,7 +65,7 @@
 <!-- container ends -->
 
 <!-- New course modal -->
-<div id="new_creator_modal" class="modal fade" tabindex="-1">
+<div id="new_creator_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -95,20 +89,21 @@
           </div>
           <div class="mb-3">
             <label for="creator_password" class="col-form-label">Content Creator's Password</label>
-            <input type="text" class="form-control" id="creator_password"></input><button type="button" class="btn btn-secondary mt-1" id="generate_password">Generate password</button>
+            <input type="text" class="form-control" id="creator_password"></input>
+            <button type="button" class="btn btn-link" id="generate_password">Generate password</button>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="save_creator" class="btn btn-success">Add Content Creator</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="save_creator" class="btn btn-primary">Add Content Creator</button>
       </div>
     </div>
   </div>
 </div>
 <!-- New course modal ends here -->
 <!-- View course modal -->
-<div id="view_creator_modal" class="modal fade" tabindex="-1">
+<div id="view_creator_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -128,14 +123,14 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
 </div>
 <!-- View course modal ends here -->
 <!--  Edit course modal -->
-<div id="edit_creator_modal" class="modal fade" tabindex="-1">
+<div id="edit_creator_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -160,15 +155,15 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="update_creator_btn" class="btn btn-success">Update details</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="update_creator_btn" class="btn btn-primary">Update details</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Edit course modal ends here -->
 <!-- Delete course modal -->
-<div id="delete_creator_modal" class="modal fade" tabindex="-1">
+<div id="delete_creator_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -177,19 +172,21 @@
       </div>
       <div class="modal-body">
         <table class="table table-borderless">
-          <tr>
+          <!-- <tr>
             <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
-          </tr>
+          </tr> -->
           <tr>
           </tr>
           <tr>
-            <td class="text-center"><strong>Are you sure?</strong></td>
+            <td class="text-center"><p>
+            <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
+            Do you really want to delete this content creator?</p></td>
           </tr>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="confirm_creator_delete" class="btn btn-danger">Confirm</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirm_creator_delete" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>

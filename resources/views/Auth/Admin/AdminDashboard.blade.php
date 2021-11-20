@@ -2,7 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-content-mt">
+<div class="container llp-container">
   <div class="row">
     <div class="col-2 position-fixed">
       <!-- include sidebar here -->
@@ -32,21 +32,15 @@
                 <td>{{$student->firstname}}</td>
                 <td>{{$student->lastname}}</td>
                 <td>{{$student->email}}</td>
-                <td class="text-center">
+                <td class="align-middle text-center">
                   <a href="{{ route('admin.showstudent', $student->id) }}" title="View student">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#eye-fill" />
-                    </svg>
+                  <i class="fas fa-eye"></i>
                   </a>
                   <a href="{{ route('admin.editstudent', $student->id) }}" title="Edit student">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#pencil-fill" />
-                    </svg>
+                  <i class="fas fa-pen"></i>
                   </a>
                   <a href="#" title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $student->id }}">
-                    <svg class="bi me-2" width="16" height="16">
-                      <use xlink:href="#trash-fill" />
-                    </svg>
+                  <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>
               </tr>
@@ -66,7 +60,7 @@
 <!-- container ends -->
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade llp-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -77,12 +71,14 @@
         @csrf
         <div class="modal-body">
           <div class="mb-3">
-            <p>Do you really want to delete these records? </p>
+            <p>
+            <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
+            Do you really want to delete this student? </p>
           </div>
           <input type="hidden" name="studentId" id="studentId">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-danger delete" id="deleteButton">Delete</button>
         </div>
       </form>

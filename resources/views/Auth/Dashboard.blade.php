@@ -2,7 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-content-mt">
+<div class="container llp-container">
   <div class="row">
     <div class="col-2 position-fixed">
       @include('Layouts.admin.sidebar')
