@@ -28,8 +28,6 @@ Route::get('/', function () {
     return view('homepage');
 });
 
-
-
 Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
     Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
@@ -101,5 +99,6 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
     Route::get('/enrolled-course', [CoursesCatalogController::class, 'afterEnrollView'])->name('student.course.enrolled');
+    Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
 });
 

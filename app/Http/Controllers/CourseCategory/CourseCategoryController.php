@@ -5,13 +5,18 @@ namespace App\Http\Controllers\CourseCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CourseCategory;
+use App\Models\UserType;
+use Auth;
 
 class CourseCategoryController extends Controller
 {
     public function index() {
         $courseCategories = CourseCategory::all();
+        $user = Auth::user();
+        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         return view('CourseCategory.manage_course_categories', [
-            'courseCategories' => $courseCategories
+            'courseCategories' => $courseCategories,
+            'userType' => $userTypeLoggedIn
         ]);
     } 
 

@@ -198,11 +198,8 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="btn-group border-top" role="group" aria-label="Basic example">
-                      <button type="button" class=" card-link btn border-end">
-                        <a href="">Register now</a></button>
-                      <button type="button" class="card-link btn">
-                        <a href="{{ route('student.course.show', $courseData['id'])}}">Go to details<i class="fas fa-arrow-right"></i></a>
-                      </button>
+                        <a href="" class="card-link btn border-end">Register now</a>
+                        <a href="{{ route('student.course.show', $courseData['id'])}}" class="card-link btn">Go to details<i class="fas fa-arrow-right"></i></a>
                     </div>
                   </div>
               </div>
@@ -215,10 +212,10 @@
            </div>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
 </section>
-
 @endsection('content')
+
+

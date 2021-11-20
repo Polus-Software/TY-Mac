@@ -1,78 +1,180 @@
-@extends('Layouts.Profile')
+@extends('Layouts.admin.master')
 @section('content')
-<nav class="navbar navbar-expand-sm bg-dark justify-content-end">
-  <ul class="navbar-nav dashboard-navbar">
-  @if($userType == 'content_creator')
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-course-categories') }}">Manage Course Categories</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-courses') }}">Manage Courses</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-    </li>
-    @elseif($userType == 'admin')
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('admin.viewall') }}">Manage Users</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-course-categories') }}">Manage Course Categories</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-instructors') }}">Manage Instructors</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-creators') }}">Manage Content Creators</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('manage-courses') }}">Manage Courses</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}">logout</a>
-    </li>
-    @elseif($userType == 'instructor')
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('instructor-session-view') }}">View Scheduled Sessions</a>
-    <li class="nav-item">
-    <li class="nav-item">
-      <a class="nav-link" href="#">Change Password</a>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}">logout</a>
-    </li>
-  @else
-  <li class="nav-item">
-      <a class="nav-link" href="{{ route('instructor-session-view') }}">Attend Session</a>
-    <li class="nav-item">
-    <li class="nav-item">
-      <a class="nav-link" href="#">Change Password</a>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('edituser') }}"> Welcome {{Auth::user()->firstname}}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('student.courses.get') }}">courses</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}">logout</a>
-    </li>
-  @endif
-  </ul>
-</nav>
-<div class="card-header"> Welcome {{Auth::user()->firstname}}</div>
-<div class="card-body">
-  @if (session('success'))
-    <div class="alert alert-success" role="alert">
-      {{ session('success') }}
+@include('Layouts.admin.header')
+<!-- container -->
+<div class="container llp-container">
+  <div class="row">
+    <div class="col-2 position-fixed">
+      @include('Layouts.admin.sidebar')
     </div>
-  @endif
+    <div class="col-9 ms-auto">
+      <!-- main -->
+      <main>
+        <div class="row mt-4">
+          <div class="col-sm-3">
+            <div class="card llp-countbox">
+              <div class="card-body text-center">
+                <h1 class="card-title">18</h5>
+                  <p class="card-text">Course registered</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card llp-countbox">
+              <div class="card-body text-center">
+                <h1 class="card-title">700</h5>
+                  <p class="card-text">Total students joined</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card llp-countbox">
+              <div class="card-body text-center">
+                <h1 class="card-title">08</h5>
+                  <p class="card-text">Total instructor</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card llp-countbox">
+              <div class="card-body text-center">
+                <h1 class="card-title">180</h5>
+                  <p class="card-text">Total Live Hours</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+            <h3>Upcoming cohorts</h3>
+          </div>
+          <table class="table llp-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">Participants</th>
+                <th scope="col">Date/Time</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row mt-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+            <h3>Recent cohorts</h3>
+          </div>
+          <table class="table llp-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">Participants</th>
+                <th scope="col">Date/Time</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td class="text-center"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#three-dots" />
+                  </svg></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <!-- main ends -->
 
+    </div>
+  </div>
+</div>
+<!-- container ends -->
+<!-- <div class="card-header"> Welcome {{Auth::user()->firstname}}</div> -->
+<!-- <div class="card-body">
+@if (session('success'))
+<div class="alert alert-success" role="alert">
+  {{ session('success') }}
+</div>
+@endif
+</div> -->
 @endsection
