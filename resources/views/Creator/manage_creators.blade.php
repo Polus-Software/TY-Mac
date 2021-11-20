@@ -1,5 +1,75 @@
-@extends('Layouts.Profile')
+@extends('Layouts.admin.master')
 @section('content')
+@include('Layouts.admin.header')
+<!-- container -->
+<div class="container llp-content-mt">
+  <div class="row">
+    <div class="col-2 position-fixed">
+      <!-- include sidebar here -->
+      @include('Layouts.admin.sidebar')
+    </div>
+    <div class="col-9 ms-auto">
+      <!-- main -->
+      <main>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+          <h3>Content creators</h3>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <button id="add_new_category" data-bs-toggle="modal" data-bs-target="#new_creator_modal" class="btn btn-primary add_new_creator_btn">Add new Content Creator</button>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <table class="table llp-table">
+            <thead>
+              <tr>
+                <th scope="col">Slno.</th>
+                <th scope="col" colspan="2">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Content Creator Added On</th>
+                <th scope="col" colspan="3" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="creator_tbody">
+              @php ($slno = 0)
+              @foreach ($creators as $creator)
+              @php ($slno = $slno + 1)
+              <tr id="{{$creator->id}}">
+                <th class="align-middle" scope="row">{{$slno}}</th>
+                <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
+                <td class="align-middle">{{$creator->email}} </td>
+                <td class="align-middle"></td>
+                <td class="align-middle">
+                  <a href="#" title="View creator" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">
+                    <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#eye-fill" />
+                    </svg>
+                  </a>
+                  <a href="#" title="Edit creator" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">
+                    <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#pencil-fill" />
+                    </svg>
+                  </a>
+                  <a href="#" title="Delete creator" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">
+                    <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#trash-fill" />
+                    </svg>
+                  </a>
+                </td>
+                <!-- <td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">View</button></td>
+          <td class="text-center align-middle"><button class="btn btn-success edit_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">Edit</button></td>
+          <td class="text-center align-middle"><button class="btn btn-danger delete_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">Delete</button></td> -->
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <!-- main ends -->
+
+    </div>
+  </div>
+</div>
+<!-- container ends -->
+
 <!-- New course modal -->
 <div id="new_creator_modal" class="modal fade" tabindex="-1">
   <div class="modal-dialog">
@@ -9,7 +79,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form>
+        <form>
           @csrf
           <div class="mb-3">
             <label for="creator_first_name" class="col-form-label">Content Creator's First Name</label>
@@ -46,16 +116,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <table class="table table-borderless">
-            <tr>
-              <td><strong>Content Creator Name:</strong></td>
-              <td class="text-right"><label id="view_creator_name"></label></td>
-            </tr>
-            <tr>
-              <td><strong>Email id:</strong></td>
-              <td class="text-right"><label id="view_creator_email"></label></td>
-            </tr>
-          </table>
+        <table class="table table-borderless">
+          <tr>
+            <td><strong>Content Creator Name:</strong></td>
+            <td class="text-right"><label id="view_creator_name"></label></td>
+          </tr>
+          <tr>
+            <td><strong>Email id:</strong></td>
+            <td class="text-right"><label id="view_creator_email"></label></td>
+          </tr>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -73,7 +143,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form>
+        <form>
           @csrf
           <div class="mb-3">
             <label for="creator_first_name" class="col-form-label">Content Creator's First Name</label>
@@ -106,16 +176,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <table class="table table-borderless">
-            <tr>
-              <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
-            </tr>
-            <tr>
-            </tr>
-            <tr>
-              <td class="text-center"><strong>Are you sure?</strong></td>
-            </tr>
-          </table>
+        <table class="table table-borderless">
+          <tr>
+            <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
+          </tr>
+          <tr>
+          </tr>
+          <tr>
+            <td class="text-center"><strong>Are you sure?</strong></td>
+          </tr>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -125,178 +195,136 @@
   </div>
 </div>
 <!-- Delete course modal ends here -->
-<div class="container">
-       <div class="custom-container mx-auto border">
-           <div class="row">                    
-               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 m-auto">
-                   <div class="content-page">
-                    <div class="mb-3">
-                        <button id="add_new_category" data-bs-toggle="modal" data-bs-target="#new_creator_modal" class="btn btn-success add_new_creator_btn">Add new Content Creator</button>
-                    </div>
-                   <table class="table table-striped table-hover table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                        <th scope="col">Slno.</th>
-                        <th scope="col" colspan="2">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Content Creator Added On</th>
-                        <th scope="col" colspan="3" class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="creator_tbody">
-                    @php ($slno = 0)
-                    @foreach ($creators as $creator)
-                    @php ($slno = $slno + 1)
-                        <tr id="{{$creator->id}}">
-                            <th class="align-middle" scope="row">{{$slno}}</th>
-                            <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
-                            <td class="align-middle">{{$creator->email}} </td>
-                            <td class="align-middle">Dummy</td>
-                            <td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">View</button></td>
-                            <td class="text-center align-middle"><button class="btn btn-success edit_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">Edit</button></td>
-                            <td class="text-center align-middle"><button class="btn btn-danger delete_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">Delete</button></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                    </table>
-                     </div>
-               </div>
-           </div>
-
-       </div>
-</div>
 
 <script>
-
-    function makeid(length) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-?';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
+  function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-?';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
+    return result;
+  }
 
-    document.getElementById('new_creator_modal').addEventListener('show.bs.modal', function (event) {
-        document.getElementById('creator_password').value = makeid(12);
+  document.getElementById('new_creator_modal').addEventListener('show.bs.modal', function(event) {
+    document.getElementById('creator_password').value = makeid(12);
+  });
+
+  document.getElementById('generate_password').addEventListener('click', function(event) {
+    document.getElementById('creator_password').value = makeid(12);
+  });
+
+  document.getElementById('save_creator').addEventListener('click', (event) => {
+    let creatorFirstName = document.getElementById('creator_first_name').value;
+    let creatorLastName = document.getElementById('creator_last_name').value;
+    let creatorEmail = document.getElementById('creator_email').value;
+    let creatorPassword = document.getElementById('creator_password').value;
+    let path = "{{ route('add-creator') }}?creatorFirstName=" + creatorFirstName + "&creatorLastName=" + creatorLastName + "&creatorEmail=" + creatorEmail + "&creatorPassword=" + creatorPassword;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      if (data.status == 'success') {
+        document.getElementById('creator_tbody').innerHTML = '';
+        document.getElementById('creator_tbody').innerHTML = data.html;
+        closeModal('new_creator_modal');
+      }
     });
+  });
 
-    document.getElementById('generate_password').addEventListener('click', function(event) {
-        document.getElementById('creator_password').value = makeid(12);
+  document.getElementById('view_creator_modal').addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var userId = button.getAttribute('data-bs-id');
+    let path = "{{ route('view-creator') }}?user_id=" + userId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.getElementById('view_creator_name').innerHTML = data.creatorDetails['creator_name'];
+      document.getElementById('view_creator_email').innerHTML = data.creatorDetails['creator_email'];
     });
+  });
 
-    document.getElementById('save_creator').addEventListener('click', (event) => {
-        let creatorFirstName = document.getElementById('creator_first_name').value;
-        let creatorLastName = document.getElementById('creator_last_name').value;
-        let creatorEmail = document.getElementById('creator_email').value;
-        let creatorPassword = document.getElementById('creator_password').value;
-        let path = "{{ route('add-creator') }}?creatorFirstName=" + creatorFirstName + "&creatorLastName=" + creatorLastName + "&creatorEmail=" + creatorEmail + "&creatorPassword=" + creatorPassword;
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            if (data.status == 'success') {
-              document.getElementById('creator_tbody').innerHTML = '';
-              document.getElementById('creator_tbody').innerHTML = data.html;
-              closeModal('new_creator_modal');
-            }
-        });
+  document.getElementById('edit_creator_modal').addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var userId = button.getAttribute('data-bs-id');
+    let path = "{{ route('edit-creator') }}?user_id=" + userId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.getElementById('edit_creator_first_name').value = data.creatorDetails['firstname'];
+      document.getElementById('edit_creator_last_name').value = data.creatorDetails['lastname'];
+      document.getElementById('edit_creator_email').value = data.creatorDetails['email'];
+      document.getElementById('update_creator_btn').setAttribute('user_id', data.creatorDetails['id']);
     });
+  });
 
-    document.getElementById('view_creator_modal').addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var userId = button.getAttribute('data-bs-id');
-        let path = "{{ route('view-creator') }}?user_id=" + userId;
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            document.getElementById('view_creator_name').innerHTML = data.creatorDetails['creator_name'];
-            document.getElementById('view_creator_email').innerHTML = data.creatorDetails['creator_email'];
-        });
+  document.getElementById('update_creator_btn').addEventListener('click', (event) => {
+    var userId = document.getElementById('update_creator_btn').getAttribute('user_id');
+    var firstname = document.getElementById('edit_creator_first_name').value;
+    var lastname = document.getElementById('edit_creator_last_name').value;
+    var email = document.getElementById('edit_creator_email').value;
+    let path = "{{ route('update-creator') }}?user_id=" + userId + "&firstname=" + firstname + "&lastname=" + lastname + "&email=" + email;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.getElementById('creator_tbody').innerHTML = '';
+      document.getElementById('creator_tbody').innerHTML = data.html;
+      closeModal('edit_creator_modal');
     });
+  });
 
-    document.getElementById('edit_creator_modal').addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var userId = button.getAttribute('data-bs-id');
-        let path = "{{ route('edit-creator') }}?user_id=" + userId;
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            document.getElementById('edit_creator_first_name').value = data.creatorDetails['firstname'];
-            document.getElementById('edit_creator_last_name').value = data.creatorDetails['lastname'];
-            document.getElementById('edit_creator_email').value = data.creatorDetails['email'];
-            document.getElementById('update_creator_btn').setAttribute('user_id', data.creatorDetails['id']);
-        });
+  document.getElementById('delete_creator_modal').addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var userId = button.getAttribute('data-bs-id');
+    confirm_creator_delete.setAttribute('user_id', userId);
+  });
+
+  document.getElementById('confirm_creator_delete').addEventListener('click', (event) => {
+    var userId = document.getElementById('confirm_creator_delete').getAttribute('user_id');
+
+    let path = "{{ route('delete-creator') }}?user_id=" + userId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.getElementById('creator_tbody').innerHTML = '';
+      document.getElementById('creator_tbody').innerHTML = data.html;
+      closeModal('delete_creator_modal');
     });
+  });
 
-    document.getElementById('update_creator_btn').addEventListener('click', (event) => {
-        var userId = document.getElementById('update_creator_btn').getAttribute('user_id');
-        var firstname = document.getElementById('edit_creator_first_name').value;
-        var lastname = document.getElementById('edit_creator_last_name').value;
-        var email = document.getElementById('edit_creator_email').value;
-        let path = "{{ route('update-creator') }}?user_id=" + userId + "&firstname=" + firstname + "&lastname=" + lastname + "&email=" + email;
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            document.getElementById('creator_tbody').innerHTML = '';
-            document.getElementById('creator_tbody').innerHTML = data.html;
-            closeModal('edit_creator_modal');
-        });
-    });
-
-    document.getElementById('delete_creator_modal').addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var userId = button.getAttribute('data-bs-id');
-        confirm_creator_delete.setAttribute('user_id', userId);
-    });
-
-    document.getElementById('confirm_creator_delete').addEventListener('click', (event) => {
-        var userId = document.getElementById('confirm_creator_delete').getAttribute('user_id');
-        
-        let path = "{{ route('delete-creator') }}?user_id=" + userId;
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            document.getElementById('creator_tbody').innerHTML = '';
-            document.getElementById('creator_tbody').innerHTML = data.html;
-            closeModal('delete_creator_modal');
-        });
-    });
-
-    function closeModal(modalId) {
-      const truck_modal = document.querySelector('#' + modalId);
-      const modal = bootstrap.Modal.getInstance(truck_modal);    
-      modal.hide();
-    }
-
+  function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    modal.hide();
+  }
 </script>
