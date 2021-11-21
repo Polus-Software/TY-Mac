@@ -34,7 +34,7 @@
                             <input type="hidden" name="_method" value="PUT">
                            
                             <div class="row">
-                                <div class="form-group col-md-6 col-sm-6 col-xs-2">
+                                <div class="form-group col-md-12 col-sm-12 col-xs-2">
                                     <label for="currentPassword" class="currentPassword-label">Current Password</label>
                                     <input type="password" class="form-control" name="currentPassword" id="currentPassword" placeholder="Current password">
                                     <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewCurrentPass()"></i></span>
@@ -45,7 +45,7 @@
                                     @endif
                                 </div>
                                 
-                                <div class="form-group col-md-6 col-sm-6 col-xs-2">
+                                <div class="form-group col-md-12 col-sm-12 col-xs-2">
                                     <label for="newPassword" class="newPassword-label">New Password</label>
                                     <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New password">
                                     <span><i class="fas fa-eye-slash"  id="toggleNewPassword" onClick="viewNewPass()"></i></span>
@@ -68,7 +68,7 @@
                              
                                <div class="form-group buttons d-flex justify-content-end">
                                    <button type="button" class="btn back-btn">
-                                   <a href="{{route('edituser')}}">Back</a></button>
+                                   <a href="{{route('edituser')}}">Cancel</a></button>
                                    <button type="submit" class="btn update-btn">Update</button>
                                </div>
                             </div>

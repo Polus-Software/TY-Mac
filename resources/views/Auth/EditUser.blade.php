@@ -103,7 +103,7 @@
                     <div class="row">
                         <div class="form-group buttons d-flex justify-content-end">
                             <button type="submit" class="btn back-btn">
-                            <a href="{{route('dashboard')}}">Back</a></button>
+                            <a href="{{route('dashboard')}}">Cancel</a></button>
                             <button type="submit" class="btn update-btn">Update</button>
                         </div>
                     </div>

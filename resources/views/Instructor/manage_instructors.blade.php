@@ -14,7 +14,10 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3>Instructors</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
-          <button id="add_new_category" data-bs-toggle="modal" data-bs-target="#new_instructor_modal" class="btn btn-primary add_new_instructor_btn">Add new Instructor</button>
+          <button id="add_new_category" class="btn btn-primary add_new_instructor_btn"  title="Add new instructor"
+           data-bs-toggle="modal" data-bs-target="#new_instructor_modal">
+          <i class="fas fa-plus-square me-1"></i>
+          Add new Instructor</button>
 </div>
         </div>
 <div class="row mt-4">

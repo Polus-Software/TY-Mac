@@ -35,8 +35,8 @@ body {
     color: var(--main-text-color);
 }
 
-.llp-header .nav-link svg {
-    fill: var(--main-link-color);
+.llp-header .nav-link i {
+    color: var(--main-link-color);
 }
 
 .llp-sidebar {
@@ -44,7 +44,7 @@ body {
 }
 
 .llp-sidebar .nav-link svg {
-    fill: var(--main-title-color);
+    color: var(--main-title-color);
 }
 
 .table>:not(:first-child) {
