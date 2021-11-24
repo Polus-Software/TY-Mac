@@ -1,44 +1,111 @@
-@extends('Layouts.Profile')
+@extends('Layouts.admin.master')
 @section('content')
+@include('Layouts.admin.header')
+<!-- container -->
+<div class="container llp-container">
+  <div class="row">
+    <div class="col-2 position-fixed">
+    <!-- include sidebar here -->
+    @include('Layouts.admin.sidebar')
+    </div>
+    <div class="col-9 ms-auto">
+<!-- main -->
+<main>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+          <h3>Instructors</h3>
+          <div class="btn-toolbar mb-2 mb-md-0">
+          <button id="add_new_category" class="btn btn-primary add_new_instructor_btn"  title="Add new instructor"
+           data-bs-toggle="modal" data-bs-target="#new_instructor_modal">
+          <i class="fas fa-plus-square me-1"></i>
+          Add new Instructor</button>
+</div>
+        </div>
+<div class="row mt-4">
+  <table class="table llp-table">
+  <thead>
+    <tr>
+    <th scope="col">Slno.</th>
+    <th scope="col" colspan="2">Name</th>
+    <th scope="col">Email</th>
+    <th scope="col">Instructor Added On</th>
+    <th scope="col" colspan="3" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody id="instructor_tbody">
+  @php ($slno = 0)
+  @foreach ($instructors as $instructor)
+  @php ($slno = $slno + 1)
+      <tr id="{{$instructor->id}}">
+          <th class="align-middle" scope="row">{{$slno}}</th>
+          <td class="align-middle" colspan="2">{{$instructor->firstname}} {{$instructor->lastname}}</td>
+          <td class="align-middle">{{$instructor->email}} </td>
+          <td class="align-middle"></td>
+          <td class="align-middle text-center">
+          <a href="#" title="View instructor" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="{{$instructor->id}}">
+          <i class="fas fa-eye"></i>
+            </a>
+            <a href="#" title="Edit instructor" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="{{$instructor->id}}">
+            <i class="fas fa-pen"></i>
+            </a>
+            <a href="#" title="Delete instructor" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="{{$instructor->id}}">
+            <i class="fas fa-trash-alt"></i>
+            </a>
+          </td>
+          <!-- <td class="text-center align-middle"><button class="btn btn-primary view_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="{{$instructor->id}}">View</button></td>
+          <td class="text-center align-middle"><button class="btn btn-success edit_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="{{$instructor->id}}">Edit</button></td>
+          <td class="text-center align-middle"><button class="btn btn-danger delete_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="{{$instructor->id}}">Delete</button></td> -->
+      </tr>
+  @endforeach
+  </tbody>
+</table>
+</div>
+</main>
+<!-- main ends -->
+
+    </div>
+  </div>
+</div>
+<!-- container ends -->
+
 <!-- New course modal -->
-<div id="new_instructor_modal" class="modal fade" tabindex="-1">
+<div id="new_instructor_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add new Instructor</h5>
+        <h5 class="modal-title">Add New Instructor</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <form>
           @csrf
           <div class="mb-3">
-            <label for="instructor_first_name" class="col-form-label">Instructor's First Name</label>
+            <label for="instructor_first_name" class="col-form-label">First Name</label>
             <input type="text" class="form-control" id="instructor_first_name"></input>
           </div>
           <div class="mb-3">
-            <label for="instructor_last_name" class="col-form-label">Instructor's Last Name</label>
+            <label for="instructor_last_name" class="col-form-label">Last Name</label>
             <input type="text" class="form-control" id="instructor_last_name"></input>
           </div>
           <div class="mb-3">
-            <label for="instructor_email" class="col-form-label">Instructor's Email</label>
+            <label for="instructor_email" class="col-form-label">Email</label>
             <input type="text" class="form-control" id="instructor_email"></input>
           </div>
           <div class="mb-3">
-            <label for="instructor_password" class="col-form-label">Instructor's Password</label>
-            <input type="text" class="form-control" id="instructor_password"></input><button type="button" class="btn btn-secondary mt-1" id="generate_password">Generate password</button>
+            <label for="instructor_password" class="col-form-label">Password</label>
+            <input type="text" class="form-control" id="instructor_password"></input><button type="button" class="btn btn-link" id="generate_password">Generate password</button>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="save_instructor" class="btn btn-success">Add Instructor</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="save_instructor" class="btn btn-primary">Add Instructor</button>
       </div>
     </div>
   </div>
 </div>
 <!-- New course modal ends here -->
 <!-- View course modal -->
-<div id="view_instructor_modal" class="modal fade" tabindex="-1">
+<div id="view_instructor_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -58,14 +125,14 @@
           </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
 </div>
 <!-- View course modal ends here -->
 <!--  Edit course modal -->
-<div id="edit_instructor_modal" class="modal fade" tabindex="-1">
+<div id="edit_instructor_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -90,15 +157,15 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="update_instructor_btn" class="btn btn-success">Update details</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="update_instructor_btn" class="btn btn-primary">Update details</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Edit course modal ends here -->
 <!-- Delete course modal -->
-<div id="delete_instructor_modal" class="modal fade" tabindex="-1">
+<div id="delete_instructor_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -107,64 +174,26 @@
       </div>
       <div class="modal-body">
           <table class="table table-borderless">
-            <tr>
+            <!-- <tr>
               <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
-            </tr>
+            </tr> -->
             <tr>
             </tr>
             <tr>
-              <td class="text-center"><strong>Are you sure?</strong></td>
+              <td class="text-center"><p>
+              <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
+              Do you really want to delete this istructor?</p></td>
             </tr>
           </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="confirm_instructor_delete" class="btn btn-danger">Confirm</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirm_instructor_delete" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Delete course modal ends here -->
-<div class="container">
-       <div class="custom-container mx-auto border">
-           <div class="row">                    
-               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 m-auto">
-                   <div class="content-page">
-                    <div class="mb-3">
-                        <button id="add_new_category" data-bs-toggle="modal" data-bs-target="#new_instructor_modal" class="btn btn-success add_new_instructor_btn">Add new Instructor</button>
-                    </div>
-                   <table class="table table-striped table-hover table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                        <th scope="col">Slno.</th>
-                        <th scope="col" colspan="2">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Instructor Added On</th>
-                        <th scope="col" colspan="3" class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="instructor_tbody">
-                    @php ($slno = 0)
-                    @foreach ($instructors as $instructor)
-                    @php ($slno = $slno + 1)
-                        <tr id="{{$instructor->id}}">
-                            <th class="align-middle" scope="row">{{$slno}}</th>
-                            <td class="align-middle" colspan="2">{{$instructor->firstname}} {{$instructor->lastname}}</td>
-                            <td class="align-middle">{{$instructor->email}} </td>
-                            <td class="align-middle">Dummy</td>
-                            <td class="text-center align-middle"><button class="btn btn-primary view_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="{{$instructor->id}}">View</button></td>
-                            <td class="text-center align-middle"><button class="btn btn-success edit_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="{{$instructor->id}}">Edit</button></td>
-                            <td class="text-center align-middle"><button class="btn btn-danger delete_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="{{$instructor->id}}">Delete</button></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                    </table>
-                     </div>
-               </div>
-           </div>
-
-       </div>
-</div>
 
 <script>
 

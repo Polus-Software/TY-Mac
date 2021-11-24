@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\UserType;
 use Auth;
 
 
@@ -14,13 +15,18 @@ class AdminController extends Controller
     public function viewAllStudents(){
        
         $students =User::where('role_id', 2)->paginate(10);
-        return view('Auth.Admin.AdminDashboard', compact('students'));
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+        return view('Auth.Admin.AdminDashboard', [
+            'students' => $students,
+            'userType' => $userType]);
+        
     }
 
     public function showStudent($id){
         $students =User::findOrFail($id);
         return view ('Auth.Admin.ShowStudent', compact('students'));
-
+        
     }
 
     public function editStudent($id){

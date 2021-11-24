@@ -12,6 +12,7 @@
     width: 604px;
     height: 287px;
     border-radius: 30px;
+    object-fit: cover;
 }
 .text-content-wrapper p{
     font-size: 30px;
@@ -19,7 +20,7 @@
     font-weight:bold ;
     font-family: 'Roboto', sans-serif;
 }
-.enroll-button{
+.enroll-button, .review-button{
     color:#2C3443;
     background:#FFFFFF ;
     border-radius: 10px;
@@ -41,9 +42,7 @@
     border-radius: 15px;
     border:0.5px solid #F5BC29;
 }
-/* .fa-check-circle:before{
-    padding: 10px;
- } */
+
 .row-1 p{
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
@@ -128,12 +127,25 @@
 .review{
     line-height: 36px;
 }
-.fa-star{
-    color: #F5BC29;
+.rating> .fa-star{
+    font-size:30px;
 }
 .btn a{
     text-decoration: none;
     color: inherit;
+}
+.modal-body input{
+display: none;
+}
+.modal-body textarea{
+    resize: none;
+    
+}
+.active-stars{
+    color:#F5BC29; 
+}
+.rateCourse{
+    color:#F5BC29; 
 }
 
 

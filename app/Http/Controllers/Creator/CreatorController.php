@@ -8,16 +8,20 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\UserType;
 use Hash;
+use Auth;
 
 class CreatorController extends Controller
 {
     public function index() {
         $userType = UserType::where('user_role', 'content_creator')->value('id');
+        $user = Auth::user();
+        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $creators = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
         return view('Creator.manage_creators', [
-            'creators' => $creators
+            'creators' => $creators,
+            'userType' => $userTypeLoggedIn
         ]);
     } 
 

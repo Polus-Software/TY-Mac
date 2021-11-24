@@ -1,7 +1,4 @@
-body{
-    background:grey;
-}
-
+body{background: grey;}
 .custom-container{
    margin-top: 100px;
     left: 218px;
@@ -11,22 +8,35 @@ body{
     border-radius: 4px;
 }
 .sidebar{
-    padding : 25px 0px 25px 25px ;
-    background:#FFFDF7;
-    width:max-content;
-    height: max-content;  
+    padding : 25px 25px 25px 25px ;
+    /* width: fit-content; */
+    /* width:max-content;
+    height: max-content; */
+      
 }
 
 .heading-1{
-    margin-left: -8px;
-    padding-top:23px;
+    
     font-size: 24px;
     font-family: 'Lato', sans-serif;
     font-weight:900 ;
     line-height: 24px;
     color: #2C3443;
 }
-.link-1{
+
+.nav-pills .nav-link.active{
+    background-color: #F1EEFD;
+    color:#2C3443;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}
+.nav-pills .nav-link{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    line-height: 24px;
+    color:#868E96;
+}
+/* .link-1{
     padding-top:50px;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
@@ -34,28 +44,28 @@ body{
 }
 .link-1,.link-2,.link-3, .link-4, .link-5{
 color:#868E96;
-}
+} */
 
-.nav-link:hover {
+/* .nav-link:hover {
     color: #141414;
     font-weight:bold ;
     font-family: 'Roboto', sans-serif;
-}
+} */
 
-.nav i{
+/* .nav i{
     padding-left: 20px;
     visibility: hidden;
 }
 
 .nav i.active {
     visibility : visible;
-}
+} */
 
-.nav-link.active {
+/* .nav-link.active {
     color: #141414;
     font-weight:bold ;
     font-family: 'Roboto', sans-serif;
-}
+} */
 
 .content-page{
     width: auto;

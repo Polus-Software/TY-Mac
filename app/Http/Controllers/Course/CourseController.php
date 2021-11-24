@@ -17,6 +17,8 @@ class CourseController extends Controller
 {
     public function index() {
         $userType = UserType::where('user_role', 'instructor')->value('id');
+        $user = Auth::user();
+        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -36,7 +38,8 @@ class CourseController extends Controller
         return view('Course.manage_courses', [
             'courseDetails' => $courseDetails,
             'courseCategories' => $courseCategories,
-            'instructors' => $instructors
+            'instructors' => $instructors,
+            'userType' => $userTypeLoggedIn
         ]);
     } 
 
