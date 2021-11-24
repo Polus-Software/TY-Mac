@@ -4,24 +4,49 @@
     <div class="container">
         <div class="custom-container mx-auto border">
             <div class="row">                    
-               <div class="col-lg-4 col-sm-4 col-md-4 col-xs-3">
-                    <div class="sidebar col-md-4 col-sm-2">
-                        <div class="side-heading border-bottom">
-                           <span><p class="heading-1">My Account</p></span>
-                        </div>
-                        <div class="text-left">
-                            <nav class="nav flex-column" id="navmenu">
-                            <a class="nav-link link-1" href="{{ route('edituser') }}">My Profile<span><i class="fas fa-arrow-right"></i></span></a>
-                            <a class="nav-link link-2 active" aria-current="page" href="#">Change Password<span><i class="fas fa-arrow-right active"></i></span></a>
-                            <a class="nav-link link-3" href="#">Email Notifications<span><i class="fas fa-arrow-right"></i></span></a>
-                            <a class="nav-link link-4" href="#">My Favorite Courses<span><i class="fas fa-arrow-right"></i></span></a>
-                            <a class="nav-link link-5" href="#">My Courses<span><i class="fas fa-arrow-right"></i></span></a>
-                            </nav>
-                        </div>
-                   </div>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9">
-                    <div class="content-page">
+                <div class="col-lg-4 col-sm-4 col-md-4 col-sm-12 col-12 mt-3">
+                   <div class="sidebar h-100 bg-light ms-3">
+                      <div class="side-heading">
+                        <p class="heading-1">My Account</p>
+                       </div>
+            
+                <ul class="nav nav-pills flex-column mb-auto mt-5">
+                
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="{{ route('edituser') }}">
+                    <i class="fas fa-user pe-2"></i>
+                      My Profile</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link link-dark active" href="{{ route('change.password.get') }}">
+                    <i class="fas fa-lock pe-2"></i>
+                      Change Password</a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="far fa-bell pe-2"></i>
+                      Email Notifications</a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="far fa-heart pe-2"></i>
+                      My Favourite Courses</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="fas fa-book-open pe-2"></i>
+                      My Favourite Courses</a>
+                  </li>
+                  
+                </ul>
+              </div>
+          </div>
+               
+               <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                   
+                     <div class="content-page">
                        
                         @if (Session::has('message'))
                             <div class="alert alert-success" role="alert">
@@ -34,7 +59,7 @@
                             <input type="hidden" name="_method" value="PUT">
                            
                             <div class="row">
-                                <div class="form-group col-md-12 col-sm-12 col-xs-2">
+                                <div class="form-group col-md-12 col-sm-12 col-12">
                                     <label for="currentPassword" class="currentPassword-label">Current Password</label>
                                     <input type="password" class="form-control" name="currentPassword" id="currentPassword" placeholder="Current password">
                                     <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewCurrentPass()"></i></span>
@@ -45,7 +70,7 @@
                                     @endif
                                 </div>
                                 
-                                <div class="form-group col-md-12 col-sm-12 col-xs-2">
+                                <div class="form-group col-md-12 col-sm-12 col-12">
                                     <label for="newPassword" class="newPassword-label">New Password</label>
                                     <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New password">
                                     <span><i class="fas fa-eye-slash"  id="toggleNewPassword" onClick="viewNewPass()"></i></span>
@@ -56,7 +81,7 @@
                                     @endif
                                 </div>
                            
-                                <div class="form-group col-md-12 col-sm-12 col-xs-2">
+                                <div class="form-group col-md-12 col-sm-12 col-12">
                                     <label for="confirmPassword" class="confirmPassword-label">Confirm Password</label>
                                     <input type="password" class="form-control" name="confirm_password" id="confirmPassword" placeholder="Retype password">
                                     <span><i class="fas fa-eye-slash"  id="confirmTogglePassword" onClick="viewConfirmpass()"></i></span>
@@ -75,7 +100,7 @@
                         </form>    
                         
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
     </div>

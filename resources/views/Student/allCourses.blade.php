@@ -8,9 +8,9 @@
             <p>Lorem ipsum dolor sit amet</p>
             <h1>Dignissimos Ducimus</h1>
             <ul class="p-0 m-0">
-              <li class="pb-2"><i class="fas fa-arrow-right">Praesentium voluptatum deleniti atque.</i></li>
-              <li class="pb-2"><i class="fas fa-arrow-right">Corrupti quos dolores et quas molestias.</i></li>
-              <li class="pb-2"><i class="fas fa-arrow-right">Excepturi sint occaecati cupiditate.</i></li>
+              <li class="pb-2"><i class="fas fa-arrow-right"></i>Praesentium voluptatum deleniti atque.</li>
+              <li class="pb-2"><i class="fas fa-arrow-right"></i>Corrupti quos dolores et quas molestias.</li>
+              <li class="pb-2"><i class="fas fa-arrow-right"></i>Excepturi sint occaecati cupiditate.</li>
             </ul>
           </div>
         </div>
@@ -160,7 +160,7 @@
           @foreach($courseDatas as $courseData)
             <div class="col-lg-6">
               <div class="card mb-4">
-                <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                <img src="{{asset('/storage/images/'.$courseData['course_image'])}}" class="card-img-top" alt="...">
                   <div class="card-body">
                     <h5 class="card-title text-center">
                       {{$courseData['course_title']}}
@@ -170,7 +170,7 @@
                          $limit = 150, $end = '....')}} 
                          <a href="{{ route('student.course.show',$courseData['id']) }}" class="">Read More</a>
                     </p>
-                    <div class="row pt-1">
+                    <div class="row">
                       <div class="col-lg-6 col-sm-6 col-6">
                         <i class="fas fa-star rateCourse"></i>
                         <i class="fas fa-star rateCourse"></i>
@@ -180,15 +180,15 @@
                       </div>
                         
                       <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
-                        <i class="fas fa-tag fa-flip-horizontal"></i>{{$courseData['course_category']}}
+                        <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{$courseData['course_category']}}
                       </div>
                     </div>
                   </div>
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                       <div class="row">
-                        <div class="col-lg-4 col-4 item-1"><i class="far fa-clock"></i>duration</div>
-                        <div class="col-lg-4 col-4 item-2"><i class="far fa-user"></i>
+                        <div class="col-lg-4 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>1h 50m</div>
+                        <div class="col-lg-4 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>
                         {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
                         </div>
                         <div class="col-lg-4 col-4 item-3">{{$courseData['course_difficulty']}}</div>
@@ -199,7 +199,7 @@
                     <div class="row">
                       <div class="btn-group border-top" role="group" aria-label="Basic example">
                         <a href="" class="card-link btn border-end">Register now</a>
-                        <a href="{{ route('student.course.show', $courseData['id'])}}" class="card-link btn">Go to details<i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ route('student.course.show', $courseData['id'])}}" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a>
                     </div>
                   </div>
               </div>

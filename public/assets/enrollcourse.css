@@ -31,9 +31,7 @@ section .card-2{
 .btn:hover{
     color: white;
 }
-.fa-tag:before, .fa-user:before, .fa-clock:before{
-    padding: 8px;
-}
+
 .card-1 h5{
     font-family: 'Roboto', sans-serif;
     font-weight: bold;

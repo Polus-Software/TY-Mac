@@ -93,3 +93,12 @@ body {
     font-weight: bold;
     color: var(--main-title-color);
 }
+.modal-body.error small{
+    color:red;
+    visibility: visible;
+}
+.modal-body small{
+    color:red;
+    visibility: hidden;
+    position: absolute;
+}

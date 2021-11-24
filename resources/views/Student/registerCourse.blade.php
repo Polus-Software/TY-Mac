@@ -8,7 +8,7 @@
                 <div class="card-1 mb-3 mt-4">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                            <img src="/courselist/Illustration/Mask Group 2.jpg" class="img-fluid col-md-12 col-sm-12 col-12 card-image h-100" alt="coursepicture">
+                            <img src="{{asset('/storage/images/'.$courseDetails['course_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image" alt="coursepicture">
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
@@ -19,30 +19,30 @@
                                     you will gain valuable productivity skills & become more efficient at creating documents, spreadsheets, 
                                     and presentations.</p>
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i><small>(60 ratings) 100 participants</small>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-3 col-3">
-                                            <p><i class="fas fa-tag fa-flip-horizontal"></i>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                            <p><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-3 col-3">
-                                            <p><i class="far fa-user"></i>
+                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6">
+                                            <p><i class="far fa-user pe-1"></i>
                                                 {{$courseDetails['instructor_firstname']}} {{$courseDetails['instructor_lastname']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-3 col-3">
-                                            <p><i class="far fa-user"></i>        
+                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6">
+                                            <p><i class="far fa-user pe-1"></i>        
                                                 {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-3 col-3">
-                                            <p><i class="far fa-clock"></i>duration</p>
+                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6">
+                                            <p><i class="far fa-clock pe-1"></i>duration</p>
                                         </div>
                                    
                                     </div> 

@@ -31,6 +31,7 @@ class CoursesCatalogController extends Controller
     
         $courseDetails = [];
         $courses = Course::all();
+        //dd($courses);
         foreach($courses as $course)
         {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
@@ -43,6 +44,7 @@ class CoursesCatalogController extends Controller
                 'course_title' => $course->course_title,
                 'course_category' => $courseCategory,
                 'description' => $course->description,
+                'course_image' => $course->course_image,
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
@@ -71,6 +73,9 @@ class CoursesCatalogController extends Controller
         $singleCourseDetails =[];
         $singleCourseFeedbacks = [];
         $course = Course::findOrFail($id);
+        $short_description = explode(";",$course->short_description);
+        $course_details_points = explode(";",$course->course_details_points);
+
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -101,15 +106,19 @@ class CoursesCatalogController extends Controller
             'course_category' => $courseCategory,
             'description' => $course->description,
             'course_difficulty' => $course->course_difficulty,
+            'course_details' => $course->course_details,
+            'course_image' => $course->course_image,
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'profile_photo' => $profilePhoto,
         );
         array_push($singleCourseDetails, $singleCourseData);
-   
+  //dd($singleCourseDetails);
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
-            'singleCourseFeedbacks' => $singleCourseFeedbacks
+            'singleCourseFeedbacks' => $singleCourseFeedbacks,
+            'short_description' => $short_description,
+            'course_details_points' => $course_details_points 
         ]);
 
     }
@@ -173,6 +182,7 @@ class CoursesCatalogController extends Controller
         'course_difficulty' => $course->course_difficulty,
         'instructor_firstname' => $instructorfirstname,
         'instructor_lastname' => $instructorlastname,
+        'course_image' => $course->course_image,
       );
         return view('Student.registerCourse', [
             'singleCourseDetails' => $singleCourseDetails,

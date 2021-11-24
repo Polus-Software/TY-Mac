@@ -119,7 +119,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="{{ ('add-course') }}" enctype="multipart/form-data" method="POST">
           @csrf
           <div class="mb-3">
             <label for="course_category" class="col-form-label">Course Category</label>
@@ -145,11 +145,16 @@
               @endforeach
             </select>
           </div>
+          <div class="mb-3">
+            <label for="course_image" class="col-form-label">Upload Course Image</label>
+            <input type="file" name="course_image" id="course_image">
+            <small id="course_image_error">Error message</small>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="save_course" class="btn btn-primary">Add course</button>
+        <button type="submit" id="save_course" class="btn btn-primary">Add course</button>
       </div>
     </div>
   </div>
@@ -263,30 +268,68 @@
 <!-- Delete course modal ends here -->
 
 <script>
-  document.getElementById('save_course').addEventListener('click', (event) => {
-    let courseTitle = document.getElementById('course_title').value;
-    let courseDescription = document.getElementById('course_description').value;
-    let courseCategory = document.getElementById('course_category').value;
-    let instructor = document.getElementById('course_instructor').value;
-    let path = "{{ route('add-course') }}?course_title=" + courseTitle + '&course_description=' + courseDescription + '&course_category=' + courseCategory + '&instructor=' + instructor;
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      document.getElementById('course_tbody').innerHTML = '';
-      document.getElementById('course_tbody').innerHTML = data.html;
-      document.getElementById('course_title').value = '';
-      document.getElementById('course_description').value = '';
-      document.getElementById('course_category').value = '';
-      document.getElementById('course_instructor').value = '';
-      closeModal('new_course_modal');
-    });
-  });
+
+document.getElementById('save_course').addEventListener('click',function(e){
+
+var CourseImage = document.getElementById('course_image');
+var filePath = CourseImage.value;
+
+
+if(filePath == ''){
+  e.preventDefault();
+  showError(CourseImage,'Please upload  an image');
+}else {
+  removeError(CourseImage)
+  closeModal('new_course_modal')
+}
+
+function showError(input,message){
+  input.style.borderColor = 'red';
+  const small=document.getElementById('course_image_error');
+  small.innerText=message;
+  small.style.visibility = 'visible';
+}
+
+function removeError(input){
+input.style.borderColor = '#ced4da';
+const small=document.getElementById('course_image_error');
+small.style.visibility = 'hidden';
+}
+
+
+function closeModal(modalId) {
+
+  const truck_modal = document.querySelector('#' + modalId);
+  const modal = bootstrap.Modal.getInstance(truck_modal);    
+  modal.hide();
+}  
+
+});
+
+  // document.getElementById('save_course').addEventListener('click', (event) => {
+  //   let courseTitle = document.getElementById('course_title').value;
+  //   let courseDescription = document.getElementById('course_description').value;
+  //   let courseCategory = document.getElementById('course_category').value;
+  //   let instructor = document.getElementById('course_instructor').value;
+  //   let path = "{{ route('add-course') }}?course_title=" + courseTitle + '&course_description=' + courseDescription + '&course_category=' + courseCategory + '&instructor=' + instructor;
+  //   fetch(path, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       "X-CSRF-Token": document.querySelector('input[name=_token]').value
+  //     },
+  //     body: JSON.stringify({})
+  //   }).then((response) => response.json()).then((data) => {
+  //     document.getElementById('course_tbody').innerHTML = '';
+  //     document.getElementById('course_tbody').innerHTML = data.html;
+  //     document.getElementById('course_title').value = '';
+  //     document.getElementById('course_description').value = '';
+  //     document.getElementById('course_category').value = '';
+  //     document.getElementById('course_instructor').value = '';
+  //     closeModal('new_course_modal');
+  //   });
+  // });
 
 
   document.getElementById('view_course_modal').addEventListener('show.bs.modal', function(event) {
