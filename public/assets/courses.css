@@ -62,25 +62,23 @@
     background: #FFFFFF;
    
 }
+.card img{
+    border-top-left-radius: 29px;
+    border-top-right-radius: 29px;
+    height: 187px;
+}
 .card-text{
     color:#6E7687;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    padding-left: 15px;
+    
 }
 .card-text a{
     text-decoration: none;
     color:#6E7687;
     font-family: inherit;
     font-size: inherit;
-}
-.fa-tag:before, .fa-user:before, .fa-clock:before{
-   padding: 10px;
-}
-
-.fa-arrow-right:before{
-    padding: 15px;
 }
 
 .rateCourse{

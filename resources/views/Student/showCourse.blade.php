@@ -120,10 +120,11 @@
                 <div class="row row-2">
                     <div class="col-lg-12">
                         <p class="para-1">What You'll Learn</p>
-                        <p class="para-2"><i class="fas fa-check-circle"></i> &nbsp;Lorem ipsum dolor sit amet, 
-                            consectetur adipiscing elit, sed do eiusmod.</p>
-                        <p class="para-2"><i class="fas fa-check-circle"></i> &nbsp;Lorem ipsum dolor sit amet,
-                             consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                        @foreach($short_description as $value)
+                        <p class="para-2"><i class="fas fa-check-circle"></i> &nbsp; {{$value}} <br>
+                        @endforeach
+                    </p>
+                       
                     </div>
                 </div>
                 <div class="row row-3 pt-2">
@@ -156,12 +157,14 @@
                 </div>
               </div>
               <div class="col-lg-6 col-md-12 order-1 order-lg-2">
-                  <img src="/courselist/fundamentals of google docs.jpg" alt="" 
+                  <img src="{{asset('/storage/images/'.$singleCourseDetail['course_image'])}}" alt="" 
                   class="img-fluid course-picture" style="height: auto;">
               </div>
           </div>
       </div>
     </header>
+
+    <!-- course description -->
     <section class="mt-5">
         <div class="container">
             <div class="row">
@@ -179,7 +182,8 @@
             </div>
         </div>
     </section>
-
+<!-- course description end -->
+<!-- course content-->
     <section class="mt-3">
         <div class="container">
             <div class="row">
@@ -233,32 +237,23 @@
                             </ul>   
                         </div>
                     </div>
+<!-- course content end-->
+<!-- Who this course is for -->
                 <div class="col-lg-12">
                     <div class="card mb-3">
                         <div class="card-body p-3">
                             <h5 class="card-title p-2">Who this course is for</h5>
-                            <p class="card-text-1 p-2">At vero eos et accusamus et iusto odio dignissimos ducimus qui 
-                                blanditiis praesentium voluptatum deleniti atque corrupti quos 
-                                dolores et quas molestias excepturi sint occaecati cupiditate non provident, 
-                                similique sunt in culpa qui officia deserunt mollitia animi, 
-                                id est laborum.</p>
-
-                            <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                                sed do eiusmod.
-                            </p>
-                            <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                                sed do eiusmod.
-                            </p>
-                            <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                                sed do eiusmod.
-                            </p>
+                            <p class="card-text-1 p-2">@foreach($singleCourseDetails as $singleCourseDetail)
+                               {{$singleCourseDetail['course_details']}}</p>
+                                @endforeach
+                             @foreach($course_details_points as $course_details_point)
+                             <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;{{$course_details_point}} </p>
+                             @endforeach
                         </div>
                     </div>
                 </div>
             </div>
+<!-- instructor profile -->
             <div class="col-lg-4">
                 <div class="card card-3 mb-5">
                     <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
@@ -286,13 +281,16 @@
                                 commodo consequat sunt explicabo</p>
                           </div>
                           <div class="d-flex justify-content-center">
-                              <p><i class="fab fa-twitter"></i>
-                                <i class="fab fa-linkedin-in"></i>
-                                <i class="fab fa-youtube"></i></p>
+                              <p><a href=""><i class="fab fa-twitter"></i></a>
+                                 <a href=""><i class="fab fa-linkedin-in"></i></a>
+                                 <a href=""><i class="fab fa-youtube"></i></a>
+                              </p>
                           </div>
                       </div>
                     
                   </div>
+<!-- instructor profile end -->    
+<!-- live cohorts -->      
                   <div class="card card-4 mb-3 mt-3" style="background: #F8F7FC;">
                     <div class="card-body">
                         <h5 class="card-title p-3">Upcoming Live Cohorts</h5>
@@ -316,7 +314,8 @@
             </div>
         </div>
     </section>
-
+<!-- live cohorts end --> 
+<!-- student reviews --> 
     <section>
         <div class="container">
             <div class="row">
@@ -354,16 +353,13 @@
                                 </div>
                                 @endforeach
                             </div>
-                        
-
-                    
-       
-                    </div>
+                        </div>
                     </div>
                 </div> 
             </div>
         </div>
     </section>
+<!-- student reviews end--> 
 
 <script>
     document.getElementById('enrollButton').addEventListener('click', (e) => {

@@ -1,24 +1,24 @@
 
-var nav = document.getElementById("navmenu");
-var navlink = document.getElementsByClassName("nav-link");
+// var nav = document.getElementById("navmenu");
+// var navlink = document.getElementsByClassName("nav-link");
 
 
-for (var j = 0; j < navlink.length; j++) {
-  navlink[j].addEventListener("click", function() {
+// for (var j = 0; j < navlink.length; j++) {
+//   navlink[j].addEventListener("click", function() {
   
-  var current = document.getElementsByClassName("active")[0];
-  const previousIcon = current.getElementsByTagName('i')[0];
+//   var current = document.getElementsByClassName("active")[0];
+//   const previousIcon = current.getElementsByTagName('i')[0];
 
-  previousIcon.className = previousIcon.className.replace("active", "");
-  current.className = current.className.replace(" active", "");
-  this.classList.add("active");
+//   previousIcon.className = previousIcon.className.replace("active", "");
+//   current.className = current.className.replace(" active", "");
+//   this.classList.add("active");
   
-  const icon = this.getElementsByTagName('i')[0];
+//   const icon = this.getElementsByTagName('i')[0];
 
-  icon.classList.add("active");
+//   icon.classList.add("active");
 
-  });
-}
+//   });
+// }
 
 
 //validation for edit form

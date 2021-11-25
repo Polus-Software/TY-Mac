@@ -67,9 +67,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -77,9 +75,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -87,9 +83,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -97,9 +91,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
             </tbody>
           </table>
@@ -126,9 +118,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -136,9 +126,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -146,9 +134,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
               <tr>
                 <td>1</td>
@@ -156,9 +142,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td class="text-center"><svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#three-dots" />
-                  </svg></td>
+                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
               </tr>
             </tbody>
           </table>

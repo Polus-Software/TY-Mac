@@ -33,24 +33,46 @@
 <div class="container">
   <div class="custom-container mx-auto border">
     <div class="row">                    
-        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-3">
-            <div class="sidebar col-md-4 col-sm-2">
-                <div class="side-heading border-bottom">
-                  <span><p class="heading-1">My Account</p></span>
+        <div class="col-lg-4 col-sm-4 col-md-4 col-sm-12 col-12 mt-3">
+           <div class="sidebar h-100 bg-light ms-3">
+                <div class="side-heading">
+                  <p class="heading-1">My Account</p>
                 </div>
-                  <div class="text-left">
-                    <nav class="nav flex-column" id="navmenu">
-                      <a class="nav-link link-1 active" aria-current="page" href="#">My Profile<span><i class="fas fa-arrow-right active"></i></span></a>
-                      <a class="nav-link link-2" href="{{ route('change.password.get') }}">Change Password<span><i class="fas fa-arrow-right"></i></span></a>
-                      <a class="nav-link link-3" href="#">Email Notifications<span><i class="fas fa-arrow-right"></i></span></a>
-                      <a class="nav-link link-4" href="#">My Favorite Courses<span><i class="fas fa-arrow-right"></i></span></a>
-                      <a class="nav-link link-5" href="#">My Courses<span><i class="fas fa-arrow-right"></i></span></a>
-                    </nav>
-                    
-                  </div>
+            
+                <ul class="nav nav-pills flex-column mb-auto mt-5">
+                
+                  <li class="nav-item">
+                    <a class="nav-link link-dark active" href="#">
+                    <i class="fas fa-user pe-2"></i>
+                      My Profile</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="{{ route('change.password.get') }}">
+                    <i class="fas fa-lock pe-2"></i>
+                      Change Password</a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="far fa-bell pe-2"></i>
+                      Email Notifications</a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="far fa-heart pe-2"></i>
+                      My Favourite Courses</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link link-dark" href="#">
+                    <i class="fas fa-book-open pe-2"></i>
+                      My Favourite Courses</a>
+                  </li>
+                  
+                </ul>
               </div>
           </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9">
+          <div class="col-lg-8 col-md-8 col-sm-12 col-12">
               <div class="content-page">
                   <div class="content-top">
                       <div class="card col-sm-8 mx-auto">
@@ -103,7 +125,7 @@
                     <div class="row">
                         <div class="form-group buttons d-flex justify-content-end">
                             <button type="submit" class="btn back-btn">
-                            <a href="{{route('dashboard')}}">Back</a></button>
+                            <a href="{{route('dashboard')}}">Cancel</a></button>
                             <button type="submit" class="btn update-btn">Update</button>
                         </div>
                     </div>

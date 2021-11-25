@@ -50,3 +50,4 @@ document.querySelector('#editStudentsForm').addEventListener('submit', (e) => {
       return re.test(String(email).toLowerCase());
   }
   
+  
