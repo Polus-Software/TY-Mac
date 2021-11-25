@@ -46,9 +46,19 @@
       <i class="fas fa-book-reader"></i>
         Courses</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('schedule-session') }}">
+      <i class="fas fa-book-reader"></i>
+        Schedule Live Session</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('admin-settings') }}">
+      <i class="fas fa-cogs"></i>
+        App Settings</a>
+    </li>
     @elseif($userType == 'instructor')
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('instructor-session-view') }}">
+      <a class="nav-link link-dark" href="{{route('session-view')}}">
         <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
         </svg>
@@ -59,11 +69,11 @@
     </li>
     @else
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('instructor-session-view') }}">
+      <a class="nav-link link-dark" href="">
         <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
         </svg>
-        Attend Session</a>
+        View Sessions</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="#">
@@ -75,7 +85,7 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('student.courses.get') }}">
       <i class="fas fa-book-reader"></i>
-        courses</a>
+        Courses</a>
     </li>
     @endif
 

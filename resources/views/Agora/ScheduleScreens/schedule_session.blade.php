@@ -12,49 +12,56 @@
       <!-- main -->
       <main>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Courses</h3>
+          <h3>Add Sessions</h3>
+          
+              
+
           <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="add_new_course" data-bs-toggle="modal" data-bs-target="#new_course_modal" class="btn btn-primary add_new_course_btn">Add New Course</button>
+            <!-- <button id="add_new_course" data-bs-toggle="modal" data-bs-target="#new_course_modal" class="btn btn-primary add_new_course_btn">Add New Course</button>
             <button id="add_sub_topics" data-bs-toggle="modal" data-bs-target="#new_sub_modal" class="btn btn-secondary add_new_topics_btn ms-2">Add Sub Topics</button>
-            <button id="add_batches" data-bs-toggle="modal" data-bs-target="#batch_modal" class="btn btn-secondary add_batches_btn ms-2">Add Batches</button>
+            <button id="add_batches" data-bs-toggle="modal" data-bs-target="#batch_modal" class="btn btn-secondary add_batches_btn ms-2">Add Batches</button> -->
           </div>
         </div>
         <div class="row mt-4">
+            <div class="col-lg-6 col-6 mb-4">
+            <form>
+                  <label for="session_title">Session title</label>
+                  <input class="form-control" id="session_title"/>
+                  <label for="session_course">Course</label>
+                  <select class="form-control" id="session_course">
+                      <option value="" disabled selected>Please select a course</option>
+                      @foreach($courses as $course)
+                        <option value="{{$course->id}}">{{$course->course_title}}</option> 
+                      @endforeach
+                  </select>
+                  <label for="session_topic">Topic</label>
+                  <select class="form-control" id="session_topic"></select>
+                  <label for="session_batch">Batch</label>
+                  <select class="form-control" id="session_batch"></select>
+                  <label for="session_instructor">Select instructor</label>
+                  <select class="form-control" id="session_instructor">
+                  <option value="" disabled selected>Please select an instructor</option>
+                      @foreach($instructors as $instructor)
+                        <option value="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option> 
+                      @endforeach
+                  </select>
+                  <button type="button" id="save-session-btn" class="btn btn-secondary mt-3">Add session</button>
+            </form>
+            </div>
+              
           <table class="table llp-table">
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Course Category</th>
-                <th scope="col">Description</th>
+                <th scope="col">Session Title</th>
+                <th scope="col">Session Instructor</th>
+                <th scope="col">Batch</th>
+                <th scope="col">Topic</th>
                 <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
-              @php ($slno = 0)
-              @foreach ($courseDetails as $course)
-              @php ($slno = $slno + 1)
-              <tr id="{{$course['id']}}">
-                <th class="align-middle" scope="row">{{$slno}}</th>
-                <td class="align-middle">{{$course['course_title']}}</td>
-                <td class="align-middle">{{$course['course_category']}}</td>
-                <td class="align-middle">{{$course['description']}}</td>
-                <td class="align-middle text-center">
-                  <a href="#" title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">
-                  <i class="fas fa-eye"></i>
-                  </a>
-                  <a href="#" title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
-                  <i class="fas fa-pen"></i>
-                  </a>
-                  <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
-                  <i class="fas fa-trash-alt"></i>
-                  </a>
-                </td>
-                <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
-          <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">Edit</button></td>
-          <td class="text-center align-middle"><button class="btn btn-danger add_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">Delete</button></td> -->
-              </tr>
-              @endforeach
+              
             </tbody>
           </table>
         </div>
@@ -178,9 +185,7 @@
           <div class="mb-3">
             <label for="course_category" class="col-form-label">Course Category</label>
             <select class="form-control" id="course_category">
-              @foreach ($courseCategories as $courseCategory)
-              <option value="{{$courseCategory->id}}">{{$courseCategory->category_name}}</option>
-              @endforeach
+             
             </select>
           </div>
           <div class="mb-3">
@@ -258,9 +263,7 @@
           <div class="mb-3">
             <label for="edit_course_category" class="col-form-label">Category</label>
             <select type="text" class="form-control" id="edit_course_category">
-              @foreach ($courseCategories as $courseCategory)
-              <option value="{{$courseCategory->id}}">{{$courseCategory->category_name}}</option>
-              @endforeach
+            
             </select>
           </div>
           <div class="mb-3">
@@ -339,6 +342,26 @@
       document.getElementById('course_category').value = '';
       document.getElementById('course_instructor').value = '';
       closeModal('new_course_modal');
+    });
+  });
+
+  document.getElementById('save-session-btn').addEventListener('click', (event) => {
+    let sessionTitle = document.getElementById('session_title').value;
+    let sessionCourse = document.getElementById('session_course').value;
+    let sessionTopic = document.getElementById('session_topic').value;
+    let sessionBatch = document.getElementById('session_batch').value;
+    let sessionInstructor = document.getElementById('session_instructor').value;
+    let path = "{{ route('save-session-details') }}?sessionTitle=" + sessionTitle + '&sessionCourse=' + sessionCourse + '&sessionTopic=' + sessionTopic + '&sessionBatch=' + sessionBatch + '&sessionInstructor=' + sessionInstructor;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      window.location.reload();
     });
   });
 
@@ -475,7 +498,7 @@
     let batch_duration = document.getElementById('batch_duration').value;
     let timeZone = document.getElementById('batch_region').value;
     let path = "{{ route('save-batch') }}?batchname=" + batchName + "&startDate=" + startDate + "&startTime=" + startTime + "&endTime=" + endTime + "&batch_duration=" + batch_duration + "&batchCourse=" + batchCourse + "&zone=" + timeZone;
-    console.log(path);
+   
     fetch(path, {
       method: 'POST',
       headers: {
@@ -488,6 +511,27 @@
       closeModal('batch_modal');
     });
   })
+
+  document.getElementById('session_course').addEventListener('change', function(event) {
+    let courseId = this.value;
+    console.log(courseId);
+    let path = "{{ route('get-course-attributes') }}?courseId=" + courseId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+        document.getElementById('session_batch').innerHTML = '';
+        document.getElementById('session_batch').innerHTML = data.batches;
+        document.getElementById('session_topic').innerHTML = '';
+        document.getElementById('session_topic').innerHTML = data.topics;
+      
+    });
+  });
 
   function closeModal(modalId) {
     const truck_modal = document.querySelector('#' + modalId);

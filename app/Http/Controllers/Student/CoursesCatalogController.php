@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\CohortBatch;
+use App\Models\LiveSession;
 use App\Models\CourseCategory;
 use App\Models\EnrolledCourse;
 use App\Models\GeneralCourseFeedback;
@@ -26,11 +27,16 @@ use App\Mail\InstructorMailAfterEnrolling;
 
 class CoursesCatalogController extends Controller
 {
-    public function viewAllCourses()
+    public function viewAllCourses(Request $request)
     {
     
         $courseDetails = [];
-        $courses = Course::all();
+        $allCourseCategory = CourseCategory::all();
+        if($request->filter) {
+          $courses = Course::where('category', $request->category)->get();
+        }
+          $courses = Course::all();  
+        
         foreach($courses as $course)
         {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
@@ -52,7 +58,7 @@ class CoursesCatalogController extends Controller
         $courseDetailsObj = collect($courseDetails);
         $courseDatas = $this->paginate($courseDetailsObj);
         $courseDatas->withPath('');
-        return view('Student.allCourses', compact('courseDatas'));
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory]);
         
     }
         
@@ -69,8 +75,10 @@ class CoursesCatalogController extends Controller
     public function showCourse($id){
 
         $singleCourseDetails =[];
+        $sessions = [];
         $singleCourseFeedbacks = [];
         $course = Course::findOrFail($id);
+        $liveSessions = LiveSession::where('course_id', $id)->get();
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -109,7 +117,8 @@ class CoursesCatalogController extends Controller
    
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
-            'singleCourseFeedbacks' => $singleCourseFeedbacks
+            'singleCourseFeedbacks' => $singleCourseFeedbacks,
+            'liveSessions' => $liveSessions
         ]);
 
     }
@@ -182,7 +191,7 @@ class CoursesCatalogController extends Controller
     }
 
     public function registerCourseProcess(Request $request){
-       
+      
        $courseId = $request->course_id;
        
        $batchId = $request->batch_id;
@@ -191,10 +200,12 @@ class CoursesCatalogController extends Controller
        $studentEmail= $user->email;
        $assigned = DB::table('assigned_courses')->where('course_id',  $courseId)->value('user_id');
        $instructorEmail = User::where('id', $assigned)->value('email');
+       
        $enrolledCourse = new EnrolledCourse;
        $enrolledCourse->user_id = $userId;
        $enrolledCourse->batch_id = $batchId;
        $enrolledCourse->course_id = $courseId;
+       $enrolledCourse->progress = 0;
        $enrolledCourse->save();
 
        $mailDetails =[
@@ -239,6 +250,41 @@ class CoursesCatalogController extends Controller
             'status' => 'success', 
             'message' => 'submitted successfully'
          ]);
+    }
+
+    public function filterCourse(Request $request) {
+    
+        $courseDetails = [];
+        $allCourseCategory = CourseCategory::all();
+        if($request->filter) {
+          $courses = Course::where('category', $request->category)->get();
+        } else {
+          $courses = Course::all();  
+        }
+        foreach($courses as $course)
+        {
+            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+            $instructorfirstname = User::where('id', $assigned)->value('firstname');
+            $instructorlastname = User::where('id', $assigned)->value('lastname');
+       
+            $courseData =  array (
+                'id' => $course->id,
+                'course_title' => $course->course_title,
+                'course_category' => $courseCategory,
+                'description' => $course->description,
+                'course_difficulty' => $course->course_difficulty,
+                'instructor_firstname' => $instructorfirstname,
+                'instructor_lastname' => $instructorlastname,
+            );
+            array_push($courseDetails, $courseData);
+        }
+        $courseDetailsObj = collect($courseDetails);
+        $courseDatas = $this->paginate($courseDetailsObj);
+        $courseDatas->withPath('');
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory]);
+        
+    
     }
 
 }

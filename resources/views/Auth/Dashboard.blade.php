@@ -10,6 +10,7 @@
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>
+        @if($userType == "admin")
         <div class="row mt-4">
           <div class="col-sm-3">
             <div class="card llp-countbox">
@@ -162,6 +163,7 @@
             </tbody>
           </table>
         </div>
+        @endif
       </main>
       <!-- main ends -->
 

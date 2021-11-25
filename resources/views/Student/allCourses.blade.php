@@ -35,12 +35,15 @@
     </h2>
     <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
       <div class="accordion-body">
+        @csrf
+      @foreach($allCourseCategory as $category)
       <div class="form-check">
-        <input class="form-check-input category_filter" type="checkbox" value="" id="flexCheckDefault">
+        <input class="form-check-input category_filter" type="checkbox" value="" id="{{$category->id}}" onchange="categoryFilter(this)">
         <label class="form-check-label" for="flexCheckDefault">
-          Default checkbox
+          {{$category->category_name}}
         </label>
       </div>
+      @endforeach
       </div>
     </div>
   </div>
@@ -53,13 +56,25 @@
     <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
       <div class="accordion-body">
       <div class="form-check">
-        <input class="form-check-input category_filter" type="checkbox" value="" id="flexCheckDefault">
+        <input class="form-check-input difficulty_filter" type="checkbox" value="" id="flexCheckDefault">
         <label class="form-check-label" for="flexCheckDefault">
-          Default checkbox
+          Advanced
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input category_filter" type="checkbox" value="0" id="flexCheckDefault">
+        <input class="form-check-input difficulty_filter" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Intermediate
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input difficulty_filter" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Beginner
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input difficulty_filter" type="checkbox" value="0" id="flexCheckDefault">
         <label class="form-check-label" for="flexCheckDefault">
           All levels
         </label>
@@ -76,62 +91,62 @@
     <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
       <div class="accordion-body">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input rating_filter" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
-            Default radio
+            (5 stars)
           </label>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input rating_filter" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="far fa-star filter-no-star"></i>
-            Default radio
+            (4 stars & up)
           </label>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input rating_filter" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
-            Default radio
+            (3 stars & up)
           </label>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input rating_filter" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             <i class="fas fa-star filter-star"></i>
             <i class="fas fa-star filter-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
-            Default radio
+            (2 stars & up)
           </label>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input rating_filter" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             <i class="fas fa-star filter-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
             <i class="far fa-star filter-no-star"></i>
-            Default radio
+            (1 star & up)
           </label>
         </div>
       </div>
@@ -188,10 +203,10 @@
                     <li class="list-group-item">
                       <div class="row">
                         <div class="col-lg-4 col-4 item-1"><i class="far fa-clock"></i>duration</div>
-                        <div class="col-lg-4 col-4 item-2"><i class="far fa-user"></i>
+                        <div class="col-lg-6 col-4 item-2"><i class="far fa-user"></i>
                         {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
                         </div>
-                        <div class="col-lg-4 col-4 item-3">{{$courseData['course_difficulty']}}</div>
+                        <div class="col-lg-2 col-4 item-3">{{$courseData['course_difficulty']}}</div>
                       </div>
                     </li>
                   </ul>
@@ -217,5 +232,26 @@
   </div>
 </section>
 @endsection('content')
+
+<script>
+
+
+function categoryFilter(elem) {
+  console.log(elem.id);
+  let path = "{{ route('student.courses.get') }}?filter=category" + "&category=" + elem.id;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      
+    });
+}
+
+</script>
 
 

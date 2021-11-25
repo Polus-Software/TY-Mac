@@ -66,6 +66,13 @@ class AdminController extends Controller
         
     }
 
+    public function adminSettings(Request $request) {
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+        return view('Auth.Admin.AdminSettings', [
+            'userType' => $userType ]);
+    }
+
     
 }
 

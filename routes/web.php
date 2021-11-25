@@ -75,6 +75,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
     
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
@@ -86,10 +87,15 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
     Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
+    Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
 
 
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
+    Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
     Route::get('session-view', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('schedule-session', [RtmTokenGeneratorController::class, 'scheduleSession'])->name('schedule-session');
+    Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
+    Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -100,5 +106,6 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
     Route::get('/enrolled-course', [CoursesCatalogController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
+    Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
 });
 
