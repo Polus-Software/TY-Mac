@@ -75,6 +75,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    Route::post('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
+    Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
+    Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');

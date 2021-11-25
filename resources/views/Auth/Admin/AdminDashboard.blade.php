@@ -33,10 +33,12 @@
                 <td>{{$student->lastname}}</td>
                 <td>{{$student->email}}</td>
                 <td class="align-middle text-center">
-                  <a href="{{ route('admin.showstudent', $student->id) }}" title="View student">
+                  <a href="#" title="View student"
+                  data-bs-toggle="modal" data-bs-target="#view_student_modal" data-bs-id="{{$student->id}}">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <a href="{{ route('admin.editstudent', $student->id) }}" title="Edit student">
+                  <a href="" title="Edit student"
+                  data-bs-toggle="modal" data-bs-target="#edit_student_modal" data-bs-id="{{$student->id}}">
                   <i class="fas fa-pen"></i>
                   </a>
                   <a href="#" title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $student->id }}">
@@ -58,7 +60,75 @@
   </div>
 </div>
 <!-- container ends -->
+<!-- View student modal -->
+<div id="view_student_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Student details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <tr>
+            <td><strong>First Name:</strong></td>
+            <td class="text-right"><p class="student_firstname"></p></td>
+          </tr>
+          <tr>
+            <td><strong>Last name:</strong></td>
+            <td class="text-right"><p class="student_lastname"></p></td>
+          </tr>
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td class="text-right"><p class="student_email"></p></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- View student modal ends here -->
+<!-- Edit student modal -->
+<div id="edit_student_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Student details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form  class="form"  id="editStudentsForm" action="" method="POST">
+                        @csrf 
+                        <input type="hidden" name="_method" value="PUT">
 
+                        <div class="form-group">
+                            <label for="firstname">First Name</label>
+                            <input type="text" class="form-control edit_firstname"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" class="form-control edit_lastname" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
+                            
+                          </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control edit_email" value="" name="email" id="email" placeholder=" Enter email">
+                            
+                          </div>
+                    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="update_student_btn">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit student modal ends here -->
 <!-- Delete Modal -->
 <div class="modal fade llp-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -121,6 +191,67 @@
     const modal = bootstrap.Modal.getInstance(truck_modal);
     modal.hide();
   }
+
+  document.getElementById('view_student_modal').addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var studentId = button.getAttribute('data-bs-id');
+    let path = "{{ route('view-student') }}?student_id=" + studentId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.querySelector('.student_firstname').innerHTML = data.studentDetails['firstname'];
+      document.querySelector('.student_lastname').innerHTML = data.studentDetails['lastname'];
+      document.querySelector('.student_email').innerHTML = data.studentDetails['email'];
+      closeModal('view_student_modal');
+    });
+  });
+
+  document.getElementById('edit_student_modal').addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var studentId = button.getAttribute('data-bs-id');
+    let path = "{{ route('view-student') }}?student_id=" + studentId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.querySelector('.edit_firstname').value = data.studentDetails['firstname'];
+      document.querySelector('.edit_lastname').value = data.studentDetails['lastname'];
+      document.querySelector('.edit_email').value = data.studentDetails['email'];
+      document.getElementById('update_student_btn').setAttribute('student_id', data.studentDetails['id']);
+      closeModal('edit_student_modal');
+    });
+  });
+
+  document.getElementById('update_student_btn').addEventListener('click', (event) => {
+    var button = event.relatedTarget;
+    var studentId = document.getElementById('update_student_btn').getAttribute('student_id');
+    let firstname = document.querySelector('.edit_firstname').value;
+    let lastname = document.querySelector('.edit_lastname').value;
+    let email = document.querySelector('.edit_email').value;
+    let path = "{{ route('update-student') }}?student_id=" + studentId + "&firstname=" + firstname + "&lastname=" + lastname + "&email=" + email;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      closeModal('edit_student_modal');
+    });
+  });
 </script>
 
 @endsection('content')
