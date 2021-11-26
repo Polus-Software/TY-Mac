@@ -1,0 +1,95 @@
+h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+    font-size: 30px;
+}
+.btn-group{
+    border-radius: 5px 0px 0px 5px;
+    /* color: #2C3443; */
+}
+.btn:active{
+   box-shadow: none;
+}
+.card-2{
+    border-radius: 20px;
+    box-shadow: 0px 1px 8px #00000029;
+    background: #FFFFFF; 
+}
+.coursepicture{
+    border-radius:20px;
+}
+
+.card-2 h5{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+    font-size: 16px;
+}
+.card-text{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #6E7687;
+    font-size: 14px;
+}
+.progress{
+    background: #F1EEFD;
+    height: 20px;
+}
+.progress-bar{
+    background: #74648C;
+}
+.card-2 .para-1{
+color: #6E7687;
+font-size: 14px;
+font-family: 'Roboto', sans-serif;
+font-weight: 400;
+}
+.card-2 .para-2{
+    color: #6E7687;
+    font-size: 14px;
+ font-family: 'Roboto', sans-serif;
+font-weight: bold;
+}
+.card-2 .duration{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+
+}
+.duration small{
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.28px;
+   
+}
+.card-1{
+    
+    border:none;
+    border-radius: 20px;
+    box-shadow: 0px 1px 8px #00000029;
+    background: #FFFFFF;
+}
+.card-1 h5{
+    font-size: 16px;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+    color: #2C3443;
+}
+.card-1 .card-text{
+    color:#6E7687;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    padding-left: 15px;
+}
+.card-1 .btn{
+    background: #F9FAFF 0% 0% no-repeat padding-box;
+border-radius: 0px 0px 18px 18px;
+}
+.card-1 li{
+    color: #6E7687;
+    font-size: 14px;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}

@@ -31,7 +31,6 @@ class CoursesCatalogController extends Controller
     
         $courseDetails = [];
         $courses = Course::all();
-        //dd($courses);
         foreach($courses as $course)
         {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
@@ -113,7 +112,7 @@ class CoursesCatalogController extends Controller
             'profile_photo' => $profilePhoto,
         );
         array_push($singleCourseDetails, $singleCourseData);
-  //dd($singleCourseDetails);
+  
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,

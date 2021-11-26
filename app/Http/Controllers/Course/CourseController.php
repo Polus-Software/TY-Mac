@@ -11,6 +11,7 @@ use App\Models\UserType;
 use App\Models\AssignedCourse;
 use App\Models\Topic;
 use App\Models\TopicContent;
+use App\Models\TopicAssignment;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -206,5 +207,44 @@ class CourseController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    // To view sub topics
+    public function viewSubTopic($id){
+        try{
+            $subTopics = DB::table('topics')->where('course_id', $id)->paginate(2);
+
+            return view('Course.view_sub_topics',[
+             'subTopics' => $subTopics,
+            ]);
+        }catch (Exception $exception) {
+            return($exception->getMessage());
+        }
+       
+    }
+
+
+    //Adding assignments
+    public function addAssignment(Request $request){
+      $topicId =intval($request->assignment_topic_id);
+
+      $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
+      $instructorId = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
+
+
+      $topicAssignment = new TopicAssignment;
+      $topicAssignment->assignment_title= $request->assignment_title;
+      $topicAssignment->assignment_description= $request->assignment_description;
+      $topicAssignment->topic_id = $topicId;
+      $topicAssignment->course_id = $courseId ;
+      $topicAssignment->instructor_id = $instructorId;
+
+      
+        $filename = $request->assignment_attachments->getClientOriginalName();
+        $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
+        $topicAssignment->document = $filename;
+        $topicAssignment->save();
+        return redirect()->back();
+
     }
 }

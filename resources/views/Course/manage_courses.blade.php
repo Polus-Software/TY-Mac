@@ -33,6 +33,7 @@
                 <th scope="col">Course Category</th>
                 <th scope="col">Description</th>
                 <th scope="col" class="text-center">Actions</th>
+                <th scope="col">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -53,6 +54,11 @@
                   </a>
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
+                  </a>
+                </td>
+                <td class="align-middle text-center">
+                <a href="{{ route('view-sub-topic', $course['id']) }}" title="View sub-topics">
+                  <i class="fas fa-eye"></i>
                   </a>
                 </td>
                 <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
@@ -76,7 +82,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add a new course</h5>
+        <h5 class="modal-title">Add a sub topic</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -305,6 +311,7 @@ function closeModal(modalId) {
 }  
 
 });
+
 
   // document.getElementById('save_course').addEventListener('click', (event) => {
   //   let courseTitle = document.getElementById('course_title').value;
