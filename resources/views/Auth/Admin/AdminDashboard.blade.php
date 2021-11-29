@@ -106,18 +106,18 @@
 
                         <div class="form-group">
                             <label for="firstname">First Name</label>
-                            <input type="text" class="form-control edit_firstname"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
-                            
+                            <input type="text" class="form-control edit_firstname has-validation"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
+                            <div class="invalid-feedback">Please enter a first name.</div>
                         </div>
                         <div class="form-group">
                             <label for="lastname">Last Name</label>
-                            <input type="text" class="form-control edit_lastname" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
-                            
+                            <input type="text" class="form-control edit_lastname has-validation" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
+                            <div class="invalid-feedback">Please enter a lastname.</div>
                           </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control edit_email" value="" name="email" id="email" placeholder=" Enter email">
-                            
+                            <input type="email" class="form-control edit_email has-validation" value="" name="email" id="email" placeholder=" Enter email">
+                            <div class="invalid-feedback">Please enter a valid email id.</div>
                           </div>
                     </form>
       </div>
@@ -213,6 +213,7 @@
   });
 
   document.getElementById('edit_student_modal').addEventListener('show.bs.modal', function(event) {
+    clearValidationMessage('editStudentsForm');
     var button = event.relatedTarget;
     var studentId = button.getAttribute('data-bs-id');
     let path = "{{ route('view-student') }}?student_id=" + studentId;
@@ -229,11 +230,15 @@
       document.querySelector('.edit_lastname').value = data.studentDetails['lastname'];
       document.querySelector('.edit_email').value = data.studentDetails['email'];
       document.getElementById('update_student_btn').setAttribute('student_id', data.studentDetails['id']);
-      closeModal('edit_student_modal');
+      blurValidation('editStudentsForm');
     });
   });
 
   document.getElementById('update_student_btn').addEventListener('click', (event) => {
+    const isFormValid = submitValidation('editStudentsForm');
+    if(isFormValid === false){
+      return;
+    }
     var button = event.relatedTarget;
     var studentId = document.getElementById('update_student_btn').getAttribute('student_id');
     let firstname = document.querySelector('.edit_firstname').value;
@@ -252,6 +257,45 @@
       closeModal('edit_student_modal');
     });
   });
+  
+  clearValidationMessage = (formId) => {
+    document.querySelectorAll(`#${formId} input.has-validation`).forEach(field => {
+      if (field.parentElement.querySelector('.invalid-feedback').classList.contains('d-block')) {
+        field.parentElement.querySelector('.invalid-feedback').classList.remove('d-block');
+      }
+    })
+  }
+  blurValidation = (formId) => {
+    document.querySelectorAll(`#${formId} input.has-validation`).forEach(field => {
+      field.addEventListener('blur', (event) => {
+        validateField(event.target);
+      });
+    });
+  }
+  submitValidation = (formId) => {
+    const fields = document.querySelectorAll(`#${formId} input.has-validation`);
+    for (field of fields) {
+      let result = validateField(field);
+      if (result === false) return result;
+    }
+    return true;
+  }
+  validateField = (field) => {
+    if (field.value.trim() === "") {
+      field.parentElement.querySelector('.invalid-feedback').classList.add('d-block');
+      return false;
+    }
+    if (field.type === 'email') {
+      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (!field.value.match(mailformat)) {
+        field.parentElement.querySelector('.invalid-feedback').classList.add('d-block');
+        return false;
+      }
+    }
+    field.parentElement.querySelector('.invalid-feedback').classList.remove('d-block');
+    return true;
+  }
+
 </script>
 
 @endsection('content')
