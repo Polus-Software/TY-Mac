@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\CourseCategory;
 use App\Models\EnrolledCourse;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MyCoursesController extends Controller
 {
@@ -17,37 +18,39 @@ class MyCoursesController extends Controller
         
        $singleEnrolledCourseData = [];
        $user = Auth::user();
-       //dd($user); 
        $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
-       //dd($enrolledCourses);
 
-      foreach($enrolledCourses as $enrolledCourse){
+        foreach($enrolledCourses as $enrolledCourse){
 
-        $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
-        $description = Course::where('id', $enrolledCourse->course_id)->value('description');
-        $categoryId = Course::where('id', $enrolledCourse->course_id)->value('category');
-        $course_difficult = Course::where('id', $enrolledCourse->course_id)->value('course_difficulty');
-        $courseCategory = CourseCategory::where('id', $categoryId)->value('category_name');
-        $start_date = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_date');
-        $start_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_time');
-        $end_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_time');
-        //dd($start_date);
-        $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
-        $instructorfirstname = User::where('id', $assigned)->value('firstname');
-        $instructorlastname = User::where('id', $assigned)->value('lastname');
+          $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
+          $description = Course::where('id', $enrolledCourse->course_id)->value('description');
+          $category_id = Course::where('id', $enrolledCourse->course_id)->value('category');
+          $course_image = Course::where('id', $enrolledCourse->course_id)->value('course_image');
+          $course_difficulty = Course::where('id', $enrolledCourse->course_id)->value('course_difficulty');
+          $courseCategory = CourseCategory::where('id', $category_id)->value('category_name');
+          $start_date = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_date');
+          $start_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_time');
+          $end_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('end_time');
+          $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
+          $instructorfirstname = User::where('id', $assigned)->value('firstname');
+          $instructorlastname = User::where('id', $assigned)->value('lastname');
 
- $enrolledCourseData = array(
-     'course_title' =>  $course_title,
-     'description' => $description,
-
-
- );
- //dd($enrolledCourseData);
-        
+        $enrolledCourseData = array(
+          'course_title' =>  $course_title,
+          'description' => $description,
+          'category_name' => $courseCategory,
+          'course_difficulty' => $course_difficulty,
+          'course_image' => $course_image,
+          'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
+          'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
+          'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
+          'instructor_firstname' => $instructorfirstname,
+          'instructor_lastname' => $instructorlastname,
+        );
+        array_push($singleEnrolledCourseData, $enrolledCourseData);
       }
-      
-      //dd($instructorfirstname);
-
-      return view('Student.myCourses');
+      return view('Student.myCourses', [
+        'singleEnrolledCourseData' => $singleEnrolledCourseData
+      ]);
     }
 }
