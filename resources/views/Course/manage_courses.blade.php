@@ -14,10 +14,13 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3>Courses</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course"
+            <!-- <button id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course"
              data-bs-toggle="modal" data-bs-target="#new_course_modal">
              <i class="fas fa-plus-square me-1"></i>
-             Add New Course</button>
+             Add New Course</button> -->
+             <a href="{{ route('add-course') }}" id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course">
+             <i class="fas fa-plus-square me-1"></i>
+             Add New Course</a>
             <button id="add_sub_topics" class="btn btn-secondary add_new_topics_btn ms-2" title="Add Sub Topics"
              data-bs-toggle="modal" data-bs-target="#new_sub_modal">
              <i class="far fa-plus-square me-1"></i>
