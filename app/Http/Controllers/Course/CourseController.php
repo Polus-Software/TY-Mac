@@ -42,7 +42,11 @@ class CourseController extends Controller
             'instructors' => $instructors,
             'userType' => $userTypeLoggedIn
         ]);
-    } 
+    }
+
+    public function addCourse(){
+        return view('Course.admin.create_course');
+    }
 
     public function saveCourse(Request $request) {
         $html = '';

@@ -42,7 +42,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
 
     Route::get('/manage-courses', [CourseController::class, 'index'])->name('manage-courses');
-    Route::post('/add-course', [CourseController::class, 'saveCourse'])->name('add-course');
+    Route::post('/add-course', [CourseController::class, 'saveCourse'])->name('save-course');
+    Route::get('/add-course', [CourseController::class, 'addCourse'])->name('add-course');
     Route::post('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::post('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
@@ -77,6 +78,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    Route::post('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
+    Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
+    Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
