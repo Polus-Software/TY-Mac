@@ -191,6 +191,29 @@
             <td><strong>Description:</strong></td>
             <td class="text-right"><label id="view_course_description"></label></td>
           </tr>
+          <tr>
+            <td><strong>Level :</strong></td>
+            <td class="text-right"><label id="view_course_difficulty"></label></td>
+          </tr>
+          <tr>
+            <td><strong>Duration :</strong></td>
+            <td class="text-right"><label id="view_course_duration"></label></td>
+          </tr>
+          <tr>
+            <td><strong>What you'll learn :</strong></td>
+            <td class="text-right"><label id="view_course_short_description"></label>
+          </tr>
+          <tr>
+            <td><strong>Who this course is for :</strong></td>
+            <td class="text-right">
+              <label id="view_course_details"></label>
+            </td>
+            <br>
+            <td class="text-right">
+              <label id="view_course_details_points"></label>
+            </td>
+          </tr>
+         
         </table>
       </div>
       <div class="modal-footer">
@@ -358,6 +381,12 @@ function closeModal(modalId) {
       document.getElementById('view_course_name').innerHTML = data.courseDetails['course_name'];
       document.getElementById('view_course_category').innerHTML = data.courseDetails['course_category'];
       document.getElementById('view_course_description').innerHTML = data.courseDetails['course_description'];
+      document.getElementById('view_course_difficulty').innerHTML = data.courseDetails['course_difficulty'];
+      document.getElementById('view_course_duration').innerHTML = data.courseDetails['course_duration'];
+      document.getElementById('view_course_short_description').innerHTML = data.courseDetails['short_description'];
+      document.getElementById('view_course_details').innerHTML = data.courseDetails['course_details'];
+      document.getElementById('view_course_details_points').innerHTML = data.courseDetails['course_details_points'];
+
       closeModal('view_course_modal');
     });
   });
