@@ -10,12 +10,12 @@
       <a class="nav-link link-dark text-uppercase pe-none" href="">
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="">
+      <a class="nav-link link-dark" href="{{ route('add-course') }}">
       <i class="fas fa-clipboard-list"></i>
         Course Overview</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="">
+      <a class="nav-link link-dark" href="{{ route('create-subtopic') }}">
       <i class="fas fa-book-reader"></i>
         Sub topics</a>
     </li>
