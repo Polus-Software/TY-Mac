@@ -55,6 +55,10 @@ class CourseController extends Controller
         ]);
     }
 
+    public function createSubtopic(){
+        return view('Course.admin.create_subtopic');
+    }
+
     public function saveCourse(Request $request) {
 
         $courseTitle = $request->input('course_title');
