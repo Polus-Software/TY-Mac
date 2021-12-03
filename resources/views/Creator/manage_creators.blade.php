@@ -76,23 +76,27 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="form_new_creator">
           @csrf
           <div class="mb-3">
             <label for="creator_first_name" class="col-form-label">Content Creator's First Name</label>
-            <input type="text" class="form-control" id="creator_first_name"></input>
+            <input type="text" class="form-control has-validation" id="creator_first_name"></input>
+            <div class="invalid-feedback">Please enter a first name.</div>
           </div>
           <div class="mb-3">
             <label for="creator_last_name" class="col-form-label">Content Creator's Last Name</label>
-            <input type="text" class="form-control" id="creator_last_name"></input>
+            <input type="text" class="form-control has-validation" id="creator_last_name"></input>
+            <div class="invalid-feedback">Please enter a last name.</div>
           </div>
           <div class="mb-3">
             <label for="creator_email" class="col-form-label">Content Creator's Email</label>
-            <input type="text" class="form-control" id="creator_email"></input>
+            <input type="email" class="form-control has-validation" id="creator_email"></input>
+            <div class="invalid-feedback">Please enter a valid email.</div>
           </div>
           <div class="mb-3">
             <label for="creator_password" class="col-form-label">Content Creator's Password</label>
-            <input type="text" class="form-control" id="creator_password"></input>
+            <input type="text" class="form-control has-validation" id="creator_password"></input>
+            <div class="invalid-feedback">Please enter a password.</div>
             <button type="button" class="btn btn-link" id="generate_password">Generate password</button>
           </div>
         </form>
@@ -141,19 +145,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="form_edit_creator">
           @csrf
           <div class="mb-3">
             <label for="creator_first_name" class="col-form-label">Content Creator's First Name</label>
-            <input type="text" class="form-control" id="edit_creator_first_name"></input>
+            <input type="text" class="form-control has-validation" id="edit_creator_first_name"></input>
+            <div class="invalid-feedback">Please enter a first name.</div>
           </div>
           <div class="mb-3">
             <label for="creator_last_name" class="col-form-label">Content Creator's Last Name</label>
-            <input type="text" class="form-control" id="edit_creator_last_name"></input>
+            <input type="text" class="form-control has-validation" id="edit_creator_last_name"></input>
+            <div class="invalid-feedback">Please enter a last name.</div>
           </div>
           <div class="mb-3">
             <label for="creator_email" class="col-form-label">Content Creator's Email</label>
-            <input type="email" class="form-control" id="edit_creator_email"></input>
+            <input type="email" class="form-control has-validation" id="edit_creator_email"></input>
+            <div class="invalid-feedback">Please enter a valid email id.</div>
           </div>
         </form>
       </div>
@@ -208,7 +215,9 @@
   }
 
   document.getElementById('new_creator_modal').addEventListener('show.bs.modal', function(event) {
+    clearValidationMessage('form_new_creator');
     document.getElementById('creator_password').value = makeid(12);
+    blurValidation('form_new_creator');
   });
 
   document.getElementById('generate_password').addEventListener('click', function(event) {
@@ -216,6 +225,10 @@
   });
 
   document.getElementById('save_creator').addEventListener('click', (event) => {
+    const isFormValid = submitValidation('form_new_creator');
+    if (isFormValid === false) {
+      return;
+    }
     let creatorFirstName = document.getElementById('creator_first_name').value;
     let creatorLastName = document.getElementById('creator_last_name').value;
     let creatorEmail = document.getElementById('creator_email').value;
@@ -257,6 +270,7 @@
   });
 
   document.getElementById('edit_creator_modal').addEventListener('show.bs.modal', function(event) {
+    clearValidationMessage('form_edit_creator');
     var button = event.relatedTarget;
     var userId = button.getAttribute('data-bs-id');
     let path = "{{ route('edit-creator') }}?user_id=" + userId;
@@ -273,10 +287,15 @@
       document.getElementById('edit_creator_last_name').value = data.creatorDetails['lastname'];
       document.getElementById('edit_creator_email').value = data.creatorDetails['email'];
       document.getElementById('update_creator_btn').setAttribute('user_id', data.creatorDetails['id']);
+      blurValidation('form_edit_creator');
     });
   });
 
   document.getElementById('update_creator_btn').addEventListener('click', (event) => {
+    const isFormValid = submitValidation('form_edit_creator');
+    if (isFormValid === false) {
+      return;
+    }
     var userId = document.getElementById('update_creator_btn').getAttribute('user_id');
     var firstname = document.getElementById('edit_creator_first_name').value;
     var lastname = document.getElementById('edit_creator_last_name').value;
@@ -326,5 +345,43 @@
     const truck_modal = document.querySelector('#' + modalId);
     const modal = bootstrap.Modal.getInstance(truck_modal);
     modal.hide();
+  }
+
+  clearValidationMessage = (formId) => {
+    document.querySelectorAll(`#${formId} input.has-validation`).forEach(field => {
+      if (field.parentElement.querySelector('.invalid-feedback').classList.contains('d-block')) {
+        field.parentElement.querySelector('.invalid-feedback').classList.remove('d-block');
+      }
+    })
+  }
+  blurValidation = (formId) => {
+    document.querySelectorAll(`#${formId} input.has-validation`).forEach(field => {
+      field.addEventListener('blur', (event) => {
+        validateField(event.target);
+      });
+    });
+  }
+  submitValidation = (formId) => {
+    const fields = document.querySelectorAll(`#${formId} input.has-validation`);
+    for (field of fields) {
+      let result = validateField(field);
+      if (result === false) return result;
+    }
+    return true;
+  }
+  validateField = (field) => {
+    if (field.value.trim() === "") {
+      field.parentElement.querySelector('.invalid-feedback').classList.add('d-block');
+      return false;
+    }
+    if (field.type === 'email') {
+      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (!field.value.match(mailformat)) {
+        field.parentElement.querySelector('.invalid-feedback').classList.add('d-block');
+        return false;
+      }
+    }
+    field.parentElement.querySelector('.invalid-feedback').classList.remove('d-block');
+    return true;
   }
 </script>

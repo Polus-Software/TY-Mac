@@ -6,6 +6,8 @@
     --sidebar-hover-color: #F1EEFD;
     --main-link-color: #AF7E00;
     --pale-yellow-color: #FFF9E8;
+    --light-gray-bg:  #F8F7FC;
+    --sublink-color: #6E7687;
 }
 
 body {
@@ -68,26 +70,30 @@ body {
     padding-bottom: 1rem;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link,
+.llp-form .btn-secondary.btn-sm {
     color: var(--main-title-color);
     background-color: var(--sidebar-hover-color);
 }
-
+.llp-form .btn-secondary.btn-sm {border: 0;}
 .llp-modal .modal-content {
     padding: 2rem;
 }
-.llp-modal .modal-title {
+.llp-modal .modal-title, .llp-form h3 {
     color: var(--main-title-color);
     font-family: 'Lato', 'Roboto', sans-serif;
     font-weight: 800;
     font-size: 30px;
 }
-.llp-modal .modal-footer .btn-primary, .llp-container .btn-toolbar  .btn-primary{
+.llp-modal .modal-footer .btn-primary,
+.llp-container .btn-toolbar .btn-primary,
+.llp-form .btn-primary{
     background-color: var(--main-title-color);
     border-color: var(--main-title-color);
     color: white;
 }
-.llp-modal label{
+.llp-modal label, .llp-form label{
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
@@ -102,3 +108,14 @@ body {
     visibility: hidden;
     position: absolute;
 }
+.llpcard-inner {
+    background-color: var(--light-gray-bg);
+}
+.llpcard-inner a{
+color: var(--sublink-color);
+background: #F8F7FC 0% 0% no-repeat padding-box;
+border: 1px solid #E0E0E0;
+border-radius: 5px;
+opacity: 1;
+}
+.llpcard-inner i{color: var(--main-text-color);}

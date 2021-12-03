@@ -30,6 +30,28 @@ class AdminController extends Controller
         
     }
 
+    public function viewStudent(Request $request) {
+        try {
+            $studentId = $request->input('student_id');
+            if ($studentId) {
+                $student = User::where('id', $studentId);
+                if ($student) {
+                    $data = [
+                        'id' => $student->value('id'),
+                        'firstname' => $student->value('firstname'),
+                        'lastname' => $student->value('lastname'),
+                        'email' => $student->value('email')
+                    ];
+                    return response()->json(['status' => 'success', 'message' => '', 'studentDetails' => $data]);
+                }
+            }
+            return response()->json(['status' => 'failed', 'message' => 'Some error']);
+        } catch (Exception $exception) {
+            return($exception->getMessage());
+        }
+        
+    }
+
     public function editStudent($id){
         
        $students = User::findOrFail($id);
@@ -37,21 +59,22 @@ class AdminController extends Controller
 
     }
 
-    public function updateStudent(Request $request, $id){   
+    public function updateStudent(Request $request){   
        
         $updateData = $request->validate([
             'firstname' =>'required',
             'lastname' =>'required',
             'email' => 'required|email|'
         ]);
-  
-   $student = User::findOrFail($id);
+        $studentId = $request->input('student_id');
+   $student = User::findOrFail($studentId);
    
     $student->firstname = $request['firstname'];
     $student->lastname = $request['lastname'];
     $student->email = $request['email'];
     $student->save();
-    return redirect()->route('admin.viewall')->with('message','Profile Updated');
+    $html = '';
+    return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
     
     }  
    
