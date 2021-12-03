@@ -11,7 +11,9 @@ use App\Http\Controllers\AgoraIntegrations\RtmTokenGeneratorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Student\CoursesCatalogController;
+use App\Http\Controllers\Student\MyCoursesController;
 use App\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +42,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
 
     Route::get('/manage-courses', [CourseController::class, 'index'])->name('manage-courses');
-    Route::post('/add-course', [CourseController::class, 'saveCourse'])->name('save-course');
+    Route::post('/save-course', [CourseController::class, 'saveCourse'])->name('save-course');
     Route::get('/add-course', [CourseController::class, 'addCourse'])->name('add-course');
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::post('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
@@ -91,6 +93,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
     Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
+    Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
+    Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
+
 
 
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
@@ -105,5 +110,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
     Route::get('/enrolled-course', [CoursesCatalogController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
+
+    Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
+
 });
 

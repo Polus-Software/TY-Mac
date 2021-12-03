@@ -128,7 +128,7 @@ select{
 .btn:focus{
     box-shadow: none;
 }
-.page-item.active .page-link{
+/* .page-item.active .page-link{
     z-index: 3;
     color: #fff;
     background-color:#F5BC29;
@@ -146,4 +146,4 @@ select{
 }
 .page-item.active .page-link {
     border-color:#F5BC29 ;
-}
+} */
