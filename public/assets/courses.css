@@ -6,7 +6,7 @@
 
 .filter{
     background:#f8f7fc;   
-    height: 800px;
+    /* height: 800px; */
 }
 
 
@@ -111,8 +111,10 @@
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     color: #6E7687;
-    /* width: max-content; */
+}
 
+.item-3 {
+    text-align-last: end;
 }
 select{
     width: 200px;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\Filter;
 use App\Models\UserType;
 use Auth;
 
@@ -69,8 +70,24 @@ class AdminController extends Controller
     public function adminSettings(Request $request) {
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
+        $filters = Filter::all();
         return view('Auth.Admin.AdminSettings', [
-            'userType' => $userType ]);
+            'userType' => $userType,
+            'filters' => $filters ]);
+    }
+
+    public function changeFilterStatus(Request $request) {
+        $filterId = $request->filter_id;
+        $isEnabled = $request->is_enabled;
+
+        $filter = Filter::find($filterId);
+        if($isEnabled == "true") {
+          $filter->is_enabled = true;
+        } else {
+          $filter->is_enabled = false;
+        }
+        $filter->save();
+        return response()->json(['status' => 'success', 'message' => ' Changed status successfully']);
     }
 
     

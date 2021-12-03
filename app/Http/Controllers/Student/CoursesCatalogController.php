@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\Filter;
 use App\Models\UserType;
 use App\Models\CohortBatch;
 use App\Models\LiveSession;
@@ -31,13 +32,19 @@ class CoursesCatalogController extends Controller
     {
     
         $courseDetails = [];
+        $allCourseCategory = CourseCategory::all();
         $courses = Course::all();
+        $filters = Filter::all();
+        $userType =  UserType::where('user_role', 'instructor')->value('id');
+
+        $instructors = User::where('role_id', $userType)->get();
         foreach($courses as $course)
         {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
             $instructorlastname = User::where('id', $assigned)->value('lastname');
+            $duration = $course->course_duration . "h";
        
             $courseData =  array (
                 'id' => $course->id,
@@ -48,13 +55,15 @@ class CoursesCatalogController extends Controller
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
+                'rating' => $course->course_rating,
+                'duration' => $duration
             );
             array_push($courseDetails, $courseData);
         }
         $courseDetailsObj = collect($courseDetails);
         $courseDatas = $this->paginate($courseDetailsObj);
         $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory]);
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
         
     }
         
@@ -115,7 +124,6 @@ class CoursesCatalogController extends Controller
             'profile_photo' => $profilePhoto,
         );
         array_push($singleCourseDetails, $singleCourseData);
-  //dd($singleCourseDetails);
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
@@ -257,37 +265,95 @@ class CoursesCatalogController extends Controller
     }
 
     public function filterCourse(Request $request) {
-    
-        $courseDetails = [];
-        $allCourseCategory = CourseCategory::all();
-        if($request->filter) {
-          $courses = Course::where('category', $request->category)->get();
-        } else {
-          $courses = Course::all();  
+     
+     $html = '';
+     $categoryFlag = 0;
+     $levelsFlag = 0;
+     $ratingsFlag = 0;
+     $categories = $request->categories;
+     $levels = $request->levels;
+     $ratings = $request->ratings;
+     $courses = DB::table('courses');
+     
+
+     if($categories) {
+         $categoriesArr = explode(",", $categories);
+         foreach($categoriesArr as $category) {
+            $categoryPair = explode('=', $category);
+            if($categoryFlag == 0) {
+                $courses = $courses->where('category', $categoryPair[1]);
+                $categoryFlag = 1;
+            } else {
+                $courses = $courses->orWhere('category', $categoryPair[1]);
+            }
+         }
+     }
+
+     if($levels) {
+        $levelsArr = explode(",", $levels);
+        foreach($levelsArr as $level) {
+           $levelPair = explode('=', $level);
+            if($levelPair[1] == "all") {
+                $courses = $courses->where('course_difficulty', 'beginner')->orWhere('course_difficulty', 'intermediate')->orWhere('course_difficulty', 'advanced');
+                break;
+            }
+            if($levelsFlag == 0) {
+                $courses = $courses->where('course_difficulty', $levelPair[1]);
+                $levelsFlag = 1;
+            } else {
+                $courses = $courses->orWhere('course_difficulty', $levelPair[1]);
+            }
         }
-        foreach($courses as $course)
-        {
-            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
-            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
-            $instructorfirstname = User::where('id', $assigned)->value('firstname');
-            $instructorlastname = User::where('id', $assigned)->value('lastname');
-       
-            $courseData =  array (
-                'id' => $course->id,
-                'course_title' => $course->course_title,
-                'course_category' => $courseCategory,
-                'description' => $course->description,
-                'course_difficulty' => $course->course_difficulty,
-                'instructor_firstname' => $instructorfirstname,
-                'instructor_lastname' => $instructorlastname,
-            );
-            array_push($courseDetails, $courseData);
+    }
+
+    if($ratings) {
+        $ratingsArr = explode(",", $ratings);
+        foreach($ratingsArr as $rating) {
+           $ratingPair = explode('=', $rating);
+            if($ratingsFlag == 0) {
+                $courses = $courses->where('course_rating', '>=' , $ratingPair[1]);
+                $ratingsFlag = 1;
+            } else {
+                $courses = $courses->orWhere('course_rating', '>=' , $ratingPair[1]);
+            }
         }
-        $courseDetailsObj = collect($courseDetails);
-        $courseDatas = $this->paginate($courseDetailsObj);
-        $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory]);
-        
+    }
+
+
+     $courses = $courses->get();
+           foreach($courses as $course) {
+                $html = $html . '<div class="col-lg-6"><div class="card mb-4">';
+                $html = $html . '<img src="" class="card-img-top" alt="..."><div class="card-body">';
+                $html = $html . '<h5 class="card-title text-center">'. $course->course_title .'</h5>';
+                $html = $html . '<p class="card-text">';
+                $html = $html . \Illuminate\Support\Str::limit($course->description, $limit = 150, $end = '....');
+                $html = $html . '<a href="/show-course/' . $course->id . '" class="">Read More</a></p>';
+                $html = $html . '<div class="row"><div class="col-lg-6 col-sm-6 col-6">';
+                for($i=1;$i<=5;$i++) {
+                    if($i <= $course->course_rating) {
+                        $html = $html . '<i class="fas fa-star rateCourse"></i>';
+                    } else {
+                        $html = $html . '<i class="far fa-star rateCourse"></i>';
+                    }
+                } 
+
+                $html = $html . '(60)</div>';  
+                $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
+                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>Course category</div></div></div>';   //$courseCategory 
+                $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
+                $html = $html . '<div class="col-lg-4 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>1h 50m</div>';
+                $html = $html . '<div class="col-lg-4 col-4 item-2 text-center"><i class="far fa-user pe-1"></i></div>'; //$instructorName
+                $html = $html . '<div class="col-lg-4 col-4 item-3">'. $course->course_difficulty .'</div></div></li></ul>';
+                $html = $html . '<div class="card-body"><div class="row"><div class="btn-group border-top" role="group" aria-label="Basic example">'; 
+                $html = $html . '<a href="" class="card-link btn border-end">Register now</a>'; 
+                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a></div></div></div></div></div>';        
+            }
+     
+     return response()->json([
+        'status' => 'success', 
+        'message' => 'submitted successfully',
+        'html' => $html
+     ]);
     
     }
 

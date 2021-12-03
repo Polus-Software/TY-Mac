@@ -39,6 +39,7 @@ class RtmTokenGeneratorController extends Controller
     public function buildToken(Request $request) {
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
+        
         if($userObj->role_id == 2) {
             $role = self::RoleSubscriber;
             $roleName = $userObj->firstname;

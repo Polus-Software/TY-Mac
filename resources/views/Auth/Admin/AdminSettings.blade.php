@@ -15,10 +15,13 @@
           <h3>Filter settings</h3>
         </div>
         <div class="row mt-4">
-          
-          <div class="d-flex justify-content-center">
-            
-          </div>
+          @csrf
+          @foreach($filters as $filter)
+            <div class="form-check form-switch">
+                <input class="form-check-input filter_switch" filter_id="{{$filter->id}}" type="checkbox" @if($filter->is_enabled == true) checked=checked @endif>
+                <label class="form-check-label" for="flexSwitchCheckDefault">{{$filter->filter_name}}</label>
+            </div>
+          @endforeach
         </div>
       </main>
       <!-- main ends -->
@@ -31,6 +34,25 @@
 
 
 <script>
+  let filter_switch = document.getElementsByClassName('filter_switch');
+  for(var index = 0; index < filter_switch.length; index++) {
+    filter_switch[index].addEventListener('change', function(event) {
+        let filter = this.getAttribute('filter_id');
+        let isEnabled = this.checked;
+        let path = "{{ route('change-filter-status')}}?filter_id=" + filter + "&is_enabled=" + isEnabled;
+        fetch(path, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+        body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+          console.log(data);
+        });
+    });
+  }
   
 </script>
 

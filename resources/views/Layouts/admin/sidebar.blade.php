@@ -69,7 +69,7 @@
     </li>
     @else
     <li class="nav-item">
-      <a class="nav-link link-dark" href="">
+      <a class="nav-link link-dark" href="{{route('session-view')}}">
         <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
         </svg>

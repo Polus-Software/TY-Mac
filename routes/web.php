@@ -76,7 +76,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
     Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
+    Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
     
+
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
@@ -108,4 +110,3 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
 });
-
