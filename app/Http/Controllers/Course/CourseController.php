@@ -52,6 +52,14 @@ class CourseController extends Controller
         return view('Course.admin.create_subtopic');
     }
 
+    public function createAssignment(){
+        return view('Course.admin.create_assignment');
+    }
+
+    public function viewAssignment(){
+        return view('Course.admin.view_assignment');
+    }
+
     public function saveCourse(Request $request) {
         $html = '';
         $slNo = 1;
