@@ -34,10 +34,12 @@ class CoursesCatalogController extends Controller
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
         $courses = Course::all();
+
         $filters = Filter::all();
         $userType =  UserType::where('user_role', 'instructor')->value('id');
 
         $instructors = User::where('role_id', $userType)->get();
+
         foreach($courses as $course)
         {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');

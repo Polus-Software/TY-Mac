@@ -36,6 +36,7 @@
                 <th scope="col">Course Category</th>
                 <th scope="col">Description</th>
                 <th scope="col" class="text-center">Actions</th>
+                <th scope="col">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -56,6 +57,11 @@
                   </a>
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
+                  </a>
+                </td>
+                <td class="align-middle text-center">
+                <a href="{{ route('view-sub-topic', $course['id']) }}" title="View sub-topics">
+                  <i class="fas fa-eye"></i>
                   </a>
                 </td>
                 <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
@@ -79,7 +85,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add a new sub topic</h5>
+        <h5 class="modal-title">Add a sub topic</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -244,6 +250,29 @@
             <td><strong>Description:</strong></td>
             <td class="text-right"><label id="view_course_description"></label></td>
           </tr>
+          <tr>
+            <td><strong>Level :</strong></td>
+            <td class="text-right"><label id="view_course_difficulty"></label></td>
+          </tr>
+          <tr>
+            <td><strong>Duration :</strong></td>
+            <td class="text-right"><label id="view_course_duration"></label></td>
+          </tr>
+          <tr>
+            <td><strong>What you'll learn :</strong></td>
+            <td class="text-right"><label id="view_course_short_description"></label>
+          </tr>
+          <tr>
+            <td><strong>Who this course is for :</strong></td>
+            <td class="text-right">
+              <label id="view_course_details"></label>
+            </td>
+            <br>
+            <td class="text-right">
+              <label id="view_course_details_points"></label>
+            </td>
+          </tr>
+         
         </table>
       </div>
       <div class="modal-footer">
@@ -368,6 +397,7 @@ function closeModal(modalId) {
 
 });
 
+
   // document.getElementById('save_course').addEventListener('click', (event) => {
   //   let courseTitle = document.getElementById('course_title').value;
   //   let courseDescription = document.getElementById('course_description').value;
@@ -410,6 +440,12 @@ function closeModal(modalId) {
       document.getElementById('view_course_name').innerHTML = data.courseDetails['course_name'];
       document.getElementById('view_course_category').innerHTML = data.courseDetails['course_category'];
       document.getElementById('view_course_description').innerHTML = data.courseDetails['course_description'];
+      document.getElementById('view_course_difficulty').innerHTML = data.courseDetails['course_difficulty'];
+      document.getElementById('view_course_duration').innerHTML = data.courseDetails['course_duration'];
+      document.getElementById('view_course_short_description').innerHTML = data.courseDetails['short_description'];
+      document.getElementById('view_course_details').innerHTML = data.courseDetails['course_details'];
+      document.getElementById('view_course_details_points').innerHTML = data.courseDetails['course_details_points'];
+
       closeModal('view_course_modal');
     });
   });

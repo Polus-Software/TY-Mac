@@ -136,7 +136,7 @@
                         </strong></p>
                     </div>
                     <div class="col-lg-6">
-                        <p>Upcoming Cohort:<strong> 11/10/2021</strong></p>
+                        <p>Upcoming Cohort:<strong>11/10/2021</strong></p>
                     </div>
                    
                 </div>
@@ -169,7 +169,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card card-1">
                         <div class="card-body p-4">
                           <h5 class="card-title">Course description</h5>
@@ -329,7 +328,7 @@
                                     <img src="{{asset('/storage/images/'.$singleCourseFeedback['studentProfilePhoto'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:54px; height:54px;">
                                     <div class="card-body">
                                         <h5 class="card-title text-left">
-                                            {{$singleCourseFeedback['studentFirstname']}} {{$singleCourseFeedback['studentLastname']}}
+                                            {{$singleCourseFeedback['studentFirstname']}} {{$singleCourseFeedback['studentLastname']}}</h5>
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                             @for($i = 1; $i<=5; $i++)

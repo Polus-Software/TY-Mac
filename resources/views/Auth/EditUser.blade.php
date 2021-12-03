@@ -72,7 +72,7 @@
                 </ul>
               </div>
           </div>
-          <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+          <div class="col-lg-9 col-md-8 col-sm-12 col-12">
               <div class="content-page">
                   <div class="content-top">
                       <div class="card col-sm-8 mx-auto">

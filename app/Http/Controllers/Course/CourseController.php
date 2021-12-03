@@ -12,7 +12,9 @@ use App\Models\AssignedCourse;
 use App\Models\Topic;
 use App\Models\CohortBatch;
 use App\Models\TopicContent;
+use App\Models\TopicAssignment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -45,7 +47,13 @@ class CourseController extends Controller
     }
 
     public function addCourse(){
-        return view('Course.admin.create_course');
+        $courseCategories = CourseCategory::all();
+        $instructors = DB::table('users')->where('role_id', '=', 3) ->get();
+
+        return view('Course.admin.create_course',[
+            'courseCategories' => $courseCategories,
+            'instructors' => $instructors,
+        ]);
     }
 
     public function createSubtopic(){
@@ -61,42 +69,60 @@ class CourseController extends Controller
     }
 
     public function saveCourse(Request $request) {
-        $html = '';
-        $slNo = 1;
+
         $courseTitle = $request->input('course_title');
-        $courseDesc = $request->input('course_description');
-        
+        $courseDesc = $request->input('description');
         $courseCategory = $request->input('course_category');
-        $instructor = $request->input('instructor');
+        $courseDifficulty = $request->input('course_difficulty');
+        $instructorName = $request->input('instructor_name');
+        $courseDuration = $request->input('course_duration');
+       
+        $what_learn = "";
+        $what_learn_points_count = $request->input('what_learn_points_count');
+ 
+        for($index = 1; $index <= $what_learn_points_count; $index++) {
+           $what_learn_temp = $request->input('what_learn_' . $index);
+           $what_learn = $what_learn . $what_learn_temp . ";";
+        }
+ 
+        $whoLearnDescription = $request->input('who_learn_description');
+
+        $who_learn ="";
+        $who_learn_points_count = $request->input('who_learn_points_count');
+   
+        for($i =1;  $i <= $who_learn_points_count; $i++){
+          $who_learn_temp = $request->input('who_learn_points_'. $i);
+          $who_learn = $who_learn . $who_learn_temp . ";";
+        }
+
+        $courseFile = $request->course_image->getClientOriginalName();
+        $courseThumbnailFile = $request->course_thumbnail_image->getClientOriginalName();
+
+        $request->course_image->storeAs('courseImages',$courseFile,'public');
+        $request->course_thumbnail_image->storeAs('courseThumbnailImages',$courseThumbnailFile,'public');
+        
         $user = Auth::user();
         $userId = $user->id;
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
         $course->category = $courseCategory;
+        $course->course_difficulty = $courseDifficulty;
+        $course->course_duration = $courseDuration;
+        $course->short_description = $what_learn ;
+        $course->course_details = $whoLearnDescription;
+        $course->course_details_points = $who_learn;
+        $course->course_image = $courseFile;
+        $course->course_thumbnail_image = $courseThumbnailFile;
         $course->created_by = $userId;
         $course->save();
+
         $assignedCourse = new AssignedCourse;
         $assignedCourse->course_id = $course->id;
-        $assignedCourse->user_id = $instructor;
+        $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
 
-        $courses = Course::all();
-
-        foreach($courses as $course) {
-            $categoryName = CourseCategory::where('id', $course->category)->value('category_name');
-            $html = $html . '<tr id="' . $course->course_id .'">';
-            $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
-            $html = $html . ' <td class="align-middle">' . $course->course_title . '</td>';
-            $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-            $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="' . $course->id . '">View</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-success edit_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="' . $course->id . '">Edit</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger delete_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '">Delete</button></td></tr>';
-            $slNo = $slNo + 1;
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
+        return redirect('manage-courses')->withSuccess('Successfully added!');
     }
 
     public function viewCourse(Request $request) {
@@ -106,7 +132,19 @@ class CourseController extends Controller
                 $course = Course::where('id', $courseId);
                 if ($course) {
                     $categoryName = CourseCategory::where('id', $course->value('category'))->value('category_name');
-                    $data = ['course_name' => $course->value('course_title'), 'course_category' => $categoryName, 'course_description' => $course->value('description')];
+                    
+                    $data = ['course_name' => $course->value('course_title'), 
+                    'course_category' => $categoryName,
+                    'course_description' => $course->value('description'), 
+                    'course_difficulty' => $course->value('course_difficulty'),
+                    'course_duration' => (int)$course->value('course_duration'),
+                    'short_description' => explode(";", $course->value('short_description')),
+                    'course_details' => $course->value('course_details'),
+                    'course_details_points' => explode(";", $course->value('course_details_points')),
+                    // 'course_image' => $course->value('course_image'),
+                    // 'course_thumbnail_image' => $course->value('course_thumbnail_image'),
+                   
+                    ];
                     return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
                 }
             }
@@ -243,5 +281,43 @@ class CourseController extends Controller
         $batch->region = $zone;
         $batch->save();
         return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
+    }
+
+    // To view sub topics
+    public function viewSubTopic($id){
+        try{
+            $subTopics = DB::table('topics')->where('course_id', $id)->paginate(2);
+
+            return view('Course.view_sub_topics',[
+             'subTopics' => $subTopics,
+            ]);
+        }catch (Exception $exception) {
+            return($exception->getMessage());
+        }
+       
+    }
+
+
+    //Adding assignments
+    public function addAssignment(Request $request){
+      $topicId =intval($request->assignment_topic_id);
+
+      $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
+      $instructorId = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
+
+
+      $topicAssignment = new TopicAssignment;
+      $topicAssignment->assignment_title= $request->assignment_title;
+      $topicAssignment->assignment_description= $request->assignment_description;
+      $topicAssignment->topic_id = $topicId;
+      $topicAssignment->course_id = $courseId ;
+      $topicAssignment->instructor_id = $instructorId;
+
+      
+        $filename = $request->assignment_attachments->getClientOriginalName();
+        $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
+        $topicAssignment->document = $filename;
+        $topicAssignment->save();
+        return redirect()->back();
     }
 }
