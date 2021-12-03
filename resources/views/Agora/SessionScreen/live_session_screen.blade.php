@@ -15,7 +15,6 @@
       height: 100%;
     }
   </style>
-  <h1>Works</h1>
   <div id="root1"></div>
   <script type="text/javascript">
       

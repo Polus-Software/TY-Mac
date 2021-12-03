@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserType;
 use App\Models\AssignedCourse;
 use App\Models\Topic;
+use App\Models\CohortBatch;
 use App\Models\TopicContent;
 use App\Models\TopicAssignment;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,14 @@ class CourseController extends Controller
 
     public function createSubtopic(){
         return view('Course.admin.create_subtopic');
+    }
+
+    public function createAssignment(){
+        return view('Course.admin.create_assignment');
+    }
+
+    public function viewAssignment(){
+        return view('Course.admin.view_assignment');
     }
 
     public function saveCourse(Request $request) {
@@ -254,6 +263,26 @@ class CourseController extends Controller
         return redirect()->back();
     }
 
+    public function saveBatch(Request $request) {
+        $course = $request->batchCourse;
+        $batchName = $request->batchname;
+        $startDate = $request->startDate;
+        $startTime = $request->startTime;
+        $endTime = $request->endTime;
+        $batchDuration = $request->batch_duration;
+        $zone = $request->zone;
+        $batch = new CohortBatch;
+        $batch->course_id = $course;
+        $batch->batchname = $batchName;
+        $batch->start_date = $startDate;
+        $batch->start_time = $startTime;
+        $batch->end_time = $endTime;
+        $batch->duration = $batchDuration;
+        $batch->region = $zone;
+        $batch->save();
+        return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
+    }
+
     // To view sub topics
     public function viewSubTopic($id){
         try{
@@ -290,6 +319,5 @@ class CourseController extends Controller
         $topicAssignment->document = $filename;
         $topicAssignment->save();
         return redirect()->back();
-
     }
 }
