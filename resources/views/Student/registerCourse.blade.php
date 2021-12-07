@@ -122,7 +122,7 @@ document.getElementById('registerNowButton').addEventListener('click', (event) =
            body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
             if (data.status =='success'){
-            window.location.href ="/enrolled-course?course_id="+ courseId;
+               window.location.href ="/enrolled-course?course_id="+ courseId;
             }
             
         });

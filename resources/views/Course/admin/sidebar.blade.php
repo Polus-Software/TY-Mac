@@ -20,7 +20,7 @@
         Sub topics</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="">
+      <a class="nav-link link-dark" href="{{ route('create-assignment') }}">
       <i class="fas fa-users"></i>
         Assignments</a>
     </li>

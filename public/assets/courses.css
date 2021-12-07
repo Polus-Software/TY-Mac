@@ -6,10 +6,10 @@
 
 .filter{
     background:#f8f7fc;   
-    height: 800px;
+    /* height: 800px; */
 }
 
-.filter-button:not(.collapsed)::after
+
 
 .filter-button {
     color: #000 !important;
@@ -111,8 +111,10 @@
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     color: #6E7687;
-    /* width: max-content; */
+}
 
+.item-3 {
+    text-align-last: end;
 }
 select{
     width: 200px;
