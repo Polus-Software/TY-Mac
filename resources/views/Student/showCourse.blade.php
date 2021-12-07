@@ -293,7 +293,7 @@
                   <div class="card card-4 mb-3 mt-3" style="background: #F8F7FC;">
                     <div class="card-body">
                         <h5 class="card-title p-3">Upcoming Live Cohorts</h5>
-                        @foreach($singleCourseDetails as $singleCourseDetail)
+                        @foreach($liveSessions as $liveSession)
                             <div class="row g-0 border-bottom">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-4">
                                     <img src="/courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
@@ -301,8 +301,7 @@
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-8">
                                     <div class="card-body">
                                         <h5 class="card-title">
-                                            {{$singleCourseDetail['instructor_firstname']}} 
-                                            {{$singleCourseDetail['instructor_lastname']}}
+                                            <a style="text-decoration:none;color:#2C3443;" href="{{ route('session-view') }}">{{$liveSession['session_title']}}</a>
                                         </h5>
                                         <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
                                     </div>
@@ -431,11 +430,10 @@
             },
            body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
-            console.log(data);
             if (data.status =='success'){
                 closeModal('reviewModal');
+                window.location.reload();
             }
-            
         });
 
    });

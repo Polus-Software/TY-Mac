@@ -46,6 +46,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/save-course', [CourseController::class, 'saveCourse'])->name('save-course');
     Route::get('/add-course', [CourseController::class, 'addCourse'])->name('add-course');
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
+    Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
+    Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
     Route::post('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::post('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
@@ -80,10 +82,13 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
+    Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
+    Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
     Route::post('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
     Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     
+
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
@@ -94,13 +99,17 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
     Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
+    Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
 
 
-
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
+    Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
     Route::get('session-view', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('schedule-session', [RtmTokenGeneratorController::class, 'scheduleSession'])->name('schedule-session');
+    Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
+    Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -112,7 +121,6 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/enrolled-course', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
 
+    Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
-
 });
-
