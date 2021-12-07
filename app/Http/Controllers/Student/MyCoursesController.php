@@ -35,18 +35,18 @@ class MyCoursesController extends Controller
           $instructorfirstname = User::where('id', $assigned)->value('firstname');
           $instructorlastname = User::where('id', $assigned)->value('lastname');
 
-        $enrolledCourseData = array(
-          'course_title' =>  $course_title,
-          'description' => $description,
-          'category_name' => $courseCategory,
-          'course_difficulty' => $course_difficulty,
-          'course_image' => $course_image,
-          'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
-          'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
-          'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
-          'instructor_firstname' => $instructorfirstname,
-          'instructor_lastname' => $instructorlastname,
-        );
+          $enrolledCourseData = array(
+            'course_title' =>  $course_title,
+            'description' => $description,
+            'category_name' => $courseCategory,
+            'course_difficulty' => $course_difficulty,
+            'course_image' => $course_image,
+            'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
+            'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
+            'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
+            'instructor_firstname' => $instructorfirstname,
+            'instructor_lastname' => $instructorlastname,
+          );
         array_push($singleEnrolledCourseData, $enrolledCourseData);
       }
       return view('Student.myCourses', [

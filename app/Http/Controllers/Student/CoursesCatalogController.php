@@ -241,9 +241,9 @@ class CoursesCatalogController extends Controller
         
     }
 
-    public function afterEnrollView(){
-        return view('Student.enrolledCoursePage');
-    }
+    // public function afterEnrollView(){
+    //     return view('Student.enrolledCoursePage');
+    // }
     
 
     public function courseReviewProcess(Request $request){

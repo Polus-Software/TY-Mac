@@ -56,6 +56,7 @@ class CourseController extends Controller
         ]);
     }
 
+
     public function createSubtopic(){
         return view('Course.admin.create_subtopic');
     }
@@ -67,6 +68,7 @@ class CourseController extends Controller
     public function viewAssignment(){
         return view('Course.admin.view_assignment');
     }
+
 
     public function saveCourse(Request $request) {
 
@@ -138,7 +140,7 @@ class CourseController extends Controller
                     'course_description' => $course->value('description'), 
                     'course_difficulty' => $course->value('course_difficulty'),
                     'course_duration' => (int)$course->value('course_duration'),
-                    'short_description' => explode(";", $course->value('short_description')),
+                    'short_description' =>  explode(";", $course->value('short_description')),
                     'course_details' => $course->value('course_details'),
                     'course_details_points' => explode(";", $course->value('course_details_points')),
                     // 'course_image' => $course->value('course_image'),
@@ -242,7 +244,13 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
 
+    public function createSubtopic(){
+
+        return view('Course.admin.create_subtopic');
+    }
+
     public function saveSubTopic(Request $request) {
+        //dd($request->all());
         $topic = new Topic;
         $topic->topic_title = $request->topic_title;
         $topic->course_id = $request->course;
