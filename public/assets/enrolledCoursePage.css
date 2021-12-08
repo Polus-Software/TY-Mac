@@ -3,7 +3,10 @@
     font-weight: 900;
    font-size: 20px;
    color: #2C3443;
-   
+}
+.sidebar img{
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 40px;
 }
 .vertcalNav{
     background: #F8F7FC;
@@ -36,8 +39,7 @@
     color: #2C3443;
     font-size: 16px;
 }
-.card-1 .card-text{
-
+.card-1 .card-text, .card-7 .card-text-1, .card-8 .card-text-1{
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -50,7 +52,7 @@
 .progress-bar{
     background: #74648C;
 }
-.card-1 .para-1{
+.card-1 .para-1 , .card-6 .para-1{
     color: #6E7687;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
@@ -78,20 +80,31 @@
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 10px;
 }
-card-2 h5{
+.card-2 h5 , .card-6 h5 ,.card-7 h5,.recommendation{
     color: #2C3443;
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
     font-weight: 900;
 }
-.card-2 h6{
+.achievement{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color:#6E7687;  
+}
+.card-6 .card-title{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+.card-2 h6 , .card-5 h6 {
     color: #2C3443;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
-
 }
-.card-2 li{
+
+.card-2 li , .card-5 li{
     color: #6E7687;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
@@ -99,6 +112,7 @@ card-2 h5{
     list-style-type: circle;
     line-height: 26px;
 }
+
 .card-2 button{
     color: #6E7687;
     font-family: 'Lato', sans-serif;
@@ -107,9 +121,23 @@ card-2 h5{
     font-size: 16px;
     letter-spacing: 0.32px;
 }
+.card-6 button{
+    background: #F8F7FC;
+    color: #6E7687;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    border-radius: 5px;
+    font-size: 16px;
+    letter-spacing: 0.32px;
+}
+.card-6 .time{
+    color: #868E96;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}
 .card-3 .go-live{
     background: #FCF7F9;
-   
 }
 .card-3{
     background: #FFFFFF 0% 0% no-repeat padding-box;
@@ -143,6 +171,7 @@ card-2 h5{
 .card-5{
     border: none;
 }
+
 .card-4 .card-text{
     color: #AF7E00;
 }
@@ -150,10 +179,6 @@ card-2 h5{
     color: #6E7687;
 }
 
-/* .card .btn{
-    background: #FCF7F9;
-    border-radius: 5px;
-} */
 .card-title-2{
     font-size: 11px;
     color: #2C3443;
@@ -168,4 +193,68 @@ card-2 h5{
 }
 .fa-star{
     color: #AF7E00;
+}
+.card-8 img{
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 40px;
+}
+.card-8 .instructor-name{
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+   font-size: 24px;
+   color: #2C3443;
+}
+.card .earned-badges{
+    background: #F8F7FC;
+}
+.badges{
+    color: #2C3443;
+    font-weight: 900;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+.card-8 small{
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color:#868E96;
+    font-weight: 400;
+
+}
+
+
+
+
+
+
+
+.container {
+    display: flex;
+}
+
+.badge-shadow {
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 50%;
+    height: 69px;
+    width: 69px;
+}
+
+/* Utilities */
+.left-0 {
+    position: relative;
+    left: 0px;
+}
+
+.left--15 {
+    position: relative;
+    left: -15px;
+}
+
+.left--30 {
+    position: relative;
+    left: -30px;
+}
+
+.left--45 {
+    position: relative;
+    left: -45px;
 }
