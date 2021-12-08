@@ -102,6 +102,10 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
+    Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
+    Route::get('edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
+    Route::post('update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
+    Route::get('delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
 
 
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');

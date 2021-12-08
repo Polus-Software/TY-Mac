@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Course;
+use Illuminate\Support\Facades\Session;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -60,14 +61,6 @@ class CourseController extends Controller
         return view('Course.admin.create_subtopic');
     }
 
-    public function createAssignment(){
-        return view('Course.admin.create_assignment');
-    }
-
-    public function viewAssignment(){
-        return view('Course.admin.view_assignment');
-    }
-
     public function saveCourse(Request $request) {
 
         $courseTitle = $request->input('course_title');
@@ -94,12 +87,13 @@ class CourseController extends Controller
           $who_learn_temp = $request->input('who_learn_points_'. $i);
           $who_learn = $who_learn . $who_learn_temp . ";";
         }
-
+        if($request->file()){
         $courseFile = $request->course_image->getClientOriginalName();
         $courseThumbnailFile = $request->course_thumbnail_image->getClientOriginalName();
 
         $request->course_image->storeAs('courseImages',$courseFile,'public');
         $request->course_thumbnail_image->storeAs('courseThumbnailImages',$courseThumbnailFile,'public');
+        }
         
         $user = Auth::user();
         $userId = $user->id;
@@ -122,7 +116,9 @@ class CourseController extends Controller
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
 
-        return redirect('manage-courses')->withSuccess('Successfully added!');
+        Session::put('course_id', $course->id);
+        Session::save();
+        return redirect('create-assignment', ['courseId'=> $course->id])->with('course_id', $course->id);
     }
 
     public function viewCourse(Request $request) {
@@ -318,6 +314,111 @@ class CourseController extends Controller
         $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
         $topicAssignment->document = $filename;
         $topicAssignment->save();
+        return redirect()->back();
+    }
+
+    public function createAssignment(){
+        if(Session::has('course_id')){
+            $course_id = Session::get('course_id');
+            DB::insert('insert into topics (`topic_title`, `course_id`, `description`, `created_at`, `updated_at`) values (?, ?, ?, ?, ?)', ['MS office'.$course_id, $course_id, 'dfsfd', NULL, NULL]);
+        }
+        
+        $subTopics = DB::table('topics')->where('course_id', $course_id)->get();
+        return view('Course.admin.create_assignment', [
+            'course_id' => $course_id,
+            'subTopics' => $subTopics
+        ]);
+    }
+
+    public function editAssignment(Request $request){
+        if(Session::has('course_id')){
+            $course_id = Session::get('course_id');
+        }
+        $assignment_id = $request->get('assignment_id');
+        $assignment_details = DB::table('topic_assignments')->where('id', $assignment_id);
+        $subTopics = DB::table('topics')->where('course_id', $course_id)->get();
+        $assignment = [
+            'id' => $assignment_details->value('id'),
+            'topic_id' => $assignment_details->value('topic_id'),
+            'instructor_id' => $assignment_details->value('instructor_id'),
+            'course_id' => $assignment_details->value('course_id'),
+            'assignment_title' => $assignment_details->value('assignment_title'),
+            'assignment_description' => $assignment_details->value('assignment_description'),
+            'document' => $assignment_details->value('document')
+        ];
+        return view('Course.admin.edit_assignment', [
+            'course_id' => $course_id,
+            'subTopics' => $subTopics,
+            'assignment_details' => $assignment
+        ]);
+    }
+
+    public function viewAssignment(){
+        $course_id = Session::get('course_id');
+        $assignments = DB::table('topic_assignments')
+        ->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
+        ->where('topic_assignments.course_id', $course_id)
+        ->get();
+        return view('Course.admin.view_assignment', [
+            'assignments' => $assignments
+        ]);
+    }
+
+    /**
+     * Saving assignments to db
+     */
+    public function saveAssignment(Request $request) {
+        $topicId =intval($request->input('assignment_topic_id'));
+        $course_id = $request->input('course_id');
+        // $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
+        $instructorId = DB::table('assigned_courses')->where('course_id', $course_id)->value('user_id');
+
+        $topicAssignment = new TopicAssignment;
+        $topicAssignment->assignment_title= $request->input('assignment_title');
+        $topicAssignment->assignment_description= $request->input('assignment_description');
+        $topicAssignment->topic_id = $topicId;
+        $topicAssignment->course_id = $course_id ;
+        $topicAssignment->instructor_id = $instructorId;
+
+        //TODO: Assignment due date
+        if($request->file()){
+            $filename = $request->assignment_attachments->getClientOriginalName();
+            $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
+            $topicAssignment->document = $filename;
+        }
+        
+        $topicAssignment->save();
+        return redirect('view-assignment');//->with('course_id', $course_id);
+    }
+
+    /**
+     * Saving assignments to db
+     */
+    public function updateAssignment(Request $request) {
+        $topicId =intval($request->input('assignment_topic_id'));
+        $assignment_id = intval($request->input('assignment_id'));
+        $course_id = $request->input('course_id');
+
+        $assignment_title= $request->input('assignment_title');
+        $assignment_description= $request->input('assignment_description');
+        
+        TopicAssignment::where('id', 'like',$assignment_id)->update([
+            'topic_id' => $topicId,
+            'assignment_title' => $assignment_title,
+            'assignment_description' => $assignment_description
+
+        ]);
+        return redirect('view-assignment');
+    }
+
+    /**
+     * delete assignments from db
+     */
+    public function deleteAssignment(Request $request) {
+        $assignment_id = $request->input('assignment_id');
+        if ($assignment_id) {
+            DB::table('topic_assignments')->where('id', '=', $assignment_id)->delete();
+        }
         return redirect()->back();
     }
 }

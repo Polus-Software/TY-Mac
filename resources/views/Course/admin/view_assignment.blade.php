@@ -12,7 +12,7 @@
       <!-- main -->
       <main>
       <div class="py-4">
-          <ul class="nav nav-tabs">
+          <ul class="nav nav-tabs llp-tabs">
   <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="{{ route('view-assignment') }}">Assignment list</a>
   </li>
@@ -23,32 +23,32 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
+          @foreach($assignments as $assignment)
+          <div class="col-12 mb-3">
             <div class="card">
-  <div class="card-header">
-    Assignemnt: Assignemnt1
-    <span>20 minutes to complete</span>
-  </div>
-  <div class="card-body">
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="">Go somewhere</a>
-    <div class="row">
-    <div class="col-md-6">
-            <label for="choose-sub-topic">Choose sub topic</label>
-            <select type="text" class="form-select" id="choose-sub-topic">
-            <option selected>Select...</option>
-            </select>
-            
-          </div>
-          <div class="d-flex align-items-end col-md-6">
-          <button class="btn btn-sm btn-outline-dark me-3" type="button">Edit</button>
-          <button class="btn btn-sm btn-outline-dark" type="button">Delete</button>
-          </div>
-          </div>
-          
-  </div>
-</div>
+              <div class="card-header">
+              Title: <strong>{{$assignment->assignment_title}}</strong>
+              <!-- <span>20 minutes to complete</span> -->
+              </div>
+              <div class="card-body">
+              <p class="card-text">{{$assignment->assignment_description}}</p>
+              <a href="#" class="">Go somewhere</a>
+              <div class="row">
+              <div class="col-md-6">
+              <label for="">Subtopic:</label>
+              <p>{{$assignment->topic_title}}</p>
+
+              </div>
+              <div class="d-flex align-items-end col-md-6">
+              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('edit-assignment', ['assignment_id' => $assignment->id]) }}">Edit</a>
+              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('delete-assignment', ['assignment_id' => $assignment->id]) }}">Delete</a>
+              </div>
+              </div>
+
+              </div>
             </div>
+          </div>
+          @endforeach
         </div>
       </main>
       <!-- main ends -->
