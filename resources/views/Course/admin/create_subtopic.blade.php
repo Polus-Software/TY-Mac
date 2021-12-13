@@ -14,34 +14,14 @@
         
         <form action="{{ route('add-sub-topic') }}" class="row g-3 llp-form" method="POST">
           @csrf
+          <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
           <div class="py-4">
-            <h4>Course Title:<span>Lorem ipsum dolor sit amet</span></h4>
+            <h4>Course Title:<span>Lorem ipsum dolor sit amet({{$course_id}})</span></h4>
             <hr class="my-4">
           </div>
           <div class="row sub-topic-container">
-          <!-- sub topic -->
-          <!-- <div class="card mb-3">
-          <div class="card-body">
-          <h5 class="card-title">Enter subtopic title</h5>
-          <input type="text" class="form-control" id="title" name="topic_title" placeholder="Ex: Session 1 - Intro to G Suite & Google Drive">
-          <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
-          <div id="add-content"></div>
-          <div class="row">
-          <div class="col-12">
-          <a class="btn btn-sm btn-outline-secondary btn-sub-content" id="add_content_btn">Add content for sub-topic</a>
-          <a class="btn btn-sm btn-outline-secondary" id="upload_audio_video">Upload audio/video</a>
+            <input id="topic_count" name="topic_count" type="hidden" value="0">
           </div>
-          </div>
-          </div>
-          </div>
-          </div> -->
-          <!-- sub topic ends-->
-          </div>
-      <!-- <div class="row">
-        <div class="col-12">
-      
-        </div>
-      </div> -->
         <div class="row">
             <div class="col-12">
             <div id="add-sub-topic" class="mt-3"></div>
@@ -52,7 +32,6 @@
           
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
           <button class="btn btn-primary" type="submit">Save</button>
-          <!-- <span id="test_span"></span> -->
           </div>
         </form>
       </main>
@@ -66,49 +45,64 @@ window.onload = function(event) {
   let sub_topic_count = 1;
   let content_count = 1;
   let externallink_count = 1;
+
+  const createNewElement = (el, classLists = [], attribs = {}, text ='') => {
+    let tempEl ;
+    if(el) tempEl = document.createElement(el);
+    if(classLists){
+      classLists.forEach((className)=> {
+        tempEl.classList.add(className);
+      });
+    }
+    if(typeof(attribs) !== 'undefined' && Array.isArray(attribs) && attribs.length>0) {
+      attribs.forEach((attrs)=>{
+        Object.keys(attrs).map(key=> {
+          tempEl.setAttribute(`${key}`,`${attrs[key]}`);
+        });
+      });
+    }
+    if(text) tempEl.textContent = text;
+    return tempEl;
+  }
   
   document.querySelector('#add_sub_topic_btn').addEventListener('click', (e) => {
   e.preventDefault();
   const el = e.currentTarget;
   const subTopicContainerEl = document.querySelector('.sub-topic-container');
   subTopicContainerEl.appendChild(generateSubTopicHTML());
+  document.getElementById('topic_count').value = parseInt(document.getElementById('topic_count').value)+1;
   sub_topic_count++;
   });
 
   const generateSubTopicHTML = () => {
-    const cardEl = document.createElement('div');
-    cardEl.classList.add('card', 'mb-3');
-    const cardbodyEl = document.createElement('div');
-    cardbodyEl.classList.add('card-body');
-    const cardtitleEl = document.createElement('h5');
-    cardtitleEl.classList.add('card-title');
-    cardtitleEl.textContent = 'Enter subtopic title';
-    const topictitleEl = document.createElement('input');
-    topictitleEl.classList.add('form-control');
-    topictitleEl.setAttribute('type', 'text');
-    topictitleEl.setAttribute('name', `topic_title${sub_topic_count}`);
-    topictitleEl.setAttribute('placeholder', 'Ex: Session 1 - Intro to G Suite & Google Drive');
-    const innercardEl = document.createElement('div');
-    innercardEl.classList.add('llpcard-inner', 'bg-light', 'mt-3', 'mb-3', 'p-3');
-    const addContentContainerEl = document.createElement('div');
-    addContentContainerEl.classList.add('row', 'content-container');
-    const rowEl = document.createElement('div');
-    rowEl.classList.add('row');
-    const colEl = document.createElement('div');
-    colEl.classList.add('col-12');
-    const addContentbtnEl = document.createElement('a');
-    addContentbtnEl.classList.add('btn', 'btn-sm', 'btn-outline-secondary', `btn-sub-content`);
-    addContentbtnEl.textContent = 'Add content for sub-topic';
+    const cardEl = createNewElement('div', ['card', 'mb-3']);
+    const cardbodyEl = createNewElement('div', ['card-body']);
+    const cardtitleEl = createNewElement('h5', ['card-title'], [], 'Enter subtopic title');
+    const topictitleEl = createNewElement('input', ['form-control'], [
+      {"type": "text"}, {'name': `topic_title${sub_topic_count}`}, {'placeholder': 'Ex: Session 1 - Intro to G Suite & Google Drive'}
+    ]);
+    const innercardEl = createNewElement('div',['llpcard-inner', 'bg-light', 'mt-3', 'mb-3', 'p-3']);
+    const contentCountEl = createNewElement('input', ['content_count'], [
+      {'type': 'hidden'}, {'id': `content_count_topic_${sub_topic_count}`}, {'name': `content_count_topic_${sub_topic_count}`},{'value': 0}, {'rel': sub_topic_count}
+    ]);
+    const addContentContainerEl = createNewElement('div', ['row', 'content-container'], [
+      {'id': `topic-${sub_topic_count}`}
+    ]);
+    const rowEl = createNewElement('div', ['row']);
+    const colEl = createNewElement('div', ['col-12']);
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for sub-topic');
     addContentbtnEl.addEventListener('click', (e) => {
-      e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML());
+      const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
+      contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
+      const topicNum = contentCountHiddenEl.getAttribute('rel');
+      e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
       content_count++;
     });
-    const uploadContentbtnEl = document.createElement('a');
-    uploadContentbtnEl.classList.add('btn', 'btn-sm', 'btn-outline-secondary');
-    uploadContentbtnEl.textContent = 'Upload audio/video';
+    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Upload audio/video');
     colEl.appendChild(addContentbtnEl);
     colEl.appendChild(uploadContentbtnEl);
     rowEl.appendChild(colEl);
+    innercardEl.appendChild(contentCountEl);
     innercardEl.appendChild(addContentContainerEl);
     innercardEl.appendChild(rowEl);
     cardbodyEl.appendChild(cardtitleEl);
@@ -117,85 +111,72 @@ window.onload = function(event) {
     cardEl.appendChild(cardbodyEl);
     return cardEl;
   }
+
 const generateSubTopicHTMLInitial = () => {
   const subTopicContainerEl = document.querySelector('.sub-topic-container');
   subTopicContainerEl.appendChild(generateSubTopicHTML());
+  document.getElementById('topic_count').value = 1;
   sub_topic_count++;
 }
 generateSubTopicHTMLInitial();
 
-  const generateContentHTML = () => {
-    const contentContainerEl = document.createElement('div');
-    contentContainerEl.classList.add('card', 'card-body', 'mb-3');
-    const contnetTitleEl = document.createElement('input');
-    contnetTitleEl.classList.add('form-control', 'mb-3');
-    contnetTitleEl.setAttribute('type', 'text');
-    contnetTitleEl.setAttribute('name', `content-title_${sub_topic_count}_${content_count}`);
-    contnetTitleEl.setAttribute('placeholder', 'Ex: What is Google Suite?');
-    const addExternalLinkEl = document.createElement('div');
-    addExternalLinkEl.classList.add('add_external_link', 'mb-3');
-    const contentEl = document.createElement('div');
-    contentEl.classList.add('row', 'p-2', 'flex-fill', 'bd-highlight');
-    const studyMaterialEl = document.createElement('div');
-    studyMaterialEl.classList.add('col-lg-3');
-    studyMaterialEl.textContent = 'Study material:';
-    const uploadContainerEl = document.createElement('div');
-    uploadContainerEl.classList.add('col-lg-5', 'col-12');
-    const uploadTextEl = document.createElement('label');
-    uploadTextEl.textContent = 'Upload from device';
-    const uploadFileEl = document.createElement('input');
-    uploadFileEl.classList.add('form-control');
-    uploadFileEl.setAttribute('type', 'file');
-    uploadFileEl.setAttribute('name', `upload_sub_topic_content_${sub_topic_count}_${content_count}`);
-    const contentLinkContainerEl = document.createElement('div');
-    contentLinkContainerEl.classList.add('col-lg-3', 'pt-4');
-    const contentLinkEl = document.createElement('a');
-    contentLinkEl.classList.add('btn', 'btn-sm', 'btn-outline-secondary');
-    contentLinkEl.setAttribute('name', `upload_sub_topic_content_${sub_topic_count}_${content_count}`);
-    contentLinkEl.textContent = 'Add external link';
+  const generateContentHTML = (topicNum, contentCount) => {
+    const contentContainerEl = createNewElement('div', ['card', 'card-body', 'mb-3']);
+    const contentTitleEl = createNewElement('input', ['form-control', 'mb-3'], [
+      {'type': 'text'},
+      {'name': `content_title_${topicNum}_${contentCount}`},
+      {'placeholder': 'Ex: What is Google Suite?'}
+    ]);
+    const addExternalLinkEl = createNewElement('div', ['add_external_link', 'mb-3']);
+    const contentEl = createNewElement('div', ['row', 'p-2', 'flex-fill', 'bd-highlight']);
+    const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Study material:');
+
+    const uploadContainerEl = createNewElement('div', ['col-lg-5', 'col-12']);
+    const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
+    const uploadFileEl = createNewElement('input', ['form-control'], [
+      {'type': 'file'},
+      {'name': `content_upload_${topicNum}_${contentCount}`}
+    ]);
+    const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
+    const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [
+      {'type': 'hidden'}, {'id': `externalLink_count_topic_${topicNum}_content_${contentCount}`},
+      {'name': `externalLink_count_topic_${topicNum}_content_${contentCount}`},{'value': 0}
+    ]);
+    const contentLinkEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Add external link');
     contentLinkEl.addEventListener('click', (e) => {
-    e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateExternalLinkHTML());
+    const linkCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count');
+    linkCountHiddenEl.value = parseInt(linkCountHiddenEl.value)+1;
+    e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateExternalLinkHTML(topicNum, contentCount, linkCountHiddenEl.value));
     externallink_count++;
     });
-    const removeContentContainerEl = document.createElement('div');
-    removeContentContainerEl.classList.add('col-lg-1', 'text-end');
-    const removeContentLinkEl = document.createElement('a');
-    removeContentLinkEl.setAttribute('name', `upload_sub_topic_content_${sub_topic_count}_${content_count}`);
+    const removeContentContainerEl = createNewElement('div', ['col-lg-1', 'text-end']);
+    const removeContentLinkEl = createNewElement('a');
     removeContentLinkEl.addEventListener('click', (e) => {
       e.currentTarget.parentElement.parentElement.parentElement.remove();
     });
-    const removeIconEl = document.createElement('i');
-    removeIconEl.classList.add('fas', 'fa-trash-alt');
+    const removeIconEl = createNewElement('i', ['fas', 'fa-trash-alt']);
     removeContentLinkEl.appendChild(removeIconEl);
     removeContentContainerEl.appendChild(removeContentLinkEl);
     contentLinkContainerEl.appendChild(contentLinkEl);
     uploadContainerEl.appendChild(uploadTextEl);
     uploadContainerEl.appendChild(uploadFileEl);
-    contentContainerEl.appendChild(contnetTitleEl);
-    contentContainerEl.appendChild(addExternalLinkEl);
     contentEl.appendChild(studyMaterialEl);
     contentEl.appendChild(uploadContainerEl);
     contentEl.appendChild(contentLinkContainerEl);
     contentEl.appendChild(removeContentContainerEl);
-    contentContainerEl.appendChild(contnetTitleEl);
+    contentContainerEl.appendChild(contentTitleEl);
+    addExternalLinkEl.appendChild(externalLinkCountEl);
     contentContainerEl.appendChild(addExternalLinkEl);
     contentContainerEl.appendChild(contentEl);
     return contentContainerEl;
   }
 
-  const generateExternalLinkHTML = () => {
-    const externalContainerEl = document.createElement('div');
-    externalContainerEl.classList.add('row', 'external-container', 'mb-3');
-    const labelContainerEl = document.createElement('div');
-    labelContainerEl.classList.add('col-lg-4');
-    const labelEl = document.createElement('label');
-    labelEl.textContent = 'Add External Link';
-    const divContainerEl = document.createElement('div');
-    divContainerEl.classList.add('col-lg-8');
-    const inputEl = document.createElement('input');
-    inputEl.setAttribute('type', 'link');
-    inputEl.setAttribute('name', `add_external_link_${sub_topic_count}_${content_count}_${externallink_count}`);
-    inputEl.classList.add('form-control');
+  const generateExternalLinkHTML = (topicNum, contentCount, linkCount) => {
+    const externalContainerEl = createNewElement('div', ['row', 'external-container', 'mb-3']);
+    const labelContainerEl = createNewElement('div',['col-lg-4']);
+    const labelEl = createNewElement('label', [], [], 'Add External Link');
+    const divContainerEl = createNewElement('div', ['col-lg-8']);
+    const inputEl = createNewElement('input', ['form-control'], [{'type': 'link'}, {'name': `external_topic${topicNum}_content_${contentCount}_link_${linkCount}`}]);
     divContainerEl.appendChild(inputEl);
     labelContainerEl.appendChild(labelEl);
     externalContainerEl.appendChild(labelContainerEl);

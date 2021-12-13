@@ -57,8 +57,11 @@ class CourseController extends Controller
         ]);
     }
 
-    public function createSubtopic(){
-        return view('Course.admin.create_subtopic');
+    public function createSubtopic(Request $request){
+        $course_id = $request->input('course_id');
+        return view('Course.admin.create_subtopic', [
+            'course_id' => $course_id
+        ]);
     }
 
     public function saveCourse(Request $request) {
@@ -116,9 +119,9 @@ class CourseController extends Controller
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
 
-        Session::put('course_id', $course->id);
-        Session::save();
-        return redirect('create-assignment', ['courseId'=> $course->id])->with('course_id', $course->id);
+        // Session::put('course_id', $course->id);
+        // Session::save();
+        return redirect()->route('create-subtopic', ['course_id' => $course->id]);
     }
 
     public function viewCourse(Request $request) {
@@ -238,25 +241,58 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
 
+    // public function saveSubTopic(Request $request) {
+    //     $topic = new Topic;
+    //     $topic->topic_title = $request->topic_title;
+    //     $topic->course_id = $request->course;
+    //     $topic->description = $request->topic_description;
+    //     $topic->save();
+    //     if($request->hasFile('study_material')){
+    //         $filename = $request->study_material->getClientOriginalName();
+    //         $request->study_material->storeAs('study_material',$filename,'public');
+    //         $content = new TopicContent;
+    //         $content->topic_title = $request->topic_title;
+    //         $content->topic_id = $topic->id;
+    //         $content->description = $request->topic_description;
+    //         $content->content_type = $request->study_material->extension();
+    //         $content->document = $filename;
+    //         $content->save();
+    //     }
+
+    //     return redirect()->back();
+    // }
+
     public function saveSubTopic(Request $request) {
-        $topic = new Topic;
-        $topic->topic_title = $request->topic_title;
-        $topic->course_id = $request->course;
-        $topic->description = $request->topic_description;
-        $topic->save();
-        if($request->hasFile('study_material')){
-            $filename = $request->study_material->getClientOriginalName();
-            $request->study_material->storeAs('study_material',$filename,'public');
-            $content = new TopicContent;
-            $content->topic_title = $request->topic_title;
-            $content->topic_id = $topic->id;
-            $content->description = $request->topic_description;
-            $content->content_type = $request->study_material->extension();
-            $content->document = $filename;
-            $content->save();
+        $external_links = '';
+        $topic_count  = $request->topic_count;
+        $course_id = $request->course_id;
+        for($i = 1; $i<= $topic_count; $i++) {
+            $topic = new Topic;
+            $topic->topic_title = $request->input('topic_title'.$i);
+            $topic->course_id = $course_id;
+            $topic->description = "test";
+            $topic->save();
+            $content_count = $request->input('content_count_topic_'.$i);            
+            for($j = 1; $j<=$content_count; $j++) {
+                if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
+                    continue;
+                }
+                $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
+                for($k =1; $k <= $external_link_count; $k++) {
+                    $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
+                    $external_links = $external_links . $external_link.';';
+                }
+                $content = new TopicContent;
+                $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                $content->topic_id = $topic->id;
+                $content->description = $external_links;
+                $content->content_type = 'test';
+                $content->document = 'test';
+                $content->save();
+            }
         }
 
-        return redirect()->back();
+        return redirect()->route('create-assignment', ['course_id' => $course_id]);
     }
 
     public function saveBatch(Request $request) {
@@ -317,12 +353,8 @@ class CourseController extends Controller
         return redirect()->back();
     }
 
-    public function createAssignment(){
-        if(Session::has('course_id')){
-            $course_id = Session::get('course_id');
-            DB::insert('insert into topics (`topic_title`, `course_id`, `description`, `created_at`, `updated_at`) values (?, ?, ?, ?, ?)', ['MS office'.$course_id, $course_id, 'dfsfd', NULL, NULL]);
-        }
-        
+    public function createAssignment(Request $request){
+        $course_id = $request->input('course_id');
         $subTopics = DB::table('topics')->where('course_id', $course_id)->get();
         return view('Course.admin.create_assignment', [
             'course_id' => $course_id,
@@ -353,8 +385,8 @@ class CourseController extends Controller
         ]);
     }
 
-    public function viewAssignment(){
-        $course_id = Session::get('course_id');
+    public function viewAssignment(Request $request){
+        $course_id = $request->input('course_id');
         $assignments = DB::table('topic_assignments')
         ->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
         ->where('topic_assignments.course_id', $course_id)
@@ -388,7 +420,7 @@ class CourseController extends Controller
         }
         
         $topicAssignment->save();
-        return redirect('view-assignment');//->with('course_id', $course_id);
+        return redirect()->route('view-assignment', ['course_id' => $course_id]);
     }
 
     /**
@@ -420,5 +452,9 @@ class CourseController extends Controller
             DB::table('topic_assignments')->where('id', '=', $assignment_id)->delete();
         }
         return redirect()->back();
+    }
+
+    public function createCohort() {
+        
     }
 }

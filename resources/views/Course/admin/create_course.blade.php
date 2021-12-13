@@ -59,7 +59,7 @@
           </div>
           <div class="col-md-6">
             <label for="duration">Duration</label>
-            <input type="number" class="form-control" id="duration" name="course_duration">
+            <input type="number" class="form-control" id="duration" name="course_duration" value="1">
           </div>
           <div class="col-12">
             <label for="what-learn">What you'll learn</label>
