@@ -140,24 +140,31 @@
                     </div>
                    
                 </div>
+                
                 <div class="row pt-2">
+                @unless($userType == 'admin' ||  $userType == 'instructor' || $userType == 'content-creator')
+                    @if($enrolledFlag == false)
                     <div class="col-lg-4 col-md-4 col-sm-4 col-6 mb-3">
                         <a class="btn enroll-button" id="enrollButton">
                             Enroll now
                         </a>
                         <input type="hidden" id="course_id" value="{{$singleCourseDetail['id']}}">
-                        <input type="hidden" id="user_id" value="{{ Auth::user()->id }}">
+                        <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
 
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                    @else
+                     <h6>Already enrolled!</h6>
+                    @endif
+                @endunless
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-6">
                         <a class="btn review-button" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
                             Add review
                         </a>
-                    </div>
+                    </div> -->
                 </div>
               </div>
               <div class="col-lg-6 col-md-12 order-1 order-lg-2">
-                  <img src="{{asset('/storage/images/'.$singleCourseDetail['course_image'])}}" alt="" 
+                  <img src="{{asset('/storage/courseImages/'.$singleCourseDetail['course_image'])}}" alt="course-image" 
                   class="img-fluid course-picture" style="height: auto;">
               </div>
           </div>
@@ -190,7 +197,24 @@
                     <div class="card card-2 mb-3">
                         <div class="card-body">
                             <h5 class="card-title border-bottom p-2">Course Content</h5>
-                            <h6 class="card-subtitle p-2">Session 1 - Intro to G Suite & Google Drive</h6>
+                            @php ($slno = 0)
+                            @foreach($courseContents as $courseContent)
+                            @php ($slno = $slno + 1)
+                            <h6 class="card-subtitle mt-2"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                            <ul class="list-group list-group-flush border-bottom pb-3">
+                                <li class="list-group-item">
+                                @foreach($courseContent['contentsData'] as $content)
+                                    <ul>
+                                    <li id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
+                                        <!-- <li>How to use Google Drive</li>
+                                        <li>Creating a folder in Google Drive</li>
+                                        <li>Sharing a folder in Google Drive</li> -->
+                                    </ul>
+                                    @endforeach
+                                </li>
+                            </ul>
+                            @endforeach 
+                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
                             <ul class="list-group list-group-flush border-bottom pb-3">
                                 <li class="list-group-item">
                                     <ul>
@@ -200,8 +224,8 @@
                                         <li>Sharing a folder in Google Drive</li>
                                     </ul>
                                 </li>
-                            </ul>   
-                            <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
+                            </ul>    -->
+                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
                             <ul class="list-group list-group-flush border-bottom pb-3">
                                 <li class="list-group-item">
                                     <ul>
@@ -211,19 +235,8 @@
                                         <li>Sharing a folder in Google Drive</li>
                                     </ul>
                                 </li>
-                            </ul>   
-                            <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                            <ul class="list-group list-group-flush border-bottom pb-3">
-                                <li class="list-group-item">
-                                    <ul>
-                                        <li>How to use Google Suite</li>
-                                        <li>How to use Google Drive</li>
-                                        <li>Creating a folder in Google Drive</li>
-                                        <li>Sharing a folder in Google Drive</li>
-                                    </ul>
-                                </li>
-                            </ul>   
-                            <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
+                            </ul>    -->
+                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
                             <ul class="list-group list-group-flush pb-3">
                                 <li class="list-group-item">
                                     <ul>
@@ -233,7 +246,7 @@
                                         <li>Sharing a folder in Google Drive</li>
                                     </ul>
                                 </li>
-                            </ul>   
+                            </ul>    -->
                         </div>
                     </div>
 <!-- course content end-->
@@ -258,7 +271,7 @@
                     <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
                          <div class="col-lg-4 col-sm-4 col-4">
                          @foreach($singleCourseDetails as $singleCourseDetail)
-                           <img src="{{asset('/storage/images/'.$singleCourseDetail['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" 
+                           <img src="{{ asset('/storage/images/'.$singleCourseDetail['profile_photo']) }}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" 
                            alt="..." style="width:94px; height:94px;">
                            @endforeach
                         </div>
@@ -268,25 +281,50 @@
                             @foreach($singleCourseDetails as $singleCourseDetail)
                               {{$singleCourseDetail['instructor_firstname']}} {{$singleCourseDetail['instructor_lastname']}}
                             @endforeach</h5>
-                          <p class="card-text-1">Prof. at TY-Mac</p>
+                          <p class="card-text-1"> 
+                          @foreach($singleCourseDetails as $singleCourseDetail)
+                          {{$singleCourseDetail['designation']}} at {{$singleCourseDetail['institute']}}</p>
+                          @endforeach
+                          
+                             
                         </div>
                         </div>
                     </div>
                       <div class="row">
                           <div class="col-md-12">
-                              <p class="card-text-1 p-3" style="line-height: 32px;;">Lorem ipsum dolor sit amet, consectetsur lete adipiscing elit, 
-                                sed do eiusmod tempor sed incididunt ut labore et dolore magna aliqua.
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                commodo consequat sunt explicabo</p>
-                          </div>
-                          <div class="d-flex justify-content-center">
-                              <p><a href=""><i class="fab fa-twitter"></i></a>
-                                 <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                 <a href=""><i class="fab fa-youtube"></i></a>
+                              <p class="card-text-1 p-3" style="line-height: 32px;">
+                              @foreach($singleCourseDetails as $singleCourseDetail)
+                              {{$singleCourseDetail['instructorDescription']}}
+                              @endforeach
                               </p>
                           </div>
+                           
+                                <div class="row d-flex justify-content-center mb-2">
+                                    <div class="col-1">
+                                      <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                       {{$singleCourseDetail['instructorTwitter']}}
+                                        @endforeach">
+                                        <i class="fab fa-twitter"></i>
+                                      </a>
+                                    </div>
+                                <div class="col-1">
+                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorLinkedin']}}
+                                            @endforeach">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                </div>
+                                <div class="col-1">
+                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                            {{$singleCourseDetail['instructorYoutube']}}
+                                            @endforeach">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                </div>
+                            </div>
+                         
                       </div>
-                    
+                     
                   </div>
 <!-- instructor profile end -->    
 <!-- live cohorts -->      
@@ -414,29 +452,29 @@
    });
 
 
-   document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-       let courseId = document.getElementById('course_id').value;
-       let userId = document.getElementById('user_id').value;
-       let comment =document.getElementById('comment').value;
+//    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
+//        let courseId = document.getElementById('course_id').value;
+//        let userId = document.getElementById('user_id').value;
+//        let comment =document.getElementById('comment').value;
 
-       let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
+//        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
        
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            if (data.status =='success'){
-                closeModal('reviewModal');
-                window.location.reload();
-            }
-        });
+//         fetch(path, {
+//             method: 'POST',
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json',
+//                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
+//             },
+//            body: JSON.stringify({})
+//         }).then((response) => response.json()).then((data) => {
+//             if (data.status =='success'){
+//                 closeModal('reviewModal');
+//                 window.location.reload();
+//             }
+//         });
 
-   });
+//    });
    
    
    function closeModal(modalId) {

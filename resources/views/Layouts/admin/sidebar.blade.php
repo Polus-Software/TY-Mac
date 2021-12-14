@@ -67,6 +67,10 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="#">Change Password</a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('assigned-courses') }}">Assigned Courses</a>
+    </li>
     @else
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{route('session-view')}}">
@@ -92,3 +96,10 @@
   </ul>
 </div>
 <!-- sidebar ends -->
+<!-- <section>
+<div class="tab-content" id="v-pills-tabContent">
+<div class="tab-pane fade" id="v-pills-assignedCourses" role="tabpanel" aria-labelledby="v-pills-assignedCourses-tab">
+  <h1>sfnkjvbgikf</h1>
+</div>
+</div>
+</section> -->

@@ -191,9 +191,7 @@
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
 }
-.fa-star{
-    color: #AF7E00;
-}
+
 .card-8 img{
     box-shadow: -4px 0px 6px #00000029;
     border-radius: 40px;
@@ -221,6 +219,21 @@
 
 }
 
+.rating> .fa-star{
+    font-size:30px;
+}
+.modal-body input{
+    display: none;
+}
+.modal-body textarea{
+    resize: none;    
+}
+.active-stars{
+    color:#F5BC29; 
+}
+.rateCourse{
+    color:#F5BC29; 
+}
 
 
 

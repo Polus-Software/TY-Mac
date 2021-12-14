@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\GeneralCourseFeedback;
 
 class EnrolledCourseController extends Controller
 {
@@ -40,13 +41,29 @@ class EnrolledCourseController extends Controller
             'profile_photo' => $profilePhoto,
         );
         array_push($courseDetails, $singleCourseData);
-    
-  
-    
-//dd($courseDetails);
         return view('Student.enrolledCoursePage',[
             'singleCourseDetails' => $courseDetails,
         ]);
+    }
+
+     public function courseReviewProcess(Request $request){
+
+        $courseId = $request->course_id;
+        $userId = $request->user_id;
+        $comment = $request->input('comment');
+        $rating = $request->input('rating');
+
+        $generalCourseFeedback = new GeneralCourseFeedback;
+        $generalCourseFeedback->user_id = $userId;
+        $generalCourseFeedback->course_id = $courseId;
+        $generalCourseFeedback->comment = $comment;
+        $generalCourseFeedback->rating = $rating;
+        $generalCourseFeedback->save();
+
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
     }
 
     

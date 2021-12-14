@@ -248,7 +248,7 @@
           @foreach($courseDatas as $courseData)
             <div class="col-lg-6">
               <div class="card mb-4">
-                <img src="{{asset('/storage/images/'.$courseData['course_image'])}}" class="card-img-top" alt="...">
+                <img src="{{asset('/storage/courseThumbnailImages/'.$courseData['course_thumbnail_image'])}}" class="card-img-top" alt="course-image">
                   <div class="card-body">
                     <h5 class="card-title text-center">
                       {{$courseData['course_title']}}

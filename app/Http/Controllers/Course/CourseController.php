@@ -244,10 +244,10 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
 
-    public function createSubtopic(){
+    // public function createSubtopic(){
 
-        return view('Course.admin.create_subtopic');
-    }
+    //     return view('Course.admin.create_subtopic');
+    // }
 
     public function saveSubTopic(Request $request) {
         //dd($request->all());
@@ -302,7 +302,6 @@ class CourseController extends Controller
         }catch (Exception $exception) {
             return($exception->getMessage());
         }
-       
     }
 
 
