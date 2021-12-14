@@ -111,7 +111,6 @@ class AssignedCoursesController extends Controller
 
     public function downloadStudyMaterial($topic_content_id){
         $attachment_name = TopicContent::where('topic_content_id', $topic_content_id)->value('document');
-        $path = public_path() . '\storage\study_material';
 
         if(Storage::disk('downloads')->exists("study_material/$attachment_name")) {
             $absolutePath = Storage::disk('downloads')->path("study_material/$attachment_name");

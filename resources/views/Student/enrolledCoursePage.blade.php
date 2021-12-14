@@ -44,14 +44,13 @@
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                         @foreach($singleCourseDetails as $course)
-                            <img src="{{asset('/storage/images/'.$course['course_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
+                            <img src="{{asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
                         @endforeach
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
                                 <h5 class="card-title pb-3">@foreach($singleCourseDetails as $course)
                                     {{ $course['course_title'] }}
-                                    
                                     @endforeach
                                 </h5>
                                 <p class="card-text">
@@ -77,7 +76,7 @@
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-12">
                                             <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
-                                                {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
+                                                {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
                                             @endforeach
                                             </p>
                                         </div>
@@ -104,8 +103,6 @@
                                                 <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                             </div>
                                         </div>
-                                        
-
                                     </div>
                                 </div>
                             </div>

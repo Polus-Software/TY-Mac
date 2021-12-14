@@ -35,7 +35,7 @@ class EnrolledCourseController extends Controller
             'description' => $course->description,
             'course_difficulty' => $course->course_difficulty,
             'course_details' => $course->course_details,
-            'course_image' => $course->course_image,
+            'course_thumbnail_image' => $course->course_thumbnail_image,
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'profile_photo' => $profilePhoto,

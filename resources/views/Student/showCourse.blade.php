@@ -138,7 +138,6 @@
                     <div class="col-lg-6">
                         <p>Upcoming Cohort:<strong>11/10/2021</strong></p>
                     </div>
-                   
                 </div>
                 
                 <div class="row pt-2">
@@ -156,11 +155,6 @@
                      <h6>Already enrolled!</h6>
                     @endif
                 @endunless
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                        <a class="btn review-button" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                            Add review
-                        </a>
-                    </div> -->
                 </div>
               </div>
               <div class="col-lg-6 col-md-12 order-1 order-lg-2">

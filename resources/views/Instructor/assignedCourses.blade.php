@@ -11,7 +11,6 @@
     <div class="col-2 position-fixed">
     @include('Layouts.admin.sidebar')
     </div>
-
     <div class="col-9 ms-auto">
       <main>
       <div class="row mt-4">

@@ -33,6 +33,7 @@ class AdminController extends Controller
     public function viewStudent(Request $request) {
         try {
             $studentId = $request->input('student_id');
+           
             if ($studentId) {
                 $student = User::where('id', $studentId);
                 if ($student) {

@@ -253,7 +253,7 @@ class CoursesCatalogController extends Controller
         'course_difficulty' => $course->course_difficulty,
         'instructor_firstname' => $instructorfirstname,
         'instructor_lastname' => $instructorlastname,
-        'course_image' => $course->course_image,
+        'course_thumbnail_image' => $course->course_thumbnail_image,
       );
         return view('Student.registerCourse', [
             'singleCourseDetails' => $singleCourseDetails,

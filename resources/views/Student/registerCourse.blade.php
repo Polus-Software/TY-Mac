@@ -8,16 +8,14 @@
                 <div class="card-1 mb-3 mt-4">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                            <img src="{{asset('/storage/images/'.$courseDetails['course_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image" alt="coursepicture">
+                            <img src="{{asset('/storage/courseThumbnailImages/'.$courseDetails['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image" alt="coursepicture">
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
                                 <h5 class="card-title pb-3">
                                     {{$courseDetails['course_title']}}
                                 </h5>
-                                <p class="card-text">By learning both of these apps, 
-                                    you will gain valuable productivity skills & become more efficient at creating documents, spreadsheets, 
-                                    and presentations.</p>
+                                <p class="card-text"> {{$courseDetails['description']}}</p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                             <i class="fas fa-star rateCourse"></i>
@@ -44,7 +42,6 @@
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-6">
                                             <p><i class="far fa-clock pe-1"></i>duration</p>
                                         </div>
-                                   
                                     </div> 
                                 </div>
                             </div>
