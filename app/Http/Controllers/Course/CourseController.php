@@ -241,6 +241,9 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
 
+    // public function createSubtopic(){
+    //     return view('Course.admin.create_subtopic');
+    // }
     // public function saveSubTopic(Request $request) {
     //     $topic = new Topic;
     //     $topic->topic_title = $request->topic_title;
@@ -258,7 +261,6 @@ class CourseController extends Controller
     //         $content->document = $filename;
     //         $content->save();
     //     }
-
     //     return redirect()->back();
     // }
 
@@ -326,7 +328,6 @@ class CourseController extends Controller
         }catch (Exception $exception) {
             return($exception->getMessage());
         }
-       
     }
 
 

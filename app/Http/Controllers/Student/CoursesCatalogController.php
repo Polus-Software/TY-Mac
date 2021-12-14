@@ -23,7 +23,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentMailAfterEnrolling;
 use App\Mail\InstructorMailAfterEnrolling;
-
+use App\Models\Topic;
+use App\Models\TopicContent;
 
 
 class CoursesCatalogController extends Controller
@@ -53,7 +54,7 @@ class CoursesCatalogController extends Controller
                 'course_title' => $course->course_title,
                 'course_category' => $courseCategory,
                 'description' => $course->description,
-                'course_image' => $course->course_image,
+                'course_thumbnail_image' => $course->course_thumbnail_image,
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
@@ -83,7 +84,10 @@ class CoursesCatalogController extends Controller
 
         $singleCourseDetails =[];
         $sessions = [];
+        $enrolledFlag = false;
         $singleCourseFeedbacks = [];
+        $courseContents = [];
+
         $course = Course::findOrFail($id);
         $liveSessions = LiveSession::where('course_id', $id)->get();
         $short_description = explode(";",$course->short_description);
@@ -94,6 +98,43 @@ class CoursesCatalogController extends Controller
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
         $instructorlastname = User::where('id', $assigned)->value('lastname');
         $profilePhoto = User::where('id', $assigned)->value('image');
+        $instructorDesignation = User::where('id', $assigned)->value('designation');
+        $instructorInstitute = User::where('id', $assigned)->value('institute');
+        $instructorDescription = User::where('id', $assigned)->value('description');
+        $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
+        $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
+        $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
+
+        $topics = Topic::where('course_id', $id)->get();
+ 
+         foreach($topics as $topic){
+ 
+             $courseId =  $topic->course_id;
+             $topicId = $topic->topic_id;
+             $topic_title =  $topic->topic_title;
+             $topicContentArray= TopicContent::where('topic_id', array($topicId))->get();
+             $contentsData = $topicContentArray->toArray();
+ 
+             array_push($courseContents, array(
+                 'topic_id' => $topicId,
+                 'topic_title' =>$topic_title,
+                 'contentsData' => $contentsData
+             ));
+         }
+
+
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+
+        if($userType == "student") {
+            $userId = $user->id;
+            $enrollment = EnrolledCourse::where('user_id', $userId)->where('course_id', $id)->get();
+            if(count($enrollment) != 0) {
+                $enrolledFlag = true;
+            } else {
+                $enrolledFlag = false;
+            }
+        }
 
         $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
         foreach($generalCourseFeedbacks as $generalCourseFeedback){
@@ -101,7 +142,6 @@ class CoursesCatalogController extends Controller
             $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');
             $studentProfilePhoto = User::where('id', $generalCourseFeedback->user_id)->value('image');
 
-           
         array_push($singleCourseFeedbacks, array(
             'user_id' => $generalCourseFeedback->user_id,
             'rating' => $generalCourseFeedback->rating,
@@ -124,17 +164,35 @@ class CoursesCatalogController extends Controller
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'profile_photo' => $profilePhoto,
+            'designation' => $instructorDesignation,
+            'institute' => $instructorInstitute,
+            'instructorDescription' => $instructorDescription,
+            'instructorTwitter' => $instructorTwitter,
+            'instructorLinkedin' => $instructorLinkedin,
+            'instructorYoutube' => $instructorYoutube,
+
         );
         array_push($singleCourseDetails, $singleCourseData);
+       // dd($singleCourseDetails);
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
+            'courseContents' => $courseContents,
             'liveSessions' => $liveSessions,
             'short_description' => $short_description,
-            'course_details_points' => $course_details_points 
+            'course_details_points' => $course_details_points,
+            'userType' => $userType,
+            'enrolledFlag' => $enrolledFlag
         ]);
 
     }
+
+
+
+
+
+
+
     public function enrollCourse(){
 
         if (Auth::check() == true) {
@@ -195,7 +253,7 @@ class CoursesCatalogController extends Controller
         'course_difficulty' => $course->course_difficulty,
         'instructor_firstname' => $instructorfirstname,
         'instructor_lastname' => $instructorlastname,
-        'course_image' => $course->course_image,
+        'course_thumbnail_image' => $course->course_thumbnail_image,
       );
         return view('Student.registerCourse', [
             'singleCourseDetails' => $singleCourseDetails,
@@ -246,25 +304,25 @@ class CoursesCatalogController extends Controller
     // }
     
 
-    public function courseReviewProcess(Request $request){
+    // public function courseReviewProcess(Request $request){
 
-        $courseId = $request->course_id;
-        $userId = $request->user_id;
-        $comment = $request->input('comment');
-        $rating = $request->input('rating');
+    //     $courseId = $request->course_id;
+    //     $userId = $request->user_id;
+    //     $comment = $request->input('comment');
+    //     $rating = $request->input('rating');
 
-        $generalCourseFeedback = new GeneralCourseFeedback;
-        $generalCourseFeedback->user_id = $userId;
-        $generalCourseFeedback->course_id = $courseId;
-        $generalCourseFeedback->comment = $comment;
-        $generalCourseFeedback->rating = $rating;
-        $generalCourseFeedback->save();
+    //     $generalCourseFeedback = new GeneralCourseFeedback;
+    //     $generalCourseFeedback->user_id = $userId;
+    //     $generalCourseFeedback->course_id = $courseId;
+    //     $generalCourseFeedback->comment = $comment;
+    //     $generalCourseFeedback->rating = $rating;
+    //     $generalCourseFeedback->save();
 
-        return response()->json([
-            'status' => 'success', 
-            'message' => 'submitted successfully'
-         ]);
-    }
+    //     return response()->json([
+    //         'status' => 'success', 
+    //         'message' => 'submitted successfully'
+    //      ]);
+    // }
 
     public function filterCourse(Request $request) {
      
