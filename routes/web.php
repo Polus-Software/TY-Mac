@@ -49,6 +49,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
     Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
+    Route::get('/create-cohort', [CourseController::class, 'createCohort'])->name('create-cohort');
+    Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
     Route::post('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::post('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
@@ -103,6 +105,10 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
+    Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
+    Route::get('edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
+    Route::post('update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
+    Route::get('delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
 
 
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
