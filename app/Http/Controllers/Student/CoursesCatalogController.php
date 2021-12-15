@@ -124,6 +124,7 @@ class CoursesCatalogController extends Controller
 
 
         $user = Auth::user();
+        if($user){
         $userType =  UserType::find($user->role_id)->user_role;
 
         if($userType == "student") {
@@ -135,6 +136,10 @@ class CoursesCatalogController extends Controller
                 $enrolledFlag = false;
             }
         }
+    }else{
+        return redirect('/student-courses');
+       
+    }
 
         $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
         foreach($generalCourseFeedbacks as $generalCourseFeedback){

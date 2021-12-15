@@ -58,6 +58,9 @@
             </tbody>
           </table>
         </div>
+        <div class="d-flex justify-content-end">
+            {!! $instructors->links() !!}
+        </div>
       </main>
       <!-- main ends -->
 

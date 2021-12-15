@@ -36,7 +36,7 @@
                 <th scope="col">Course Category</th>
                 <th scope="col">Description</th>
                 <th scope="col" class="text-center">Actions</th>
-                <th scope="col">View Sub-topics</th>
+                <th scope="col" class="text-end">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -49,15 +49,18 @@
                 <td class="align-middle">{{$course['course_category']}}</td>
                 <td class="align-middle">{{$course['description']}}</td>
                 <td class="align-middle text-center">
-                  <a href="#" title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">
+                  <span style="display: inline-block;width: max-content;">
+                  <a title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <a href="#" title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
+                  <a title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-pen"></i>
                   </a>
-                  <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
+                  <a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
+                  </span>
+                  
                 </td>
                 <td class="align-middle text-center">
                 <a href="{{ route('view-sub-topic', $course['id']) }}" title="View sub-topics">
@@ -72,6 +75,7 @@
             </tbody>
           </table>
         </div>
+       
       </main>
       <!-- main ends -->
 
@@ -446,7 +450,7 @@ function closeModal(modalId) {
       document.getElementById('view_course_details').innerHTML = data.courseDetails['course_details'];
       document.getElementById('view_course_details_points').innerHTML = data.courseDetails['course_details_points'];
 
-      closeModal('view_course_modal');
+      //closeModal('view_course_modal');
     });
   });
 
