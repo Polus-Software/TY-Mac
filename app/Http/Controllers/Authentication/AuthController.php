@@ -91,7 +91,7 @@ class AuthController extends Controller
            Auth::login($user, $remember_me);
            return redirect('dashboard');
         }
-        return redirect('login')->withSuccess('Credentials are wrong.');
+        return redirect('login')->withErrors('Credentials are wrong.');
     }
     
     /**
@@ -99,13 +99,15 @@ class AuthController extends Controller
      */
     public function dashboardView() {
         $user = Auth::user();
-        $userType =  UserType::find($user->role_id)->user_role;
+       
         if(Auth::check()) {
+            $userType =  UserType::find($user->role_id)->user_role;
             return view('Auth.Dashboard', [
                 'userType' => $userType
             ]);
         }
-        return redirect('login')->withSuccess('Access is not permitted');
+        //return redirect('login')->withErrors('Access is not permitted');
+        return redirect('/403');
     }
     
     /**

@@ -38,9 +38,13 @@ class EditController extends Controller
         
     }
 
-    public function showChangePasswordForm() 
-    { 
-       return view('Auth.changePassword');
+    public function showChangePasswordForm(){ 
+    if(Auth::check()){
+        return view('Auth.changePassword');
+    }else{
+        return redirect('/403');
+    }
+       
     }
 
     public function submitChangePasswordForm(Request $request)

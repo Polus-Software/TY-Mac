@@ -22,7 +22,7 @@
                 <th scope="col">Avatar</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
-                <th scope="col">Email</th>
+                <th scope="col">E-mail ID</th>
                 <th scope="col">Courses Joined</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
@@ -30,36 +30,35 @@
             </thead>
             <tbody>
               @php ($slno = 0)
-              @foreach($students as $student)
+              @foreach($studentDatas as $studentData)
               @php ($slno = $slno + 1)
-              <tr id="{{$student->id}}">
+              <tr id="{{$studentData['id'] }}">
                 <td>{{ $slno }}</td>
-                <td><img src="{{ asset('/storage/images/'.$student['image']) }}"  class="rounded-circle" alt="" style="width:25px; height:25px;"></td>
-                <td>{{$student->firstname}}</td>
-                <td>{{$student->lastname}}</td>
-                <td>{{$student->email}}</td>
-                <td>
-                  {{$enrolledCourseCount}}</td>
-                <td>Active</td>
+                <td class="text-center"><img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;"></td>
+                <td>{{$studentData['firstname'] }}</td>
+                <td>{{$studentData['lastname'] }}</td>
+                <td >{{$studentData['email'] }}</td>
+                <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
+                <td class="align-middle text-center"><p style="background:lightgreen; border-radius:19px;">Active</p></td>
                 <td class="align-middle text-center">
-                  <a href="#" title="View student"
-                  data-bs-toggle="modal" data-bs-target="#view_student_modal" data-bs-id="{{$student->id}}">
-                  <i class="fas fa-eye"></i>
+                  <a title="Edit student"
+                  data-bs-toggle="modal" data-bs-target="#edit_student_modal" data-bs-id="{{ $studentData['id'] }}">
+                  <i class="fas fa-edit"></i>
                   </a>
-                  <a href="" title="Edit student"
-                  data-bs-toggle="modal" data-bs-target="#edit_student_modal" data-bs-id="{{$student->id}}">
-                  <i class="fas fa-pen"></i>
-                  </a>
-                  <a href="#" title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $student->id }}">
+                  <a title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
+                  <a title="" data-bs-toggle="modal" data-bs-target="" data-bs-student="">
+                  <i class="fas fa-ellipsis-v"></i>
+                  </a>
+                 
                 </td>
               </tr>
               @endforeach
             </tbody>
           </table>
-          <div class="d-flex justify-content-center">
-            {!! $students->links() !!}
+          <div class="d-flex justify-content-end">
+          {!! $studentDatas->links() !!}
           </div>
         </div>
       </main>
@@ -236,6 +235,7 @@
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
       document.querySelector('.edit_firstname').value = data.studentDetails['firstname'];
+      console.log(document.querySelector('.edit_firstname').value);
       document.querySelector('.edit_lastname').value = data.studentDetails['lastname'];
       document.querySelector('.edit_email').value = data.studentDetails['email'];
       document.getElementById('update_student_btn').setAttribute('student_id', data.studentDetails['id']);

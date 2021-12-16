@@ -35,13 +35,13 @@
             </thead>
             <tbody id="course_tbody">
               @php ($slno = 0)
-              @foreach ($courseDetails as $course)
+              @foreach ($courseDatas as $courseData)
               @php ($slno = $slno + 1)
-              <tr id="{{$course['id']}}">
-                <th class="align-middle" scope="row">{{$slno}}</th>
-                <td class="align-middle">{{$course['course_title']}}</td>
-                <td class="align-middle">{{$course['course_category']}}</td>
-                <td class="align-middle">{{$course['description']}}</td>
+              <tr id="{{$courseData['id']}}">
+                <th class="align-middle" scope="row">{{($courseDatas->currentpage() -1) * $courseDatas->perpage() + $slno }}</th>
+                <td class="align-middle">{{$courseData['course_title']}}</td>
+                <td class="align-middle">{{$courseData['course_category']}}</td>
+                <td class="align-middle">{{$courseData['description']}}</td>
                 <td><span class="badge bg-warning text-dark">Draft</span></td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-course', ['course_id' => $course['id']]) }}" title="View course">
@@ -53,21 +53,19 @@
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
-                  </span>
-                  
                 </td>
-                <!-- <td class="align-middle text-center">
-                <a href="{{ route('view-subtopics', $course['id']) }}" title="View sub-topics">
+                <td class="align-middle text-center">
+                <a href="{{ route('view-sub-topic', $courseData['id']) }}" title="View sub-topics">
                   <i class="fas fa-eye"></i>
                   </a>
-                </td> -->
-                <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
-          <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">Edit</button></td>
-          <td class="text-center align-middle"><button class="btn btn-danger add_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">Delete</button></td> -->
+                </td>
               </tr>
               @endforeach
             </tbody>
           </table>
+          <div class="d-flex justify-content-end">
+          {!! $courseDatas->links() !!}
+          </div>
           @else          
           <div class="alert alert-warning d-flex align-items-center" role="alert">
           <i class="fas fa-box-open fa-2x me-3"></i>
@@ -75,10 +73,8 @@
           </div>
           @endif
         </div>
-       
       </main>
       <!-- main ends -->
-
     </div>
   </div>
 </div>

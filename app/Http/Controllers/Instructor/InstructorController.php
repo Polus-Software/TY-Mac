@@ -15,6 +15,9 @@ class InstructorController extends Controller
     public function index() {
         $userType = UserType::where('user_role', 'instructor')->value('id');
         $user = Auth::user();
+
+        if($user){
+
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
@@ -23,6 +26,9 @@ class InstructorController extends Controller
             'instructors' => $instructors,
             'userType' => $userTypeLoggedIn
         ]);
+        }else{
+            return redirect('/403');
+        }
     } 
 
     public function saveInstructor(Request $request) {

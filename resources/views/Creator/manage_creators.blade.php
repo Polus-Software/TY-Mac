@@ -36,7 +36,7 @@
               @foreach ($creators as $creator)
               @php ($slno = $slno + 1)
               <tr id="{{$creator->id}}">
-                <th class="align-middle" scope="row">{{$slno}}</th>
+                <th class="align-middle" scope="row">{{  ($creators->currentpage() -1) * $creators->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
                 <td class="align-middle">{{$creator->email}} </td>
                 <td class="align-middle"></td>

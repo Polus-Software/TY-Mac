@@ -420,6 +420,43 @@ window.onload = function(event) {
 }
 
 
+document.querySelector('#loginForm').addEventListener('submit', function(e) {
+        if(loginemail.value === '') {
+            e.preventDefault();
+            showError(loginemail,'Email is required');
+        }else {
+            removeError(loginemail);
+        }
+        if(loginpassword.value === '') {
+            e.preventDefault();
+            showError(loginpassword,'Password is required');
+        } else {
+            removeError(loginpassword);
+        }
+    });
+
+const loginform = document.getElementById('loginForm');
+const loginemail = document.getElementById('inputEmail');
+const loginpassword = document.getElementById('inputPassword');
+   
+
+function showError(input,message){
+  input.style.borderColor = 'red';
+  const formControl=input.parentElement;
+  const small=formControl.querySelector('small');
+  small.innerText=message;
+  small.style.visibility = 'visible';
+}
+
+function removeError(input){
+input.style.borderColor = '#ced4da';
+const formControl=input.parentElement;
+const small=formControl.querySelector('small');
+small.style.visibility = 'hidden';
+}
+
+<script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
+
 
 
 </script>
