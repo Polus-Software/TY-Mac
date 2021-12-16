@@ -19,19 +19,28 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col">Avatar</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Courses Joined</th>
+                <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
+              @php ($slno = 0)
               @foreach($students as $student)
-              <tr>
-                <td>{{$student->id}}</td>
+              @php ($slno = $slno + 1)
+              <tr id="{{$student->id}}">
+                <td>{{ $slno }}</td>
+                <td><img src="{{ asset('/storage/images/'.$student['image']) }}"  class="rounded-circle" alt="" style="width:25px; height:25px;"></td>
                 <td>{{$student->firstname}}</td>
                 <td>{{$student->lastname}}</td>
                 <td>{{$student->email}}</td>
+                <td>
+                  {{$enrolledCourseCount}}</td>
+                <td>Active</td>
                 <td class="align-middle text-center">
                   <a href="#" title="View student"
                   data-bs-toggle="modal" data-bs-target="#view_student_modal" data-bs-id="{{$student->id}}">
@@ -75,11 +84,11 @@
             <td class="text-right"><p class="student_firstname"></p></td>
           </tr>
           <tr>
-            <td><strong>Last name:</strong></td>
+            <td><strong>Last Name:</strong></td>
             <td class="text-right"><p class="student_lastname"></p></td>
           </tr>
           <tr>
-            <td><strong>Email:</strong></td>
+            <td><strong>Email id:</strong></td>
             <td class="text-right"><p class="student_email"></p></td>
           </tr>
         </table>
@@ -101,28 +110,28 @@
       </div>
       <div class="modal-body">
       <form  class="form"  id="editStudentsForm" action="" method="POST">
-                        @csrf 
-                        <input type="hidden" name="_method" value="PUT">
+          @csrf 
+          <input type="hidden" name="_method" value="PUT">
 
-                        <div class="form-group">
-                            <label for="firstname">First Name</label>
-                            <input type="text" class="form-control edit_firstname has-validation"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
-                            <div class="invalid-feedback">Please enter a first name.</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastname">Last Name</label>
-                            <input type="text" class="form-control edit_lastname has-validation" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
-                            <div class="invalid-feedback">Please enter a lastname.</div>
-                          </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control edit_email has-validation" value="" name="email" id="email" placeholder=" Enter email">
-                            <div class="invalid-feedback">Please enter a valid email id.</div>
-                          </div>
-                    </form>
+          <div class="form-group">
+              <label for="firstname" class="pb-1">First Name</label>
+              <input type="text" class="form-control edit_firstname has-validation mb-3"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
+              <div class="invalid-feedback">Please enter a first name.</div>
+          </div>
+          <div class="form-group">
+              <label for="lastname" class="pb-1">Last Name</label>
+              <input type="text" class="form-control edit_lastname has-validation mb-3" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
+              <div class="invalid-feedback">Please enter a lastname.</div>
+            </div>
+          <div class="form-group">
+              <label for="email" class="pb-1">Email</label>
+              <input type="email" class="form-control edit_email has-validation mb-3" value="" name="email" id="email" placeholder=" Enter email">
+              <div class="invalid-feedback">Please enter a valid email id.</div>
+            </div>
+      </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-primary" id="update_student_btn">Update</button>
       </div>
     </div>
@@ -208,7 +217,7 @@
       document.querySelector('.student_firstname').innerHTML = data.studentDetails['firstname'];
       document.querySelector('.student_lastname').innerHTML = data.studentDetails['lastname'];
       document.querySelector('.student_email').innerHTML = data.studentDetails['email'];
-      closeModal('view_student_modal');
+      //closeModal('view_student_modal');
     });
   });
 

@@ -30,7 +30,7 @@
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
-                <!-- <th scope="col">View Sub-topics</th> -->
+                <th scope="col" class="text-end">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -53,6 +53,8 @@
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
+                  </span>
+                  
                 </td>
                 <!-- <td class="align-middle text-center">
                 <a href="{{ route('view-subtopics', $course['id']) }}" title="View sub-topics">
@@ -73,6 +75,7 @@
           </div>
           @endif
         </div>
+       
       </main>
       <!-- main ends -->
 
@@ -394,7 +397,7 @@ function closeModal(modalId) {
       document.getElementById('view_course_details').innerHTML = data.courseDetails['course_details'];
       document.getElementById('view_course_details_points').innerHTML = data.courseDetails['course_details_points'];
 
-      closeModal('view_course_modal');
+      //closeModal('view_course_modal');
     });
   });
 

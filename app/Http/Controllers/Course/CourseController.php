@@ -24,7 +24,10 @@ class CourseController extends Controller
     public function index() {
         $userType = UserType::where('user_role', 'instructor')->value('id');
         $user = Auth::user();
-        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
+        if($user){
+            $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
+       
+        
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -47,6 +50,9 @@ class CourseController extends Controller
             'instructors' => $instructors,
             'userType' => $userTypeLoggedIn
         ]);
+    }else {
+        return redirect('login');
+       }
     }
 
     public function addCourse(){
@@ -282,6 +288,9 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
 
+    // public function createSubtopic(){
+    //     return view('Course.admin.create_subtopic');
+    // }
     // public function saveSubTopic(Request $request) {
     //     $topic = new Topic;
     //     $topic->topic_title = $request->topic_title;
@@ -299,7 +308,6 @@ class CourseController extends Controller
     //         $content->document = $filename;
     //         $content->save();
     //     }
-
     //     return redirect()->back();
     // }
 

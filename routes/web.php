@@ -13,6 +13,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Student\CoursesCatalogController;
 use App\Http\Controllers\Student\MyCoursesController;
 use App\Http\Controllers\Student\EnrolledCourseController;
+use App\Http\Controllers\Instructor\AssignedCoursesController;
 use App\User;
 
 
@@ -48,11 +49,13 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
     Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
+
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
     Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
     Route::get('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::get('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
+
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
     Route::post('/delete-course', [CourseController::class, 'deleteCourse'])->name('delete-course');
     Route::post('/load-courses', [CourseController::class, 'loadCourse'])->name('load-courses');
@@ -103,14 +106,15 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
     Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
+
     Route::get('view-subtopics', [CourseController::class, 'viewSubTopics'])->name('view-subtopics');
     Route::get('view_cohortbatches', [CourseController::class, 'viewCohortbatches'])->name('view_cohortbatches');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
-    Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
-    Route::get('edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
-    Route::post('update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
-    Route::get('delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
 
+    Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
+   // Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
+
+    Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
     Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
     Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
@@ -127,8 +131,13 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
     Route::get('/enrolled-course', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
-    Route::post('/review-course', [CoursesCatalogController::class, 'courseReviewProcess'])->name('student.course.review.post');
+    Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
+    Route::get('/assigned-courses', [AssignedCoursesController::class, 'viewAssignedCourses'])->name('assigned-courses');
+    Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
+    Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
+    Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
+
 });

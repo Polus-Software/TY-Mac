@@ -1,5 +1,40 @@
 @extends('Layouts.enrolledCoursePage')
 @section('content')
+<!-- review modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="rating text-center mb-3">
+            <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
+            <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
+            <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
+            <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
+            <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
+        </div>
+          
+        <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
+            <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength ="60"></textarea> 
+        </div>                         
+      </div>
+       <div class="modal-footer border-0 mb-3">
+           @csrf
+        <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- review modal ends -->
+
+
+
+
+
+
 
 <header class="d-flex align-items-center mb-3">
     <div class="container">
@@ -9,14 +44,13 @@
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                         @foreach($singleCourseDetails as $course)
-                            <img src="{{asset('/storage/images/'.$course['course_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
+                            <img src="{{asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
                         @endforeach
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
                                 <h5 class="card-title pb-3">@foreach($singleCourseDetails as $course)
                                     {{ $course['course_title'] }}
-                                    
                                     @endforeach
                                 </h5>
                                 <p class="card-text">
@@ -42,7 +76,7 @@
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-12">
                                             <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
-                                                {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
+                                                {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
                                             @endforeach
                                             </p>
                                         </div>
@@ -55,16 +89,20 @@
                                             </p>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
-                                                    
                                                 </p>
                                                 
                                             </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
+                                                <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                                Add review
+                                                </a>
+                                                <input type="hidden" id="course_id" value="{{$course['id']}}">
+                                                <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
+                                            </div>
                                         </div>
-                                        
-
                                     </div>
                                 </div>
                             </div>
@@ -106,12 +144,7 @@
                                         <button class="nav-link bg-transparent left--45 p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
                                            <img src="Badges/More.svg" alt="">
                                         </button>
-                                
                                 </div>
-                            
-
-
-                            
                         </div>
                     </div>
                 </div>
@@ -437,15 +470,15 @@
                                             
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
                                                                 @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
-                                                                @endforeach
+                                                               {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at  {{ $course['institute'] }}
+                                                               @endforeach
                                                            
                                                             </p>
                                                             </div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                                                                 <p class="text-end time">4 months ago</p>
                                                             </div>
                                                         </div>
@@ -567,21 +600,30 @@
                                                 {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
                                                 @endforeach
                                                 </h5>
-                                                <p class="card-text-1">Prof. at TY-Mac</p>
+                                                <p class="card-text-1">
+                                                @foreach($singleCourseDetails as $course)
+                                                {{ $course['designation'] }} at   {{ $course['institute'] }}
+                                                @endforeach</p>
                                             </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <p class="card-text-1 p-3">Lorem ipsum dolor sit amet, consectetsur lete adipiscing elit, 
-                                                sed do eiusmod tempor sed incididunt ut labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                commodo consequat sunt explicabo</p>
+                                                <p class="card-text-1 p-3">
+                                                @foreach($singleCourseDetails as $course)
+                                                {{ $course['instructorDescription'] }}
+                                                @endforeach</p>
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <p><a href=""><i class="fab fa-twitter pe-2"></i></a>
-                                                    <a href=""><i class="fab fa-linkedin-in pe-2"></i></a>
-                                                    <a href=""><i class="fab fa-youtube"></i></a>
+                                                <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorTwitter']}}
+                                            @endforeach"><i class="fab fa-twitter pe-2"></i></a>
+                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorLinkedin']}}
+                                            @endforeach"><i class="fab fa-linkedin-in pe-2"></i></a>
+                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorYoutube']}}
+                                            @endforeach"><i class="fab fa-youtube"></i></a>
                                                 </p>
                                             </div>
                                         </div>
@@ -739,4 +781,66 @@
                 </div>
             </div>
     </section>
+
+
+
+
+<script>
+    let finalRating = 0;
+   
+   let stars = document.getElementsByClassName('rating-star');
+   for(var index = 0; index < stars.length; index++){
+       stars[index].addEventListener('click', function (event){
+           let starRating = parseInt(this.getAttribute('star-rating'));
+
+            for(var i = 0; i < starRating; i++) {
+                stars[i].classList.add("active-stars");
+            }
+            for(var i = starRating; i < index; i++) {
+                console.log(i);
+                stars[i].classList.remove("active-stars");
+            }
+           finalRating= starRating; 
+   });
+   }
+
+   document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
+      let starElement = document.getElementsByClassName('rating-star');
+      for (var i = 0; i < 5 ; i++) {
+          starElement[i].classList.remove("active-stars");
+      }
+      document.getElementById('comment').value = "";
+   });
+
+   document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
+    
+       let courseId = document.getElementById('course_id').value;
+       let userId = document.getElementById('user_id').value;
+       let comment =document.getElementById('comment').value;
+
+       let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
+       //console.log(path);
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if (data.status =='success'){
+                closeModal('reviewModal');
+                window.location.reload();
+            }
+        });
+
+   });
+   
+   function closeModal(modalId) {
+        const truck_modal = document.querySelector('#' + modalId);
+        const modal = bootstrap.Modal.getInstance(truck_modal);    
+        modal.hide();
+    }
+</script>
 @endsection('content')
