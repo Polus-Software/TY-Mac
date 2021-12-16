@@ -80,7 +80,7 @@ body {
 .llp-modal .modal-content {
     padding: 2rem;
 }
-.llp-modal .modal-title, .llp-form h3 {
+.llp-modal .modal-title, .llp-form h3, .llp-view h3{
     color: var(--main-title-color);
     font-family: 'Lato', 'Roboto', sans-serif;
     font-weight: 800;
@@ -93,7 +93,9 @@ body {
     border-color: var(--main-title-color);
     color: white;
 }
-.llp-modal label, .llp-form label{
+.llp-modal label, 
+.llp-form label,
+.llp-view label{
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;

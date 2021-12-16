@@ -48,10 +48,11 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
     Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
-    Route::get('/create-cohort', [CourseController::class, 'createCohort'])->name('create-cohort');
+    Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
+    Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
     Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
-    Route::post('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
-    Route::post('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
+    Route::get('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
+    Route::get('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
     Route::post('/update-course', [CourseController::class, 'updateCourse'])->name('update-course');
     Route::post('/delete-course', [CourseController::class, 'deleteCourse'])->name('delete-course');
     Route::post('/load-courses', [CourseController::class, 'loadCourse'])->name('load-courses');
@@ -102,7 +103,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('profile-upload', [EditController::class, 'uploadImage'])->name('change.avatar.post');
     Route::post('add-sub-topic', [CourseController::class, 'saveSubTopic'])->name('add-sub-topic');
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
-    Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
+    Route::get('view-subtopics', [CourseController::class, 'viewSubTopics'])->name('view-subtopics');
+    Route::get('view_cohortbatches', [CourseController::class, 'viewCohortbatches'])->name('view_cohortbatches');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
     Route::get('edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');

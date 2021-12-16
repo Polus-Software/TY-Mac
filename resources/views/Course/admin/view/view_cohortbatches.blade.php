@@ -6,42 +6,43 @@
   <div class="row">
   <div class="col-2 position-fixed">
       <!-- include sidebar here -->
-      @include('Course.admin.sidebar')
+      @include('Course.admin.view.sidebar')
     </div>
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>
+      <div class="py-4"><h5>Course Title: {{$course_title}}</h5><hr class="my-4"></div>
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view-assignment') }}">Assignment list</a>
+    <a class="nav-link active" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}">Subtopic list</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ route('create-assignment') }}">New Assignment</a>
+    <a class="nav-link" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}">New Subtopic</a>
   </li>
 </ul>
         </div>
 
         <div class="row">
-          @foreach($assignments as $assignment)
+          @foreach($cohortbatches as $cohortbatch)
           <div class="col-12 mb-3">
             <div class="card">
               <div class="card-header">
-              Title: <strong>{{$assignment->assignment_title}}</strong>
+              Title: <strong>{{$cohortbatch->batchname}}</strong>
               <!-- <span>20 minutes to complete</span> -->
               </div>
               <div class="card-body">
-              <p class="card-text">{{$assignment->assignment_description}}</p>
+              <p class="card-text">{{$cohortbatch->batchname}}</p>
               <a href="#" class="">Go somewhere</a>
               <div class="row">
               <div class="col-md-6">
               <label for="">Subtopic:</label>
-              <p>{{$assignment->topic_title}}</p>
+              <p>{{$cohortbatch->batchname}}</p>
 
               </div>
               <div class="d-flex align-items-end col-md-6">
-              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('edit-assignment', ['assignment_id' => $assignment->id]) }}">Edit</a>
-              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('delete-assignment', ['assignment_id' => $assignment->id]) }}">Delete</a>
+              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('edit-assignment', ['assignment_id' => $cohortbatch->id]) }}">Edit</a>
+              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('delete-assignment', ['assignment_id' => $cohortbatch->id]) }}">Delete</a>
               </div>
               </div>
 

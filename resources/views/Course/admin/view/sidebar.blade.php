@@ -10,22 +10,22 @@
       <a class="nav-link link-dark text-uppercase pe-none" href="">
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('add-course') }}">
+      <a class="nav-link link-dark" href="{{ route('view-course', ['course_id' => $course_id]) }}">
       <i class="fas fa-clipboard-list"></i>
         Course Overview</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('create-subtopic') }}">
+      <a class="nav-link link-dark" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}">
       <i class="fas fa-book-reader"></i>
         Sub topics</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('create-assignment') }}">
+      <a class="nav-link link-dark" href="{{ route('view-assignment', ['course_id' => $course_id]) }}">
       <i class="fas fa-users"></i>
         Assignments</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('create-cohortbatch') }}">
+      <a class="nav-link link-dark" href="{{ route('view_cohortbatches', ['course_id' => $course_id]) }}">
       <i class="fas fa-user-friends"></i>
         Cohorts</a>
     </li>
