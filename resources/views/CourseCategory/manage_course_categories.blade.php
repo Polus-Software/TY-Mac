@@ -34,7 +34,7 @@
               @foreach ($courseCategories as $courseCategory)
               @php ($slno = $slno + 1)
               <tr id="{{$courseCategory['id']}}">
-                <th class="align-middle" scope="row">{{$slno}}</th>
+                <th class="align-middle" scope="row">{{ ($courseCategories->currentpage() -1) * $courseCategories->perpage() + $slno  }}</th>
                 <td class="align-middle" colspan="2">{{$courseCategory['category_name']}}</td>
                 <td class="align-middle text-center">
                   <a href="#" title="View course category" data-bs-toggle="modal" data-bs-target="#view_category_modal" data-bs-id="{{$courseCategory['id']}}">

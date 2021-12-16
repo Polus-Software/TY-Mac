@@ -41,44 +41,42 @@
             </thead>
             <tbody id="course_tbody">
               @php ($slno = 0)
-              @foreach ($courseDetails as $course)
+              @foreach ($courseDatas as $courseData)
               @php ($slno = $slno + 1)
-              <tr id="{{$course['id']}}">
-                <th class="align-middle" scope="row">{{$slno}}</th>
-                <td class="align-middle">{{$course['course_title']}}</td>
-                <td class="align-middle">{{$course['course_category']}}</td>
-                <td class="align-middle">{{$course['description']}}</td>
+              <tr id="{{$courseData['id']}}">
+                <th class="align-middle" scope="row">{{($courseDatas->currentpage() -1) * $courseDatas->perpage() + $slno }}</th>
+                <td class="align-middle">{{$courseData['course_title']}}</td>
+                <td class="align-middle">{{$courseData['course_category']}}</td>
+                <td class="align-middle">{{$courseData['description']}}</td>
                 <td class="align-middle text-center">
                   <span style="display: inline-block;width: max-content;">
-                  <a title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">
+                  <a title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <a title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
+                  <a title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-pen"></i>
                   </a>
-                  <a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
+                  <a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
                   </span>
                   
                 </td>
                 <td class="align-middle text-center">
-                <a href="{{ route('view-sub-topic', $course['id']) }}" title="View sub-topics">
+                <a href="{{ route('view-sub-topic', $courseData['id']) }}" title="View sub-topics">
                   <i class="fas fa-eye"></i>
                   </a>
                 </td>
-                <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
-          <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">Edit</button></td>
-          <td class="text-center align-middle"><button class="btn btn-danger add_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">Delete</button></td> -->
               </tr>
               @endforeach
             </tbody>
           </table>
+          <div class="d-flex justify-content-end">
+          {!! $courseDatas->links() !!}
+          </div>
         </div>
-       
       </main>
       <!-- main ends -->
-
     </div>
   </div>
 </div>

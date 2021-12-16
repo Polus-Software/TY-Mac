@@ -124,6 +124,7 @@ class CoursesCatalogController extends Controller
 
 
         $user = Auth::user();
+
         if($user){
         $userType =  UserType::find($user->role_id)->user_role;
 
@@ -136,10 +137,6 @@ class CoursesCatalogController extends Controller
                 $enrolledFlag = false;
             }
         }
-    }else{
-        return redirect('/student-courses');
-       
-    }
 
         $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
         foreach($generalCourseFeedbacks as $generalCourseFeedback){
@@ -178,7 +175,7 @@ class CoursesCatalogController extends Controller
 
         );
         array_push($singleCourseDetails, $singleCourseData);
-       // dd($singleCourseDetails);
+      
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
@@ -189,14 +186,11 @@ class CoursesCatalogController extends Controller
             'userType' => $userType,
             'enrolledFlag' => $enrolledFlag
         ]);
-
+    }else{
+        return redirect('/403');
     }
 
-
-
-
-
-
+    }
 
     public function enrollCourse(){
 

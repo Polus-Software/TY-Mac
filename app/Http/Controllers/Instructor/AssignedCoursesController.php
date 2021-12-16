@@ -27,8 +27,9 @@ class AssignedCoursesController extends Controller
 
         $assignedCourseData = [];
         $user = Auth::user();
+        if($user){
+
         $userType =  UserType::find($user->role_id)->user_role;
- 
         $assigned = AssignedCourse::where('user_id', $user->id)->get();
         foreach($assigned as $assign){
            $course =  Course::where('id', $assign->course_id);
@@ -54,6 +55,9 @@ class AssignedCoursesController extends Controller
             'assignedCourseData' => $assignedCourseData,
             'userType' =>  $userType
         ]);
+    }else{
+        return redirect('/403');
+    }
     }
 
     public function viewStudentList($id){
@@ -61,9 +65,8 @@ class AssignedCoursesController extends Controller
         $studentLists =[];
         $enrolled = EnrolledCourse::where('course_id',$id)->get();
         $user = Auth::user();
+        if($user){
         $userType =  UserType::find($user->role_id)->user_role;
- 
-
         foreach($enrolled as $enroll){
 
             $userId = $enroll->user_id;
@@ -84,6 +87,9 @@ class AssignedCoursesController extends Controller
             'studentLists' =>$studentLists,
             'userType' =>  $userType
         ]);
+    }else{
+        return redirect('/403');
+    }
 
     }
 
@@ -93,6 +99,7 @@ class AssignedCoursesController extends Controller
        $courseContents = [];
        $topics = Topic::where('course_id', $id)->get();
        $user = Auth::user();
+       if($user){
        $userType =  UserType::find($user->role_id)->user_role;
 
         foreach($topics as $topic){
@@ -113,6 +120,9 @@ class AssignedCoursesController extends Controller
             'courseContents' => $courseContents,
             'userType' =>  $userType
         ]);
+    }else{
+        return redirect('/403');
+    }
     }
 
 

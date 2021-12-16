@@ -16,6 +16,9 @@ use App\Models\TopicContent;
 use App\Models\TopicAssignment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CourseController extends Controller
 {
@@ -24,8 +27,6 @@ class CourseController extends Controller
         $user = Auth::user();
         if($user){
             $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
-       
-        
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -42,8 +43,13 @@ class CourseController extends Controller
               );
               array_push($courseDetails, $courseData);
         }
+
+        $courseDetailsObj = collect($courseDetails);
+        $courseDatas = $this->paginate($courseDetailsObj);
+        $courseDatas->withPath('');
+
         return view('Course.manage_courses', [
-            'courseDetails' => $courseDetails,
+             'courseDatas' => $courseDatas,
             'courseCategories' => $courseCategories,
             'instructors' => $instructors,
             'userType' => $userTypeLoggedIn
@@ -51,6 +57,14 @@ class CourseController extends Controller
     }else {
         return redirect('login');
        }
+    }
+
+
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function addCourse(){
@@ -125,8 +139,6 @@ class CourseController extends Controller
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
 
-        // Session::put('course_id', $course->id);
-        // Session::save();
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
     }
 
@@ -146,9 +158,6 @@ class CourseController extends Controller
                     'short_description' => explode(";", $course->value('short_description')),
                     'course_details' => $course->value('course_details'),
                     'course_details_points' => explode(";", $course->value('course_details_points')),
-                    // 'course_image' => $course->value('course_image'),
-                    // 'course_thumbnail_image' => $course->value('course_thumbnail_image'),
-                   
                     ];
                     return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
                 }

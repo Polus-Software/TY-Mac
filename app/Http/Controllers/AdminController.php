@@ -10,35 +10,61 @@ use App\Models\EnrolledCourse;
 use App\Models\Filter;
 use App\Models\UserType;
 use Auth;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
 {
     public function viewAllStudents(){
-       
-        $students =User::where('role_id', 2)->paginate(10);
+       $studentDetails =[];
+
+        $students =User::where('role_id', 2)->get();
+        //dd($students);
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
-foreach($students as $student){
-    $enrolledCourses = EnrolledCourse::where('user_id', $student->id)->get();
-    $enrolledCourseCount = count($enrolledCourses);
-//dd($enrolledCourseCount);
-}
 
+        foreach($students as $student){
+            $enrolledCourses = EnrolledCourse::where('user_id', $student->id)->get();
+            $enrolledCourseCount = count($enrolledCourses);
+        //dd($enrolledCourseCount);
        
-        
+        $studentData = array(
+            'id'=> $student->id,
+            'firstname' => $student->firstname,
+            'lastname' => $student->lastname,
+            'email' => $student->email,
+            'image' =>$student->image,
+            'enrolledCourseCount' => $enrolledCourseCount
+        );
+        array_push($studentDetails, $studentData);
+    }
+        $studentDetailsObj = collect($studentDetails);
+        $studentDatas = $this->paginate($studentDetailsObj);
+        $studentDatas->withPath('');
+
         return view('Auth.Admin.AdminDashboard', [
-            'students' => $students,
-            'enrolledCourseCount' => $enrolledCourseCount,
-            'userType' => $userType]);
+            'studentDatas' => $studentDatas,
+            'userType' => $userType
+        ]);
         
     }
 
-    public function showStudent($id){
-        $students =User::findOrFail($id);
-        return view ('Auth.Admin.ShowStudent', compact('students'));
-        
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
+
+
+    // public function showStudent($id){
+    //     $students =User::findOrFail($id);
+    //     return view ('Auth.Admin.ShowStudent', compact('students'));
+        
+    // }
 
     public function viewStudent(Request $request) {
         try {
@@ -63,6 +89,7 @@ foreach($students as $student){
         
     }
 
+
     public function editStudent($id){
         
        $students = User::findOrFail($id);
@@ -86,7 +113,6 @@ foreach($students as $student){
     $student->save();
     $html = '';
     return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
-    
     }  
    
      
@@ -97,18 +123,22 @@ foreach($students as $student){
         $students->delete();
       
         return response()->json(['status' => 'success', 'message' => ' Record Deleted successfully']);
-        
-        
     }
 
     public function adminSettings(Request $request) {
         $user = Auth::user();
+        if($user){
         $userType =  UserType::find($user->role_id)->user_role;
         $filters = Filter::all();
+
         return view('Auth.Admin.AdminSettings', [
             'userType' => $userType,
             'filters' => $filters ]);
-    }
+        }else{
+            return redirect('/403');
+        }
+
+        }
 
     public function changeFilterStatus(Request $request) {
         $filterId = $request->filter_id;
