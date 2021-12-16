@@ -124,10 +124,10 @@ class CoursesCatalogController extends Controller
 
 
         $user = Auth::user();
-
+        $userType = "";
         if($user){
         $userType =  UserType::find($user->role_id)->user_role;
-
+        }
         if($userType == "student") {
             $userId = $user->id;
             $enrollment = EnrolledCourse::where('user_id', $userId)->where('course_id', $id)->get();
@@ -186,9 +186,6 @@ class CoursesCatalogController extends Controller
             'userType' => $userType,
             'enrolledFlag' => $enrolledFlag
         ]);
-    }else{
-        return redirect('/403');
-    }
 
     }
 
