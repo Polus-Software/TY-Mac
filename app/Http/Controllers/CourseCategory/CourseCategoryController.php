@@ -11,7 +11,7 @@ use Auth;
 class CourseCategoryController extends Controller
 {
     public function index() {
-        $courseCategories = CourseCategory::all();
+        $courseCategories = CourseCategory::paginate(10);
         $user = Auth::user();
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         return view('CourseCategory.manage_course_categories', [

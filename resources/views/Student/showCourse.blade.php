@@ -190,57 +190,17 @@
                 <div class="col-lg-8">
                     <div class="card card-2 mb-3">
                         <div class="card-body">
-                            <h5 class="card-title border-bottom p-2">Course Content</h5>
+                            <h5 class="card-title border-bottom pb-2">Course Content</h5>
                             @php ($slno = 0)
                             @foreach($courseContents as $courseContent)
                             @php ($slno = $slno + 1)
-                            <h6 class="card-subtitle mt-2"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
-                            <ul class="list-group list-group-flush border-bottom pb-3">
-                                <li class="list-group-item">
+                            <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                            <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
                                 @foreach($courseContent['contentsData'] as $content)
-                                    <ul>
-                                    <li id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
-                                        <!-- <li>How to use Google Drive</li>
-                                        <li>Creating a folder in Google Drive</li>
-                                        <li>Sharing a folder in Google Drive</li> -->
-                                    </ul>
-                                    @endforeach
-                                </li>
+                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
+                                @endforeach
                             </ul>
                             @endforeach 
-                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                            <ul class="list-group list-group-flush border-bottom pb-3">
-                                <li class="list-group-item">
-                                    <ul>
-                                        <li>How to use Google Suite</li>
-                                        <li>How to use Google Drive</li>
-                                        <li>Creating a folder in Google Drive</li>
-                                        <li>Sharing a folder in Google Drive</li>
-                                    </ul>
-                                </li>
-                            </ul>    -->
-                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                            <ul class="list-group list-group-flush border-bottom pb-3">
-                                <li class="list-group-item">
-                                    <ul>
-                                        <li>How to use Google Suite</li>
-                                        <li>How to use Google Drive</li>
-                                        <li>Creating a folder in Google Drive</li>
-                                        <li>Sharing a folder in Google Drive</li>
-                                    </ul>
-                                </li>
-                            </ul>    -->
-                            <!-- <h6 class="card-subtitle p-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                            <ul class="list-group list-group-flush pb-3">
-                                <li class="list-group-item">
-                                    <ul>
-                                        <li>How to use Google Suite</li>
-                                        <li>How to use Google Drive</li>
-                                        <li>Creating a folder in Google Drive</li>
-                                        <li>Sharing a folder in Google Drive</li>
-                                    </ul>
-                                </li>
-                            </ul>    -->
                         </div>
                     </div>
 <!-- course content end-->
@@ -446,29 +406,29 @@
    });
 
 
-//    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-//        let courseId = document.getElementById('course_id').value;
-//        let userId = document.getElementById('user_id').value;
-//        let comment =document.getElementById('comment').value;
+   document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
+       let courseId = document.getElementById('course_id').value;
+       let userId = document.getElementById('user_id').value;
+       let comment =document.getElementById('comment').value;
 
-//        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
+       let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
        
-//         fetch(path, {
-//             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
-//             },
-//            body: JSON.stringify({})
-//         }).then((response) => response.json()).then((data) => {
-//             if (data.status =='success'){
-//                 closeModal('reviewModal');
-//                 window.location.reload();
-//             }
-//         });
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if (data.status =='success'){
+                closeModal('reviewModal');
+                window.location.reload();
+            }
+        });
 
-//    });
+   });
    
    
    function closeModal(modalId) {

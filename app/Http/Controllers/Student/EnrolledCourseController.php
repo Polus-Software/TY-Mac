@@ -27,6 +27,12 @@ class EnrolledCourseController extends Controller
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
         $instructorlastname = User::where('id', $assigned)->value('lastname');
         $profilePhoto = User::where('id', $assigned)->value('image');
+        $instructorDesignation = User::where('id', $assigned)->value('designation');
+        $instructorInstitute = User::where('id', $assigned)->value('institute');
+        $instructorDescription = User::where('id', $assigned)->value('description');
+        $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
+        $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
+        $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
     
         $singleCourseData =  array (
             'id' => $course->id,
@@ -39,6 +45,13 @@ class EnrolledCourseController extends Controller
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'profile_photo' => $profilePhoto,
+            'designation' => $instructorDesignation,
+            'institute' => $instructorInstitute,
+            'instructorDescription' => $instructorDescription,
+            'instructorTwitter' => $instructorTwitter,
+            'instructorLinkedin' => $instructorLinkedin,
+            'instructorYoutube' => $instructorYoutube,
+
         );
         array_push($courseDetails, $singleCourseData);
         return view('Student.enrolledCoursePage',[

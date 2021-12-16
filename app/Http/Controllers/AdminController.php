@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\EnrolledCourse;
 use App\Models\Filter;
 use App\Models\UserType;
 use Auth;
@@ -18,8 +19,17 @@ class AdminController extends Controller
         $students =User::where('role_id', 2)->paginate(10);
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
+foreach($students as $student){
+    $enrolledCourses = EnrolledCourse::where('user_id', $student->id)->get();
+    $enrolledCourseCount = count($enrolledCourses);
+//dd($enrolledCourseCount);
+}
+
+       
+        
         return view('Auth.Admin.AdminDashboard', [
             'students' => $students,
+            'enrolledCourseCount' => $enrolledCourseCount,
             'userType' => $userType]);
         
     }

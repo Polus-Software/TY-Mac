@@ -18,7 +18,10 @@ class MyCoursesController extends Controller
         
        $singleEnrolledCourseData = [];
        $user = Auth::user();
-       $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
+       if($user){
+        $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
+      
+       //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
 
         foreach($enrolledCourses as $enrolledCourse){
 
@@ -52,5 +55,9 @@ class MyCoursesController extends Controller
       return view('Student.myCourses', [
         'singleEnrolledCourseData' => $singleEnrolledCourseData
       ]);
+    }else {
+      return redirect('/student-courses');
     }
+  }
+ 
 }

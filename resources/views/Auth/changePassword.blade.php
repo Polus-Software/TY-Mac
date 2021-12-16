@@ -4,7 +4,7 @@
     <div class="container">
         <div class="custom-container mx-auto border">
             <div class="row">                    
-                <div class="col-lg-4 col-sm-4 col-md-4 col-sm-12 col-12 mt-3">
+                <div class="col-lg-3 col-md-4 col-sm-4 col-sm-12 col-12 mt-3">
                    <div class="sidebar h-100 bg-light ms-3">
                       <div class="side-heading">
                         <p class="heading-1">My Account</p>

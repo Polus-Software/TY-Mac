@@ -18,7 +18,7 @@ class InstructorController extends Controller
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
-                ->get();
+                ->paginate(10);
         return view('Instructor.manage_instructors', [
             'instructors' => $instructors,
             'userType' => $userTypeLoggedIn

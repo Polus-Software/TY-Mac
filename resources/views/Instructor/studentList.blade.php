@@ -1,18 +1,16 @@
 @extends('Layouts.admin.master')
 @section('content')
+@include('Layouts.admin.header')
 
 <!-- container -->
-
-
-
 
 <div class="container llp-container">
   <div class="row">
     <div class="col-2 position-fixed">
-       
+    @include('Layouts.admin.sidebar')
     </div>
 
-    <div class="col-10 ms-auto">
+    <div class="col-9 ms-auto">
       <main>
       <div class="row mt-4">
           <table class="table llp-table">

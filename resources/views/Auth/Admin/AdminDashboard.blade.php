@@ -19,9 +19,12 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col">Avatar</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Courses Joined</th>
+                <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
@@ -31,9 +34,13 @@
               @php ($slno = $slno + 1)
               <tr id="{{$student->id}}">
                 <td>{{ $slno }}</td>
+                <td><img src="{{ asset('/storage/images/'.$student['image']) }}"  class="rounded-circle" alt="" style="width:25px; height:25px;"></td>
                 <td>{{$student->firstname}}</td>
                 <td>{{$student->lastname}}</td>
                 <td>{{$student->email}}</td>
+                <td>
+                  {{$enrolledCourseCount}}</td>
+                <td>Active</td>
                 <td class="align-middle text-center">
                   <a href="#" title="View student"
                   data-bs-toggle="modal" data-bs-target="#view_student_modal" data-bs-id="{{$student->id}}">

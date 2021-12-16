@@ -470,15 +470,15 @@
                                             
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
                                                                 @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
-                                                                @endforeach
+                                                               {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at  {{ $course['institute'] }}
+                                                               @endforeach
                                                            
                                                             </p>
                                                             </div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                                                                 <p class="text-end time">4 months ago</p>
                                                             </div>
                                                         </div>
@@ -600,21 +600,30 @@
                                                 {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
                                                 @endforeach
                                                 </h5>
-                                                <p class="card-text-1">Prof. at TY-Mac</p>
+                                                <p class="card-text-1">
+                                                @foreach($singleCourseDetails as $course)
+                                                {{ $course['designation'] }} at   {{ $course['institute'] }}
+                                                @endforeach</p>
                                             </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <p class="card-text-1 p-3">Lorem ipsum dolor sit amet, consectetsur lete adipiscing elit, 
-                                                sed do eiusmod tempor sed incididunt ut labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                commodo consequat sunt explicabo</p>
+                                                <p class="card-text-1 p-3">
+                                                @foreach($singleCourseDetails as $course)
+                                                {{ $course['instructorDescription'] }}
+                                                @endforeach</p>
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <p><a href=""><i class="fab fa-twitter pe-2"></i></a>
-                                                    <a href=""><i class="fab fa-linkedin-in pe-2"></i></a>
-                                                    <a href=""><i class="fab fa-youtube"></i></a>
+                                                <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorTwitter']}}
+                                            @endforeach"><i class="fab fa-twitter pe-2"></i></a>
+                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorLinkedin']}}
+                                            @endforeach"><i class="fab fa-linkedin-in pe-2"></i></a>
+                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorYoutube']}}
+                                            @endforeach"><i class="fab fa-youtube"></i></a>
                                                 </p>
                                             </div>
                                         </div>

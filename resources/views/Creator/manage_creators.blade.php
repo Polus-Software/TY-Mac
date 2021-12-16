@@ -59,6 +59,9 @@
             </tbody>
           </table>
         </div>
+        <div class="d-flex justify-content-end">
+            {!! $creators->links() !!}
+          </div>
       </main>
       <!-- main ends -->
 
