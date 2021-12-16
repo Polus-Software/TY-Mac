@@ -14,8 +14,10 @@ use App\Models\Topic;
 use App\Models\CohortBatch;
 use App\Models\TopicContent;
 use App\Models\TopicAssignment;
+use App\Models\CohortNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Throwable;
 
 class CourseController extends Controller
 {
@@ -57,7 +59,7 @@ class CourseController extends Controller
         $courseCategories = CourseCategory::all();
         $instructors = DB::table('users')->where('role_id', '=', 3) ->get();
 
-        return view('Course.admin.create_course',[
+        return view('Course.admin.create.create_course',[
             'courseCategories' => $courseCategories,
             'instructors' => $instructors,
         ]);
@@ -124,43 +126,46 @@ class CourseController extends Controller
         $assignedCourse->course_id = $course->id;
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
-
-        // Session::put('course_id', $course->id);
-        // Session::save();
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
     }
 
+    /**
+     * For viewing a course details
+     */
     public function viewCourse(Request $request) {
         try {
-            $courseId = $request->input('course_id');
-            if ($courseId) {
-                $course = Course::where('id', $courseId);
-                if ($course) {
-                    $categoryName = CourseCategory::where('id', $course->value('category'))->value('category_name');
-                    
-                    $data = ['course_name' => $course->value('course_title'), 
-                    'course_category' => $categoryName,
-                    'course_description' => $course->value('description'), 
-                    'course_difficulty' => $course->value('course_difficulty'),
-                    'course_duration' => (int)$course->value('course_duration'),
-                    'short_description' => explode(";", $course->value('short_description')),
-                    'course_details' => $course->value('course_details'),
-                    'course_details_points' => explode(";", $course->value('course_details_points')),
-                    // 'course_image' => $course->value('course_image'),
-                    // 'course_thumbnail_image' => $course->value('course_thumbnail_image'),
-                   
-                    ];
-                    return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
-                }
+            $course_id = $request->input('course_id');
+            if($course_id) {
+                $data = DB::table('courses')
+                            ->join('course_category', 'courses.category', '=', 'course_category.id')
+                            ->join('assigned_courses', 'courses.id', '=', 'assigned_courses.course_id')
+                            ->join('users', 'assigned_courses.user_id', '=', 'users.id')
+                            ->where('courses.id', $course_id);
+                $course_details = [
+                    'instructor' => $data->value('users.firstname'),                  
+                    'title' => $data->value('courses.course_title'),
+                    'description' => $data->value('courses.description'),
+                    'difficulty' => $data->value('courses.course_difficulty'),
+                    'category' => $data->value('course_category.category_name'),
+                    'duration' => $data->value('courses.course_duration'),
+                    'whatlearn' => $data->value('courses.course_details'),
+                    'whothis' => $data->value('courses.course_details_points'),
+                    'image' => $data->value('courses.course_image'),
+                    'thumbnail' => $data->value('courses.course_thumbnail_image')
+                ];
+                return view('Course.admin.view.view_course', [
+                    'course_details' => $course_details,
+                    'course_id' => $course_id
+                ]);
             }
-            return response()->json(['status' => 'failed', 'message' => 'Some error']);
-        } catch (Exception $exception) {
-            return($exception->getMessage());
+
+        } catch(Throwable $e) {
+            report($e);
+            return false;
         }
-        
     }
 
-    public function editCourse(Request $request) {
+    public function editCourse1(Request $request) {
         $courseId = $request->input('course_id');
         if ($courseId) {
             $course = Course::where('id', $courseId);
@@ -173,39 +178,75 @@ class CourseController extends Controller
         return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
-    public function updateCourse(Request $request) {
-        $html = '';
-        $slNo = 1;
-        $courseTitle = $request->input('course_title');
-        $courseDesc = $request->input('description');
-        $courseCategory = $request->input('course_category');
-        $instructor = $request->input('instructor');
-        $courseId = $request->input('course_id');
-        $user = Auth::user();
-        $userId = $user->id;
-        $course = Course::find($courseId);
-        $course->course_title = $courseTitle;
-        $course->description = $courseDesc;
-        $course->category = $courseCategory;
-        $course->created_by = $userId;
-        $course->save();
-        $assignedCourse = AssignedCourse::where('course_id', 'like', $courseId)->update(['course_id' => $course->id, 'user_id' => $instructor]);
-        $courses = Course::all();
-
-        foreach($courses as $course) {
-            $categoryName = CourseCategory::where('id', $course->category)->value('category_name');
-            $html = $html . '<tr id="' . $course->id .'">';
-            $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
-            $html = $html . ' <td class="align-middle">' . $course->course_title . '</td>';
-            $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-            $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="' . $course->id . '">View</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-success edit_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="' . $course->id . '">Edit</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger delete_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '">Delete</button></td></tr>';
-            $slNo = $slNo + 1;
+    /**
+     * For editing a course
+     */
+    public function editCourse(Request $request) {
+        try {
+            $course_id = $request->input('course_id');
+            if ($course_id) {
+                $course = Course::where('id', $course_id);
+                if ($course) {
+                    $userType = UserType::where('user_role', 'instructor')->value('id');
+                    $instructors = DB::table('users')->where('role_id', '=', $userType)->get();
+                    $courseCategories = CourseCategory::all();
+                    $data = DB::table('courses')
+                            ->join('course_category', 'courses.category', '=', 'course_category.id')
+                            ->join('assigned_courses', 'courses.id', '=', 'assigned_courses.course_id')
+                            ->join('users', 'assigned_courses.user_id', '=', 'users.id')
+                            ->where('courses.id', $course_id);
+                $course_details = [
+                    'instructor' => $data->value('users.firstname'),
+                     'instructor_id' => $data->value('assigned_courses.user_id'),
+                    'title' => $data->value('courses.course_title'),
+                    'description' => $data->value('courses.description'),
+                    'difficulty' => $data->value('courses.course_difficulty'),
+                    'category_id' => $data->value('courses.category'),
+                    'category' => $data->value('course_category.category_name'),
+                    'duration' => $data->value('courses.course_duration'),
+                    'whatlearn' => $data->value('courses.course_details'),
+                    'whothis' => $data->value('courses.course_details_points'),
+                    'image' => $data->value('courses.course_image'),
+                    'thumbnail' => $data->value('courses.course_thumbnail_image')
+                ];
+                    return view('Course.admin.create.create_course', [
+                        'course_details' => $course_details,
+                        'course_id' => $course_id,
+                        'courseCategories' => $courseCategories,
+                        'instructors' => $instructors
+                    ]);
+                }
+            }
+        } catch(Throwable $e) {
+            report($e);
+            return false;
         }
+        
+    }
 
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
+    public function updateCourse(Request $request) {
+        try{
+            $html = '';
+            $slNo = 1;
+            $courseTitle = $request->input('course_title');
+            $courseDesc = $request->input('description');
+            $courseCategory = $request->input('course_category');
+            $instructor = $request->input('instructor');
+            $courseId = $request->input('course_id');
+            $user = Auth::user();
+            $userId = $user->id;
+            $course = Course::find($courseId);
+            $course->course_title = $courseTitle;
+            $course->description = $courseDesc;
+            $course->category = $courseCategory;
+            $course->created_by = $userId;
+            $course->save();
+            return redirect()->route('view-course', ['course_id' => $course->id]);
+        } catch(Throwable $e) {
+            report($e);
+            return false;
+        }
+        
     }
 
     public function deleteCourse(Request $request) {
@@ -323,16 +364,28 @@ class CourseController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
     }
 
-    // To view sub topics
-    public function viewSubTopic($id){
-        try{
-            $subTopics = DB::table('topics')->where('course_id', $id)->paginate(2);
+    /**
+     * For viewing a subTopics details
+     */
+    public function viewSubTopics(Request $request) {
+        try {
+            $course_id = $request->input('course_id');
+            if($course_id) {
+                $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+                $subtopics = DB::table('topics')
+                                ->join('topic_contents', 'topics.topic_id', '=', 'topic_contents.topic_id')
+                                ->where('topics.course_id', $course_id)
+                                ->paginate(2);
+                return view('Course.admin.view.view_subtopics', [
+                    'subtopics' => $subtopics,
+                    'course_id' => $course_id,
+                    'course_title' => $course_title
+                ]);
+            }
 
-            return view('Course.view_sub_topics',[
-             'subTopics' => $subTopics,
-            ]);
-        }catch (Exception $exception) {
-            return($exception->getMessage());
+        } catch(Throwable $e) {
+            report($e);
+            return false;
         }
     }
 
@@ -392,15 +445,29 @@ class CourseController extends Controller
         ]);
     }
 
-    public function viewAssignment(Request $request){
-        $course_id = $request->input('course_id');
-        $assignments = DB::table('topic_assignments')
-        ->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
-        ->where('topic_assignments.course_id', $course_id)
-        ->get();
-        return view('Course.admin.view_assignment', [
-            'assignments' => $assignments
-        ]);
+    /**
+     * For viewing a assignments
+     */
+    public function viewAssignment(Request $request) {
+        try {
+            $course_id = $request->input('course_id');
+            if($course_id) {
+                $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+                $assignments = DB::table('topic_assignments')
+                                ->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
+                                ->where('topic_assignments.course_id', $course_id)
+                                ->get();
+                return view('Course.admin.view.view_assignment', [
+                    'assignments' => $assignments,
+                    'course_id' => $course_id,
+                    'course_title' => $course_title,
+                ]);
+            }
+
+        } catch(Throwable $e) {
+            report($e);
+            return false;
+        }
     }
 
     /**
@@ -427,7 +494,7 @@ class CourseController extends Controller
         }
         
         $topicAssignment->save();
-        return redirect()->route('view-assignment', ['course_id' => $course_id]);
+        return redirect()->route('create-cohortbatch', ['course_id' => $course_id]);
     }
 
     /**
@@ -461,7 +528,52 @@ class CourseController extends Controller
         return redirect()->back();
     }
 
-    public function createCohort() {
-        
+    public function createCohortBatch(Request $request) {
+        $course_id = $request->input('course_id');
+        $notifications = CohortNotification::all();
+        return view('Course.admin.create_cohortbatch', [
+            'course_id'=> $course_id,
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function saveCohortBatch(Request $request) {
+        $cohortbatch = new CohortBatch();
+        $cohortbatch->title = $request->input('cohortbatch_title');
+        $cohortbatch->course_id = $request->input('course_id');
+        $cohortbatch->start_date = $request->input('cohortbatch_startdate');
+        $cohortbatch->end_date = $request->input('cohortbatch_enddate');
+        $cohortbatch->batchname = $request->input('cohortbatch_batchname');
+        $cohortbatch->start_time = $request->input('cohortbatch_starttime');
+        $cohortbatch->end_time = $request->input('cohortbatch_endtime');
+        $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
+        $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
+        $cohortbatch->save();
+        return redirect('manage-courses');
+    }
+
+    /**
+     * For viewing a Cohortbatches
+     */
+    public function viewCohortbatches(Request $request) {
+        try {
+            $course_id = $request->input('course_id');
+            $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+            if($course_id) {
+                $cohortbatches = DB::table('cohort_batches')
+                                //->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
+                                ->where('cohort_batches.course_id', $course_id)
+                                ->get();
+                return view('Course.admin.view.view_cohortbatches', [
+                    'cohortbatches' => $cohortbatches,
+                    'course_id' => $course_id,
+                    'course_title' => $course_title
+                ]);
+            }
+
+        } catch(Throwable $e) {
+            report($e);
+            return false;
+        }
     }
 }

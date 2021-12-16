@@ -4,79 +4,119 @@
 <!-- container -->
 <div class="container llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+    <div class="col-2 position-fixed">
       <!-- include sidebar here -->
-      @include('Course.admin.sidebar')
+      @include('Course.admin.create.sidebar')
     </div>
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>
-        
+        @if(Route::current()->getName() == 'edit-course')
+        <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+        @else
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+        @endif
         @csrf
         <input type="hidden" id="what_learn_points_count" name="what_learn_points_count">
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
-
-          <div class="py-4">
-          <h3>Course Overview</h3>
+          <div class="py-4"><h3>Course Overview</h3>
           <hr class="my-4">
         </div>
           <div class="col-12">
             <label for="title">Title</label>
+            @if(isset($course_details['title']))
+            <input type="text" class="form-control" id="title" name="course_title" value="{{ $course_details['title'] }}">
+            @else
             <input type="text" class="form-control" id="title" name="course_title">
+            @endif
           </div>
           <div class="col-12">
             <label for="description">Description</label>
+            @if(isset($course_details['description']))
+            <textarea type="text" class="form-control" id="description" name="description">{{ $course_details['description'] }}</textarea>
+            @else
             <textarea type="text" class="form-control" id="description" name="description"></textarea>
+            @endif
           </div>
           <div class="col-md-6">
             <label for="category">Category</label>
-            <!-- <input type="text" class="form-control" id="category"> -->
             <select type="text" class="form-select" id="course_category" name="course_category">
+              <option value="">Select</option>
             @foreach ($courseCategories as $courseCategory)
-              <option value="{{$courseCategory->id}}">{{$courseCategory->category_name}}</option>
-            @endforeach
-          
+            @if(isset($course_details['description']) && $courseCategory->id == $course_details['category_id'])
+            <option value="{{$courseCategory->id}}" selected>{{ $courseCategory->category_name }}</option>
+            @else
+            <option value="{{$courseCategory->id}}">{{ $courseCategory->category_name }}</option>
+            @endif                            
+            @endforeach          
             </select>
           </div>
           <div class="col-md-6">
             <label for="level">Level</label>
             <select type="text" class="form-select" id="course_difficulty" name="course_difficulty">
+              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Beginner')
+              <option value ="Beginner" selected>Beginner</option>
+              @else
               <option value ="Beginner">Beginner</option>
+              @endif
+              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Intermediate')
+              <option value ="Intermediate" selected>Intermediate</option>
+              @else
               <option value ="Intermediate">Intermediate</option>
+              @endif
+              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Advanced')
+              <option value ="Advanced" selected>Advanced</option>
+              @else
               <option value ="Advanced">Advanced</option>
+              @endif
             </select>
           </div>
           <div class="col-md-6">
             <label for="instructor-name">Instructor name</label>
             <select type="text" class="form-select" id="indtructor_name" name="instructor_name">
             @foreach ($instructors as $instructor)
-              <option value ="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option>
-            @endforeach
-          
+            @if(isset($course_details['instructor_id']) && $instructor->id == $course_details['instructor_id'])
+            <option value ="{{$instructor->id}}" selected>{{$instructor->firstname}} {{$instructor->lastname}}</option>
+            @else
+            <option value ="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option>
+            @endif
+            @endforeach          
             </select>
-            <!-- <input type="text" class="form-control" id="instructor-name" name="instructor_name"> -->
           </div>
           <div class="col-md-6">
-            <label for="duration">Duration</label>
+            <label for="duration">Duration</label>            
+            @if(isset($course_details['duration']))
+            <input type="number" class="form-control" id="duration" name="course_duration" value="{{ $course_details['duration'] }}">
+            @else
             <input type="number" class="form-control" id="duration" name="course_duration" value="1">
+            @endif
           </div>
           <div class="col-12">
-            <label for="what-learn">What you'll learn</label>
+            <label for="what-learn">What you'll learn</label>            
+            @if(isset($course_details['whatlearn']))
+            <input type="text" class="form-control" id="what-learn" name="what_learn_1" value="{{ $course_details['whatlearn'] }}">
+            @else
             <input type="text" class="form-control" id="what-learn" name="what_learn_1">
+            @endif
             <div id="add-more-points"></div>
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add more answer</button>
           </div>
           <div class="col-12">
             <label for="who-course">Who this course is for?</label><br>
             
-            <label for="who-course-description">Description</label>
+            <label for="who-course-description">Description</label>            
+            @if(isset($course_details['whothis']))
+            <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4" maxlength ="60">{{ $course_details['whothis'] }}</textarea>
+            @else
             <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4" maxlength ="60"></textarea>
-            
+            @endif
             <label for="who-course-description">Points</label>
+            @if(isset($course_details['whothis']))
+            <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1" value="{{ $course_details['whothis'] }}">
+            @else
             <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1">
-            <div id="add-points"></div>
-            
+            @endif            
+            <div id="add-points"></div>            
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-who-learn">Add more answer</button>
           </div>
           <div class="col-12">

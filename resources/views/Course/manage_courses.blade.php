@@ -14,20 +14,13 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3>Courses</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <!-- <button id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course"
-             data-bs-toggle="modal" data-bs-target="#new_course_modal">
-             <i class="fas fa-plus-square me-1"></i>
-             Add New Course</button> -->
-             <a href="{{ route('add-course') }}" id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course">
+            <a href="{{ route('add-course') }}" id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course">
              <i class="fas fa-plus-square me-1"></i>
              Add New Course</a>
-            <button id="add_sub_topics" class="btn btn-secondary add_new_topics_btn ms-2" title="Add Sub Topics"
-             data-bs-toggle="modal" data-bs-target="#new_sub_modal">
-             <i class="far fa-plus-square me-1"></i>
-             Add Sub Topics</button>
           </div>
         </div>
         <div class="row mt-4">
+          @if (count($courseDetails) > 0 )
           <table class="table llp-table">
             <thead>
               <tr>
@@ -35,6 +28,7 @@
                 <th scope="col">Course Title</th>
                 <th scope="col">Course Category</th>
                 <th scope="col">Description</th>
+                <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
                 <th scope="col" class="text-end">View Sub-topics</th>
               </tr>
@@ -48,25 +42,25 @@
                 <td class="align-middle">{{$course['course_title']}}</td>
                 <td class="align-middle">{{$course['course_category']}}</td>
                 <td class="align-middle">{{$course['description']}}</td>
+                <td><span class="badge bg-warning text-dark">Draft</span></td>
                 <td class="align-middle text-center">
-                  <span style="display: inline-block;width: max-content;">
-                  <a title="View course" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">
+                  <a href="{{ route('view-course', ['course_id' => $course['id']]) }}" title="View course">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <a title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
+                  <!-- <a href="#" title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-pen"></i>
-                  </a>
-                  <a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
+                  </a> -->
+                  <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
                   </span>
                   
                 </td>
-                <td class="align-middle text-center">
-                <a href="{{ route('view-sub-topic', $course['id']) }}" title="View sub-topics">
+                <!-- <td class="align-middle text-center">
+                <a href="{{ route('view-subtopics', $course['id']) }}" title="View sub-topics">
                   <i class="fas fa-eye"></i>
                   </a>
-                </td>
+                </td> -->
                 <!-- <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="{{$course['id']}}">View</button></td>
           <td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">Edit</button></td>
           <td class="text-center align-middle"><button class="btn btn-danger add_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">Delete</button></td> -->
@@ -74,6 +68,12 @@
               @endforeach
             </tbody>
           </table>
+          @else          
+          <div class="alert alert-warning d-flex align-items-center" role="alert">
+          <i class="fas fa-box-open fa-2x me-3"></i>
+          <div>No courses available!</div>
+          </div>
+          @endif
         </div>
        
       </main>
@@ -232,60 +232,7 @@
   </div>
 </div>
 <!-- New course modal ends here -->
-<!-- View course modal -->
-<div id="view_course_modal" class="modal fade llp-modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Course details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-borderless">
-          <tr>
-            <td><strong>Course Name:</strong></td>
-            <td class="text-right"><label id="view_course_name"></label></td>
-          </tr>
-          <tr>
-            <td><strong>Category:</strong></td>
-            <td class="text-right"><label id="view_course_category"></label></td>
-          </tr>
-          <tr>
-            <td><strong>Description:</strong></td>
-            <td class="text-right"><label id="view_course_description"></label></td>
-          </tr>
-          <tr>
-            <td><strong>Level :</strong></td>
-            <td class="text-right"><label id="view_course_difficulty"></label></td>
-          </tr>
-          <tr>
-            <td><strong>Duration :</strong></td>
-            <td class="text-right"><label id="view_course_duration"></label></td>
-          </tr>
-          <tr>
-            <td><strong>What you'll learn :</strong></td>
-            <td class="text-right"><label id="view_course_short_description"></label>
-          </tr>
-          <tr>
-            <td><strong>Who this course is for :</strong></td>
-            <td class="text-right">
-              <label id="view_course_details"></label>
-            </td>
-            <br>
-            <td class="text-right">
-              <label id="view_course_details_points"></label>
-            </td>
-          </tr>
-         
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- View course modal ends here -->
+
 <!--  Edit course modal -->
 <div id="edit_course_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
