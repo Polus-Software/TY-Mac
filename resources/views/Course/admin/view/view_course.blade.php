@@ -55,7 +55,7 @@
             <img src="{{ asset('storage/courseImages/'.$course_details['thumbnail']) }}" alt="">
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-            <a class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit</a>
+            <a class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
           </div>
           </section>
       </main>

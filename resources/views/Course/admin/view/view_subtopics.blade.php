@@ -29,7 +29,6 @@
             <div class="card">
               <div class="card-header">
               Title: <strong>{{$subtopic->topic_title}}</strong>
-              <!-- <span>20 minutes to complete</span> -->
               </div>
               <div class="card-body">
               <p class="card-text">{{$subtopic->description}}</p>
