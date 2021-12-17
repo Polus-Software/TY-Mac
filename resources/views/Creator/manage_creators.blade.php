@@ -51,9 +51,6 @@
                   <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>
-                <!-- <td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">View</button></td>
-          <td class="text-center align-middle"><button class="btn btn-success edit_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">Edit</button></td>
-          <td class="text-center align-middle"><button class="btn btn-danger delete_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">Delete</button></td> -->
               </tr>
               @endforeach
             </tbody>
