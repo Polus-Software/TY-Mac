@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="row mt-4">
-          @if (count($courseDetails) > 0 )
+          @if (count($courseDatas) > 0 )
           <table class="table llp-table">
             <thead>
               <tr>
@@ -44,13 +44,10 @@
                 <td class="align-middle">{{$courseData['description']}}</td>
                 <td><span class="badge bg-warning text-dark">Draft</span></td>
                 <td class="align-middle text-center">
-                  <a href="{{ route('view-course', ['course_id' => $course['id']]) }}" title="View course">
+                  <a href="{{ route('view-course', ['course_id' => $courseData['id']]) }}" title="View course">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <!-- <a href="#" title="Edit course" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="{{$course['id']}}">
-                  <i class="fas fa-pen"></i>
-                  </a> -->
-                  <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$course['id']}}">
+                  <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>
