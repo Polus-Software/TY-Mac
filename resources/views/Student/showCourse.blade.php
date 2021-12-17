@@ -149,7 +149,6 @@
                         </a>
                         <input type="hidden" id="course_id" value="{{$singleCourseDetail['id']}}">
                         <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
-
                     </div>
                     @else
                      <h6>Already enrolled!</h6>
@@ -353,30 +352,30 @@
 <!-- student reviews end--> 
 
 <script>
-    document.getElementById('enrollButton').addEventListener('click', (e) => {
-    e.preventDefault();
-    let path ="{{ route('student.course.enroll') }}";
-    fetch(path, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
+    // document.getElementById('enrollButton').addEventListener('click', (e) => {
+    // e.preventDefault();
+    // let path ="{{ route('student.course.enroll') }}";
+    // fetch(path, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             "X-CSRF-Token": document.querySelector('input[name=_token]').value
+    //         },
             
-        }).then((response) => response.json()).then((data) => {
-           if (data.status =='success'){
-            let courseId = document.getElementById('course_id').value;
-            window.location.href ="/register-course?id="+courseId;
+    //     }).then((response) => response.json()).then((data) => {
+    //        if (data.status =='success'){
+    //         let courseId = document.getElementById('course_id').value;
+    //         window.location.href ="/register-course?id="+courseId;
             
-           }else{
-               let loginModal = new bootstrap.Modal(
-               document.getElementById("loginModal"),{
-               });
-               loginModal.show();
-           }
-        });
-    });
+    //        }else{
+    //            let loginModal = new bootstrap.Modal(
+    //            document.getElementById("loginModal"),{
+    //            });
+    //            loginModal.show();
+    //        }
+    //     });
+    // });
 
 
    let finalRating = 0;
@@ -397,38 +396,38 @@
    });
    }
 
-   document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
-      let starElement = document.getElementsByClassName('rating-star');
-      for (var i = 0; i < 5 ; i++) {
-          starElement[i].classList.remove("active-stars");
-      }
-      document.getElementById('comment').value = "";
-   });
+//    document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
+//       let starElement = document.getElementsByClassName('rating-star');
+//       for (var i = 0; i < 5 ; i++) {
+//           starElement[i].classList.remove("active-stars");
+//       }
+//       document.getElementById('comment').value = "";
+//    });
 
 
-   document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-       let courseId = document.getElementById('course_id').value;
-       let userId = document.getElementById('user_id').value;
-       let comment =document.getElementById('comment').value;
+//    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
+//        let courseId = document.getElementById('course_id').value;
+//        let userId = document.getElementById('user_id').value;
+//        let comment =document.getElementById('comment').value;
 
-       let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
+//        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
        
-        fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "X-CSRF-Token": document.querySelector('input[name=_token]').value
-            },
-           body: JSON.stringify({})
-        }).then((response) => response.json()).then((data) => {
-            if (data.status =='success'){
-                closeModal('reviewModal');
-                window.location.reload();
-            }
-        });
+//         fetch(path, {
+//             method: 'POST',
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json',
+//                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
+//             },
+//            body: JSON.stringify({})
+//         }).then((response) => response.json()).then((data) => {
+//             if (data.status =='success'){
+//                 closeModal('reviewModal');
+//                 window.location.reload();
+//             }
+//         });
 
-   });
+//    });
    
    
    function closeModal(modalId) {

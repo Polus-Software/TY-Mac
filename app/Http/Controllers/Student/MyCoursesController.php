@@ -20,9 +20,6 @@ class MyCoursesController extends Controller
        $user = Auth::user();
        if($user){
         $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
-      
-       //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
-
         foreach($enrolledCourses as $enrolledCourse){
 
           $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');

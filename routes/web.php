@@ -31,6 +31,9 @@ use App\User;
 Route::get('/', function () {
     return view('homepage');
 });
+Route::get('/403', function () {
+    return view('Errors.accessDenied');
+});
 
 Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
