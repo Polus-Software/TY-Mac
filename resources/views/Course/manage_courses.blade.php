@@ -30,7 +30,6 @@
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
-                <th scope="col" class="text-end">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -49,11 +48,6 @@
                   </a>
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-trash-alt"></i>
-                  </a>
-                </td>
-                <td class="align-middle text-center">
-                <a href="{{ route('view-sub-topic', $courseData['id']) }}" title="View sub-topics">
-                  <i class="fas fa-eye"></i>
                   </a>
                 </td>
               </tr>
