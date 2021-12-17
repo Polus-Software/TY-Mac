@@ -212,7 +212,9 @@
                                {{$singleCourseDetail['course_details']}}</p>
                                 @endforeach
                              @foreach($course_details_points as $course_details_point)
+                             @if($course_details_point != '')
                              <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;{{$course_details_point}} </p>
+                             @endif
                              @endforeach
                         </div>
                     </div>
