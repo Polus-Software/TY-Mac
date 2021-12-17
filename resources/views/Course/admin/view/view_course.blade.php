@@ -40,19 +40,33 @@
           </div>
           <div class="col-12">
             <label>What you'll learn</label>
-            <p>{{$course_details['whatlearn']}}</p>
+            <ul>
+            @foreach($course_details['whatlearn'] as $whatlearn)
+            <li>{{$whatlearn}}</li>
+            @endforeach
+            </ul>
           </div>
           <div class="col-12">
             <label>Who this course is for?</label>
-            <p>{{$course_details['whothis']}}</p>
+            <ul>
+            @foreach($course_details['whothis'] as $whothis)
+            @if($whothis != '')
+            <li>{{$whothis}}</li>
+            @endif
+            @endforeach
+            </ul>
           </div>
           <div class="col-12">
             <label>Course image</label>
-            <img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" alt="">
+            <div style="margin-top:15px;">
+                <img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" alt="">
+            </div>
           </div>
           <div class="col-12">
             <label>Course thumbnail image</label>
-            <img src="{{ asset('storage/courseImages/'.$course_details['thumbnail']) }}" alt="">
+            <div style="margin-top:15px;">
+                <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="">
+            </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
             <a class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
