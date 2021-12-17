@@ -33,10 +33,17 @@ class RtmTokenGeneratorController extends Controller
 
 
     public function index(Request $request) {
-        return view('Agora.SessionScreen.live_session_screen');
+        $userObj = Auth::user();
+        
+        if($userObj) {
+            return view('Agora.SessionScreen.live_session_screen');
+        } else {
+            return redirect('/403');
+        }
     }
 
     public function buildToken(Request $request) {
+        
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         
@@ -56,6 +63,7 @@ class RtmTokenGeneratorController extends Controller
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
         return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => strval(rand(101, 500)), 'channel' => 'Live Session', 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        
     }
 
     public function buildTokenStudent(Request $request) {
@@ -80,18 +88,6 @@ class RtmTokenGeneratorController extends Controller
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
-        
-        // $courses = Course::all();
-        // foreach ($courses as $course) {
-        //     $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
-        //     $courseData =  array (
-        //         'id' => $course->id,
-        //         'course_title' => $course->course_title,
-        //         'course_category' => $courseCategory,
-        //         'description' => $course->description
-        //       );
-        //       array_push($courseDetails, $courseData);
-        // }
         return view('Agora.ScheduleScreens.schedule_session', [
             'courses' => $courses,
             'instructors' => $instructors,

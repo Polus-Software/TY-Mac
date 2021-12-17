@@ -1,6 +1,63 @@
 @extends('Layouts.showCourse')
 @section('content')
+<style>
+  .btn-outline-success {
+    border-color: #000000 !important;
+}
+.btn-outline-success:hover {
+  background-color: #fff !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+  </style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TY-Mac</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <form class="mb-2 mb-lg-0 d-flex me-auto">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      </form>
 
+      <ul class="navbar-nav">
+      @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+        @endif
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -212,7 +269,9 @@
                                {{$singleCourseDetail['course_details']}}</p>
                                 @endforeach
                              @foreach($course_details_points as $course_details_point)
+                             @if($course_details_point != '')
                              <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;{{$course_details_point}} </p>
+                             @endif
                              @endforeach
                         </div>
                     </div>
@@ -352,30 +411,30 @@
 <!-- student reviews end--> 
 
 <script>
-    // document.getElementById('enrollButton').addEventListener('click', (e) => {
-    // e.preventDefault();
-    // let path ="{{ route('student.course.enroll') }}";
-    // fetch(path, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             "X-CSRF-Token": document.querySelector('input[name=_token]').value
-    //         },
+    document.getElementById('enrollButton').addEventListener('click', (e) => {
+    e.preventDefault();
+    let path ="{{ route('student.course.enroll') }}";
+    fetch(path, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
             
-    //     }).then((response) => response.json()).then((data) => {
-    //        if (data.status =='success'){
-    //         let courseId = document.getElementById('course_id').value;
-    //         window.location.href ="/register-course?id="+courseId;
+        }).then((response) => response.json()).then((data) => {
+           if (data.status =='success'){
+            let courseId = document.getElementById('course_id').value;
+            window.location.href ="/register-course?id="+courseId;
             
-    //        }else{
-    //            let loginModal = new bootstrap.Modal(
-    //            document.getElementById("loginModal"),{
-    //            });
-    //            loginModal.show();
-    //        }
-    //     });
-    // });
+           }else{
+               let loginModal = new bootstrap.Modal(
+               document.getElementById("loginModal"),{
+               });
+               loginModal.show();
+           }
+        });
+    });
 
 
    let finalRating = 0;

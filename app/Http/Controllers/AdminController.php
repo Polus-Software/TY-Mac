@@ -22,14 +22,12 @@ class AdminController extends Controller
        $studentDetails =[];
 
         $students =User::where('role_id', 2)->get();
-        //dd($students);
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
 
         foreach($students as $student){
             $enrolledCourses = EnrolledCourse::where('user_id', $student->id)->get();
             $enrolledCourseCount = count($enrolledCourses);
-        //dd($enrolledCourseCount);
        
         $studentData = array(
             'id'=> $student->id,

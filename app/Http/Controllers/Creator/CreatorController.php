@@ -111,10 +111,10 @@ class CreatorController extends Controller
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
                     $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
                     $html = $html . '<th class="align-middle">' . $creator->email . '</th>';
-                    $html = $html . '<td class="align-middle">Dummy</td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="' . $creator->id . '">View</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-success add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="' . $creator->id . '">Edit</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="' . $creator->id . '">Delete</button></td></tr>';
+                    $html = $html . '<td class="align-middle"></td>';
+                    $html = $html . '<td class="align-middle text-center"><a href="#" title="View creator" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-eye"></i></a>';
+                    $html = $html . '<a href="#" title="Edit creator" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-pen"></i></a>';
+                    $html = $html . '<a href="#" title="Delete creator" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
                 }
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);

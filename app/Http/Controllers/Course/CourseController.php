@@ -91,8 +91,8 @@ class CourseController extends Controller
         $courseTitle = $request->input('course_title');
         $courseDesc = $request->input('description');
         $courseCategory = $request->input('course_category');
-        $courseDifficulty = $request->input('course_difficulty');
-        $instructorName = $request->input('instructor_name');
+        $courseDifficulty = $request->input('difficulty');
+        $instructorName = $request->input('instructor');
         $courseDuration = $request->input('course_duration');
        
         $what_learn = "";
@@ -158,6 +158,8 @@ class CourseController extends Controller
                             ->join('assigned_courses', 'courses.id', '=', 'assigned_courses.course_id')
                             ->join('users', 'assigned_courses.user_id', '=', 'users.id')
                             ->where('courses.id', $course_id);
+                $whatlearn = explode(';', $data->value('courses.course_details'));
+                $whothis = explode(';', $data->value('courses.course_details_points'));
                 $course_details = [
                     'instructor' => $data->value('users.firstname').' '.$data->value('users.lastname'),                  
                     'title' => $data->value('courses.course_title'),
@@ -165,8 +167,8 @@ class CourseController extends Controller
                     'difficulty' => $data->value('courses.course_difficulty'),
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
-                    'whatlearn' => $data->value('courses.course_details'),
-                    'whothis' => $data->value('courses.course_details_points'),
+                    'whatlearn' => $whatlearn,
+                    'whothis' => $whothis,
                     'image' => $data->value('courses.course_image'),
                     'thumbnail' => $data->value('courses.course_thumbnail_image')
                 ];

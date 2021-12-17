@@ -1,5 +1,63 @@
 @extends('Layouts.enrolledCoursePage')
 @section('content')
+<style>
+  .btn-outline-success {
+    border-color: #000000 !important;
+}
+.btn-outline-success:hover {
+  background-color: #fff !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+  </style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TY-Mac</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <form class="mb-2 mb-lg-0 d-flex me-auto">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      </form>
+
+      <ul class="navbar-nav">
+      @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+        @endif
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 <!-- review modal -->
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -132,6 +190,9 @@
                             </button>
                             <button class="nav-link mb-2 ps-5 text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
                                 <img src="" alt="" class="pe-2">Cohort Info
+                            </button>
+                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
+                                <img src="" alt="" class="pe-2">Assignments
                             </button>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                             <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
@@ -632,6 +693,32 @@
                             </div>
                         </div>
 
+                        <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">
+                           <div class="row">
+                               <div class="col-lg-12">
+                                <div class="card card-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title border-bottom pt-2 pb-2">Assignment info</h5>
+                                        @php ($slno = 0)
+                                        @foreach($topicDetails as $topicDetail)
+                                        @php ($slno = $slno + 1)
+                                        <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
+                                        <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                                            @foreach($topicDetail['assignmentList'] as $assignment)
+                                            <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
+                                            <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
+                                            {{$assignment['assignment_title']}}
+                                            </li>
+                                            </a>
+                                           @endforeach
+                                        </ul>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+
                         <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
                             <div class="card card-8 mb-3">
                                 <div class="card-body">
@@ -751,6 +838,11 @@
                                 </div>
                             </div>
                         </div>
+
+                        
+
+                        
+
 
 
 

@@ -39,7 +39,7 @@
                 <td>{{$studentData['lastname'] }}</td>
                 <td >{{$studentData['email'] }}</td>
                 <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
-                <td class="align-middle text-center"><p style="background:lightgreen; border-radius:19px;">Active</p></td>
+                <td class="align-middle text-center"><p style="background:lightgreen; border-radius:19px;margin-bottom:0px;">Active</p></td>
                 <td class="align-middle text-center">
                   <a title="Edit student"
                   data-bs-toggle="modal" data-bs-target="#edit_student_modal" data-bs-id="{{ $studentData['id'] }}">
