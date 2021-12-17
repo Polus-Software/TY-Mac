@@ -8,7 +8,7 @@
                 <div class="card-1 mb-3 mt-4">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                            <img src="{{asset('/storage/courseThumbnailImages/'.$courseDetails['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image" alt="coursepicture">
+                            <img src="{{asset('/storage/courseThumbnailImages/'.$courseDetails['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image h-100" alt="coursepicture">
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">

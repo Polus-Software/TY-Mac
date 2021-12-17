@@ -134,6 +134,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
     Route::get('/enrolled-course', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
+    Route::get('/assignments/{assignment}', [EnrolledCourseController::class, 'showassignment'])->name('student.course.assignment');
+    Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
+    Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');
     Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');

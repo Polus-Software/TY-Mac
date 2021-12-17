@@ -352,30 +352,30 @@
 <!-- student reviews end--> 
 
 <script>
-    // document.getElementById('enrollButton').addEventListener('click', (e) => {
-    // e.preventDefault();
-    // let path ="{{ route('student.course.enroll') }}";
-    // fetch(path, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             "X-CSRF-Token": document.querySelector('input[name=_token]').value
-    //         },
+    document.getElementById('enrollButton').addEventListener('click', (e) => {
+    e.preventDefault();
+    let path ="{{ route('student.course.enroll') }}";
+    fetch(path, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
             
-    //     }).then((response) => response.json()).then((data) => {
-    //        if (data.status =='success'){
-    //         let courseId = document.getElementById('course_id').value;
-    //         window.location.href ="/register-course?id="+courseId;
+        }).then((response) => response.json()).then((data) => {
+           if (data.status =='success'){
+            let courseId = document.getElementById('course_id').value;
+            window.location.href ="/register-course?id="+courseId;
             
-    //        }else{
-    //            let loginModal = new bootstrap.Modal(
-    //            document.getElementById("loginModal"),{
-    //            });
-    //            loginModal.show();
-    //        }
-    //     });
-    // });
+           }else{
+               let loginModal = new bootstrap.Modal(
+               document.getElementById("loginModal"),{
+               });
+               loginModal.show();
+           }
+        });
+    });
 
 
    let finalRating = 0;
