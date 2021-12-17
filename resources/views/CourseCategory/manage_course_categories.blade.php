@@ -55,6 +55,9 @@
             </tbody>
           </table>
         </div>
+        <div class="d-flex justify-content-end">
+            {!! $courseCategories->links() !!}
+          </div>
       </main>
       <!-- main ends -->
 

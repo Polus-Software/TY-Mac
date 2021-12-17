@@ -18,7 +18,7 @@ class CreatorController extends Controller
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $creators = DB::table('users')
                 ->where('role_id', '=', $userType)
-                ->get();
+                ->paginate(10);
         return view('Creator.manage_creators', [
             'creators' => $creators,
             'userType' => $userTypeLoggedIn

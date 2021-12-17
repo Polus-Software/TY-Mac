@@ -58,6 +58,9 @@
             </tbody>
           </table>
         </div>
+        <div class="d-flex justify-content-end">
+            {!! $instructors->links() !!}
+        </div>
       </main>
       <!-- main ends -->
 
@@ -290,7 +293,7 @@
       document.getElementById('edit_instructor_email').value = data.instructorDetails['email'];
       document.getElementById('update_instructor_btn').setAttribute('user_id', data.instructorDetails['id']);
       blurValidation('form_edit_instructor');
-      closeModal('edit_instructor_modal');
+      //closeModal('edit_instructor_modal');
     });
   });
 

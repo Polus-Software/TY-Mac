@@ -1,5 +1,68 @@
 @extends('Layouts.courses')
 @section('content')
+
+
+<!-- login modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+   <div class="modal-content">
+      <div class="modal-body">
+     <div class="container-overlay">
+      <div class="mx-auto">
+        <div class="wrapper row flex-column my-5" >  
+            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
+                <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
+                    @csrf
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label for="email" class="email-label">Email</label>
+                        <input type="email"  name="email"class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
+                        value="{{old('email')}}">
+                        <small>Error message</small>
+                        @if ($errors->has('email'))
+                        <span class="text-danger">{{ $errors->first('email') }}</span>
+                        @endif        
+                    </div>
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label for="inputPassword" class="password-label">Password</label>
+                        <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
+                        <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
+                        <small>Error message</small>
+                        @if ($errors->has('password'))
+                        <span class="text-danger">{{ $errors->first('password') }}</span>
+                        @endif
+                    </div>
+
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label class="form-check-label rememberme">
+                        <input  class="form-check-input"  name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+                    </div>
+
+                    <div class="d-grid form-group  mx-sm-5 mx-0">
+                        <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
+                    </div>
+
+                    <div class="text-center forgotpass">
+                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
+                        
+                    </div>
+
+                    <div class="text-center bottom-text">
+                        <span><p>Don't have an account? </span>
+                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                    </div>            
+            
+                </form>
+            </div> 
+        </div>      
+     </div>          
+
+    </div>
+    
+   </div>
+</div>
+</div>
+</div>
+<!-- login modal ends -->
 <header class="ty-mac-header-bg d-flex align-items-center">
     <div class="container">
       <div class="row">
@@ -248,7 +311,7 @@
           @foreach($courseDatas as $courseData)
             <div class="col-lg-6">
               <div class="card mb-4">
-                <img src="{{asset('/storage/images/'.$courseData['course_image'])}}" class="card-img-top" alt="...">
+                <img src="{{asset('/storage/courseThumbnailImages/'.$courseData['course_thumbnail_image'])}}" class="card-img-top" alt="course-image">
                   <div class="card-body">
                     <h5 class="card-title text-center">
                       {{$courseData['course_title']}}
@@ -289,7 +352,13 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="btn-group border-top" role="group" aria-label="Basic example">
-                        <a href="" class="card-link btn border-end">Register now</a>
+                     @if(Auth::guest())
+                        <a class="card-link btn border-end" id="registerNowButton"  data-bs-toggle="modal"
+                         data-bs-target="#loginModal">Register now</a>
+                      @else
+                        <a href="{{ route('student.course.register', ['id'=>$courseData['id']])}}" class="card-link btn border-end">Register now</a>
+                      @endif
+                     
                         <a href="{{ route('student.course.show', $courseData['id'])}}" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a>
                     </div>
                   </div>
