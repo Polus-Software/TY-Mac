@@ -14,7 +14,6 @@ class AlterCohortBatchesTable extends Migration
     public function up()
     {
         Schema::table('cohort_batches', function (Blueprint $table) {
-            //
             $table->string('title');
             $table->date('end_date');
             $table->string('time_zone');
