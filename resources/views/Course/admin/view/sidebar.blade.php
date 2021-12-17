@@ -29,22 +29,12 @@
       <i class="fas fa-user-friends"></i>
         Cohorts</a>
     </li>
+    <li class="nav-item" style="margin-top: auto;">
+    <a class="btn btn-primary">Publish</a>
+    </li>
+    <li class="nav-item" style="margin-top: auto;">
+    <a class="btn btn-outline-secondary" href="{{ route('manage-courses') }}">Back to course list</a>
+    </li>
   </ul>
-  <a class="btn btn-primary">Publish</a>
-  <a class="btn btn-primary">Back to course list</a>
-  <ul class="nav nav-pills flex-column mb-auto mt-5">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Active</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled">Disabled</a>
-  </li>
-</ul>
 </div>
 <!-- sidebar ends -->
