@@ -88,7 +88,9 @@ body {
 }
 .llp-modal .modal-footer .btn-primary,
 .llp-container .btn-toolbar .btn-primary,
-.llp-form .btn-primary{
+.llp-form .btn-primary,
+.llp-view .btn-primary,
+.llp-sidebar .btn-primary {
     background-color: var(--main-title-color);
     border-color: var(--main-title-color);
     color: white;

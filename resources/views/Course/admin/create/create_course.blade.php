@@ -13,6 +13,7 @@
       <main>
         @if(Route::current()->getName() == 'edit-course')
         <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+        <input type="hidden" id="course_id" name="course_id" value="{{ $course_id}}">
         @else
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         @endif
@@ -53,18 +54,18 @@
           </div>
           <div class="col-md-6">
             <label for="level">Level</label>
-            <select type="text" class="form-select" id="course_difficulty" name="course_difficulty">
-              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Beginner')
+            <select type="text" class="form-select" id="difficulty" name="difficulty">
+              @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Beginner')
               <option value ="Beginner" selected>Beginner</option>
               @else
               <option value ="Beginner">Beginner</option>
               @endif
-              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Intermediate')
+              @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Intermediate')
               <option value ="Intermediate" selected>Intermediate</option>
               @else
               <option value ="Intermediate">Intermediate</option>
               @endif
-              @if(isset($course_details['category_id']) && $course_details['category_id'] =='Advanced')
+              @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Advanced')
               <option value ="Advanced" selected>Advanced</option>
               @else
               <option value ="Advanced">Advanced</option>
@@ -73,12 +74,12 @@
           </div>
           <div class="col-md-6">
             <label for="instructor-name">Instructor name</label>
-            <select type="text" class="form-select" id="indtructor_name" name="instructor_name">
+            <select class="form-select" id="instructor" name="instructor">
             @foreach ($instructors as $instructor)
             @if(isset($course_details['instructor_id']) && $instructor->id == $course_details['instructor_id'])
-            <option value ="{{$instructor->id}}" selected>{{$instructor->firstname}} {{$instructor->lastname}}</option>
+            <option value ="{{ $instructor->id }}" selected>{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
             @else
-            <option value ="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option>
+            <option value ="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
             @endif
             @endforeach          
             </select>
@@ -149,8 +150,12 @@
             </div>
             </div>
           </div>
-          <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-          <!-- <button class="btn btn-primary" id="save_course" type="submit">Save as draft & continue</button> -->
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">          
+          @if(Route::current()->getName() == 'edit-course')
+          <a class="btn btn-outline-secondary" role="button" href="{{ route('view-course', ['course_id' => $course_id]) }}">Cancel</a>
+          @else
+          <a class="btn btn-outline-secondary" role="button" href="{{ route('manage-courses') }}">Cancel</a>
+          @endif
           <input class="btn btn-primary" id="save_course" type="submit" value="Save as draft & continue">
           </div>
         </form>
