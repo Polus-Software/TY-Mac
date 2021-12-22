@@ -37,6 +37,9 @@
 
 
 <header class="d-flex align-items-center mb-3">
+<!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com" target="_blank">
+  Share on Facebook
+</a> -->
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -115,7 +118,7 @@
 </header>
 
     <section>
-        <div class="container">
+        <div class="container flex-column">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
                     <div class="row sidebar pt-4">
@@ -154,6 +157,7 @@
                    
                 <div class="col-lg-9 col-md-8 col-sm-12 col-12 gx-5">
                     <div class="tab-content" id="v-pills-tabContent">
+
                         <div class="tab-pane fade show active" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
                             <div class="card card-2 mb-3">
                                 <div class="card-body">
@@ -421,6 +425,7 @@
                             </div>
                         </div>
 
+                       
                         <div class="tab-pane fade" id="v-pills-CohortQuestions" role="tabpanel" aria-labelledby="v-pills-CohortQuestions-tab">
                            <div class="row">
                                <div class="col-lg-12">
@@ -568,7 +573,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
-                           
+                 
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card card-7">
@@ -636,184 +641,81 @@
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">
-                           <div class="row">
-                               <div class="col-lg-12">
-                                <div class="card card-2">
-                                    <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card card-2">
+                                        <div class="card-body p-4">
                                         <h5 class="card-title border-bottom pt-2 pb-2">Assignment info</h5>
-                                        @php ($slno = 0)
-                                        @foreach($topicDetails as $topicDetail)
-                                        @php ($slno = $slno + 1)
-                                        <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
-                                        <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
-                                            @foreach($topicDetail['assignmentList'] as $assignment)
-                                            <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
-                                            <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
-                                            {{$assignment['assignment_title']}}
-                                            </li>
-                                            </a>
-                                           @endforeach
-                                        </ul>
+                                           
+                                            @php ($slno = 0)
+                                            @foreach($topicDetails as $topicDetail)
+                                            @php ($slno = $slno + 1)
+                                            <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
+                                            <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                                                    @foreach($topicDetail['assignmentList'] as $assignment)
+                                                    <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
+                                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
+                                                    {{$assignment['assignment_title']}}
+                                                    </li>
+                                                    </a>
+                                                @endforeach
+                                                </ul>
+                                            @endforeach
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
+                            <div class="card card-8 mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
+                                        <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
+                                        @foreach($achievedBadgeDetails as $achievedBadgeDetail)
+                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                                                <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">  
+                                                <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
+                                                <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
+                                            </div>
+                                            @endforeach
+                                           
+                                        </div>
+                                     
+                                        <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
+                                        <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
+                                        @foreach($upcoming as $upcomingBadge)
+                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                                                <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">  
+                                                <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
+                                                <!-- <small>-----</small> -->
+                                            </div>
+                                        @endforeach
+                                        </div>
+
+                                        <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
+                                        @foreach($badgesDetails as $badgesData)
+                                        <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
+                                            <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt=""> 
+                                                <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
+                                                <small>---</small>
+                                            </div>
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                                                <p class="badges">{{ $badgesData['badge_name'] }}</p>
+                                                <p>{{ $badgesData['badge_description'] }}</p>
+                                            </div>  
+                                        </div>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
                         </div>
-                       
-
-                        <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
-                            <div class="card card-8 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
-                                    
-                                        <div class="row earned-badges pt-5 pb-5 d-flex justify-content-lg-center mb-3">
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Badge 1.svg" alt="">  
-                                                <p class="col-lg-12 badges ps-2 m-0">Joinee</p>
-                                                <small>November 11, 2021</small>
-                                            </div>
-                                        
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Badge 2.svg" alt=""> 
-                                                <p class="col-lg-12 badges ps-2 m-0">Starter</p>
-                                                <small>November 11, 2021</small>
-                                            </div>
-
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Badge 3.svg" alt="">
-                                                <p class="col-lg-12 badges m-0">Assignment</p>
-                                                <small>November 11, 2021</small> 
-                                            </div>
-
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Next.svg" alt=""> 
-                                                <p class="col-lg-12 badges ps-3 m-0">Next</p>
-                                                <small>November 11, 2021</small>
-                                            </div>
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Next.svg" alt=""> 
-                                                <p class="col-lg-12 badges ps-3 m-0">Next</p>
-                                                <small>November 11, 2021</small>
-                                            </div>
-                                        </div>
-                                     
-                                        <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
-                                        <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Badge.svg" alt="">  
-                                                <p class="col-lg-12 badges m-0">Q&A</p>
-                                                <small>-----</small>
-                                            </div>
-                                        
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="Badges/Completion.svg" alt=""> 
-                                                <p class="col-lg-12 badges m-0">Completion</p>
-                                                <small>---</small>
-                                            </div>
-
-                                        </div>
-
-                                        <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
-                                        <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="Badges/Badge 1.svg" alt=""> 
-                                                <p class="col-lg-12 badges m-0">Joinee</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p>Joinee</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                            </div>  
-                                        </div>
-                                        <div class="row d-flex justify-content-start ps-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="Badges/Badge 2.svg" alt=""> 
-                                                <p class="col-lg-12 badges m-0">Starter</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p>Joinee</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                            </div>  
-                                        </div>
-
-                                        <div class="row d-flex justify-content-start ps-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="Badges/Badge 3.svg" alt=""> 
-                                                <p class="col-lg-12 badges m-0">assignment</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p>Joinee</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                            </div>  
-                                        </div>
-                                        <div class="row d-flex justify-content-start ps-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="Badges/Badge.svg" alt=""> 
-                                                <p class="col-lg-12 badges">Q&A</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p>Joinee</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                            </div>  
-                                        </div>
-
-                                        <div class="row d-flex justify-content-start ps-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="Badges/Completion.svg" alt=""> 
-                                                <p class="col-lg-12 badges">Completion</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p>Joinee</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                            </div>  
-                                        </div>
-                                            
-                                            
-
-                                           
-
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-
-                        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
 

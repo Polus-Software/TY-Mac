@@ -1,9 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    @foreach($singleCourseDetails as $singleCourseDetail)
+        <!-- <meta property="og:title" content="{{$singleCourseDetail['course_title']}}" />  
+        <meta property="og:description" content="{{$singleCourseDetail['description']}}" />
+        <meta property="og:image" content="{{ url('/') }}/storage/courseImages/{{$singleCourseDetail['course_image']}}"> -->
+
+    <meta name="twitter:title" content="{{$singleCourseDetail['course_title']}}" />
+    <meta name="twitter:description" content="{{$singleCourseDetail['description']}}" />
+    <meta name="twitter:image" content="{{ url('/') }}/storage/courseImages/{{$singleCourseDetail['course_image']}}" />
+    @endforeach
     <title></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -11,8 +22,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/assets/singlecourse.css') }}">
-    <link rel="stylesheet" href="{{ asset('/assets/LoginModal.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
+  
 </head>
 <body>
    @yield('content') 
