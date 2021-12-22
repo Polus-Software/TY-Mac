@@ -52,7 +52,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
     Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
-
+    Route::get('/edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
+    Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
     Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');

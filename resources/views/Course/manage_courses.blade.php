@@ -30,7 +30,6 @@
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
-                <th scope="col" class="text-end">View Sub-topics</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -49,11 +48,6 @@
                   </a>
                   <a href="#" title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="{{$courseData['id']}}">
                   <i class="fas fa-trash-alt"></i>
-                  </a>
-                </td>
-                <td class="align-middle text-center">
-                <a href="{{ route('view-sub-topic', $courseData['id']) }}" title="View sub-topics">
-                  <i class="fas fa-eye"></i>
                   </a>
                 </td>
               </tr>
@@ -341,59 +335,6 @@ function closeModal(modalId) {
 
 });
 
-
-  // document.getElementById('save_course').addEventListener('click', (event) => {
-  //   let courseTitle = document.getElementById('course_title').value;
-  //   let courseDescription = document.getElementById('course_description').value;
-  //   let courseCategory = document.getElementById('course_category').value;
-  //   let instructor = document.getElementById('course_instructor').value;
-  //   let path = "{{ route('add-course') }}?course_title=" + courseTitle + '&course_description=' + courseDescription + '&course_category=' + courseCategory + '&instructor=' + instructor;
-  //   fetch(path, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //       "X-CSRF-Token": document.querySelector('input[name=_token]').value
-  //     },
-  //     body: JSON.stringify({})
-  //   }).then((response) => response.json()).then((data) => {
-  //     document.getElementById('course_tbody').innerHTML = '';
-  //     document.getElementById('course_tbody').innerHTML = data.html;
-  //     document.getElementById('course_title').value = '';
-  //     document.getElementById('course_description').value = '';
-  //     document.getElementById('course_category').value = '';
-  //     document.getElementById('course_instructor').value = '';
-  //     closeModal('new_course_modal');
-  //   });
-  // });
-
-
-  document.getElementById('view_course_modal').addEventListener('show.bs.modal', function(event) {
-    var button = event.relatedTarget;
-    var courseId = button.getAttribute('data-bs-id');
-    let path = "{{ route('view-course') }}?course_id=" + courseId;
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      document.getElementById('view_course_name').innerHTML = data.courseDetails['course_name'];
-      document.getElementById('view_course_category').innerHTML = data.courseDetails['course_category'];
-      document.getElementById('view_course_description').innerHTML = data.courseDetails['course_description'];
-      document.getElementById('view_course_difficulty').innerHTML = data.courseDetails['course_difficulty'];
-      document.getElementById('view_course_duration').innerHTML = data.courseDetails['course_duration'];
-      document.getElementById('view_course_short_description').innerHTML = data.courseDetails['short_description'];
-      document.getElementById('view_course_details').innerHTML = data.courseDetails['course_details'];
-      document.getElementById('view_course_details_points').innerHTML = data.courseDetails['course_details_points'];
-
-      //closeModal('view_course_modal');
-    });
-  });
-
   document.getElementById('edit_course_modal').addEventListener('show.bs.modal', function(event) {
     var button = event.relatedTarget;
     var courseId = button.getAttribute('data-bs-id');
@@ -407,8 +348,6 @@ function closeModal(modalId) {
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-      console.log(data.courseDetails['instructor']);
-      console.log(data.courseDetails['course_category']);
       document.getElementById('edit_course_title').value = data.courseDetails['course_name'];
       document.getElementById('edit_course_category').value = data.courseDetails['course_category'];
       document.getElementById('edit_course_description').value = data.courseDetails['course_description'];

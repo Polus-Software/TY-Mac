@@ -305,30 +305,6 @@ class CoursesCatalogController extends Controller
         
     }
 
-    // public function afterEnrollView(){
-    //     return view('Student.enrolledCoursePage');
-    // }
-    
-
-    // public function courseReviewProcess(Request $request){
-
-    //     $courseId = $request->course_id;
-    //     $userId = $request->user_id;
-    //     $comment = $request->input('comment');
-    //     $rating = $request->input('rating');
-
-    //     $generalCourseFeedback = new GeneralCourseFeedback;
-    //     $generalCourseFeedback->user_id = $userId;
-    //     $generalCourseFeedback->course_id = $courseId;
-    //     $generalCourseFeedback->comment = $comment;
-    //     $generalCourseFeedback->rating = $rating;
-    //     $generalCourseFeedback->save();
-
-    //     return response()->json([
-    //         'status' => 'success', 
-    //         'message' => 'submitted successfully'
-    //      ]);
-    // }
 
     public function filterCourse(Request $request) {
      
@@ -389,7 +365,7 @@ class CoursesCatalogController extends Controller
      $courses = $courses->get();
            foreach($courses as $course) {
                 $html = $html . '<div class="col-lg-6"><div class="card mb-4">';
-                $html = $html . '<img src="" class="card-img-top" alt="..."><div class="card-body">';
+                $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="..."><div class="card-body">';
                 $html = $html . '<h5 class="card-title text-center">'. $course->course_title .'</h5>';
                 $html = $html . '<p class="card-text">';
                 $html = $html . \Illuminate\Support\Str::limit($course->description, $limit = 150, $end = '....');

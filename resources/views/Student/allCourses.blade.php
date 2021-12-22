@@ -1,7 +1,63 @@
 @extends('Layouts.courses')
 @section('content')
+<style>
+  .btn-outline-success {
+    border-color: #000000 !important;
+}
+.btn-outline-success:hover {
+  background-color: #fff !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+  </style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TY-Mac</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <form class="mb-2 mb-lg-0 d-flex me-auto">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      </form>
 
-
+      <ul class="navbar-nav">
+      @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+        @endif
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -103,8 +159,8 @@
               @csrf
               @foreach($allCourseCategory as $category)
               <div class="form-check">
-                <input class="form-check-input category_filter filter_option" filtertype="category" type="checkbox" value="{{$category->id}}">
-                <label class="form-check-label" for="flexCheckDefault">
+                <input class="form-check-input category_filter filter_option" id="category{{$category->id}}" filtertype="category" type="checkbox" value="{{$category->id}}">
+                <label class="form-check-label" for="category{{$category->id}}">
                   {{$category->category_name}}
                 </label>
               </div>
@@ -126,20 +182,20 @@
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
               <div class="accordion-body">
               <div class="form-check">
-                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Advanced" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
+                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Advanced" id="Advanced">
+                <label class="form-check-label" for="Advanced">
                   Advanced
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Intermediate" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
+                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Intermediate" id="Intermediate">
+                <label class="form-check-label" for="Intermediate">
                   Intermediate
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Beginner" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
+                <input class="form-check-input difficulty_filter filter_option" filtertype="difficulty" type="checkbox" value="Beginner" id="Beginner">
+                <label class="form-check-label" for="Beginner">
                   Beginner
                 </label>
               </div>
@@ -299,9 +355,6 @@
           <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end p-4">
             <select name="" id="" class="rounded">
               <option value="most-popular">Most Popular</option>
-              <option value="">Most Popular</option>
-              <option value="">Most Popular</option>
-              <option value="">Most Popular</option>
             </select>
           </div>
         </div>
@@ -378,7 +431,7 @@
   </div>
 </section>
 @endsection('content')
-
+<script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
 <script>
 
 window.onload = function(event) {
@@ -417,9 +470,7 @@ window.onload = function(event) {
       });
    });
   }
-}
-
-
+  
 document.querySelector('#loginForm').addEventListener('submit', function(e) {
         if(loginemail.value === '') {
             e.preventDefault();
@@ -454,10 +505,7 @@ const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
-
-<script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
-
-
+}
 
 </script>
 

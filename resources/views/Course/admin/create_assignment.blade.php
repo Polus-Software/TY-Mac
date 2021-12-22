@@ -25,7 +25,7 @@
 </ul>
         </div>
         <div class="col-12">
-            <label for="title">Title({{$course_id}})</label>
+            <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="assignment_title">
           </div>
           <div class="col-12">
@@ -35,12 +35,14 @@
           <div class="row bd-highlight p-3">
     <div class="col-11">
     Attach file
-    <a href="" class="btn btn-sm btn-outline-dark">Upload from device</a>
-    <div class="vr me-2 ms-2"></div>
-    <a href="" class="btn btn-sm btn-outline-dark">Add external link</a>
+    <input type="file" class="form-control" id="course-image" name="course_image" placeholder="Upload from device">
+    <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
+    <!-- <div class="vr me-2 ms-2"></div> -->
+    <div id="external-link-div" class="mt-2" style="display:none;">
+      <label>Add external link</label>
+      <input class="form-control" type="text" id="external-link" name="external-link" /><i id="close-ext" class="fas fa-trash-alt mt-2"></i>
     </div>
-    <div class="col-1">
-    <i class="fas fa-trash-alt"></i>
+    <a style="margin-top:10px;" id="add-ext-link-assign" href="#" class="btn btn-sm btn-outline-dark">Add external link</a>
     </div>
   </div>
   <div class="col-md-6">
@@ -56,7 +58,7 @@
           <div class="col-md-6">
             <label for="due-date">Assignment due date</label>
             <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="due-date" id="due-date" aria-label="due-date" aria-describedby="due-date-icon">
+  <input type="text" class="form-control" placeholder="due-date" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
   <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
 </div>
           </div>
@@ -71,3 +73,22 @@
 </div>
 <!-- container ends -->
 @endsection('content')
+<link rel="stylesheet" href="{{ asset('/assets/dtsel.css') }}">
+<script type="text/javascript" src="{{ asset('/assets/dtsel.js') }}"></script>
+  
+<script>
+  window.onload = function(){
+    startdate = new dtsel.DTS('input[name="due-date"]', {
+    paddingX: 15, paddingY: 15
+  });
+    document.getElementById('add-ext-link-assign').addEventListener('click', function(event) {
+    event.preventDefault();
+      document.getElementById("external-link-div").style.display = "block";
+  });
+  document.getElementById('close-ext').addEventListener('click', function(event) {
+    event.preventDefault();
+      document.getElementById("external-link-div").style.display = "none";
+  });
+  };
+  
+</script>
