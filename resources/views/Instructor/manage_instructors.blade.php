@@ -14,9 +14,9 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3>Instructors</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="add_new_category" class="btn btn-primary add_new_instructor_btn" title="Add new instructor" data-bs-toggle="modal" data-bs-target="#new_instructor_modal">
+            <a id="add_new_category" class="btn btn-primary add_new_instructor_btn" title="Add new instructor" href="{{ route('add-instructor') }}">
               <i class="fas fa-plus-square me-1"></i>
-              Add new Instructor</button>
+              Add new Instructor</a>
           </div>
         </div>
         <div class="row mt-4">
@@ -40,10 +40,10 @@
                 <td class="align-middle">{{$instructor->email}} </td>
                 <td class="align-middle"></td>
                 <td class="align-middle text-center">
-                  <a href="#" title="View instructor" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="{{$instructor->id}}">
+                  <a href="{{ route('view-instructor', ['instructor_id' => $instructor->id]) }}" title="View instructor">
                     <i class="fas fa-eye"></i>
                   </a>
-                  <a href="#" title="Edit instructor" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="{{$instructor->id}}">
+                  <a href="{{route('edit-instructor', ['instructor_id' => $instructor->id])}}" title="Edit instructor">
                     <i class="fas fa-pen"></i>
                   </a>
                   <a href="#" title="Delete instructor" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="{{$instructor->id}}">
@@ -179,7 +179,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete course category</h5>
+        <h5 class="modal-title">Delete instructor</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -193,7 +193,7 @@
             <td class="text-center">
               <p>
                 <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
-                Do you really want to delete this istructor?
+                Do you really want to delete this instructor?
               </p>
             </td>
           </tr>

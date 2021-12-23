@@ -72,16 +72,18 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/delete-course-category', [CourseCategoryController::class, 'deleteCourseCategory'])->name('delete-course-category');
 
     Route::get('/manage-instructors', [InstructorController::class, 'index'])->name('manage-instructors');
-    Route::post('/add-instructor', [InstructorController::class, 'saveInstructor'])->name('add-instructor');
-    Route::post('/view-instructor', [InstructorController::class, 'viewInstructor'])->name('view-instructor');
-    Route::post('/edit-instructor', [InstructorController::class, 'editInstructor'])->name('edit-instructor');
+    Route::get('/add-instructor', [InstructorController::class, 'addInstructor'])->name('add-instructor');
+    Route::get('/view-instructor', [InstructorController::class, 'viewInstructor'])->name('view-instructor');
+    Route::get('/edit-instructor', [InstructorController::class, 'editInstructor'])->name('edit-instructor');
     Route::post('/update-instructor', [InstructorController::class, 'updateInstructor'])->name('update-instructor');
     Route::post('/delete-instructor', [InstructorController::class, 'deleteInstructor'])->name('delete-instructor');
+    Route::post('/save-instructor', [InstructorController::class, 'saveInstructor'])->name('save-instructor');
 
     Route::get('/manage-creators', [CreatorController::class, 'index'])->name('manage-creators');
-    Route::post('/add-creator', [CreatorController::class, 'saveCreator'])->name('add-creator');
-    Route::post('/view-creator', [CreatorController::class, 'viewCreator'])->name('view-creator');
-    Route::post('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
+    Route::get('/add-creator', [CreatorController::class, 'addInstructor'])->name('add-creator');
+    Route::post('/save-creator', [CreatorController::class, 'saveCreator'])->name('save-creator');
+    Route::get('/view-creator', [CreatorController::class, 'viewCreator'])->name('view-creator');
+    Route::get('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
     Route::post('/update-creator', [CreatorController::class, 'updateCreator'])->name('update-creator');
     Route::post('/delete-creator', [CreatorController::class, 'deleteCreator'])->name('delete-creator');
     Route::put('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -94,8 +96,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
     Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
     Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
-    Route::post('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
-    Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
+    Route::get('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
+    Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     
 
