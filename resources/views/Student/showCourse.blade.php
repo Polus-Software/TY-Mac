@@ -120,7 +120,7 @@
 </div>
 <!-- end login modal -->
 <!-- review modal -->
-<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header border-0">
@@ -145,14 +145,14 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
  <!-- end review modal -->
 
     <header class="ty-mac-header-bg d-flex align-items-center">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 ">
-                  
+               
                 <div class="text-content-wrapper w-100 text-lg-start">
                     <p>@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_title']}}
@@ -212,10 +212,29 @@
                     @endif
                 @endunless
                 </div>
+                <div class="row mt-2">
+                   
+                        <p class="fw-bold">share this course: </p>
+                        @foreach($singleCourseDetails as $singleCourseDetail)
+                        <div class="col-lg-12">
+                            <!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Facebook" target="_blank"><i class="fab fa-facebook fa-lg btn-dark pe-3"></i></a> -->
+                            <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
+                            <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
+
+                            <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a>
+                        </div>
+                        @endforeach
+                
+                
+                </div>
               </div>
+             
               <div class="col-lg-6 col-md-12 order-1 order-lg-2">
                   <img src="{{asset('/storage/courseImages/'.$singleCourseDetail['course_image'])}}" alt="course-image" 
                   class="img-fluid course-picture" style="height: auto;">
+              </div>
+              <div class="row">
+                  
               </div>
           </div>
       </div>
@@ -279,7 +298,7 @@
             </div>
 <!-- instructor profile -->
             <div class="col-lg-4">
-                <div class="card card-3 mb-5">
+                <div class="card card-3 mb-3">
                     <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
                          <div class="col-lg-4 col-sm-4 col-4">
                          @foreach($singleCourseDetails as $singleCourseDetail)

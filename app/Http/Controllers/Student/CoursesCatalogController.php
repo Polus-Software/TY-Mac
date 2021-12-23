@@ -25,6 +25,8 @@ use App\Mail\StudentMailAfterEnrolling;
 use App\Mail\InstructorMailAfterEnrolling;
 use App\Models\Topic;
 use App\Models\TopicContent;
+use App\Models\StudentAchievement;
+use App\Models\AchievementBadge;
 
 
 class CoursesCatalogController extends Controller
@@ -275,6 +277,14 @@ class CoursesCatalogController extends Controller
        $enrolledCourse->course_id = $courseId;
        $enrolledCourse->progress = 0;
        $enrolledCourse->save();
+
+       $badgeId = AchievementBadge::where('title', 'Joinee')->value('id');
+
+       $student_achievement = new StudentAchievement;
+       $student_achievement->student_id = $userId;
+       $student_achievement->badge_id =  $badgeId;
+       $student_achievement->is_achieved = true;
+       $student_achievement->save();
 
        $mailDetails =[
         'title' => 'Thank you for enrolling the course',

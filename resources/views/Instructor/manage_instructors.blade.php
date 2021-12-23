@@ -69,7 +69,7 @@
 </div>
 <!-- container ends -->
 
-<!-- New course modal -->
+<!-- New instructor modal -->
 <div id="new_instructor_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -238,6 +238,7 @@
     let instructorLastName = document.getElementById('instructor_last_name').value;
     let instructorEmail = document.getElementById('instructor_email').value;
     let instructorPassword = document.getElementById('instructor_password').value;
+   
     let path = "{{ route('add-instructor') }}?instructorFirstName=" + instructorFirstName + "&instructorLastName=" + instructorLastName + "&instructorEmail=" + instructorEmail + "&instructorPassword=" + instructorPassword;
     fetch(path, {
       method: 'POST',
