@@ -14,10 +14,10 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3>Content creators</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="add_new_category" class="btn btn-primary add_new_creator_btn" title="Add new Content Creator"
-             data-bs-toggle="modal" data-bs-target="#new_creator_modal">
+            <a class="btn btn-primary" href="{{ route('add-creator') }}" title="add creator">
             <i class="fas fa-plus-square me-1"></i>
-            Add new Content Creator</button>
+            Add new Content Creator
+                  </a>
           </div>
         </div>
         <div class="row mt-4">
@@ -41,10 +41,10 @@
                 <td class="align-middle">{{$creator->email}} </td>
                 <td class="align-middle"></td>
                 <td class="align-middle text-center">
-                  <a href="#" title="View creator" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="{{$creator->id}}">
+                  <a href="{{ route('view-creator', ['creator_id' => $creator->id]) }}" title="View creator">
                   <i class="fas fa-eye"></i>
                   </a>
-                  <a href="#" title="Edit creator" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="{{$creator->id}}">
+                  <a href="{{ route('edit-creator', ['creator_id' => $creator->id]) }}" title="Edit creator">
                   <i class="fas fa-pen"></i>
                   </a>
                   <a href="#" title="Delete creator" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="{{$creator->id}}">
@@ -177,7 +177,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete course category</h5>
+        <h5 class="modal-title">Delete content creator</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -335,9 +335,11 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-      document.getElementById('creator_tbody').innerHTML = '';
-      document.getElementById('creator_tbody').innerHTML = data.html;
+      // document.getElementById('creator_tbody').innerHTML = '';
+      // document.getElementById('creator_tbody').innerHTML = data.html;
+      console.log('anisjshh  '+data);
       closeModal('delete_creator_modal');
+      // window.location.reload();
     });
   });
 
