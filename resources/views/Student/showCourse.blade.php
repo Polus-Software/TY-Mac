@@ -211,6 +211,9 @@
                      <h6>Already enrolled!</h6>
                     @endif
                 @endunless
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/19" target="_blank">
+                    Share on Facebook
+                </a>
                 </div>
               </div>
               <div class="col-lg-6 col-md-12 order-1 order-lg-2">
