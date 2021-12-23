@@ -15,8 +15,12 @@ use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Models\TopicAssignment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Collection;
 use Response;
 use App\Models\Assignment;
+use App\Models\StudentAchievement;
+use App\Models\AchievementBadge;
+
 
 class EnrolledCourseController extends Controller
 {
@@ -25,38 +29,100 @@ class EnrolledCourseController extends Controller
 
         $courseDetails =[];
         $topicDetails = [];
+        $achievedBadgeDetails = [];
+        $badgesDetails = [];
+        $allBadges = [];
+        $badgeComparisonArray = [];
+        $upcoming = [];
         $courseId = $request->course_id;
         $course = Course::findOrFail($courseId);
- 
+        $user =Auth::user();
+
+        if($user){
+
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
-        $instructorfirstname = User::where('id', $assigned)->value('firstname');
-        $instructorlastname = User::where('id', $assigned)->value('lastname');
-        $profilePhoto = User::where('id', $assigned)->value('image');
-        $instructorDesignation = User::where('id', $assigned)->value('designation');
-        $instructorInstitute = User::where('id', $assigned)->value('institute');
-        $instructorDescription = User::where('id', $assigned)->value('description');
-        $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
-        $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
-        $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
+        $instructor = User::where('id', $assigned);
+        $instructorfirstname = $instructor->value('firstname');
+        $instructorlastname = $instructor->value('lastname');
+        $profilePhoto = $instructor->value('image');
+        $instructorDesignation = $instructor->value('designation');
+        $instructorInstitute = $instructor->value('institute');
+        $instructorDescription = $instructor->value('description');
+        $instructorTwitter = $instructor->value('twitter_social');
+        $instructorLinkedin =$instructor->value('linkedIn_social');
+        $instructorYoutube = $instructor->value('youtube_social');
     
-        $topics = Topic::where('course_id',  $courseId)->get();
+        $achievements = StudentAchievement::where('student_id', $user->id)->get();
 
-        foreach($topics as $topic){
+        foreach($achievements as $achievement){
 
-            $courseId =  $topic->course_id;
-            $topicId = $topic->topic_id;
-            $topic_title =  $topic->topic_title;
-            $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
-            $assignmentList = $assignmentsArray->toArray();
- 
-            array_push($topicDetails, array(
-                'topic_id' => $topicId,
-                'topic_title' =>$topic_title,
-                'assignmentList'=> $assignmentList
+            $achievementBadge = AchievementBadge::where('id' , $achievement->badge_id);
+            $badge_name = $achievementBadge->value('title');
+            $badge_image = $achievementBadge->value('image');
+            $badge_created_at =  StudentAchievement::where('badge_id', $achievement->badge_id)->value('created_at');
+           
+            array_push($badgeComparisonArray, $achievement->badge_id);
+
+        array_push($achievedBadgeDetails, array(
+            'id'=> $achievement->badge_id,
+            'badge_name' =>  $badge_name,
+            'badge_image' => $badge_image,
+            'badge_created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $badge_created_at)->format('F d, Y'),
+        ));
+        }
+
+        $achievementBadges = AchievementBadge::all(); 
+
+        foreach($achievementBadges as $badge){
+            $badge_id = $badge->id;
+            $badge_name = $badge->title;
+            $badge_description = $badge->description;
+            $badge_image = $badge->image;
+
+            array_push($allBadges, $badge_id);
+
+            array_push($badgesDetails, array(
+                'id' => $badge_id,
+                'badge_name' => $badge_name,
+                'badge_description' => $badge_description,
+                'badge_image' => $badge_image
             ));
         }
- 
+
+        $upcomingBadges = array_diff($allBadges, $badgeComparisonArray);
+
+        foreach($upcomingBadges as $badges) {
+
+            $achievementBadge = AchievementBadge::where('id' , $badges);
+            $badge_name = $achievementBadge->value('title');
+            $badge_image = $achievementBadge->value('image');
+            //$badge_created_at = StudentAchievement::where('badge_id', $badges)->value('created_at');
+        
+            array_push($upcoming, array(
+                'id'=> $badges,
+                'badge_name' =>  $badge_name,
+                'badge_image' => $badge_image,
+                
+            ));
+        }
+
+        $topics = Topic::where('course_id',  $courseId)->get();
+            foreach($topics as $topic){
+
+                $courseId =  $topic->course_id;
+                $topicId = $topic->topic_id;
+                $topic_title =  $topic->topic_title;
+                $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
+                $assignmentList = $assignmentsArray->toArray();
+    
+                array_push($topicDetails, array(
+                    'topic_id' => $topicId,
+                    'topic_title' =>$topic_title,
+                    'assignmentList'=> $assignmentList
+                ));
+            }
+
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -80,8 +146,15 @@ class EnrolledCourseController extends Controller
 
         return view('Student.enrolledCoursePage',[
             'singleCourseDetails' => $courseDetails,
-            'topicDetails' =>  $topicDetails
+            'topicDetails' =>  $topicDetails,
+            'achievedBadgeDetails' => $achievedBadgeDetails,
+            'badgesDetails' => $badgesDetails,
+            'upcoming' => $upcoming
         ]);
+
+    }else{
+        return redirect('/403');
+    }
     }
 
      public function courseReviewProcess(Request $request){
@@ -133,30 +206,49 @@ class EnrolledCourseController extends Controller
     }
 
     public function submitAssignment(Request $request){
+       
 
-    $assignementFile = $request->assignment_answer->getClientOriginalName();
-    $topic_assignment_id = $request->topic_assignment_id;
-    
-     //dd($topic_id);
-    $request->assignment_answer->storeAs('assignmentAnswers', $assignementFile,'public');
-    $user = Auth::user();
-    $userId = $user->id;
+        $user = Auth::user();
+        $userId = $user->id;
 
-    $courseId = TopicAssignment::where('id', $topic_assignment_id)->value('course_id');
-    $instructorId = TopicAssignment::where('id', $topic_assignment_id)->value('instructor_id');
-    $topicId = TopicAssignment::where('id', $topic_assignment_id)->value('topic_id');
-    
+        $assignementFile = $request->assignment_answer->getClientOriginalName();
+        $topic_assignment_id = $request->topic_assignment_id;
 
-    $assignment = new Assignment;
-    $assignment->assignment_answer = $assignementFile;
-    $assignment->topic_assignment_id = $topic_assignment_id;
-    $assignment->student_id = $userId;
-    $assignment->course_id = $courseId;
-    $assignment->instructor_id = $instructorId;
-    $assignment->topic_id = $topicId;
-    $assignment->is_submitted = true;
-    $assignment->save();
-    return redirect()->back();
+        $assignments = Assignment::where('student_id' , $userId)
+                                  ->where('topic_assignment_id', $topic_assignment_id)->get();
+      
+                           
+        if(count($assignments) == 0){
+
+        $request->assignment_answer->storeAs('assignmentAnswers', $assignementFile,'public');
+        $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
+        $courseId = $topicAssignment->value('course_id');
+        $instructorId = $topicAssignment->value('instructor_id');
+        $topicId = $topicAssignment->value('topic_id');
+        
+        $assignment = new Assignment;
+        $assignment->assignment_answer = $assignementFile;
+        $assignment->topic_assignment_id = $topic_assignment_id;
+        $assignment->student_id = $userId;
+        $assignment->course_id = $courseId;
+        $assignment->instructor_id = $instructorId;
+        $assignment->topic_id = $topicId;
+        $assignment->is_submitted = true;
+        $assignment->save();
+
+        $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
+
+        $student_achievement = new StudentAchievement;
+        $student_achievement->student_id = $userId;
+        $student_achievement->badge_id =  $badgeId;
+        $student_achievement->is_achieved = true;
+        $student_achievement->save();
+
+        return redirect()->back();
+        }
     
     }
+
+
+     
 }

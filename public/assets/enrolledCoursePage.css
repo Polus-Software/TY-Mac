@@ -80,7 +80,7 @@
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 10px;
 }
-.card-2 h5 , .card-6 h5 ,.card-7 h5,.recommendation{
+.card-2 h5 , .card-6 h5 ,.card-7 h5,.recommendation, .card-8 h5{
     color: #2C3443;
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
