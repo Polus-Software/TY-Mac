@@ -25,8 +25,8 @@
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Course Category</th>
+                <th scope="col">Title</th>
+                <th scope="col">Category</th>
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>

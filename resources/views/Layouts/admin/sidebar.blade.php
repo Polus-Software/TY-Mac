@@ -24,7 +24,7 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('admin.viewall') }}">
       <i class="fas fa-users"></i>
-        Users</a>
+        Students</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-instructors') }}">
