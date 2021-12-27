@@ -399,4 +399,8 @@ class CoursesCatalogController extends Controller
     
     }
 
+    public static function getAllCourses() {
+        return Course::all();
+    }
+
 }
