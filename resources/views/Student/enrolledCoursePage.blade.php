@@ -153,8 +153,11 @@
                                             <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
+                                                   
                                                 </p>
-                                                
+                                                @foreach($singleCourseDetails as $course)
+                                                <a href="{{ route('generate-certificate', $course['id']) }}" class="btn">Download certificate<i class="fas fa-download ps-3"></i></a>
+                                                @endforeach
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
@@ -197,6 +200,7 @@
                             <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
                                 <img src="" alt="" class="pe-2">Assignments
                             </button>
+                           
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                             <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
                             
@@ -396,7 +400,7 @@
                         
                             <div class="row border-bottom">
                                 <div class="col-lg-12">
-                                    <h5 class="recommendation">Recommended Topics to Review</h5>
+                                    <h5 class="heading-1">Recommended Topics to Review</h5>
                                 </div>
                             </div>
 
@@ -724,7 +728,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
                             <div class="card card-8 mb-3">
                                 <div class="card-body">
@@ -769,7 +773,8 @@
                                 </div>
                             </div>
                         </div>
-
+                       
+                       
                     </div>
                 </div>
             </div>

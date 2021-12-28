@@ -20,6 +20,7 @@ use Response;
 use App\Models\Assignment;
 use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
+use PDF;
 
 
 class EnrolledCourseController extends Controller
@@ -61,7 +62,7 @@ class EnrolledCourseController extends Controller
             $badge_name = $achievementBadge->value('title');
             $badge_image = $achievementBadge->value('image');
             $badge_created_at =  StudentAchievement::where('badge_id', $achievement->badge_id)->value('created_at');
-           
+   
             array_push($badgeComparisonArray, $achievement->badge_id);
 
         array_push($achievedBadgeDetails, array(
@@ -247,6 +248,54 @@ class EnrolledCourseController extends Controller
         return redirect()->back();
         }
     
+    }
+
+    public function generateCertificate($id){
+
+    $courseDetails = [];
+    $course= Course::findOrFail($id);    
+    $user = Auth::user();
+    $student_firstname = $user->firstname;
+    $student_lastname = $user->lastname;
+
+    if($user){
+
+    $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+
+    $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+    $instructor = User::where('id', $assigned);
+    $instructorfirstname = $instructor->value('firstname');
+    $instructorlastname = $instructor->value('lastname');
+    $instructorSignature = $instructor->value('signature');
+    $date_of_issue = Carbon::now();
+  
+  $image = Storage::url('signatures/'.$instructorSignature); 
+  $absolutePath = Storage::disk('downloads')->path("signatures/$instructorSignature");
+
+    $singleCourseData =  array (
+        'id' => $course->id,
+        'course_title' => $course->course_title,
+        'course_category' => $courseCategory,
+        'instructor_firstname' => $instructorfirstname,
+        'instructor_lastname' => $instructorlastname,
+        'instructor_signature' => $instructorSignature,
+        'student_firstname' =>$student_firstname,
+        'student_lastname' =>$student_lastname,
+        'date_of_issue' => Carbon::createFromFormat('Y-m-d H:i:s', $date_of_issue)->format('F d, Y'),
+    );
+      
+    array_push($courseDetails, $singleCourseData);
+
+    view()->share('p', $courseDetails);
+
+    $pdf_doc = PDF::loadView('Student.certificate',['courseDetails' => $courseDetails])
+               ->setOptions(['defaultFont' =>'sans-serif', 'chroot' => public_path()]);
+
+    return $pdf_doc->stream($course->course_title.'Certificate.pdf');
+
+    }else{
+        return redirect('/403');
+    }
     }
 
 
