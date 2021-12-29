@@ -22,6 +22,7 @@ class MyCoursesController extends Controller
         $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
         foreach($enrolledCourses as $enrolledCourse){
 
+          $courseId = $enrolledCourse->course_id;
           $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
           $description = Course::where('id', $enrolledCourse->course_id)->value('description');
           $category_id = Course::where('id', $enrolledCourse->course_id)->value('category');
@@ -36,6 +37,7 @@ class MyCoursesController extends Controller
           $instructorlastname = User::where('id', $assigned)->value('lastname');
 
           $enrolledCourseData = array(
+            'course_id' => $courseId,
             'course_title' =>  $course_title,
             'description' => $description,
             'category_name' => $courseCategory,
@@ -52,7 +54,7 @@ class MyCoursesController extends Controller
       return view('Student.myCourses', [
         'singleEnrolledCourseData' => $singleEnrolledCourseData
       ]);
-    }else {
+    } else {
       return redirect('/student-courses');
     }
   }

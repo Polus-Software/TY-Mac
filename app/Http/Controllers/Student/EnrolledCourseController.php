@@ -20,12 +20,12 @@ use Response;
 use App\Models\Assignment;
 use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
+use App\Models\StudentFeedbackCount;
 
 
 class EnrolledCourseController extends Controller
 {
-    public function afterEnrollView(Request $request){
-
+    public function afterEnrollView(Request $request, $courseId){
 
         $courseDetails =[];
         $topicDetails = [];
@@ -34,7 +34,8 @@ class EnrolledCourseController extends Controller
         $allBadges = [];
         $badgeComparisonArray = [];
         $upcoming = [];
-        $courseId = $request->course_id;
+        $singleRec = [];
+        $finalRec = [];
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
 
@@ -113,12 +114,14 @@ class EnrolledCourseController extends Controller
                 $courseId =  $topic->course_id;
                 $topicId = $topic->topic_id;
                 $topic_title =  $topic->topic_title;
+                $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
+                    'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList
                 ));
             }
@@ -144,12 +147,32 @@ class EnrolledCourseController extends Controller
 
         array_push($courseDetails, $singleCourseData);
 
+        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->get();
+        
+        foreach($studentFeedbackCounts as $feedback) {
+            if($feedback->value('negative') > $feedback->value('positive')) {
+                $topicId = $feedback->topic_id;
+                $topic = Topic::where('topic_id',  $topicId);
+                $contentId = $feedback->content_id;
+                $content = TopicContent::where('topic_content_id',  $contentId);
+
+                $singleRec = array(
+                    'content_id' => $contentId,
+                    'content_title' => $content->value('topic_title'),
+                    'topic_id' => $topicId,
+                    'topic_title' => $topic->value('topic_title'),
+                );
+
+                array_push($finalRec, $singleRec);
+            }
+        }
         return view('Student.enrolledCoursePage',[
             'singleCourseDetails' => $courseDetails,
             'topicDetails' =>  $topicDetails,
             'achievedBadgeDetails' => $achievedBadgeDetails,
             'badgesDetails' => $badgesDetails,
-            'upcoming' => $upcoming
+            'upcoming' => $upcoming,
+            'recommendations' => $finalRec
         ]);
 
     }else{

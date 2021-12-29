@@ -373,7 +373,7 @@
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-8">
                                     <div class="card-body">
                                         <h5 class="card-title">
-                                            <a style="text-decoration:none;color:#2C3443;" href="{{ route('session-view') }}">{{$liveSession['session_title']}}</a>
+                                            <a style="text-decoration:none;color:#2C3443;" href="{{ route('session-view', 7) }}">{{$liveSession['session_title']}}</a>
                                         </h5>
                                         <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
                                     </div>

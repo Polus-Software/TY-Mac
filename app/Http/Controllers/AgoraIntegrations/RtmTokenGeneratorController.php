@@ -18,6 +18,8 @@ use App\Models\Topic;
 use App\Models\CohortBatch;
 use App\Models\TopicContent;
 use App\Models\LiveSession;
+use App\Models\LiveFeedbacksPushRecord;
+use App\Models\StudentFeedbackCount;
 use Illuminate\Support\Facades\DB;
 
 require_once "AccessToken.php";
@@ -32,18 +34,34 @@ class RtmTokenGeneratorController extends Controller
     const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
 
 
-    public function index(Request $request) {
+    public function index(Request $request, $session) {
         $userObj = Auth::user();
+
+        $sessionObj = LiveSession::where('live_session_id', $session);
+        $topicId = $sessionObj->value('topic_id');
+        $topic = Topic::where('topic_id', $topicId)->value('topic_title');
+
+        $contents = TopicContent::where('topic_id', $topicId)->get();
         
         if($userObj) {
-            return view('Agora.SessionScreen.live_session_screen');
+            $userTypeLoggedIn =  UserType::find($userObj->role_id)->user_role;
+            
+            return view('Agora.SessionScreen.live_session_screen', [
+                'session' => $session,
+                'topic_title' => $topic,
+                'contents' => $contents,
+                'userType' => $userTypeLoggedIn
+            ]);
         } else {
             return redirect('/403');
         }
     }
 
-    public function buildToken(Request $request) {
-        
+    public function buildToken(Request $request, $session) {
+
+        $sessionObj = LiveSession::where('live_session_id', $session);
+
+        $sessionTitle = $sessionObj->value('session_title');
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         
@@ -55,14 +73,14 @@ class RtmTokenGeneratorController extends Controller
             $roleName = "Instructor";
         }
         
-        $expireTimeInSeconds = 3600;
+        $expireTimeInSeconds = 14400;
         $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
         $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
         $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => strval(rand(101, 500)), 'channel' => 'Live Session', 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -85,13 +103,31 @@ class RtmTokenGeneratorController extends Controller
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $courses = Course::all();
         $sessions = LiveSession::all();
+        $sessionsArray = [];
+        $slNo = 1;
+        foreach($sessions as $session) {
+            $sessionTitle = $session->session_title;
+            $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
+            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
+
+            array_push($sessionsArray, array(
+                'slNo' => $slNo,
+                'sessionTitle' => $sessionTitle,
+                'instructor' =>$instructor,
+                'batch' => $batch,
+                'topic'=> $topic
+            ));
+
+            $slNo++;
+        }
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
         return view('Agora.ScheduleScreens.schedule_session', [
             'courses' => $courses,
             'instructors' => $instructors,
-            'sessions' => $sessions,
+            'sessions' => $sessionsArray,
             'userType' => $userTypeLoggedIn
         ]);
     }
@@ -132,5 +168,117 @@ class RtmTokenGeneratorController extends Controller
         $liveSession->save();
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
+    }
+
+    public function viewSessions(Request $request) {
+
+        $user = Auth::user();
+        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
+
+        $sessions = LiveSession::all();
+        $sessionsArray = [];
+        $slNo = 1;
+        foreach($sessions as $session) {
+            $sessionTitle = $session->session_title;
+            $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
+            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
+
+            array_push($sessionsArray, array(
+                'id' => $session->live_session_id,
+                'slNo' => $slNo,
+                'sessionTitle' => $sessionTitle,
+                'instructor' =>$instructor,
+                'batch' => $batch,
+                'topic'=> $topic
+            ));
+
+            $slNo++;
+        }
+        
+        return view('Instructor.sessionList', [
+            'sessions' => $sessionsArray,
+            'userType' => $userTypeLoggedIn
+        ]);
+    }
+
+    public function pushLiveRecord(Request $request) {
+
+        $contentId = $request->content_id;
+
+        $content = TopicContent::where('topic_content_id', $contentId);
+        $topic = Topic::where('topic_id', $content->value('topic_id'));
+        $previousPushes = LiveFeedbacksPushRecord::where('topic_id', $topic->value('topic_id'))->update(['is_expired' => true]);
+        
+        $pushRecord = new LiveFeedbacksPushRecord;
+        $pushRecord->topic_content_id = $contentId;
+        $pushRecord->topic_id = $content->value('topic_id');
+        $pushRecord->course_id = $topic->value('course_id');
+        $user = Auth::user();
+        $instructor =  $user->id;
+        $pushRecord->instructor = $instructor;
+        $pushRecord->is_pushed = true;
+        $pushRecord->is_expired = false;
+        $pushRecord->save();
+
+        return;
+    }
+
+    public function getLiveRecord(Request $request) {
+        $session = LiveSession::where('live_session_id', $request->session);
+
+        $topicId = $session->value('topic_id');
+        $push = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('is_expired', false);
+
+        $topicContentId = $push->value('topic_content_id');
+
+        $content = TopicContent::where('topic_content_id', $topicContentId);
+
+        $contentTitle = $content->value('topic_title');
+        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle]);
+    }
+
+    public function pushFeedbacks(Request $request) {
+
+        $contentId = $request->content_id;
+        $type = $request->type;
+
+        $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId)->get();
+        if(count($feedbackCountExists)) {
+            $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId);
+            if($type == "positive") {
+                $positiveCount = $feedbackCountExists->value('positive');
+                $feedbackCountExists->update(['positive' => $positiveCount + 1]);
+            } else {
+                $negativeCount = $feedbackCountExists->value('negative');
+                $feedbackCountExists->update(['negative' => $negativeCount + 1]);
+            }
+        } else {
+            $feedbackCount = new StudentFeedbackCount;
+            $content = TopicContent::where('topic_content_id', $contentId);
+            $topicId = $content->value('topic_id');
+            $topic = Topic::where('topic_id', $topicId);
+            $courseId = $topic->value('course_id');
+
+            $user = Auth::user();
+            $student =  $user->id;
+            $feedbackCount->content_id = $contentId;
+            $feedbackCount->topic_id = $topicId;
+            $feedbackCount->course_id = $courseId;
+            $feedbackCount->student = $student;
+            if($type == "positive") {
+                $feedbackCount->positive = 1;
+                $feedbackCount->negative = 0;
+            } else {
+                $feedbackCount->positive = 0;
+                $feedbackCount->negative = 1;
+            }
+
+            $feedbackCount->save();
+        }
+        $finalCounts = StudentFeedbackCount::where('content_id', $contentId);
+        $positiveCount = $finalCounts->value('positive');
+        $negativeCount = $finalCounts->value('negative');
+        return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
     }
 }
