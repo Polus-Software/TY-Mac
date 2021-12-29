@@ -13,7 +13,23 @@
     <link rel="stylesheet" href="{{ asset('/assets/courses.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/paginator.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
+    <meta property="og:title" content="Custom title" />
+    <meta property="og:image" content="https://enliltdev.fibiweb.com/storage/courseImages/course-image.png" />
+    <meta property="og:type" content="website" />
 </head>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/61bcb163c82c976b71c1f0ad/1fn4h9rvm';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 <body>
    @yield('content') 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

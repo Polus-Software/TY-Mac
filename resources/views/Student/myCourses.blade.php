@@ -9,6 +9,9 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+.card-2:hover {
+    cursor: pointer;
+}
   </style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
@@ -720,9 +723,6 @@
                 <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end">
                     <select name="" id="" class="rounded pe-4">
                         <option value="most-popular">Course in progress</option>
-                        <option value="">Most Popular</option>
-                        <option value="">Most Popular</option>
-                        <option value="">Most Popular</option>
                     </select>
                 </div>
             </div>
@@ -730,7 +730,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     @foreach ($singleEnrolledCourseData as $singleEnrolledCourse)
-                        <div class="card-2 mb-3 mt-4">
+                        <div class="card-2 mb-3 mt-4" data-id="{{ $singleEnrolledCourse['course_id'] }}">
                             <div class="row g-0">
                                 <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                                     <img src="{{ asset('/storage/courseImages/' . $singleEnrolledCourse['course_image']) }}"
@@ -776,7 +776,6 @@
                                                         {{ $singleEnrolledCourse['end_time'] }}</small>
                                                 </p>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -791,5 +790,15 @@
         </div>
 
     </section>
-
+<script>
+    var elements = document.getElementsByClassName('card-2');
+    var length = elements.length;
+    for(index=0;index<length;index++) {
+        console.log(elements[index]);
+        elements[index].addEventListener('click', function(event) {
+            let courseId = this.getAttribute('data-id');
+            window.location.replace('/enrolled-course/' + courseId);
+        });
+    }
+</script>
 @endsection('content')

@@ -57,11 +57,24 @@
                 <th scope="col">Session Instructor</th>
                 <th scope="col">Batch</th>
                 <th scope="col">Topic</th>
-                <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
-              
+              @if(count($sessions))
+              @foreach($sessions as $session)
+              <tr>
+                <td scope="col">{{ $session['slNo'] }}</td>
+                <td scope="col">{{ $session['sessionTitle'] }}</td>
+                <td scope="col">{{ $session['instructor'] }}</td>
+                <td scope="col">{{ $session['batch'] }}</td>
+                <td scope="col">{{ $session['topic'] }}</td>
+              </tr>
+              @endforeach
+              @else
+              <tr>
+                <td style="text-align:center;" colspan="5">No records</td>
+              </tr>
+              @endif
             </tbody>
           </table>
         </div>

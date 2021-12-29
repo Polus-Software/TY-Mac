@@ -122,12 +122,16 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
-    Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
+    Route::get('generate-token/{session}', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
     Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
-    Route::get('session-view', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('session-view/{session}', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('sessions-view', [RtmTokenGeneratorController::class, 'viewSessions'])->name('sessions-view');
     Route::get('schedule-session', [RtmTokenGeneratorController::class, 'scheduleSession'])->name('schedule-session');
     Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
     Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
+    Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
+    Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
+    Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -136,7 +140,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/register-course', [CoursesCatalogController::class, 'registerCourse'])->name('student.course.register');
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
-    Route::get('/enrolled-course', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
+    Route::get('/enrolled-course/{course}', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::get('/assignments/{assignment}', [EnrolledCourseController::class, 'showassignment'])->name('student.course.assignment');
     Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
     Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');
