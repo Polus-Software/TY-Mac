@@ -386,7 +386,7 @@
                         (60)
                       </div>
                         
-                      <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
+                      <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
                         <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{$courseData['course_category']}}
                       </div>
                     </div>
@@ -398,7 +398,7 @@
                         <div class="col-lg-5 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>
                         {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
                         </div>
-                        <div class="col-lg-4 col-4 item-3">{{$courseData['course_difficulty']}}</div>
+                        <div class="col-lg-4 col-sm-4 col-4 item-3 d-flex justify-content-end">{{$courseData['course_difficulty']}}</div>
                       </div>
                     </li>
                   </ul>
@@ -420,9 +420,10 @@
             </div>
            @endforeach
            <!-- </div> -->
-           <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
               {{ $courseDatas->links() }}
             </div>
+
            </div>
           </div>
         </div>

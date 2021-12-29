@@ -216,8 +216,11 @@ class CoursesCatalogController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           return redirect()->back()->with(['success' => 'Successfully logged in!']);
-       
+           if($userType == 'instructor'){
+            return redirect('/');
+        }else{
+            return redirect()->back()->with(['success' => 'Successfully logged in!']);
+            }
         }
     }
 

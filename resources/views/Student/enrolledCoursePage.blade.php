@@ -150,13 +150,13 @@
                                             </p>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
                                                    
                                                 </p>
                                                 @foreach($singleCourseDetails as $course)
-                                                <a href="{{ route('generate-certificate', $course['id']) }}" class="btn">Download certificate<i class="fas fa-download ps-3"></i></a>
+                                                <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
                                                 @endforeach
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
@@ -204,7 +204,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                             <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
                             
-                                <div class="container">
+                                <div class="container mb-3">
                                     <div class="badge-shadow left-0"><img src="Badges/Badge 1.svg" alt=""></div>
                                     <div class="badge-shadow left--15"><img src="Badges/Badge 2.svg" alt=""></div>
                                     <div class="badge-shadow left--30"><img src="Badges/Badge 3.svg" alt=""></div>
@@ -234,16 +234,14 @@
                                     </div>
                                     
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="list-group-item">
-                                            <ul>
-                                                <li>How to use Google Suite</li>
-                                                <li>How to use Google Drive</li>
-                                                <li>Creating a folder in Google Drive</li>
-                                                <li>Sharing a folder in Google Drive</li>
-                                            </ul>
-                                        </li>
+                                        
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
+                                    
                                     </ul>   
-
+                                   
                                     <div class="row">
                                         <div class="col-lg-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <h6 class="card-title pt-3">Session 1 - Intro to G Suite & Google Drive</h6>
@@ -254,16 +252,13 @@
                                     </div>
                                 
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="list-group-item">
-                                            <ul>
-                                                <li>How to use Google Suite</li>
-                                                <li>How to use Google Drive</li>
-                                                <li>Creating a folder in Google Drive</li>
-                                                <li>Sharing a folder in Google Drive</li>
-                                            </ul>
-                                        </li>
+                                        
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
+                                    
                                     </ul>   
-
                                     <div class="row">
                                         <div class="col-lg-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <h6 class="card-title pt-3">Session 1 - Intro to G Suite & Google Drive</h6>
@@ -274,15 +269,13 @@
                                     </div>
                                     
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="list-group-item">
-                                            <ul>
-                                                <li>How to use Google Suite</li>
-                                                <li>How to use Google Drive</li>
-                                                <li>Creating a folder in Google Drive</li>
-                                                <li>Sharing a folder in Google Drive</li>
-                                            </ul>
-                                        </li>
-                                    </ul> 
+                                        
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
+                                    
+                                    </ul>   
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 col-sm-12 col-12">
@@ -294,16 +287,11 @@
                                     </div>
                                     
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="list-group-item">
-                                            <ul>
-                                                <li>How to use Google Suite</li>
-                                                <li>How to use Google Drive</li>
-                                                <li>Creating a folder in Google Drive</li>
-                                                <li>Sharing a folder in Google Drive</li>
-                                            </ul>
-                                        </li>
-                                    </ul> 
-                                    
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
+                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
+                                    </ul>   
                                 </div>
                             </div>
 
@@ -315,7 +303,7 @@
 
                             <div class="row mt-3 mb-3">
                                 <div class="col-lg-6 mb-3">
-                                    <div class="card card-3" style="height: 560px;">
+                                    <div class="card card-3" style="height: 559px;">
                                         <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <div class="row">
@@ -336,7 +324,7 @@
                                                 <div class="col-lg-12">
                                                     <!-- <div class="card card-5">
                                                         <div class="card-body"> -->
-                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                            <h6 class="card-title mt-3">Session 1 - Intro to G Suite & Google Drive</h6>
                                                             <ul class="list-group list-group-flush">
                                                                 <li class="list-group-item">
                                                                     <ul>
@@ -354,7 +342,7 @@
                                 </div>
 
                                  <div class="col-lg-6">
-                                    <div class="card card-3" style="height: 550px;">
+                                    <div class="card card-3" style="height: 559px;">
                                         <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <div class="row">
@@ -375,7 +363,7 @@
                                                 <div class="col-lg-12">
                                                     <!-- <div class="card card-5">
                                                         <div class="card-body"> -->
-                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h5>
+                                                            <h6 class="card-title mt-3">Session 1 - Intro to G Suite & Google Drive</h5>
                                                             <ul class="list-group list-group-flush">
                                                                 <li class="list-group-item">
                                                                     <ul>

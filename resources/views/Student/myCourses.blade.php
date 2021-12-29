@@ -770,11 +770,18 @@
                                                     {{ $singleEnrolledCourse['course_difficulty'] }}
                                                 </p>
                                             </div>
+                                            
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                                <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:</p> <small> {{ $singleEnrolledCourse['start_date'] }} -
+                                               
+                                                <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
+                                                 <small> {{ $singleEnrolledCourse['start_date'] }} -
                                                         {{ $singleEnrolledCourse['start_time'] }} -
-                                                        {{ $singleEnrolledCourse['end_time'] }}</small>
+                                                        {{ $singleEnrolledCourse['end_time'] }}
+                                                    </small>
                                                 </p>
+                                                
+                                                
+                                              
                                             </div>
 
                                         </div>
