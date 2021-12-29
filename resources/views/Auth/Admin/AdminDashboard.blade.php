@@ -12,19 +12,19 @@
       <!-- main -->
       <main>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Student details</h3>
+          <h3>Students</h3>
         </div>
         <div class="row mt-4">
           <table class="table llp-table">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Avatar</th>
+                <th scope="col" class="align-middle text-center"></th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">E-mail ID</th>
-                <th scope="col">Courses Joined</th>
-                <th scope="col">Status</th>
+                <th scope="col" class="align-middle text-center">Courses Joined</th>
+                <th scope="col" class="align-middle text-center">Status</th>
                 <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
@@ -34,17 +34,22 @@
               @php ($slno = $slno + 1)
               <tr id="{{$studentData['id'] }}">
                 <td>{{ $slno }}</td>
-                <td class="text-center"><img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;"></td>
+                <td class="align-middle text-center">
+                  @if(isset($studentData['image']))
+                  <i class="fas fa-user-circle fa-2x"></i>
+                  @else
+                  <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;">
+                  @endif                  
+                </td>
                 <td>{{$studentData['firstname'] }}</td>
                 <td>{{$studentData['lastname'] }}</td>
                 <td >{{$studentData['email'] }}</td>
                 <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
-                <td class="align-middle text-center"><p style="background:lightgreen; border-radius:19px;margin-bottom:0px;">Active</p></td>
+                <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
                 <td class="align-middle text-center">
-                  <a title="Edit student"
-                  data-bs-toggle="modal" data-bs-target="#edit_student_modal" data-bs-id="{{ $studentData['id'] }}">
-                  <i class="fas fa-edit"></i>
-                  </a>
+                <a href="{{ route('view-student', ['student_id' => $studentData['id']]) }}" title="View student">
+                  <i class="fas fa-eye"></i>
+                  </a>                  
                   <a title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
@@ -68,75 +73,7 @@
   </div>
 </div>
 <!-- container ends -->
-<!-- View student modal -->
-<div id="view_student_modal" class="modal fade llp-modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Student details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-borderless">
-          <tr>
-            <td><strong>First Name:</strong></td>
-            <td class="text-right"><p class="student_firstname"></p></td>
-          </tr>
-          <tr>
-            <td><strong>Last Name:</strong></td>
-            <td class="text-right"><p class="student_lastname"></p></td>
-          </tr>
-          <tr>
-            <td><strong>Email id:</strong></td>
-            <td class="text-right"><p class="student_email"></p></td>
-          </tr>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- View student modal ends here -->
-<!-- Edit student modal -->
-<div id="edit_student_modal" class="modal fade llp-modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Student details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <form  class="form"  id="editStudentsForm" action="" method="POST">
-          @csrf 
-          <input type="hidden" name="_method" value="PUT">
 
-          <div class="form-group">
-              <label for="firstname" class="pb-1">First Name</label>
-              <input type="text" class="form-control edit_firstname has-validation mb-3"  value ="" name="firstname" id="firstname" placeholder="Enter First Name">
-              <div class="invalid-feedback">Please enter a first name.</div>
-          </div>
-          <div class="form-group">
-              <label for="lastname" class="pb-1">Last Name</label>
-              <input type="text" class="form-control edit_lastname has-validation mb-3" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
-              <div class="invalid-feedback">Please enter a lastname.</div>
-            </div>
-          <div class="form-group">
-              <label for="email" class="pb-1">Email</label>
-              <input type="email" class="form-control edit_email has-validation mb-3" value="" name="email" id="email" placeholder=" Enter email">
-              <div class="invalid-feedback">Please enter a valid email id.</div>
-            </div>
-      </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="update_student_btn">Update</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Edit student modal ends here -->
 <!-- Delete Modal -->
 <div class="modal fade llp-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">

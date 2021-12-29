@@ -24,7 +24,7 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('admin.viewall') }}">
       <i class="fas fa-users"></i>
-        Users</a>
+        Students</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-instructors') }}">
@@ -58,10 +58,10 @@
     </li>
     @elseif($userType == 'instructor')
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{route('session-view')}}">
-        <svg class="bi me-2" width="16" height="16">
+      <a class="nav-link link-dark" href="{{route('sessions-view')}}">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
-        </svg>
+        </svg> -->
         View Scheduled Sessions</a>
     </li>
     <li class="nav-item">
@@ -72,13 +72,13 @@
       <a class="nav-link link-dark" href="{{ route('assigned-courses') }}">Assigned Courses</a>
     </li>
     @else
-    <li class="nav-item">
-      <a class="nav-link link-dark" href="{{route('session-view')}}">
+    <!-- <li class="nav-item">
+      <a class="nav-link link-dark" href="">
         <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
         </svg>
         View Sessions</a>
-    </li>
+    </li> -->
     <li class="nav-item">
       <a class="nav-link link-dark" href="#">
         <svg class="bi me-2" width="16" height="16">

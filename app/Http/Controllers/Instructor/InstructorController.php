@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\UserType;
 use Hash;
 use Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class InstructorController extends Controller
 {
@@ -29,100 +31,115 @@ class InstructorController extends Controller
         }else{
             return redirect('/403');
         }
-    } 
+    }
+    public function addInstructor() {
+        $userType = UserType::where('user_role', 'instructor')->value('id');
+        return view('Auth.Admin.instructor.create_instructor', [
+            'userType' => $userType
+        ]);
+
+    }
 
     public function saveInstructor(Request $request) {
-        $html = '';
-        $slNo = 1;
+        $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+        ]);
         $userType = UserType::where('user_role', 'instructor')->value('id');
-        $instructorFirstName = $request->input('instructorFirstName');
-        $instructorLastName = $request->input('instructorLastName');
-        $instructorEmail = $request->input('instructorEmail');
-        $instructorPassword = $request->input('instructorPassword');
         $instructor = new User;
-        $instructor->firstname = $instructorFirstName;
-        $instructor->lastname = $instructorLastName;
-        $instructor->email = $instructorEmail;
-        $instructor->password = Hash::make($instructorPassword);
+        $instructor->firstname = $request->input('firstname');
+        $instructor->lastname = $request->input('lastname');
+        $instructor->email = $request->input('email');
+        $instructor->password = Hash::make($request->input('password'));
         $instructor->role_id = $userType;
         $instructor->save();
-
-        $instructors = DB::table('users')
-                ->where('role_id', '=', $userType)
-                ->get();
-        
-        foreach($instructors as $instructor) {
-            $html = $html . '<tr id="' . $instructor->id .'">';
-            $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-            $html = $html . '<td class="align-middle" colspan="2">' . $instructor->firstname . ' ' . $instructor->lastname . '</td>';
-            $html = $html . '<th class="align-middle">' . $instructor->email . '</th>';
-            $html = $html . '<td class="align-middle">Dummy</td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary view_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="' . $instructor->id . '">View</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-success add_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="' . $instructor->id . '">Edit</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger add_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $instructor->id . '">Delete</button></td></tr>';
-            $slNo = $slNo + 1;
-        }
-        
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
+        return redirect()->route('manage-instructors');
     }
-    
+        
     public function viewInstructor(Request $request) {
-        $instructorId = $request->input('user_id');
+        $instructorId = $request->input('instructor_id');
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
         if ($instructorId) {
             $instructor = User::where('id', $instructorId);
+            $assigned_courses = DB::table('assigned_courses')
+                    ->join('courses', 'assigned_courses.course_id', '=', 'courses.id')
+                    ->where('assigned_courses.user_id', $instructorId)
+                    ->get();
             if ($instructor) {
-                $data = ['instructor_name' => $instructor->value('firstname') . ' ' . $instructor->value('lastname'), 'instructor_email' => $instructor->value('email')];
-                return response()->json(['status' => 'success', 'message' => '', 'instructorDetails' => $data]);
+                $data = [
+                    'firstname' => $instructor->value('firstname') ,
+                    'lastname' => $instructor->value('lastname'),
+                    'instructor_email' => $instructor->value('email'),
+                    'instructor_id' => $instructor->value('id')
+                ];
+                return view('Auth.Admin.instructor.view_instructor', [
+                    'instructorDetails' => $data,
+                    'userType' => $userType,
+                    'assigned_courses' => $assigned_courses
+                ]);
             }
+            
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
-    }
+    }    
 
     public function editInstructor(Request $request) {
-        $userId = $request->input('user_id');
-        if ($userId) {
-            $instructor = User::where('id', $userId);
-            if ($instructor) {
-                $data = ['firstname' => $instructor->value('firstname'), 'lastname' => $instructor->value('lastname'), 'email' => $instructor->value('email'), 'id' => $instructor->value('id')];
-                return response()->json(['status' => 'success', 'message' => '', 'instructorDetails' => $data]);
+        try{
+            $instructor_id = $request->input('instructor_id');
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
+            if ($instructor_id) {
+                $instructor = User::where('id', $instructor_id);
+                $assigned_courses = DB::table('assigned_courses')
+                ->join('courses', 'assigned_courses.course_id', '=', 'courses.id')
+                ->where('assigned_courses.user_id', $instructor_id)
+                ->get();
+                if ($instructor) {
+                    $data = [
+                    'firstname' => $instructor->value('firstname') ,
+                    'lastname' => $instructor->value('lastname'),
+                    'instructor_email' => $instructor->value('email'),
+                    'instructor_id' => $instructor->value('id')
+                    ];
+                    return view('Auth.Admin.instructor.create_instructor', [
+                    'instructorDetails' => $data,
+                    'userType' => $userType,
+                    'assigned_courses' => $assigned_courses
+                    ]);
+                }
             }
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
     public function updateInstructor(Request $request) {
-        $html = '';
-        $slNo = 1;
-        $userType = UserType::where('user_role', 'instructor')->value('id');
-        $userId = $request->input('user_id');
-        $firstName = $request->input('firstname');
-        $lastName = $request->input('lastname');
-        $email = $request->input('email');
-        if ($userId) {
-            $intructor = User::find($userId);
-            if ($intructor) {
-                $intructor->firstname = $firstName;
-                $intructor->lastname = $lastName;
-                $intructor->email = $email;
-                $intructor->save();
-                $instructors = DB::table('users')
-                ->where('role_id', '=', $userType)
-                ->get();
-                foreach($instructors as $instructor) {
-                    $html = $html . '<tr id="' . $instructor->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $instructor->firstname . ' ' . $instructor->lastname . '</td>';
-                    $html = $html . '<th class="align-middle">' . $instructor->email . '</th>';
-                    $html = $html . '<td class="align-middle"></td>';
-                    $html = $html . '<td class="align-middle text-center"><a href="#" title="View instructor" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="' . $instructor->id . '"><i class="fas fa-eye"></i></a>';
-                    $html = $html . '<a href="#" title="Edit instructor" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="' . $instructor->id . '"><i class="fas fa-pen"></i></a>';
-                    $html = $html . '<a href="#" title="Delete instructor" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $instructor->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
-                    $slNo = $slNo + 1;
+        try {
+            $instructor_id = $request->input('instructor_id');
+            $validatedData = $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
+            ]);
+            
+            $firstName = $request->input('firstname');
+            $lastName = $request->input('lastname');
+            $email = $request->input('email');
+            if ($instructor_id) {
+                $instructor = User::findOrFail($instructor_id);
+                if ($instructor) {
+                    $instructor->firstname = $firstName;
+                    $instructor->lastname = $lastName;
+                    $instructor->email = $email;
+                    $instructor->save();
+                    return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
                 }
-                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
     public function deleteInstructor(Request $request) {

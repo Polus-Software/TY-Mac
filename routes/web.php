@@ -73,16 +73,18 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/delete-course-category', [CourseCategoryController::class, 'deleteCourseCategory'])->name('delete-course-category');
 
     Route::get('/manage-instructors', [InstructorController::class, 'index'])->name('manage-instructors');
-    Route::post('/add-instructor', [InstructorController::class, 'saveInstructor'])->name('add-instructor');
-    Route::post('/view-instructor', [InstructorController::class, 'viewInstructor'])->name('view-instructor');
-    Route::post('/edit-instructor', [InstructorController::class, 'editInstructor'])->name('edit-instructor');
+    Route::get('/add-instructor', [InstructorController::class, 'addInstructor'])->name('add-instructor');
+    Route::get('/view-instructor', [InstructorController::class, 'viewInstructor'])->name('view-instructor');
+    Route::get('/edit-instructor', [InstructorController::class, 'editInstructor'])->name('edit-instructor');
     Route::post('/update-instructor', [InstructorController::class, 'updateInstructor'])->name('update-instructor');
     Route::post('/delete-instructor', [InstructorController::class, 'deleteInstructor'])->name('delete-instructor');
+    Route::post('/save-instructor', [InstructorController::class, 'saveInstructor'])->name('save-instructor');
 
     Route::get('/manage-creators', [CreatorController::class, 'index'])->name('manage-creators');
-    Route::post('/add-creator', [CreatorController::class, 'saveCreator'])->name('add-creator');
-    Route::post('/view-creator', [CreatorController::class, 'viewCreator'])->name('view-creator');
-    Route::post('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
+    Route::get('/add-creator', [CreatorController::class, 'addInstructor'])->name('add-creator');
+    Route::post('/save-creator', [CreatorController::class, 'saveCreator'])->name('save-creator');
+    Route::get('/view-creator', [CreatorController::class, 'viewCreator'])->name('view-creator');
+    Route::get('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
     Route::post('/update-creator', [CreatorController::class, 'updateCreator'])->name('update-creator');
     Route::post('/delete-creator', [CreatorController::class, 'deleteCreator'])->name('delete-creator');
     Route::put('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -95,8 +97,8 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
     Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
     Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
-    Route::post('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
-    Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
+    Route::get('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
+    Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     
 
@@ -121,12 +123,16 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
 
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
-    Route::get('generate-token', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
+    Route::get('generate-token/{session}', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
     Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
-    Route::get('session-view', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('session-view/{session}', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
+    Route::get('sessions-view', [RtmTokenGeneratorController::class, 'viewSessions'])->name('sessions-view');
     Route::get('schedule-session', [RtmTokenGeneratorController::class, 'scheduleSession'])->name('schedule-session');
     Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
     Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
+    Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
+    Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
+    Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -135,7 +141,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/register-course', [CoursesCatalogController::class, 'registerCourse'])->name('student.course.register');
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');
     Route::post('/register-course-batch', [CoursesCatalogController::class, 'registerCourseProcess'])->name('student.course.register.post');
-    Route::get('/enrolled-course', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
+    Route::get('/enrolled-course/{course}', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::get('/assignments/{assignment}', [EnrolledCourseController::class, 'showassignment'])->name('student.course.assignment');
     Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
     Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');

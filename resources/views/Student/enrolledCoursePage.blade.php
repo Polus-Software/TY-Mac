@@ -204,11 +204,11 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                             <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
                             
-                                <div class="container mb-3">
-                                    <div class="badge-shadow left-0"><img src="Badges/Badge 1.svg" alt=""></div>
-                                    <div class="badge-shadow left--15"><img src="Badges/Badge 2.svg" alt=""></div>
-                                    <div class="badge-shadow left--30"><img src="Badges/Badge 3.svg" alt=""></div>
-                                    <!-- <div class="badge-shadow left--45"><img src="Badges/More.svg" alt=""></div> -->
+                                <div class="container">
+                                    <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
+                                    <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
+                                    <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
+                                    <div class="badge-shadow left--45"><img src="/Badges/More.svg" alt=""></div>
                                         <button class="nav-link bg-transparent left--45 p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
                                            <img src="Badges/More.svg" alt="">
                                         </button>
@@ -224,9 +224,10 @@
                             <div class="card card-2 mb-3">
                                 <div class="card-body">
                                     <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                    @foreach($topicDetails as $topicDetail)
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <h6 class="card-title pt-2">Session 1 - Intro to G Suite & Google Drive</h6>
+                                            <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
                                             <button type="button" class="btn"><i class="fas fa-undo pe-2"></i>View again</button>
@@ -234,64 +235,11 @@
                                     </div>
                                     
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
-                                    
+                                        @foreach($topicDetail['topic_content'] as $content)
+                                            <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
+                                        @endforeach
                                     </ul>   
-                                   
-                                    <div class="row">
-                                        <div class="col-lg-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <h6 class="card-title pt-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                            <button type="button" class="btn go-live"><i class="fas fa-eye pe-2"></i>Go to live</button>
-                                        </div>
-                                    </div>
-                                
-                                    <ul class="list-group list-group-flush border-bottom pb-3">
-                                        
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
-                                    
-                                    </ul>   
-                                    <div class="row">
-                                        <div class="col-lg-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <h6 class="card-title pt-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                            <p><i class="far fa-clock pe-1 pt-3"></i>Next cohort: 11/19/2021 - 9 AM IST - 10 AM IST</button></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <ul class="list-group list-group-flush border-bottom pb-3">
-                                        
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
-                                    
-                                    </ul>   
-
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                            <h6 class="card-title pt-3">Session 1 - Intro to G Suite & Google Drive</h6>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-12 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                            <p><i class="far fa-clock pe-1 pt-3"></i>Next cohort: 11/19/2021 - 9 AM IST - 10 AM IST</button></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Suite</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">How to use Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Creating a folder in Google Drive</li>
-                                        <li class="ms-4 border-0 pb-2" style="list-style:circle;">Sharing a folder in Google Drive</li>
-                                    </ul>   
+                                    @endforeach                                    
                                 </div>
                             </div>
 
@@ -302,9 +250,10 @@
                             </div>
 
                             <div class="row mt-3 mb-3">
+                            @foreach($recommendations as $recommendation)
                                 <div class="col-lg-6 mb-3">
-                                    <div class="card card-3" style="height: 559px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                    <div class="card card-3" style="height: 560px;">
+                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -315,73 +264,29 @@
                                                 <div class="col-lg-12">
                                                     <div class="card card-4">
                                                         <div class="card-body">
-                                                          This is some text within a card body.
+                                                          We recommend that you view this topic again.
                                                         </div>
                                                       </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <!-- <div class="card card-5">
-                                                        <div class="card-body"> -->
-                                                            <h6 class="card-title mt-3">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                            <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                             <ul class="list-group list-group-flush">
                                                                 <li class="list-group-item">
                                                                     <ul>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
+                                                                        <li>{{ $recommendation['content_title'] }}</li>
                                                                     </ul>
                                                                 </li>
                                                             </ul>   
-                                                        <!-- </div> -->
-                                                    <!-- </div> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                 <div class="col-lg-6">
-                                    <div class="card card-3" style="height: 559px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <a href="#" class="btn btn-primary w-100">View again</a>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-4">
-                                                        <div class="card-body">
-                                                          <p class="card-text">We recommend you to view again these topics.</p>
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <!-- <div class="card card-5">
-                                                        <div class="card-body"> -->
-                                                            <h6 class="card-title mt-3">Session 1 - Intro to G Suite & Google Drive</h5>
-                                                            <ul class="list-group list-group-flush">
-                                                                <li class="list-group-item">
-                                                                    <ul>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>   
-                                                        <!-- </div> -->
-                                                    <!-- </div> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
+                            
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-personalizedRecommendations" role="tabpanel" aria-labelledby="v-pills-personalizedRecommendations-tab">

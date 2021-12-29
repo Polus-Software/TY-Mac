@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserType;
 use Hash;
 use Auth;
+use Illuminate\Validation\Rule;
 
 class CreatorController extends Controller
 {
@@ -27,128 +28,106 @@ class CreatorController extends Controller
         }else{
             return redirect('/403');
         }
-    } 
+    }
+
+    public function addInstructor() {
+        $userType = UserType::where('user_role', 'content_creator')->value('id');
+        return view('Auth.Admin.creator.create_creator', [
+            'userType' => $userType
+        ]);
+
+    }
 
     public function saveCreator(Request $request) {
-        $html = '';
-        $slNo = 1;
+        $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+        ]);
         $userType = UserType::where('user_role', 'content_creator')->value('id');
-        $creatorFirstName = $request->input('creatorFirstName');
-        $creatorLastName = $request->input('creatorLastName');
-        $creatorEmail = $request->input('creatorEmail');
-        $creatorPassword = $request->input('creatorPassword');
         $creator = new User;
-        $creator->firstname = $creatorFirstName;
-        $creator->lastname = $creatorLastName;
-        $creator->email = $creatorEmail;
-        $creator->password = Hash::make($creatorPassword);
+        $creator->firstname = $request->input('firstname');
+        $creator->lastname = $request->input('lastname');
+        $creator->email = $request->input('email');
+        $creator->password = Hash::make($request->input('password'));
         $creator->role_id = $userType;
         $creator->save();
-
-        $creators = DB::table('users')
-                ->where('role_id', '=', $userType)
-                ->get();
-        
-        foreach($creators as $creator) {
-            $html = $html . '<tr id="' . $creator->id .'">';
-            $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-            $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
-            $html = $html . '<th class="align-middle">' . $creator->email . '</th>';
-            $html = $html . '<td class="align-middle">Dummy</td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="' . $creator->id . '">View</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-success add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="' . $creator->id . '">Edit</button></td>';
-            $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="' . $creator->id . '">Delete</button></td></tr>';
-            $slNo = $slNo + 1;
-        }
-        
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
+        return redirect()->route('manage-creators');
     }
-    
+
     public function viewCreator(Request $request) {
-        $creatorId = $request->input('user_id');
+        $creatorId = $request->input('creator_id');
         if ($creatorId) {
             $creator = User::where('id', $creatorId);
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
             if ($creator) {
-                $data = ['creator_name' => $creator->value('firstname') . ' ' . $creator->value('lastname'), 'creator_email' => $creator->value('email')];
-                return response()->json(['status' => 'success', 'message' => '', 'creatorDetails' => $data]);
+                $data = [
+                    'creator_id' => $creator->value('id') ,
+                    'firstname' => $creator->value('firstname') ,
+                    'lastname' => $creator->value('lastname'),
+                    'email' => $creator->value('email')];
+                return view('Auth.Admin.creator.view_creator', [
+                    'creatorDetails' => $data,
+                    'userType' => $userType
+                ]);
             }
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
     public function editCreator(Request $request) {
-        $userId = $request->input('user_id');
-        if ($userId) {
-            $creator = User::where('id', $userId);
+        $creatorId = $request->input('creator_id');
+        if ($creatorId) {
+            $creator = User::where('id', $creatorId);
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
             if ($creator) {
-                $data = ['firstname' => $creator->value('firstname'), 'lastname' => $creator->value('lastname'), 'email' => $creator->value('email'), 'id' => $creator->value('id')];
-                return response()->json(['status' => 'success', 'message' => '', 'creatorDetails' => $data]);
+                $data = [
+                    'creator_id' => $creator->value('id') ,
+                    'firstname' => $creator->value('firstname') ,
+                    'lastname' => $creator->value('lastname'),
+                    'email' => $creator->value('email')];
+                return view('Auth.Admin.creator.create_creator', [
+                    'creatorDetails' => $data,
+                    'userType' => $userType
+                ]);
             }
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
     public function updateCreator(Request $request) {
-        $html = '';
-        $slNo = 1;
-        $userType = UserType::where('user_role', 'content_creator')->value('id');
-        $userId = $request->input('user_id');
+        $creatorId = $request->input('creator_id');
+        $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => ['required', Rule::unique('users')->ignore($creatorId)],
+        ]);
+        $userType = UserType::where('user_role', 'content_creator')->value('id');        
         $firstName = $request->input('firstname');
         $lastName = $request->input('lastname');
         $email = $request->input('email');
-        if ($userId) {
-            $intructor = User::find($userId);
+        if ($creatorId) {
+            $intructor = User::find($creatorId);
             if ($intructor) {
                 $intructor->firstname = $firstName;
                 $intructor->lastname = $lastName;
                 $intructor->email = $email;
                 $intructor->save();
-                $creators = DB::table('users')
-                ->where('role_id', '=', $userType)
-                ->get();
-                foreach($creators as $creator) {
-                    $html = $html . '<tr id="' . $creator->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
-                    $html = $html . '<th class="align-middle">' . $creator->email . '</th>';
-                    $html = $html . '<td class="align-middle"></td>';
-                    $html = $html . '<td class="align-middle text-center"><a href="#" title="View creator" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-eye"></i></a>';
-                    $html = $html . '<a href="#" title="Edit creator" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-pen"></i></a>';
-                    $html = $html . '<a href="#" title="Delete creator" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
-                    $slNo = $slNo + 1;
-                }
-                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
+                return redirect()->route('view-creator', ['creator_id' => $creatorId]);
             }
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 
     public function deleteCreator(Request $request) {
-        $html = '';
-        $slNo = 1;
-        $userType = UserType::where('user_role', 'content_creator')->value('id');
         $userId = $request->input('user_id');
         if ($userId) {
-            $creator = User::find($userId);
+            $creator = User::find($userId);die($creator);
             if ($creator) {
                 $creator->delete();
-                $creators = DB::table('users')
-                ->where('role_id', '=', $userType)
-                ->get();
-                foreach($creators as $creator) {
-                    $html = $html . '<tr id="' . $creator->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
-                    $html = $html . '<th class="align-middle">' . $creator->email . '</th>';
-                    $html = $html . '<td class="align-middle">Dummy</td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary view_new_creator_btn" data-bs-toggle="modal" data-bs-target="#view_creator_modal" data-bs-id="' . $creator->id . '">View</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-success add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#edit_creator_modal" data-bs-id="' . $creator->id . '">Edit</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger add_new_creator_btn" data-bs-toggle="modal" data-bs-target="#delete_creator_modal" data-bs-id="' . $creator->id . '">Delete</button></td></tr>';
-                    $slNo = $slNo + 1;
-                }
-                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
+                return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
             }
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error', 'test' => $courseCategoryId]);
+        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
 }

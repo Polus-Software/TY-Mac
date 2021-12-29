@@ -178,9 +178,8 @@ class CourseController extends Controller
                 ]);
             }
 
-        } catch(Throwable $e) {
-            report($e);
-            return false;
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
     }
 
@@ -236,9 +235,8 @@ class CourseController extends Controller
                     ]);
                 }
             }
-        } catch(Throwable $e) {
-            report($e);
-            return false;
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
         
     }
@@ -332,10 +330,9 @@ class CourseController extends Controller
                 $assignedCourse = AssignedCourse::where('course_id', 'like', $course_id)->update(['course_id' => $course->id, 'user_id' => $instructor]);
                 return redirect()->route('view-course', ['course_id' => $course->id]);
             }
-        } catch(Throwable $e) {
-            report($e);
-            return false;
-        }        
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
+        }
     }
 
     public function deleteCourse(Request $request) {
@@ -473,9 +470,8 @@ class CourseController extends Controller
                 ]);
             }
 
-        } catch(Throwable $e) {
-            report($e);
-            return false;
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
     }
 
@@ -554,9 +550,8 @@ class CourseController extends Controller
                 ]);
             }
 
-        } catch(Throwable $e) {
-            report($e);
-            return false;
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
     }
 
@@ -661,9 +656,8 @@ class CourseController extends Controller
                 ]);
             }
 
-        } catch(Throwable $e) {
-            report($e);
-            return false;
+        } catch (Exception $exception) {
+            return ($exception->getMessage());
         }
     }
 }
