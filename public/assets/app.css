@@ -1,6 +1,4 @@
-body{
-    /* background:gray; */
-}
+
 
 .form-group{
     margin: 25px 40px;
@@ -92,7 +90,6 @@ color: white;
     text-decoration: none;
 
 }
-
 
 .forgotpass a{
     color:inherit;

@@ -70,14 +70,14 @@ class EditController extends Controller
 
     public function uploadImage(Request $request)
     {
-    
+   
     $request->validate([
-        'image' => 'required | mimes:jpeg,jpg,png | max:1000',
+        'image' => 'required | mimes:jpeg,jpg,png',
     ]);
-
+   
         if($request->hasFile('image')){
             $filename = $request->image->getClientOriginalName();
-            
+           
             $request->image->storeAs('images',$filename,'public');
            
             $user = Auth::user();

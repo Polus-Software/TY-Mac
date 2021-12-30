@@ -81,8 +81,10 @@ class CourseController extends Controller
 
     public function createSubtopic(Request $request){
         $course_id = $request->input('course_id');
+        $course_title = Course::where('id', $course_id)->value('course_title');
         return view('Course.admin.create_subtopic', [
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'course_title' => $course_title
         ]);
     }
 
@@ -350,12 +352,12 @@ class CourseController extends Controller
                     $categoryName = CourseCategory::where('id', $course->category)->value('category_name');
                     $html = $html . '<tr id="' . $course->id .'">';
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
-                    $html = $html . ' <td class="align-middle">' . $course->course_title . '</td>';
+                    $html = $html . '<td class="align-middle">' . $course->course_title . '</td>';
                     $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
                     $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="' . $course->id . '">View</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-success edit_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="' . $course->id . '">Edit</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger delete_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '">Delete</button></td></tr>';
+                    $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
+                    $html = $html . '<td class="text-center align-middle"><a href="" title="View course"><i class="fas fa-eye"></i></a>';
+                    $html = $html . '<a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
                 }
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);

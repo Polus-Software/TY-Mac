@@ -39,7 +39,7 @@
                 <th class="align-middle" scope="row">{{  ($creators->currentpage() -1) * $creators->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
                 <td class="align-middle">{{$creator->email}} </td>
-                <td class="align-middle"></td>
+                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $creator->created_at)->format('F d, Y')}}</td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-creator', ['creator_id' => $creator->id]) }}" title="View creator">
                   <i class="fas fa-eye"></i>

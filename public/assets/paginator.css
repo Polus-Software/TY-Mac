@@ -17,3 +17,10 @@
 .page-item.active .page-link {
     border-color:#F5BC29 ;
 }
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    text-decoration: none;
+    background-color: #F5BC29;
+    border-color: #F5BC29;
+}

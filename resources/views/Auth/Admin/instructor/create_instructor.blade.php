@@ -55,8 +55,9 @@
                 <div class="invalid-feedback d-block">{{ $errors->first('lastname') }}</div>
                 @endif
               </div>
-              <div class="col-12">
-                <label>Email id</label>
+              
+              <div class="col-md-6">
+                <label>Email Id</label>
                 @if(!!$isEdit)
                 <input type="email" class="form-control" value="{{$instructorDetails['instructor_email']}}" name="email" id="email" placeholder=" Enter email">
                 @else
@@ -64,6 +65,76 @@
                 @endif
                 @if ($errors->has('email'))
                 <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div>
+                @endif
+              </div>
+              <div class="col-md-6">
+                <label for="institute">Institute</label>
+                @if(!!$isEdit)
+                <input type="text" class="form-control" value="{{$instructorDetails['instructor_institute']}}" name="institute" id="institute" placeholder="Enter institute">
+                @else
+                <input type="text" class="form-control" name="institute" id="institute" placeholder="Enter institute">
+                @endif
+                @if ($errors->has('institute'))
+                <div class="invalid-feedback d-block">{{ $errors->first('institute') }}</div>
+                @endif
+              </div>
+
+              <div class="col-md-6">
+                <label for="designation">Designation</label>
+                @if(!!$isEdit)
+                <input type="text" class="form-control" value="{{$instructorDetails['instructor_designation']}}" name="designation" id="designation" placeholder="Enter designation">
+                @else
+                <input type="text" class="form-control" name="designation" id="designation" placeholder="Enter designation">
+                @endif
+                @if ($errors->has('designation'))
+                <div class="invalid-feedback d-block">{{ $errors->first('designation') }}</div>
+                @endif
+              </div>
+
+              <div class="col-md-6">
+                <label for="twitter-link">Twitter Link</label>
+                @if(!!$isEdit)
+                <input type="text" class="form-control" value="{{$instructorDetails['instructor_twitter_social']}}" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
+                @else
+                <input type="text" class="form-control" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
+                @endif
+                @if ($errors->has('twitter_social'))
+                <div class="invalid-feedback d-block">{{ $errors->first('twitter_social') }}</div>
+                @endif
+              </div>
+
+              <div class="col-md-6">
+                <label for="linkedin-link">LinkedIn Link</label>
+                @if(!!$isEdit)
+                <input type="text" class="form-control" value="{{$instructorDetails['instructor_linkedin_social']}}" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
+                @else
+                <input type="text" class="form-control" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
+                @endif
+                @if ($errors->has('linkedin_social'))
+                <div class="invalid-feedback d-block">{{ $errors->first('linkedin_social') }}</div>
+                @endif
+              </div>
+
+              <div class="col-md-6">
+                <label for="youtube-link">Youtube Link</label>
+                @if(!!$isEdit)
+                <input type="text" class="form-control" value="{{$instructorDetails['instructor_youtube_social']}}" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
+                @else
+                <input type="text" class="form-control" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
+                @endif
+                @if ($errors->has('youtube_social'))
+                <div class="invalid-feedback d-block">{{ $errors->first('youtube_social') }}</div>
+                @endif
+              </div>
+              <div class="col-md-12">
+                <label for="about">About</label>
+                @if(!!$isEdit)
+                <textarea class="form-control" value="{{$instructorDetails['instructor_description']}}" name="description" id="description" placeholder="Enter description" cols="30" rows="5"></textarea>
+                @else
+                <textarea class="form-control"  name="description" id="designation" placeholder="Enter description" cols="30" rows="5"></textarea>
+                @endif
+                @if ($errors->has('description'))
+                <div class="invalid-feedback d-block">{{ $errors->first('description') }}</div>
                 @endif
               </div>
               @if(!$isEdit)
@@ -74,7 +145,7 @@
             @if ($errors->has('password'))
                 <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                 @endif
-            <button type="button" class="btn btn-link" id="generate_password">Generate password</button>
+            <button type="button" class="btn btn-link" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
           </div>
           @endif
               @if(!!$isEdit)
