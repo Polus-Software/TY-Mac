@@ -10,11 +10,62 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <title>TY- MAC</title>
 </head>
 
 <body>
   <!-- NAVBAR SECTION  -->
+  @if(Auth::check())
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TY-Mac</a>
+    <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <form class="mb-2 mb-lg-0 d-flex me-auto">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      </form>
+
+      <ul class="navbar-nav">
+      @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item">
+        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+        </li>
+        @endif
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+  @else
   <nav class="navbar navbar-expand-lg fixed-top llp-navbar">
     <div class="container">
       <a class="navbar-brand" href="">
@@ -24,13 +75,13 @@
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#services">All Courses</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-curent="page" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('student.courses.get')}}">All Courses</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
           <li class="nav-item"><a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
           <li class="nav-item"><a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
@@ -39,6 +90,7 @@
       </div>
     </div>
   </nav>
+  @endif
   <!-- top banner-->
   <section id="home" class="intro-section">
     <div class="container">
@@ -204,7 +256,7 @@
       </div>
       <div class="row mt-5 mb-4 g-3 text-center">
         <div class="col-md-12">
-          <button class="btn btn-outline-primary" type="button">Explore all Courses</button>
+          <a href="{{ route('student.courses.get') }}" class="btn btn-outline-primary" type="button" style="text-decoration:none;">Explore all Courses</a>
         </div>
       </div>
     </div>
@@ -344,7 +396,7 @@
     <div class="modal-dialog custom-container mx-auto p-3 rounded">
       <div class="modal-content border-0">
         <div class="modal-header border-0">
-          <h5 class="modal-title" id="loginModalLabel">Log in to account</h5>
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="loginModalLabel">Log in to account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -376,7 +428,7 @@
               </div>
 
               <div class="d-grid form-group  mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary"><span class="button">Login</span></button>
+                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Login</span></button>
               </div>
 
               <div class="text-center forgotpass">
@@ -404,7 +456,7 @@
     <div class="modal-dialog custom-container mx-auto p-3 rounded">
       <div class="modal-content border-0">
         <div class="modal-header border-0">
-          <h5 class="modal-title" id="signupModalLabel">Create an account</h5>
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -437,7 +489,7 @@
 
               <div class="form-group mx-sm-5 mx-0">
                 <label for="email" class="email-label">Email</label>
-                <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
                 <small>Error message</small>
 
                 @if ($errors->has('email'))
@@ -447,8 +499,8 @@
 
               <div class="form-group mx-sm-5 mx-0">
                 <label for="inputPassword" class="password-label">Password</label>
-                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
-                <span><i class="fas fa-eye-slash" id="togglePassword" onClick="viewPassword()"></i></span>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
                 <small>Error message</small>
 
 
@@ -478,7 +530,7 @@
               </div>
 
               <div class="d-grid form-group mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary"><span class="button">Create</span></button>
+                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
               </div>
 
               <div class="text-center bottom-text">
@@ -546,8 +598,8 @@
     const form = document.getElementById('signupForm');
     const firstname = document.getElementById('firstName');
     const lastname = document.getElementById('lastName');
-    const email = document.getElementById('inputEmail');
-    const password = document.getElementById('inputPassword');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
     const passwordconfirm = document.getElementById('password_confirmation');
 
 

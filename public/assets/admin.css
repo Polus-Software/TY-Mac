@@ -178,4 +178,15 @@ body {
     border-color: transparent transparent transparent transparent;
     border-bottom: 5px solid #AF7E00;
 }
+.small{
+    
+    color:red;
+    visibility: hidden;
+    position: absolute;
+    
+}
 
+.form-control.error .small{
+    color:red;
+    visibility: visible;
+}

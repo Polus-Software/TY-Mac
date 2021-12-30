@@ -36,7 +36,7 @@
           </div>
           <div class="col-md-6">
             <label>Duration</label>
-            <p>{{$course_details['title']}}</p>
+            <p>{{$course_details['duration']}} h</p>
           </div>
           <div class="col-12">
             <label>What you'll learn</label>
@@ -59,13 +59,13 @@
           <div class="col-12">
             <label>Course image</label>
             <div style="margin-top:15px;">
-                <img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" alt="">
+                <img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" alt="" style="width:500; height:400px;">
             </div>
           </div>
           <div class="col-12">
             <label>Course thumbnail image</label>
             <div style="margin-top:15px;">
-                <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="">
+                <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">

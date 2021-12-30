@@ -38,7 +38,7 @@
                 <th class="align-middle" scope="row">{{ ($instructors->currentpage() -1) * $instructors->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$instructor->firstname}} {{$instructor->lastname}}</td>
                 <td class="align-middle">{{$instructor->email}} </td>
-                <td class="align-middle"></td>
+                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $instructor->created_at)->format('F d, Y')}}</td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-instructor', ['instructor_id' => $instructor->id]) }}" title="View instructor">
                     <i class="fas fa-eye"></i>
@@ -342,8 +342,10 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
+      console.log(data);
       document.getElementById('instructor_tbody').innerHTML = '';
       document.getElementById('instructor_tbody').innerHTML = data.html;
+      
       closeModal('delete_instructor_modal');
     });
   });

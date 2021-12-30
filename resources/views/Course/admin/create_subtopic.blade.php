@@ -16,7 +16,7 @@
           @csrf
           <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
           <div class="py-4">
-            <h4>Course Title:<span>Lorem ipsum dolor sit amet({{$course_id}})</span></h4>
+            <h4>Course Title:<span>{{$course_title}}({{$course_id}})</span></h4>
             <hr class="my-4">
           </div>
           <div class="row sub-topic-container">

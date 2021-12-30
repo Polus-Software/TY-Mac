@@ -122,7 +122,7 @@ class CreatorController extends Controller
     public function deleteCreator(Request $request) {
         $userId = $request->input('user_id');
         if ($userId) {
-            $creator = User::find($userId);die($creator);
+            $creator = User::find($userId);
             if ($creator) {
                 $creator->delete();
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
