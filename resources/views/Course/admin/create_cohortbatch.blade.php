@@ -104,7 +104,7 @@
             <label for="duration">Start time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-1 mt-5">
             <select name="" id="">
               <option value="AM">AM</option>
               <option value="PM">PM</option>
@@ -114,7 +114,7 @@
             <label for="duration">End time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-1 mt-5">
             <select name="" id="">
               <option value="AM">AM</option>
               <option value="PM">PM</option>

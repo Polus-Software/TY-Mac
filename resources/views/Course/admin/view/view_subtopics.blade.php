@@ -32,7 +32,7 @@
               </div>
               <div class="card-body">
               <p class="card-text">{{$subtopic->description}}</p>
-              <a href="#" class="">Go somewhere</a>
+              <!-- <a href="#" class="">Go somewhere</a> -->
               <div class="row">
               <div class="col-md-6">
               <label for="">Subtopic:</label>

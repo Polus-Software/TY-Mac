@@ -80,8 +80,10 @@ class CourseController extends Controller
     }
 
     public function createSubtopic(Request $request){
+        
         $course_id = $request->input('course_id');
         $course_title = Course::where('id', $course_id)->value('course_title');
+       
         return view('Course.admin.create_subtopic', [
             'course_id' => $course_id,
             'course_title' => $course_title
@@ -305,14 +307,6 @@ class CourseController extends Controller
                     $who_learn_temp = $request->input('who_learn_points_'. $i);
                     $who_learn = $who_learn . $who_learn_temp . ";";
                 }
-                if($request->file()){
-                $courseFile = $request->course_image->getClientOriginalName();
-                $courseThumbnailFile = $request->course_thumbnail_image->getClientOriginalName();
-
-                $request->course_image->storeAs('courseImages',$courseFile,'public');
-                $request->course_thumbnail_image->storeAs('courseThumbnailImages',$courseThumbnailFile,'public');
-                }
-
 
                 $user = Auth::user();
                 $userId = $user->id;
@@ -325,8 +319,15 @@ class CourseController extends Controller
                 $course->course_duration = $courseDuration;
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
+                if($request->file()){
+                    $courseFile = $request->course_image->getClientOriginalName();
+                    $courseThumbnailFile = $request->course_thumbnail_image->getClientOriginalName();
+    
+                    $request->course_image->storeAs('courseImages',$courseFile,'public');
+                    $request->course_thumbnail_image->storeAs('courseThumbnailImages',$courseThumbnailFile,'public');
                 $course->course_image = $courseFile;
-                $course->course_thumbnail_image = $courseThumbnailFile;                        
+                $course->course_thumbnail_image = $courseThumbnailFile;  
+                }                      
                 // $course->created_by = $userId; //TODO
                 $course->save();
                 $assignedCourse = AssignedCourse::where('course_id', 'like', $course_id)->update(['course_id' => $course->id, 'user_id' => $instructor]);
@@ -479,27 +480,27 @@ class CourseController extends Controller
 
 
     //Adding assignments
-    public function addAssignment(Request $request){
-      $topicId =intval($request->assignment_topic_id);
+    // public function addAssignment(Request $request){
+    //   $topicId =intval($request->assignment_topic_id);
 
-      $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
-      $instructorId = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
+    //   $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
+    //   $instructorId = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
 
 
-      $topicAssignment = new TopicAssignment;
-      $topicAssignment->assignment_title= $request->assignment_title;
-      $topicAssignment->assignment_description= $request->assignment_description;
-      $topicAssignment->topic_id = $topicId;
-      $topicAssignment->course_id = $courseId ;
-      $topicAssignment->instructor_id = $instructorId;
+    //   $topicAssignment = new TopicAssignment;
+    //   $topicAssignment->assignment_title= $request->assignment_title;
+    //   $topicAssignment->assignment_description= $request->assignment_description;
+    //   $topicAssignment->topic_id = $topicId;
+    //   $topicAssignment->course_id = $courseId ;
+    //   $topicAssignment->instructor_id = $instructorId;
 
       
-        $filename = $request->assignment_attachments->getClientOriginalName();
-        $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
-        $topicAssignment->document = $filename;
-        $topicAssignment->save();
-        return redirect()->back();
-    }
+    //     $filename = $request->assignment_attachments->getClientOriginalName();
+    //     $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
+    //     $topicAssignment->document = $filename;
+    //     $topicAssignment->save();
+    //     return redirect()->back();
+    // }
 
     public function createAssignment(Request $request){
         $course_id = $request->input('course_id');
@@ -536,11 +537,11 @@ class CourseController extends Controller
     /**
      * For viewing a assignments
      */
-    public function viewAssignment(Request $request) {
+    public function viewAssignments($course_id) {
         try {
-            $course_id = $request->input('course_id');
             if($course_id) {
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+              
                 $assignments = DB::table('topic_assignments')
                                 ->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
                                 ->where('topic_assignments.course_id', $course_id)
@@ -561,22 +562,25 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function saveAssignment(Request $request) {
+        
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
-        // $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
+        $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
         $instructorId = DB::table('assigned_courses')->where('course_id', $course_id)->value('user_id');
 
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
+        $topicAssignment->document =  $request->document;
+       
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
 
         //TODO: Assignment due date
         if($request->file()){
-            $filename = $request->assignment_attachments->getClientOriginalName();
-            $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
+            $filename = $request->document->getClientOriginalName();
+            $request->document->storeAs('assignmentAttachments',$filename,'public');
             $topicAssignment->document = $filename;
         }
         
@@ -625,12 +629,13 @@ class CourseController extends Controller
     }
 
     public function saveCohortBatch(Request $request) {
+      
         $cohortbatch = new CohortBatch();
         $cohortbatch->title = $request->input('cohortbatch_title');
-        $cohortbatch->course_id = $request->input('course_id');
+        $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
         $cohortbatch->end_date = $request->input('cohortbatch_enddate');
-        $cohortbatch->batchname = $request->input('cohortbatch_batchname');
+        $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $request->input('cohortbatch_starttime');
         $cohortbatch->end_time = $request->input('cohortbatch_endtime');
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
@@ -651,6 +656,7 @@ class CourseController extends Controller
                                 //->join('topics', 'topic_assignments.topic_id', '=', 'topics.topic_id')
                                 ->where('cohort_batches.course_id', $course_id)
                                 ->get();
+                                //dd($cohortbatches);
                 return view('Course.admin.view.view_cohortbatches', [
                     'cohortbatches' => $cohortbatches,
                     'course_id' => $course_id,
