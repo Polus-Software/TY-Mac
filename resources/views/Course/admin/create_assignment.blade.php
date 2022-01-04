@@ -11,16 +11,17 @@
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>
+        
       <form class="row g-3 llp-form" action="{{ route('save-assignment') }}" enctype="multipart/form-data" method="POST">
       @csrf
       <input type="hidden" id="course_id" name="course_id" value="{{$course_id}}">
           <div class="py-4">
           <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view-assignment') }}">Assignment list</a>
+    <a class="nav-link" aria-current="page" href="{{ route('view-assignments', $course_id) }}">Assignment list</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ route('create-assignment') }}">New Assignment</a>
+    <a class="nav-link active" href="{{ route('create-assignment') }}">New Assignment</a>
   </li>
 </ul>
         </div>
@@ -34,8 +35,11 @@
           </div>
           <div class="row bd-highlight p-3">
     <div class="col-11">
-    Attach file
-    <input type="file" class="form-control" id="course-image" name="course_image" placeholder="Upload from device">
+    <label>Attach file</label>
+
+    
+    <input type="file" class="form-control" id="document" name="document" placeholder="Upload from device">
+    <!-- <input type="file" class="form-control" id="document" name="document"> -->
     <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
     <!-- <div class="vr me-2 ms-2"></div> -->
     <div id="external-link-div" class="mt-2" style="display:none;">
@@ -48,7 +52,7 @@
   <div class="col-md-6">
             <label for="choose-sub-topic">Choose sub topic</label>
             <select type="text" class="form-select" id="choose-sub-topic" name="assignment_topic_id">
-            <option selected>Select...</option>
+            <!-- <option selected>Select...</option> -->
             @foreach ($subTopics as $subTopic)
             <option value="{{$subTopic->topic_id}}">{{$subTopic->topic_title}}</option>
             @endforeach

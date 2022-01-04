@@ -10,6 +10,8 @@
   color: #000000 !important;
 }
   </style>
+
+ 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
@@ -18,8 +20,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
@@ -35,16 +37,26 @@
         <li class="nav-item">
           <a class="nav-link active" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
+        </li> -->
         @if (Auth::check())
+        @if(Auth::user()->role_id == 3)
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
         <li class="nav-item">
           <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
+        @endif
         @else
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
@@ -221,7 +233,7 @@
         <div class="col-lg-5 col-sm-12 d-flex align-items-center p-3">
           <div class="text-content-wrapper d-flex d-lg-block flex-column align-items-center w-100 text-center text-lg-start">
             <p>Lorem ipsum dolor sit amet</p>
-            <h1>Dignissimos Ducimus</h1>
+            <h1 class="mb-3">Dignissimos Ducimus</h1>
             <ul class="p-0 m-0">
               <li class="pb-2"><i class="fas fa-arrow-right"></i>Praesentium voluptatum deleniti atque.</li>
               <li class="pb-2"><i class="fas fa-arrow-right"></i>Corrupti quos dolores et quas molestias.</li>

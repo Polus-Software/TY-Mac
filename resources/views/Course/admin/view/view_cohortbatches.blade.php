@@ -28,16 +28,16 @@
           <div class="col-12 mb-3">
             <div class="card">
               <div class="card-header">
-              Title: <strong>{{$cohortbatch->batchname}}</strong>
+              Title: <strong>{{$cohortbatch->title}}</strong>
               <!-- <span>20 minutes to complete</span> -->
               </div>
               <div class="card-body">
-              <p class="card-text">{{$cohortbatch->batchname}}</p>
-              <a href="#" class="">Go somewhere</a>
+              <p class="card-text">{{$cohortbatch->title}}</p>
+              <!-- <a href="#" class="">Go somewhere</a> -->
               <div class="row">
               <div class="col-md-6">
               <label for="">Subtopic:</label>
-              <p>{{$cohortbatch->batchname}}</p>
+              <p>{{$cohortbatch->title}}</p>
 
               </div>
               <div class="d-flex align-items-end col-md-6">

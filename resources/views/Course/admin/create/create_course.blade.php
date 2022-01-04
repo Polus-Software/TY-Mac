@@ -123,12 +123,16 @@
           <div class="col-12">
             <label for="course-image">Course image</label>
             <div class="row">
+              @if(isset($course_details['image']))
+              <div class="col"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail" alt="..."></div>
+              @else
               <div class="col"><img src="{{ asset('storage/images/placeholder.jpg') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>
                 <p>Lorem ipsum dolor sit amet,</p>
               </div>
+              @endif
             <div class="input-group mt-3 mb-3">
               <input type="file" class="form-control" id="course-image" name="course_image">
               <label class="input-group-text" for="course-image">Upload</label>
@@ -138,12 +142,16 @@
           <div class="col-12">
             <label for="course-thumbnail-image">Course thumbnail image</label>
             <div class="row">
+            @if(isset($course_details['thumbnail']))
+            <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
+            @else
               <div class="col"><img src="{{ asset('storage/images/placeholder.jpg') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>
                 <p>Lorem ipsum dolor sit amet,</p>
               </div>
+              @endif
             <div class="input-group mt-3 mb-3">
               <input type="file" class="form-control" id="course-thumbnail-image" name="course_thumbnail_image">
               <label class="input-group-text" for="course-thumbnail-image">Upload</label>
@@ -156,7 +164,7 @@
           @else
           <a class="btn btn-outline-secondary" role="button" href="{{ route('manage-courses') }}">Cancel</a>
           @endif
-          <input class="btn btn-primary" id="save_course" type="submit" value="Save as draft & continue">
+          <button class="btn btn-primary" id="save_course" type="submit" value="Save as draft & continue">Save as draft & continue</button>
           </div>
         </form>
       </main>
