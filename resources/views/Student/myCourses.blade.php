@@ -22,8 +22,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 d-flex me-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <button class="btn btn-outline-success" id="search-btn">Search</button>
       </form>
 
       <ul class="navbar-nav">
@@ -791,6 +792,13 @@
 
     </section>
 <script>
+    document.getElementById('search-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  let searchTerm = document.getElementById('search-box').value;
+  let path = "/course-search?search=" + searchTerm;
+  window.location = '/course-search?search=' + searchTerm;
+});
+
     var elements = document.getElementsByClassName('card-2');
     var length = elements.length;
     for(index=0;index<length;index++) {

@@ -25,9 +25,10 @@
 }
 .board-section {
     position: relative;
-    height: 70%;
+    height: 67.5%;
+    top: 55px;
     margin: 25px 0px 25px 175px;
-    width: 52%;
+    width: 106.5%;
     z-index: 1;
     overflow: hidden;
 }
@@ -82,18 +83,20 @@ svg.svg-img.prefix-tools {
 
 
 aside.layout-aside.big-class-aside {
-    position: absolute;
-    left: 175px;
+    position: relative;
+    left: -34.2em;
     top: 80px;
 }
-
+.layout {
+    background: transparent;
+}
 .layout-aside {
-    width: 60rem !important;
+    width: 54rem !important;
 }
 
 .video-player.big-class-teacher {
-  width: 90% !important;
-  height: 34rem !important;
+  width: 80% !important;
+  height: 30rem !important;
 }
 
 .video-marquee-pin.big-class {
@@ -103,8 +106,18 @@ aside.layout-aside.big-class-aside {
 }
 
 #back_to_course {
+    border: 1px solid #6E7687;
+    padding: 6px 25px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #414855;
+}
+
+#show_video {
   border: 1px solid #6E7687;
-    padding: 7px 14px;
+    padding: 6px 25px;
     border-radius: 5px;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
@@ -119,28 +132,39 @@ aside.layout-aside.big-class-aside {
   color: #6E7687;
   margin-top: 10px !important;
 }
-
+.row {
+    padding: 10px 10px 10px 181px;
+    display: inline-flex;
+    width: 57.95%;
+    position: relative;
+    top: -40rem;
+    height: 600px;
+}
 
 .row1 {
     padding: 10px 10px 10px 175px;
     display: inline-flex;
-    width: 61.75%;
+    width: 100%;
     position: relative;
-    top: -150px;
+    top: -46rem;
 }
+
 .row2 {
-    padding: 10px 10px 10px 10px;
-    width: 50.75%;
+    padding: 20px 20px 20px 20px;
+    width: 45.5%;
     position: relative;
-    top: -150px;
+    top: -46rem;
     border-radius: 10px;
     margin-left: 180px;
-    border: 1px solid #6E7687;
+    border: 1px solid #e5e7eb;
 }
 .col12 {
   display: -webkit-inline-box;
     padding: 23px 0rem 23px 21.7rem;
     width: 45rem;
+    position: relative;
+    left: -191px;
+    top: -10px;
 }
 .col11 {
     padding: 15px 3px;
@@ -223,13 +247,13 @@ ul.nav.nav-tabs li {
     width: 375px;
     height: 90vh;
     margin: 125px 10px 0px 10px;
-    border: 1px solid #6E7687;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 10px;
 }
 
 .pin-right {
-  right: 470px !important;
+    right: -30em;
 }
 
 #positive {
@@ -252,8 +276,35 @@ svg.svg-img.prefix-more.can-hover {
 .pulsate {
   -webkit-animation: pulse 1.5s infinite;
 }
+
+.nodisplay {
+  display : none;
+}
+
+.course_contents_div {
+  margin-bottom : 20px;
+}
+
+.course_contents {
+    border: 1px solid #6E7687;
+    padding: 3px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    background-color: #74648c !important;
+    color: white !important;
+    position: relative;
+    right: -31.5rem;
+}
+.course_contents:hover {    
+    color: #414855 !important;
+    background-color: white !important;
+    transition-duration: 0.2s;
+}
   </style>
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
+  <input id="user_type" type="hidden" value="" />
   <div class="main-container">
   <div id="root1"></div>
     
@@ -264,7 +315,9 @@ svg.svg-img.prefix-more.can-hover {
   </ul>
   <div class="tab-content">
     <div id="participants" class="tab-pane fade in active">
-     <p>Participants list </p>
+     @foreach($participants as $participant)
+     <p>{{ $participant }}</p>
+     @endforeach
     </div>
     <div id="chat" class="tab-pane fade">
      <p> Chat screen </p>
@@ -274,6 +327,7 @@ svg.svg-img.prefix-more.can-hover {
   </div>
   
   @if($userType == 'student')
+  <div class="row"></div>
   <div class="row1">
     <div class="col11">
       <button id="back_to_course">Back to course</button>
@@ -292,9 +346,13 @@ svg.svg-img.prefix-more.can-hover {
     @endforeach
   </div>
   @elseif($userType == 'instructor')
+  <div class="row">
+  <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+  </div>
   <div class="row1">
+  
     <div class="col11">
-      <button id="back_to_course">Back to course</button>
+      <button id="back_to_course">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
     </div>
   </div>
   <div class="row2" style="margin-bottom:20px;">
@@ -302,10 +360,14 @@ svg.svg-img.prefix-more.can-hover {
     <hr>
     <p class="notif-text">{{ $topic_title }}</p>
     @csrf
-    @foreach($contents as $content)
-    <div data-id="{{ $content->topic_content_id }}" class="course_contents" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i><a href="/storage/content_documents/sample.pdf" target="_blank" data-id="{{ $content->topic_content_id }}">{{ $content->topic_title }}</a></div>
-    @endforeach
+    
+    
+    <div class="course_contents_div" data-id="1" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 1</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="1">Start</button></div>
+    <div class="course_contents_div" data-id="2" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 2</span><button class="course_contents" href="https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" data-id="2">Start</button></div>
+    <div class="course_contents_div" data-id="3" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 3</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="3">Start</button></div>
+    
   </div>
+  
 @endif
   <script type="text/javascript">
         
@@ -319,6 +381,10 @@ svg.svg-img.prefix-more.can-hover {
                 'Content-Type': 'application/json'
             },
         }).then((response) => response.json()).then((data) => {
+          if(data.rolename == "Instructor") {
+              document.getElementById('user_type').value = data.rolename;
+          }
+          
             AgoraEduSDK.config({
            // Here pass in the Agora App ID you have got
            appId: data.appId,
@@ -340,7 +406,6 @@ svg.svg-img.prefix-more.can-hover {
         duration: data.duration,
         courseWareList: [],
         listener: (evt) => {
-          console.log("evt", evt)
         }
       }
     )
@@ -384,15 +449,36 @@ setInterval(function () {
       }
     });
   }, 2000);
+if(document.getElementById('show_video')) {
+  document.getElementById('show_video').addEventListener('click', function(event){
+    document.getElementById('course_content_iframe').classList.add('nodisplay');
+    document.getElementById('show_video').classList.add('nodisplay'); 
+  });
+}
+  
 
 let contentEle = document.getElementsByClassName('course_contents');
 length = contentEle.length;
 
 for(index = 0; index < length;index++) {
+  
     contentEle[index].addEventListener('click', function(event) {
-        // this.classList.add('unclickable');
-        // console.log(this.nextElementSibling.classList);
-        // this.nextSibling.classList.replace("unclickable", "");
+    let extension = get_url_extension(this.getAttribute('href'));
+    console.log(document.getElementById('user_type').value == "Instructor");
+    if(document.getElementById('user_type').value == "Instructor") {
+      document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
+    }
+    if(extension == "pdf") {
+      document.getElementById('course_content_iframe').classList.remove('nodisplay');
+      document.getElementById('show_video').classList.remove('nodisplay');
+      document.getElementById('course_content_iframe').setAttribute('src', this.getAttribute('href'));
+    } else if (extension == "pptx") {
+      document.getElementById('course_content_iframe').classList.remove('nodisplay');
+      document.getElementById('show_video').classList.remove('nodisplay');
+      
+      
+      document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
+    }
     let topicContentId = this.getAttribute('data-id');
     let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
     fetch(path, {
@@ -404,13 +490,15 @@ for(index = 0; index < length;index++) {
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
+      
     });
     });
 }
 
 
-document.getElementById('positive').addEventListener('click', function(event) {
 
+
+document.getElementById('positive').addEventListener('click', function(event) {
   let content = this.getAttribute('data-id');
   let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=positive";
     fetch(path, {
@@ -422,8 +510,6 @@ document.getElementById('positive').addEventListener('click', function(event) {
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-        document.getElementById('positive_count').innerHTML = "(" + data.positive + ")";
-        document.getElementById('negative_count').innerHTML = "(" + data.negative + ")";
     });
 });
 
@@ -440,12 +526,12 @@ let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negati
     },
     body: JSON.stringify({})
   }).then((response) => response.json()).then((data) => {
-    document.getElementById('positive_count').innerHTML = "(" + data.positive + ")";
-    document.getElementById('negative_count').innerHTML = "(" + data.negative + ")";
   });
 });
 
-    
+function get_url_extension(url){
+    return url.split(/[#?]/)[0].split('.').pop().trim();
+}
 
   </script>
 </body>

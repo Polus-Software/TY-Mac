@@ -21,7 +21,8 @@
         LOGO
       </a>
       <form class="mb-2 mb-lg-0 d-flex me-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+      @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,11 +30,25 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#services">All Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="/student-courses">All Courses</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
-          <li class="nav-item"><a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
+          @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item"><a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
           <li class="nav-item"><a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+        @endif
           </li>
         </ul>
       </div>
