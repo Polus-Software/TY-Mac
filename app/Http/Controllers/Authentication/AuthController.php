@@ -94,7 +94,8 @@ class AuthController extends Controller
         }else{
             return redirect('dashboard');
            }
-           return redirect('login')->withErrors('Credentials are wrong.');
+        //    return back()->with('Error','Credentials are wrong.');
+         return redirect('login')->withErrors('Credentials are wrong.');
         }
     }
     

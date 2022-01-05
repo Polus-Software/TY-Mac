@@ -30,6 +30,9 @@
             @else
             <input type="text" class="form-control" id="title" name="course_title">
             @endif
+            @if ($errors->has('course_title'))
+              <span class="text-danger">{{ $errors->first('course_title') }}</span>
+            @endif
           </div>
           <div class="col-12">
             <label for="description">Description</label>
@@ -37,6 +40,9 @@
             <textarea type="text" class="form-control" id="description" name="description">{{ $course_details['description'] }}</textarea>
             @else
             <textarea type="text" class="form-control" id="description" name="description"></textarea>
+            @endif
+            @if ($errors->has('description'))
+              <span class="text-danger">{{ $errors->first('description') }}</span>
             @endif
           </div>
           <div class="col-md-6">
@@ -51,6 +57,9 @@
             @endif                            
             @endforeach          
             </select>
+            @if ($errors->has('course_category'))
+              <span class="text-danger">{{ $errors->first('course_category') }}</span>
+            @endif
           </div>
           <div class="col-md-6">
             <label for="level">Level</label>
@@ -71,6 +80,9 @@
               <option value ="Advanced">Advanced</option>
               @endif
             </select>
+            @if ($errors->has('difficulty'))
+              <span class="text-danger">{{ $errors->first('difficulty') }}</span>
+            @endif
           </div>
           <div class="col-md-6">
             <label for="instructor-name">Instructor name</label>
@@ -83,6 +95,9 @@
             @endif
             @endforeach          
             </select>
+            @if ($errors->has('instructor'))
+              <span class="text-danger">{{ $errors->first('instructor') }}</span>
+            @endif
           </div>
           <div class="col-md-6">
             <label for="duration">Duration</label>            
@@ -91,6 +106,9 @@
             @else
             <input type="number" class="form-control" id="duration" name="course_duration" value="1">
             @endif
+            @if ($errors->has('course_duration'))
+              <span class="text-danger">{{ $errors->first('course_duration') }}</span>
+            @endif
           </div>
           <div class="col-12">
             <label for="what-learn">What you'll learn</label>            
@@ -98,6 +116,9 @@
             <input type="text" class="form-control" id="what-learn" name="what_learn_1" value="{{ $course_details['whatlearn'] }}">
             @else
             <input type="text" class="form-control" id="what-learn" name="what_learn_1">
+            @endif
+            @if ($errors->has('what_learn_1'))
+              <span class="text-danger">This field is required</span>
             @endif
             <div id="add-more-points"></div>
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add more answer</button>
@@ -111,12 +132,20 @@
             @else
             <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4" maxlength ="60"></textarea>
             @endif
-            <label for="who-course-description">Points</label>
+
+            @if ($errors->has('who_learn_description'))
+              <span class="text-danger mb-3">This field is required</span><br>
+            @endif
+            
+            <label for="who-course-points mt-2">Points</label>
             @if(isset($course_details['whothis']))
             <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1" value="{{ $course_details['whothis'] }}">
             @else
             <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1">
-            @endif            
+            @endif 
+            @if ($errors->has('who_learn_points_1'))
+              <span class="text-danger">This field is required</span>
+            @endif           
             <div id="add-points"></div>            
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-who-learn">Add more answer</button>
           </div>
@@ -134,9 +163,12 @@
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
-              <input type="file" class="form-control" id="course-image" name="course_image">
-              <label class="input-group-text" for="course-image">Upload</label>
+              <input type="file" class="form-control mb-2" id="course-image" name="course_image">
+              <label class="input-group-text col-12" for="course-image">Upload</label>
             </div>
+            @if ($errors->has('course_image'))
+              <span class="text-danger">This course image field is required</span>
+            @endif   
             </div>
           </div>
           <div class="col-12">
@@ -153,9 +185,12 @@
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
-              <input type="file" class="form-control" id="course-thumbnail-image" name="course_thumbnail_image">
-              <label class="input-group-text" for="course-thumbnail-image">Upload</label>
+              <input type="file" class="form-control mb-2" id="course-thumbnail-image" name="course_thumbnail_image">
+              <label class="input-group-text col-12" for="course-thumbnail-image">Upload</label>
             </div>
+            @if ($errors->has('course_thumbnail_image'))
+              <span class="text-danger">This course thumbnail image field is required</span>
+            @endif 
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">          
@@ -197,5 +232,6 @@
 
    
   });
+
 </script>
 @endsection('content')
