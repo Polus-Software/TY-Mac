@@ -21,10 +21,10 @@
       }
       @endphp
         @if(!!$isEdit)
-        <form class="form" id="editInstructorForm" action="{{ route('update-instructor', ['instructor_id' => $instructorDetails['instructor_id']])}}" method="POST">
+        <form class="form" id="editInstructorForm" action="{{ route('update-instructor', ['instructor_id' => $instructorDetails['instructor_id']])}}" method="POST" enctype="multipart/form-data">
           <input type="hidden" id="instructor_id" name="instructor_id" value="{{ $instructorDetails['instructor_id'] }}">
           @else
-          <form class="form" id="createInstructorForm" action="{{ route('save-instructor')}}" method="POST">
+          <form class="form" id="createInstructorForm" action="{{ route('save-instructor')}}" method="POST" enctype="multipart/form-data">
             @endif
             @csrf
 
@@ -137,17 +137,28 @@
                 <div class="invalid-feedback d-block">{{ $errors->first('description') }}</div>
                 @endif
               </div>
-              @if(!$isEdit)
-              <div class="col-12">
-            <label for="instructor_password" class="col-form-label">Password</label>
-            <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
-            
-            @if ($errors->has('password'))
-                <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
+              <div class="col-md-12">
+                <label for="about">Signature</label>
+                @if(!!$isEdit)
+                <input class="form-control" type="file" value="" name="signature" id="signature" placeholder="Enter signature">
+                @else
+                <input class="form-control" type="file" name="signature" id="signature" placeholder="Enter signature">
                 @endif
-            <button type="button" class="btn btn-link" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
-          </div>
-          @endif
+                @if ($errors->has('signature'))
+                <div class="invalid-feedback d-block">{{ $errors->first('signature') }}</div>
+                @endif
+              </div>
+              @if(!$isEdit)
+                <div class="col-12">
+                  <label for="instructor_password" class="col-form-label">Password</label>
+                  <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
+              
+                  @if ($errors->has('password'))
+                  <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
+                  @endif
+                  <button type="button" class="btn btn-link" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
+                </div>
+              @endif
               @if(!!$isEdit)
               <div class="col-12">
                 <label>Assigned courses</label>

@@ -66,6 +66,11 @@
               <label>About</label>
               <p>{{$instructorDetails['instructor_description']}}</p>
             </div>
+
+            <div class="col-md-12">
+              <label>Signature</label>
+              <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start" alt="" style="width:94px; height:94px;">
+            </div>
           </div>         
 
           <div class="col-12">

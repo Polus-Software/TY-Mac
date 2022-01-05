@@ -11,7 +11,7 @@
     </li>
     <li class="nav-item">
     @if(Route::current()->getName() == 'edit-course')
-    <a class="nav-link link-dark" href="{{ route('view-course', ['course_id' => $course_id]) }}">
+    <a class="nav-link link-dark" href="{{ route('view-course',$course_id) }}">
     @else
     <a class="nav-link link-dark" href="{{ route('add-course') }}">
     @endif
@@ -29,11 +29,11 @@
     </li>
     <li class="nav-item">
     @if(Route::current()->getName() == 'edit-course')
-    <a class="nav-link link-dark" href="{{ route('view-assignment', ['course_id' => $course_id]) }}">
+    <a class="nav-link link-dark" href="{{ route('view-assignments', $course_id) }}">
     @elseif(Route::current()->getName() == 'add-course')
     <a class="nav-link link-dark disabled" role="button" aria-disabled="true" href="#">
     @else
-    <a class="nav-link link-dark disabled" role="button" aria-disabled="true" href="{{ route('view-assignment', ['course_id' => $course_id]) }}">
+    <a class="nav-link link-dark disabled" role="button" aria-disabled="true" href="{{ route('view-assignments', $course_id) }}">
     @endif
     <i class="fas fa-users"></i>Assignments</a>
     </li>

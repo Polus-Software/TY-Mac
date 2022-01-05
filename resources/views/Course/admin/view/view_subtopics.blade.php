@@ -15,40 +15,46 @@
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}">Subtopic list</a>
+    <a class="nav-link active" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Subtopic list</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}">New Subtopic</a>
+    <a class="nav-link" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Subtopic</a>
   </li>
 </ul>
         </div>
 
         <div class="row">
-          @foreach($subtopics as $subtopic)
+         
           <div class="col-12 mb-3">
             <div class="card">
-              <div class="card-header">
-              Title: <strong>{{$subtopic->topic_title}}</strong>
-              </div>
+              <h5 class="card-title ms-3 mt-3 pb-2 border-bottom">
+             <strong>Subtopics</strong>
+              </h5>
               <div class="card-body">
-              <p class="card-text">{{$subtopic->description}}</p>
-              <!-- <a href="#" class="">Go somewhere</a> -->
-              <div class="row">
-              <div class="col-md-6">
-              <label for="">Subtopic:</label>
-              <p>{{$subtopic->topic_title}}</p>
-
+              @php ($slno = 0)
+                @foreach($courseContents as $courseContent)
+                @php ($slno = $slno + 1)
+                <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                    @foreach($courseContent['contentsData'] as $content)
+                        <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
+                    @endforeach
+                </ul>
+              @endforeach 
+             
               </div>
-              <div class="d-flex align-items-end col-md-6">
-              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('edit-assignment', ['assignment_id' => $subtopic->topic_id]) }}">Edit</a>
-              <a class="btn btn-sm btn-outline-dark me-3" href="{{ route('delete-assignment', ['assignment_id' => $subtopic->topic_id]) }}">Delete</a>
-              </div>
+              
               </div>
 
               </div>
             </div>
+            <div class="d-flex justify-content-end mb-4">
+              <a class="btn btn-sm btn-outline-dark me-2" href="{{ route('edit-subtopics', ['course_id' => $course_id]) }}">Edit</a>
+              <a class="btn btn-sm btn-outline-dark" href="">Delete</a>
+            </div>
+
           </div>
-          @endforeach
+        
         </div>
       </main>
       <!-- main ends -->

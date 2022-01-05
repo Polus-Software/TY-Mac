@@ -12,32 +12,32 @@
       <main>
         @if($userType == "admin")
         <div class="row mt-4">
-          <div class="col-sm-3">
-            <div class="card llp-countbox">
+          <div class="col-12 col-lg-3 col-md-3 col-sm-6">
+            <div class="card llp-countbox mb-3">
               <div class="card-body text-center">
                 <h1 class="card-title">18</h5>
                   <p class="card-text">Course registered</p>
               </div>
             </div>
           </div>
-          <div class="col-sm-3">
-            <div class="card llp-countbox">
-              <div class="card-body text-center">
-                <h1 class="card-title">700</h5>
-                  <p class="card-text">Total students joined</p>
+          <div class="col-12 col-lg-3 col-md-3 col-sm-6">
+            <div class="card llp-countbox mb-3">
+              <div class="card-body">
+                <h1 class="card-title text-center">700</h5>
+                  <p class="card-text text-center">Total students joined</p>
               </div>
             </div>
           </div>
-          <div class="col-sm-3">
-            <div class="card llp-countbox">
+          <div class="col-12 col-lg-3 col-md-3 col-sm-6">
+            <div class="card llp-countbox mb-3">
               <div class="card-body text-center">
                 <h1 class="card-title">08</h5>
                   <p class="card-text">Total instructor</p>
               </div>
             </div>
           </div>
-          <div class="col-sm-3">
-            <div class="card llp-countbox">
+          <div class="col-12 col-lg-3 col-md-3 col-sm-6">
+            <div class="card llp-countbox mb-3">
               <div class="card-body text-center">
                 <h1 class="card-title">180</h5>
                   <p class="card-text">Total Live Hours</p>
@@ -49,52 +49,55 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
             <h3>Upcoming cohorts</h3>
           </div>
-          <table class="table llp-table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Instructor</th>
-                <th scope="col">Participants</th>
-                <th scope="col">Date/Time</th>
-                <th scope="col" class="text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-            </tbody>
-          </table>
+        
+              <table class="table llp-table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Instructor</th>
+                    <th scope="col">Participants</th>
+                    <th scope="col">Date/Time</th>
+                    <th scope="col" class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Otto</td>
+                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Otto</td>
+                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Otto</td>
+                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Otto</td>
+                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+         
+         
         </div>
         <div class="row mt-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
