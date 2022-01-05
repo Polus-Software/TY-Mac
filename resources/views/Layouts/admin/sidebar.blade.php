@@ -65,7 +65,7 @@
         View Scheduled Sessions</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="#">Change Password</a>
+      <a class="nav-link link-dark" href="{{ route('change.password.get') }}">Change Password</a>
     </li>
 
     <li class="nav-item">
@@ -80,7 +80,7 @@
         View Sessions</a>
     </li> -->
     <li class="nav-item">
-      <a class="nav-link link-dark" href="#">
+      <a class="nav-link link-dark" href="{{ route('change.password.get') }}">
         <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table" />
         </svg>

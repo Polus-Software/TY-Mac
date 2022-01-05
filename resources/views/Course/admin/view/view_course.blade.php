@@ -69,7 +69,7 @@
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-            <a style="pointer-events:none;cursor:default;" class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
+            <a style="" class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
           </div>
           </section>
       </main>

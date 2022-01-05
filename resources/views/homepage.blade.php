@@ -25,8 +25,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
@@ -42,16 +42,27 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
+        </li> -->
         @if (Auth::check())
+        @if(Auth::user()->role_id == 3)
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
         <li class="nav-item">
           <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
+        
+        @endif
         @else
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
@@ -66,20 +77,20 @@
   </div>
 </nav>
   @else
-  <nav class="navbar navbar-expand-lg fixed-top llp-navbar">
+  <nav class="navbar navbar-expand-lg fixed-top llp-navbar navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="">
         LOGO
       </a>
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="width:max-content;">
           <li class="nav-item"><a class="nav-link active" aria-curent="page" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('student.courses.get')}}">All Courses</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
