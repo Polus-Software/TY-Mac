@@ -28,14 +28,16 @@ use App\User;
 |
 */
 
-Route::get('/', function () {
-    return view('homepage');
-});
 Route::get('/403', function () {
     return view('Errors.accessDenied');
 });
 
+
 Route::group(['middleware' => 'prevent-back-history'],function() {
+    
+Route::get('/', function () {
+    return view('homepage');
+});
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
     Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -51,12 +53,18 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/add-course', [CourseController::class, 'addCourse'])->name('add-course');
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
-    Route::get('/view-assignment', [CourseController::class, 'viewAssignment'])->name('view-assignment');
+    Route::get('/view-assignments/{course}', [CourseController::class, 'viewAssignments'])->name('view-assignments');
     Route::get('/edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
+    Route::post('/update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
     Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
-    Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
+    // Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
+    Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
+    Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
+
+
+
     Route::get('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::get('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
 
@@ -116,7 +124,9 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
 
     Route::get('view-subtopics', [CourseController::class, 'viewSubTopics'])->name('view-subtopics');
+    Route::get('edit-subtopics', [CourseController::class, 'editSubTopics'])->name('edit-subtopics');
     Route::get('view_cohortbatches', [CourseController::class, 'viewCohortbatches'])->name('view_cohortbatches');
+    Route::post('update_cohortbatches', [CourseController::class, 'updateCohortbatches'])->name('update_cohortbatches');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
 
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
@@ -154,5 +164,5 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
-
+    Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');
 });

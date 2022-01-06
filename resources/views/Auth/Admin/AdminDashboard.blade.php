@@ -15,7 +15,7 @@
           <h3>Students</h3>
         </div>
         <div class="row mt-4">
-          <table class="table llp-table">
+          <table class="table llp-table table-responsive">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -35,11 +35,13 @@
               <tr id="{{$studentData['id'] }}">
                 <td>{{ $slno }}</td>
                 <td class="align-middle text-center">
-                  @if(isset($studentData['image']))
-                  <i class="fas fa-user-circle fa-2x"></i>
-                  @else
-                  <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;">
-                  @endif                  
+                <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
+                  <!-- @if(isset($studentData['image'])) -->
+                  <!-- <i class="fas fa-user-circle fa-2x"></i> -->
+                  <!-- <img src="{{asset('/storage/images/user.png')}}" class="rounded-circle" alt="" style="width:30px; height:30px;"> -->
+                  <!-- @else -->
+                  <!-- <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;"> -->
+                  <!-- @endif                   -->
                 </td>
                 <td>{{$studentData['firstname'] }}</td>
                 <td>{{$studentData['lastname'] }}</td>
@@ -53,10 +55,6 @@
                   <a title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
-                  <a title="" data-bs-toggle="modal" data-bs-target="" data-bs-student="">
-                  <i class="fas fa-ellipsis-v"></i>
-                  </a>
-                 
                 </td>
               </tr>
               @endforeach

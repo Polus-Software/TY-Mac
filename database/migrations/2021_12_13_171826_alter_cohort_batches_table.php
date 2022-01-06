@@ -15,7 +15,8 @@ class AlterCohortBatchesTable extends Migration
     {
         Schema::table('cohort_batches', function (Blueprint $table) {
             $table->string('title');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
+            $table->string('occurrence');
             $table->string('time_zone');
             $table->unsignedBigInteger('cohort_notification_id');
             $table->foreign('cohort_notification_id')->references('id')->on('cohort_notification')->onUpdate('cascade')->onDelete('cascade');

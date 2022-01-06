@@ -10,7 +10,7 @@
   color: #000000 !important;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
       @csrf
-        <input class="form-control me-2" id="search-box" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
-        <button class="btn btn-outline-success" id="search-btn">Search</button>
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
       <ul class="navbar-nav">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
@@ -48,10 +48,10 @@
         </li>
         @else
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
         </li>
         @endif
       </ul>
@@ -88,7 +88,163 @@
   </div>
 </div>
 <!-- review modal ends -->
+<!-- login modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+   <div class="modal-content">
+      <div class="modal-body">
+     <div class="container-overlay">
+      <div class="mx-auto">
+        <div class="wrapper row flex-column my-5" >  
+            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
+                <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
+                    @csrf
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label for="email" class="email-label">Email</label>
+                        <input type="email"  name="email"class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
+                        value="{{old('email')}}">
+                        <small>Error message</small>
+                        @if ($errors->has('email'))
+                        <span class="text-danger">{{ $errors->first('email') }}</span>
+                        @endif        
+                    </div>
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label for="inputPassword" class="password-label">Password</label>
+                        <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
+                        <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
+                        <small>Error message</small>
+                        @if ($errors->has('password'))
+                        <span class="text-danger">{{ $errors->first('password') }}</span>
+                        @endif
+                    </div>
 
+                    <div class="form-group mx-sm-5 mx-0">
+                        <label class="form-check-label rememberme">
+                        <input  class="form-check-input"  name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+                    </div>
+
+                    <div class="d-grid form-group  mx-sm-5 mx-0">
+                        <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
+                    </div>
+
+                    <div class="text-center forgotpass">
+                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
+                        
+                    </div>
+
+                    <div class="text-center bottom-text">
+                        <span><p>Don't have an account? </span>
+                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                    </div>            
+            
+                </form>
+            </div> 
+        </div>      
+     </div>          
+
+    </div>
+    
+   </div>
+</div>
+</div>
+</div>
+<!-- login modal ends -->
+ <!-- signup modal -->
+ <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
+              @csrf
+              <input type="hidden" name="_method" value="POST">
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="firstName" class="firstname-label">First Name</label>
+                <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('firstname'))
+                <span class="text-danger">{{ $errors->first('firstname') }}</span>
+                @endif
+                </span>
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="lastName" class="lastname-label">Last Name</label>
+                <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('lastname'))
+                <span class="text-danger">{{ $errors->first('lastname') }}</span>
+                @endif
+
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('email'))
+                <span class="text-danger">{{ $errors->first('email') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="inputPassword" class="password-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
+                <small>Error message</small>
+
+
+                @if ($errors->has('password'))
+                <span class="text-danger">{{ $errors->first('password') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="confirmPassword" class="password-label">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
+                <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
+                <small>Error message</small>
+
+                @if ($errors->has('password_confirmation'))
+                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label class="form-check-label checkbox-text">
+                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
+                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+                @if ($errors->has('privacy_policy'))
+                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
+                @endif
+              </div>
+
+              <div class="d-grid form-group mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
+              </div>
+
+              <div class="text-center bottom-text">
+                <span>
+                  <p>Already have an account?
+                </span>
+                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+<!-- signup modal ends -->
 
 
 
@@ -151,11 +307,14 @@
                                             </p>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
+                                                   
                                                 </p>
-                                                
+                                                @foreach($singleCourseDetails as $course)
+                                                <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
+                                                @endforeach
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
@@ -198,6 +357,7 @@
                             <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
                                 <img src="" alt="" class="pe-2">Assignments
                             </button>
+                           
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                             <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
                             
@@ -205,10 +365,11 @@
                                     <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
                                     <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
                                     <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
-                                    <div class="badge-shadow left--45"><img src="/Badges/More.svg" alt=""></div>
-                                        <button class="nav-link bg-transparent left--45 p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
-                                           <img src="Badges/More.svg" alt="">
-                                        </button>
+                                        <div class="badge-shadow left--45">
+                                            <button class="nav-link bg-transparent p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
+                                                <img src="/Badges/More.svg" alt="">
+                                            </button>
+                                        </div>
                                 </div>
                         </div>
                     </div>
@@ -232,13 +393,9 @@
                                     </div>
                                     
                                     <ul class="list-group list-group-flush border-bottom pb-3">
-                                        <li class="list-group-item">
-                                            <ul>
-                                                @foreach($topicDetail['topic_content'] as $content)
-                                                <li>{{ $content->topic_title }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </li>
+                                        @foreach($topicDetail['topic_content'] as $content)
+                                            <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
+                                        @endforeach
                                     </ul>   
                                     @endforeach                                    
                                 </div>
@@ -272,56 +429,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                            <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
-                                                            <ul class="list-group list-group-flush">
-                                                                <li class="list-group-item">
-                                                                    <ul>
-                                                                        <li>{{ $recommendation['content_title'] }}</li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>   
+                                                    <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
+                                                    <ul class="list-group list-group-flush border-bottom pb-3">
+                                                        <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                    </ul>   
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                 <!-- <div class="col-lg-6">
-                                    <div class="card card-3" style="height: 550px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <a href="#" class="btn btn-primary w-100">View again</a>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-4">
-                                                        <div class="card-body">
-                                                          <p class="card-text">We recommend you to view again these topics.</p>
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h5>
-                                                            <ul class="list-group list-group-flush">
-                                                                <li class="list-group-item">
-                                                                    <ul>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>   
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 @endforeach
                             </div>
                             
@@ -331,7 +447,7 @@
                         
                             <div class="row border-bottom">
                                 <div class="col-lg-12">
-                                    <h5 class="recommendation">Recommended Topics to Review</h5>
+                                    <h5 class="heading-1">Recommended Topics to Review</h5>
                                 </div>
                             </div>
 
@@ -359,13 +475,9 @@
                                                     <div class="card card-5">
                                                         <div class="card-body">
                                                         <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                            <ul class="list-group list-group-flush">
-                                                                <li class="list-group-item">
-                                                                    <ul>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                    </ul>
-                                                                </li>
+                                                            <ul class="list-group list-group-flush pb-3">
+                                                                <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                                <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
                                                             </ul>   
                                                         </div>
                                                     </div>
@@ -398,15 +510,11 @@
                                                     <div class="card card-5">
                                                         <div class="card-body">
                                                             <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                            <ul class="list-group list-group-flush">
-                                                                <li class="list-group-item">
-                                                                    <ul>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                        <li>How to use Google Suite</li>
-                                                                        <li>How to use Google Drive</li>
-                                                                    </ul>
-                                                                </li>
+                                                            <ul class="list-group list-group-flush pb-3">
+                                                                <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                                <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                                <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                                <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
                                                             </ul>   
                                                         </div>
                                                     </div>
@@ -428,7 +536,7 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                                                 <h5 class="card-title">Questions & Answers</h5>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end mb-3">
                                                 <button type="button" class="btn">Ask a question</button>
                                             </div>
                                             
@@ -466,9 +574,6 @@
                                                 @foreach($singleCourseDetails as $course)
                                                 <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                 @endforeach
-                                               
-                                                
-                                            
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
@@ -659,7 +764,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
                             <div class="card card-8 mb-3">
                                 <div class="card-body">
@@ -704,7 +809,8 @@
                                 </div>
                             </div>
                         </div>
-
+                       
+                       
                     </div>
                 </div>
             </div>

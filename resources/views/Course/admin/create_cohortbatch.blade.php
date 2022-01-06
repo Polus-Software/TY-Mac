@@ -11,27 +11,48 @@
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>
+      <div class="py-4">
+          <h3>Course Title</h3>
+          <hr class="my-4">
+        </div>
+      <div class="py-4">
+        <ul class="nav nav-tabs llp-tabs">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('view_cohortbatches', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Cohort List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ route('create-cohortbatch', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Cohort</a>
+          </li>
+        </ul>
+      </div>
         
         <form action="{{ route('save-cohortbatch') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         @csrf
         <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
 
-          <div class="py-4">
-          <h3>Cohort Overview - {{$course_id}}</h3>
-          <hr class="my-4">
-        </div>
+          
           <div class="col-12">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="cohortbatch_title" value="">
+            @if ($errors->has('cohortbatch_title'))
+              <span class="text-danger">The batch title is required</span>
+            @endif
           </div>
           <div class="col-md-6">
             <label for="level">Start date</label>
             <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly>
+            @if ($errors->has('cohortbatch_startdate'))
+              <span class="text-danger">The batch start date is required</span>
+            @endif
           </div>
           <div class="col-md-6">
           <label for="level">End date</label>
             <input type="text" class="form-control" id="title" name="cohortbatch_enddate" readonly>
+            @if ($errors->has('cohortbatch_enddate'))
+              <span class="text-danger">The batch end date is required</span>
+            @endif
           </div>
+          <label for="batch">Batch</label>
           <input type="hidden" name="cohortbatch_batchname" id="batch_name" value="Daily">
           <div class="col-12">
             <div class="form-check">
@@ -103,9 +124,12 @@
           <div class="col-md-3">
             <label for="duration">Start time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly>
+            @if ($errors->has('cohortbatch_starttime'))
+              <span class="text-danger">The batch start time is required</span>
+            @endif
           </div>
           <div class="col-md-1">
-            <select name="" id="">
+            <select name="" id="" class="form-control mt-4">
               <option value="AM">AM</option>
               <option value="PM">PM</option>
             </select>
@@ -113,19 +137,25 @@
           <div class="col-md-3">
             <label for="duration">End time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly>
+            @if ($errors->has('cohortbatch_endtime'))
+              <span class="text-danger">The batch end time is required</span>
+            @endif
           </div>
           <div class="col-md-1">
-            <select name="" id="">
+            <select name="" id="" class="form-control mt-4">
               <option value="AM">AM</option>
               <option value="PM">PM</option>
             </select>
           </div>
           <div class="col-md-4">
             <label for="duration">Timezone</label>
-            <select name="cohortbatch_timezone">
+            <select name="cohortbatch_timezone" class="form-control">
     <!-- include timezones here -->
-    @include('Course.admin.timezones')
-</select>
+              @include('Course.admin.timezones')
+            </select>
+            @if ($errors->has('cohortbatch_timezone'))
+              <span class="text-danger">The time zone is required</span>
+            @endif
           </div>
           <div class="col-12">
             <label for="description">Notification</label>

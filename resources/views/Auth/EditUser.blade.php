@@ -52,7 +52,7 @@
                       Change Password</a>
                   </li>
                   
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link link-dark" href="#">
                     <i class="far fa-bell pe-2"></i>
                       Email Notifications</a>
@@ -62,13 +62,13 @@
                     <a class="nav-link link-dark" href="#">
                     <i class="far fa-heart pe-2"></i>
                       My Favourite Courses</a>
-                  </li>
-                  <li class="nav-item">
+                  </li> -->
+                  <!-- <li class="nav-item">
                     <a class="nav-link link-dark" href="#">
                     <i class="fas fa-book-open pe-2"></i>
                       My Favourite Courses</a>
                   </li>
-                  
+                   -->
                 </ul>
               </div>
           </div>
@@ -125,7 +125,7 @@
                     <div class="row">
                         <div class="form-group buttons d-flex justify-content-end">
                             <button type="submit" class="btn back-btn">
-                            <a href="{{route('dashboard')}}">Cancel</a></button>
+                            <a href="/">Cancel</a></button>
                             <button type="submit" class="btn update-btn">Update</button>
                         </div>
                     </div>

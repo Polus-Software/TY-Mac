@@ -11,6 +11,7 @@ use Hash;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class InstructorController extends Controller
 {
@@ -41,18 +42,39 @@ class InstructorController extends Controller
     }
 
     public function saveInstructor(Request $request) {
+      //  dd($request->signature);
+      
         $validatedData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'institute' => 'required',
+            'designation' => 'required',
+            'twitter_social' => 'required',
+            'linkedin_social' => 'required',
+            'youtube_social' => 'required',
+            'description' => 'required',
+            'signature' => 'required'
         ]);
+
         $userType = UserType::where('user_role', 'instructor')->value('id');
+        $signatureFile = $request->file('signature')->getClientOriginalName();
+        $request->signature->storeAs('signatures',$signatureFile,'public');
+       
         $instructor = new User;
         $instructor->firstname = $request->input('firstname');
         $instructor->lastname = $request->input('lastname');
         $instructor->email = $request->input('email');
         $instructor->password = Hash::make($request->input('password'));
+        $instructor->institute = $request->input('institute');
+        $instructor->designation = $request->input('designation');
+        $instructor->twitter_social = $request->input('twitter_social');
+        $instructor->linkedin_social = $request->input('linkedin_social');
+        $instructor->youtube_social = $request->input('youtube_social');
+        $instructor->description = $request->input('description');
+       
+        $instructor->signature = $signatureFile;
         $instructor->role_id = $userType;
         $instructor->save();
         return redirect()->route('manage-instructors');
@@ -73,8 +95,18 @@ class InstructorController extends Controller
                     'firstname' => $instructor->value('firstname') ,
                     'lastname' => $instructor->value('lastname'),
                     'instructor_email' => $instructor->value('email'),
-                    'instructor_id' => $instructor->value('id')
+                    'instructor_image' => $instructor->value('image'),
+                    'instructor_institute' => $instructor->value('institute'),
+                    'instructor_designation' => $instructor->value('designation'), 
+                    'instructor_twitter_social' => $instructor->value('twitter_social'),
+                    'instructor_linkedin_social' => $instructor->value('linkedin_social'),
+                    'instructor_youtube_social' => $instructor->value('youtube_social'),
+                    'instructor_description' => $instructor->value('description'),
+                    'instructor_signature' => $instructor->value('signature'),
+                    'instructor_id' => $instructor->value('id'),
+                  
                 ];
+               
                 return view('Auth.Admin.instructor.view_instructor', [
                     'instructorDetails' => $data,
                     'userType' => $userType,
@@ -101,6 +133,12 @@ class InstructorController extends Controller
                     'firstname' => $instructor->value('firstname') ,
                     'lastname' => $instructor->value('lastname'),
                     'instructor_email' => $instructor->value('email'),
+                    'instructor_institute' => $instructor->value('institute'),
+                    'instructor_designation' => $instructor->value('designation'), 
+                    'instructor_twitter_social' => $instructor->value('twitter_social'),
+                    'instructor_linkedin_social' => $instructor->value('linkedin_social'),
+                    'instructor_youtube_social' => $instructor->value('youtube_social'),
+                    'instructor_description' => $instructor->value('description'),
                     'instructor_id' => $instructor->value('id')
                     ];
                     return view('Auth.Admin.instructor.create_instructor', [
@@ -122,6 +160,12 @@ class InstructorController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
+                'institute' => 'required',
+                'designation' => 'required',
+                'twitter_social' => 'required',
+                'linkedin_social' => 'required',
+                'youtube_social' => 'required',
+                'description' => 'required'
             ]);
             
             $firstName = $request->input('firstname');
@@ -133,6 +177,12 @@ class InstructorController extends Controller
                     $instructor->firstname = $firstName;
                     $instructor->lastname = $lastName;
                     $instructor->email = $email;
+                    $instructor->institute = $request->input('institute');
+                    $instructor->designation = $request->input('designation');
+                    $instructor->twitter_social = $request->input('twitter_social');
+                    $instructor->linkedin_social = $request->input('linkedin_social');
+                    $instructor->youtube_social = $request->input('youtube_social');
+                    $instructor->description = $request->input('description');
                     $instructor->save();
                     return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
                 }
@@ -147,10 +197,12 @@ class InstructorController extends Controller
         $slNo = 1;
         $userType = UserType::where('user_role', 'instructor')->value('id');
         $userId = $request->input('user_id');
+        
         if ($userId) {
             $instructor = User::find($userId);
             if ($instructor) {
                 $instructor->delete();
+                
                 $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -158,16 +210,19 @@ class InstructorController extends Controller
                     $html = $html . '<tr id="' . $instructor->id .'">';
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
                     $html = $html . '<td class="align-middle" colspan="2">' . $instructor->firstname . ' ' . $instructor->lastname . '</td>';
-                    $html = $html . '<th class="align-middle">' . $instructor->email . '</th>';
-                    $html = $html . '<td class="align-middle">Dummy</td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary view_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#view_instructor_modal" data-bs-id="' . $instructor->id . '">View</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-success add_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#edit_instructor_modal" data-bs-id="' . $instructor->id . '">Edit</button></td>';
-                    $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger add_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $instructor->id . '">Delete</button></td></tr>';
+                    $html = $html . '<td class="align-middle">' . $instructor->email . '</th>';
+                    $html = $html . '<td class="align-middle">Carbon::createFromFormat("Y-m-d H:i:s", $instructor->created_at)->format("F d, Y")</td>';
+                    $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i>>View</a>';
+                    $html = $html . '<a  href="" title="Edit instructor"><i class="fas fa-pen"></i></a>';
+                    $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $instructor->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
-                }
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
+            
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error', 'test' => $courseCategoryId]);
+        return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }
+        
 }
+}
+

@@ -14,22 +14,65 @@
         @csrf
         <section class="row g-3 llp-view">
         <div class="py-4"><h3>Instructor details</h3><hr class="my-4"></div>
-
-<div class="col-md-2"><i class="fas fa-user-circle fa-5x"></i>
-<img src="..." class="rounded float-start" alt="..."></div>
-        
-        <div class="col-md-4">
+       
+          <div class="col-md-2">
+          <img src="{{ asset('/storage/images/'.$instructorDetails['instructor_image']) }}" class="img-fluid rounded-circle float-start" alt="" style="width:94px; height:94px;">
+          <!-- @if(isset($instructorDetails['instructor_image'])) -->
+          <!-- <i class="fas fa-user-circle fa-5x"></i> -->
+          <!-- @else -->
+          
+        <!-- @endif -->
+       </div>
+        <div class="col-md-3">
             <label>First Name</label>
             <p>{{$instructorDetails['firstname']}}</p>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label>Last Name</label>
             <p>{{$instructorDetails['lastname']}}</p>
           </div>
-          <div class="col-12">
+          <div class="col-md-3">
             <label>Email id</label>
             <p>{{$instructorDetails['instructor_email']}}</p>
           </div>
+
+          <div class="row d-flex justify-content-end">
+            <div class="col-md-3">
+              <label>Institute</label>
+              <p>{{$instructorDetails['instructor_institute']}}</p>
+            </div>
+            <div class="col-md-3">
+              <label>Designation</label>
+              <p>{{$instructorDetails['instructor_designation']}}</p>
+            </div>
+
+            <div class="col-md-4">
+              <label>Twitter Link</label>
+              <p>{{$instructorDetails['instructor_twitter_social']}}</p>
+            </div>
+          </div>
+          <div class="row d-flex justify-content-start mt-3">
+            <div class="col-md-4">
+              <label>LinkedIn Link</label>
+              <p>{{$instructorDetails['instructor_linkedin_social']}}</p>
+            </div>
+
+            <div class="col-md-6">
+              <label>Youtube Link</label>
+              <p>{{$instructorDetails['instructor_youtube_social']}}</p>
+            </div>
+
+            <div class="col-md-12">
+              <label>About</label>
+              <p>{{$instructorDetails['instructor_description']}}</p>
+            </div>
+
+            <div class="col-md-12">
+              <label>Signature</label>
+              <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start" alt="" style="width:94px; height:94px;">
+            </div>
+          </div>         
+
           <div class="col-12">
             <label>Assigned courses</label>
             <ul>

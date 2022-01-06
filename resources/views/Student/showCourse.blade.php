@@ -9,8 +9,21 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+.question-btn {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    background: #2C3443;
+    border-radius: 10px;
+    width: 190px;
+    height: 40px;
+    font-size: 14x;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +31,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
-      @csrf
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
-        <button class="btn btn-outline-success" id="search-btn">Search</button>
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
+          @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
       <ul class="navbar-nav">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
@@ -36,22 +49,32 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
+        </li> -->
         @if (Auth::check())
+        @if(Auth::user()->role_id == 3)
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
         @else
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+        <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @endif
+        @else
+        <li class="nav-item">
+        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
         </li>
         @endif
       </ul>
@@ -120,34 +143,147 @@
 </div>
 </div>
 <!-- end login modal -->
-<!-- review modal -->
-<!-- <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="rating text-center mb-3">
-            <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
-            <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
-            <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
-            <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
-            <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
+
+<!-- signup modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-          
-        <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
-            <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength ="60"></textarea> 
-        </div>                         
-      </div>
-       <div class="modal-footer border-0 mb-3">
-        <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
+              @csrf
+              <input type="hidden" name="_method" value="POST">
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="firstName" class="firstname-label">First Name</label>
+                <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('firstname'))
+                <span class="text-danger">{{ $errors->first('firstname') }}</span>
+                @endif
+                </span>
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="lastName" class="lastname-label">Last Name</label>
+                <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('lastname'))
+                <span class="text-danger">{{ $errors->first('lastname') }}</span>
+                @endif
+
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('email'))
+                <span class="text-danger">{{ $errors->first('email') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="inputPassword" class="password-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
+                <small>Error message</small>
+
+
+                @if ($errors->has('password'))
+                <span class="text-danger">{{ $errors->first('password') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="confirmPassword" class="password-label">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
+                <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
+                <small>Error message</small>
+
+                @if ($errors->has('password_confirmation'))
+                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label class="form-check-label checkbox-text">
+                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
+                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+                @if ($errors->has('privacy_policy'))
+                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
+                @endif
+              </div>
+
+              <div class="d-grid form-group mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
+              </div>
+
+              <div class="text-center bottom-text">
+                <span>
+                  <p>Already have an account?
+                </span>
+                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
       </div>
     </div>
   </div>
-</div> -->
- <!-- end review modal -->
+<!-- signup modal ends -->
+<!-- contact modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="contactModalLabel">Contact us</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="name" class="name-label">Name</label>
+                <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="phone" class="phone-label">Phone</label>
+                <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="message" class="message-label">Message</label>
+                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <small>Error message</small>
+              </div>
+              <div class="d-grid form-group  mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+  <!-- contact modal ends -->
 
     <header class="ty-mac-header-bg d-flex align-items-center">
         <div class="container">
@@ -211,21 +347,19 @@
                     @else
                      <h6>Already enrolled!</h6>
                     @endif
+                    <a class="btn question-btn" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="far fa-comment-alt"></i> Have a question?</a>
                 @endunless
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/19" target="_blank">
-                    Share on Facebook
-                </a>
                 </div>
                 <div class="row mt-2">
                    
-                        <p class="fw-bold">share this course: </p>
+                        
                         @foreach($singleCourseDetails as $singleCourseDetail)
                         <div class="col-lg-12">
-                            <!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Facebook" target="_blank"><i class="fab fa-facebook fa-lg btn-dark pe-3"></i></a> -->
+                        <span class="fw-bold">share this course: </span>
                             <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
                             <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
 
-                            <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a>
+                            <!-- <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a> -->
                         </div>
                         @endforeach
                 

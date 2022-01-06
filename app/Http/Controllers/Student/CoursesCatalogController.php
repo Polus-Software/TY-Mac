@@ -74,7 +74,7 @@ class CoursesCatalogController extends Controller
         
     
 
-    public function paginate($items, $perPage = 3, $page = null, $options = [])
+    public function paginate($items, $perPage = 6, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
@@ -216,8 +216,11 @@ class CoursesCatalogController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           return redirect()->back()->with(['success' => 'Successfully logged in!']);
-       
+           if($userType == 'instructor'){
+            return redirect('/');
+        }else{
+            return redirect()->back()->with(['success' => 'Successfully logged in!']);
+            }
         }
     }
 

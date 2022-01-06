@@ -56,7 +56,7 @@ class AuthController extends Controller
             'body' => 'You have successfully registered'
         ];
         Mail::to($email)->send(new Gmail($details));
-        return redirect('login')->withSuccess('Successfully registered!');
+        return redirect('/')->withSuccess('Successfully registered!');
 
         } catch (Exception $exception) {
             return redirect('login')->withSuccess('Successfully registered!');
@@ -89,10 +89,16 @@ class AuthController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           return redirect('dashboard');
+           if($userType == 'student' or $userType == 'instructor'){
+            return redirect('/');
+        }else{
+            return redirect('dashboard');
+           }
+        //    return back()->with('Error','Credentials are wrong.');
+         return redirect('login')->withErrors('Credentials are wrong.');
         }
-        return redirect('login')->withErrors('Credentials are wrong.');
     }
+    
     
     /**
      * Render dashboard after login
@@ -117,7 +123,7 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
         Session::flush();
         Auth::logout();
-        return Redirect('login');
+        return Redirect('/');
     }
     
 }

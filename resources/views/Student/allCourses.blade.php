@@ -10,7 +10,9 @@
   color: #000000 !important;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+ 
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,40 +20,50 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
-      <form class="mb-2 mb-lg-0 d-flex me-auto">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
       @csrf
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:30rem !important;">
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" id="search-btn">Search</button>
       </form>
 
       <ul class="navbar-nav">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link active" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
+        </li> -->
         @if (Auth::check())
+        @if(Auth::user()->role_id == 3)
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+          <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
         @else
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('signup') }}">Signup</a>
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">Login</a>
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @endif
+        @else
+        <li class="nav-item">
+        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
         </li>
         @endif
       </ul>
@@ -120,13 +132,109 @@
 </div>
 </div>
 <!-- login modal ends -->
+ <!-- signup modal -->
+ <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
+              @csrf
+              <input type="hidden" name="_method" value="POST">
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="firstName" class="firstname-label">First Name</label>
+                <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('firstname'))
+                <span class="text-danger">{{ $errors->first('firstname') }}</span>
+                @endif
+                </span>
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="lastName" class="lastname-label">Last Name</label>
+                <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('lastname'))
+                <span class="text-danger">{{ $errors->first('lastname') }}</span>
+                @endif
+
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                <small>Error message</small>
+
+                @if ($errors->has('email'))
+                <span class="text-danger">{{ $errors->first('email') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="inputPassword" class="password-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
+                <small>Error message</small>
+
+
+                @if ($errors->has('password'))
+                <span class="text-danger">{{ $errors->first('password') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="confirmPassword" class="password-label">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
+                <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
+                <small>Error message</small>
+
+                @if ($errors->has('password_confirmation'))
+                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                @endif
+              </div>
+
+              <div class="form-group mx-sm-5 mx-0">
+                <label class="form-check-label checkbox-text">
+                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
+                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+                @if ($errors->has('privacy_policy'))
+                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
+                @endif
+              </div>
+
+              <div class="d-grid form-group mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
+              </div>
+
+              <div class="text-center bottom-text">
+                <span>
+                  <p>Already have an account?
+                </span>
+                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+<!-- signup modal ends -->
 <header class="ty-mac-header-bg d-flex align-items-center">
     <div class="container">
       <div class="row">
         <div class="col-lg-5 col-sm-12 d-flex align-items-center p-3">
           <div class="text-content-wrapper d-flex d-lg-block flex-column align-items-center w-100 text-center text-lg-start">
             <p>Lorem ipsum dolor sit amet</p>
-            <h1>Dignissimos Ducimus</h1>
+            <h1 class="mb-3">Dignissimos Ducimus</h1>
             <ul class="p-0 m-0">
               <li class="pb-2"><i class="fas fa-arrow-right"></i>Praesentium voluptatum deleniti atque.</li>
               <li class="pb-2"><i class="fas fa-arrow-right"></i>Corrupti quos dolores et quas molestias.</li>
@@ -387,7 +495,7 @@
                         (60)
                       </div>
                         
-                      <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
+                      <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
                         <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{$courseData['course_category']}}
                       </div>
                     </div>
@@ -399,7 +507,7 @@
                         <div class="col-lg-5 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>
                         {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
                         </div>
-                        <div class="col-lg-4 col-4 item-3">{{$courseData['course_difficulty']}}</div>
+                        <div class="col-lg-4 col-sm-4 col-4 item-3 d-flex justify-content-end">{{$courseData['course_difficulty']}}</div>
                       </div>
                     </li>
                   </ul>
@@ -421,9 +529,10 @@
             </div>
            @endforeach
            <!-- </div> -->
-           <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
               {{ $courseDatas->links() }}
             </div>
+
            </div>
           </div>
         </div>
@@ -431,7 +540,9 @@
     </div>
   </div>
 </section>
+
 @endsection('content')
+
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
 <script>
 

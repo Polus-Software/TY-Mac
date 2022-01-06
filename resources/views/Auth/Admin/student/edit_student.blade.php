@@ -16,26 +16,26 @@
 
         <section class="row g-3 llp-view">
         <div class="py-4"><h3>Student details</h3><hr class="my-4"></div>
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <label>First Name</label>
             <input type="text" class="form-control"  value ="{{$studentDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
-            <small>Error message</small>  
+            <small class="small">Error message</small>  
             @if ($errors->has('firstname'))
                 <span class="text-danger">{{ $errors->first('firstname') }}</span>
             @endif
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 mb-3">
             <label>Last Name</label>
             <input type="text" class="form-control" value="{{$studentDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
-            <small>Error message</small>  
+            <small class="small">Error message</small>  
             @if ($errors->has('lastname'))
                 <span class="text-danger">{{ $errors->first('lastname') }}</span>
             @endif
           </div>
-          <div class="col-12">
+          <div class="col-12 mb-3">
             <label>Email id</label>
             <input type="email" class="form-control" value="{{$studentDetails['email']}}" name="email" id="email" placeholder=" Enter email">
-            <small>Error message</small>  
+            <small class="small">Error message</small>  
             @if ($errors->has('email'))
                 <span class="text-danger">{{ $errors->first('email') }}</span>
             @endif
@@ -59,4 +59,7 @@
   </div>
 </div>
 <!-- container ends -->
+
+
+<script src="{{ asset('assets/adminEdit.js') }}"></script>
 @endsection('content')

@@ -20,7 +20,7 @@
         Sub topics</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('view-assignment', ['course_id' => $course_id]) }}">
+      <a class="nav-link link-dark" href="{{ route('view-assignments',$course_id) }}">
       <i class="fas fa-users"></i>
         Assignments</a>
     </li>
