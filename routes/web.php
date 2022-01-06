@@ -44,6 +44,7 @@ Route::get('/', function () {
     Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.login');
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/user-contact', [AuthController::class, 'contactUs'])->name('user.contact');
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -62,6 +63,7 @@ Route::get('/', function () {
     // Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
+    Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
 
 
 

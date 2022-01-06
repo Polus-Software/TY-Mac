@@ -120,10 +120,34 @@ class AuthController extends Controller
      * Logout student user
      */
     public function logout() {
-        auth()->user()->tokens()->delete();
-        Session::flush();
-        Auth::logout();
+        if(auth()->user()) {
+            auth()->user()->tokens()->delete();
+            Session::flush();
+            Auth::logout();
+        }
         return Redirect('/');
+    }
+
+    public function contactUs(Request $request) {
+        
+        try {
+            $name = $request->name;
+            $phone = $request->phone;
+            $message = $request->message;
+            $email = $request->email;
+    
+            $details =[
+                'title' => 'Hey there, you have a new query!',
+                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
+            ];
+    
+            Mail::to('support@thinklit.com')->send(new Gmail($details));
+    
+            return redirect('/')->withSuccess('Sent successfully!');
+        } catch (Exception $exception) {
+            return redirect('/');
+        }
+        
     }
     
 }

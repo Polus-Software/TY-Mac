@@ -49,8 +49,11 @@
     </li>    
   </ul>
   <div class="position-relative btn-bottom-container">
-    <a class="btn btn-primary d-block">Publish</a>
+    @csrf
+    <a class="btn btn-primary d-block" id="publish">Publish</a>
     <a class="btn btn-outline-secondary d-block mt-2" href="{{ route('manage-courses') }}">Back to course list</a>
   </div>
 </div>
 <!-- sidebar ends -->
+
+

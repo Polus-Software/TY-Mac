@@ -82,11 +82,13 @@ class CourseController extends Controller
     public function createSubtopic(Request $request){
         
         $course_id = $request->input('course_id');
-        $course_title = Course::where('id', $course_id)->value('course_title');
-       
+        $course = Course::where('id', $course_id);
+        $course_title = $course->value('course_title');
+        $courseStatus = $course->value('is_published');
         return view('Course.admin.create_subtopic', [
             'course_id' => $course_id,
-            'course_title' => $course_title
+            'course_title' => $course_title,
+            'courseStatus' => $courseStatus
         ]);
     }
 
@@ -153,6 +155,7 @@ class CourseController extends Controller
         $course->course_image = $courseFile;
         $course->course_thumbnail_image = $courseThumbnailFile;
         $course->created_by = $userId;
+        $course->is_published = false;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
@@ -402,29 +405,6 @@ class CourseController extends Controller
         }
         return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
     }
-
-    // public function createSubtopic(){
-    //     return view('Course.admin.create_subtopic');
-    // }
-    // public function saveSubTopic(Request $request) {
-    //     $topic = new Topic;
-    //     $topic->topic_title = $request->topic_title;
-    //     $topic->course_id = $request->course;
-    //     $topic->description = $request->topic_description;
-    //     $topic->save();
-    //     if($request->hasFile('study_material')){
-    //         $filename = $request->study_material->getClientOriginalName();
-    //         $request->study_material->storeAs('study_material',$filename,'public');
-    //         $content = new TopicContent;
-    //         $content->topic_title = $request->topic_title;
-    //         $content->topic_id = $topic->id;
-    //         $content->description = $request->topic_description;
-    //         $content->content_type = $request->study_material->extension();
-    //         $content->document = $filename;
-    //         $content->save();
-    //     }
-    //     return redirect()->back();
-    // }
 
     public function saveSubTopic(Request $request) {
         $external_links = '';
@@ -799,5 +779,23 @@ class CourseController extends Controller
         $cohortbatch->save();
 
         return redirect()->route('view_cohortbatches', ['course_id' => $course_id]);
+    }
+
+    public function publishCourse(Request $request) {
+        $courseId = $request->course_id;
+        
+        $course = Course::find($courseId);
+        if($course->is_published) {
+            $course->is_published = false;
+            $course->save();
+    
+            return response()->json(['status' => 'unpublished', 'message' => 'Unpublished successfully']);
+        } else {
+            $course->is_published = true;
+            $course->save();
+    
+            return response()->json(['status' => 'published', 'message' => 'Published successfully']);
+        }
+        
     }
 }
