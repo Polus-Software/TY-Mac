@@ -42,8 +42,7 @@ class InstructorController extends Controller
     }
 
     public function saveInstructor(Request $request) {
-      //  dd($request->signature);
-      
+     
         $validatedData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',

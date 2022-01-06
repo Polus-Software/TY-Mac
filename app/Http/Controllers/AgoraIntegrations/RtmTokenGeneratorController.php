@@ -126,7 +126,7 @@ class RtmTokenGeneratorController extends Controller
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
-            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
 
             array_push($sessionsArray, array(
@@ -159,7 +159,7 @@ class RtmTokenGeneratorController extends Controller
         $topics = Topic::where('course_id', $course)->get();
 
         foreach($batches as $batch) {
-            $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->batchname . "</option>";
+            $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->title . "</option>";
         }
         foreach($topics as $topic) {
             $topicHtml = $topicHtml . "<option value=" . $topic->topic_id . ">" . $topic->topic_title . "</option>";
@@ -199,7 +199,7 @@ class RtmTokenGeneratorController extends Controller
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
-            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
 
             array_push($sessionsArray, array(

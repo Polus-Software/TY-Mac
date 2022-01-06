@@ -27,7 +27,6 @@ use App\Models\StudentFeedbackCount;
 class EnrolledCourseController extends Controller
 {
     public function afterEnrollView(Request $request, $courseId){
-
         $courseDetails =[];
         $topicDetails = [];
         $achievedBadgeDetails = [];
@@ -99,8 +98,7 @@ class EnrolledCourseController extends Controller
             $achievementBadge = AchievementBadge::where('id' , $badges);
             $badge_name = $achievementBadge->value('title');
             $badge_image = $achievementBadge->value('image');
-            //$badge_created_at = StudentAchievement::where('badge_id', $badges)->value('created_at');
-        
+           
             array_push($upcoming, array(
                 'id'=> $badges,
                 'badge_name' =>  $badge_name,

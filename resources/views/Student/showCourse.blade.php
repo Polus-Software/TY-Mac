@@ -37,7 +37,7 @@
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
           <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
@@ -70,6 +70,9 @@
         </li>
         @endif
         @else
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
@@ -284,10 +287,9 @@
     </div>
   </div>
   <!-- contact modal ends -->
-
-    <header class="ty-mac-header-bg d-flex align-items-center">
+    <header class="ty-mac-header-bg d-flex align-items-center mt-3">
         <div class="container">
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 ">
                
                 <div class="text-content-wrapper w-100 text-lg-start">
@@ -297,16 +299,18 @@
                     </p>
                 </div>
                 <div class="row row-1">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-4">
-                        <p class="border-end"><i class="far fa-clock"></i>Duration</p>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-3">
+                        <p class="border-end"><i class="far fa-clock"></i>@foreach($singleCourseDetails as $singleCourseDetail)
+                    {{$singleCourseDetail['duration']}}
+                    @endforeach</p>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-4 col-4">
                         <p class="border-end">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_difficulty']}}
                     @endforeach</p>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-4">
-                        <p>@foreach($singleCourseDetails as $singleCourseDetail)
+                    <div class="col-lg-4 col-md-4 col-sm-5 col-5 p-0">
+                        <p class="ms-2">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_category']}}
                     @endforeach</p>
                     </div>
@@ -330,7 +334,7 @@
                         </strong></p>
                     </div>
                     <div class="col-lg-6">
-                        <p>Upcoming Cohort:<strong>11/10/2021</strong></p>
+                        <p>Upcoming Cohort: <strong>11/10/2021</strong></p>
                     </div>
                 </div>
                 
@@ -351,9 +355,7 @@
                 @endunless
                 </div>
                 <div class="row mt-2">
-                   
-                        
-                        @foreach($singleCourseDetails as $singleCourseDetail)
+                   @foreach($singleCourseDetails as $singleCourseDetail)
                         <div class="col-lg-12">
                         <span class="fw-bold">share this course: </span>
                             <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
@@ -361,9 +363,7 @@
 
                             <!-- <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a> -->
                         </div>
-                        @endforeach
-                
-                
+                    @endforeach
                 </div>
               </div>
              
@@ -524,7 +524,7 @@
 <!-- student reviews --> 
     <section>
         <div class="container">
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card card-5 mb-2">
                         <div class="card-body">
@@ -566,6 +566,87 @@
         </div>
     </section>
 <!-- student reviews end--> 
+<footer>
+        <div class="ty-mac-footer">
+            <div class="container">
+                <div class="row pt-5 pb-4">
+                    <div class="col-lg-6 mb-4">
+                        <h4 class="pb-2">LOGO</h4>
+                        <p>At vero eos et accusamus et iusto 
+                            odio dignissimos ducimus qui blanditiis
+                             praesentium voluptatum deleniti atque 
+                             corrupti quos dolores et quas molestias
+                              excepturi sint occaecati cupiditate non 
+                              provident, similique sunt in culpa qui officia deserunt 
+                              mollitia animi, id est laborum et dolorum fuga.</p>
+                        <h4 class="pt-2 pb-3">
+                            Social Links
+                        </h4>
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-12">
+                                <a href=""><i class="fab fa-facebook"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                    </div>
+
+                    <div class="col-lg-5">
+                        <h4 class="pb-3">Quick Links</h4>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                        <h4 class="pb-2">Help</h4>
+                            <div class="col-lg-12 col-md-6 col-sm-8 col-10">
+                                <a href="#">Terms and Conditions | Privacy Policy</a>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <a href="#">Cookies</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-dark copyRight">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <p class="pt-2">© Copyright TY Mac 2021</p>
+            </div>
+        </div>
+    </footer>
+
 
 <script>
     document.getElementById('enrollButton').addEventListener('click', (e) => {
@@ -611,39 +692,6 @@
            finalRating= starRating; 
    });
    }
-
-//    document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
-//       let starElement = document.getElementsByClassName('rating-star');
-//       for (var i = 0; i < 5 ; i++) {
-//           starElement[i].classList.remove("active-stars");
-//       }
-//       document.getElementById('comment').value = "";
-//    });
-
-
-//    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-//        let courseId = document.getElementById('course_id').value;
-//        let userId = document.getElementById('user_id').value;
-//        let comment =document.getElementById('comment').value;
-
-//        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
-       
-//         fetch(path, {
-//             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
-//             },
-//            body: JSON.stringify({})
-//         }).then((response) => response.json()).then((data) => {
-//             if (data.status =='success'){
-//                 closeModal('reviewModal');
-//                 window.location.reload();
-//             }
-//         });
-
-//    });
    
    
    function closeModal(modalId) {

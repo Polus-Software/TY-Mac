@@ -93,7 +93,7 @@ class CourseController extends Controller
     }
 
     public function saveCourse(Request $request) {
-        
+
         $request->validate([
             'course_title'=>'required',
             'description' => 'required',
@@ -203,18 +203,7 @@ class CourseController extends Controller
         }
     }
 
-    // public function editCourse1(Request $request) {
-    //     $courseId = $request->input('course_id');
-    //     if ($courseId) {
-    //         $course = Course::where('id', $courseId);
-    //         if ($course) {
-    //             $instructor = AssignedCourse::where('course_id', $courseId)->value('user_id');
-    //             $data = ['course_name' => $course->value('course_title'), 'course_category' => $course->value('category'), 'course_description' => $course->value('description'), 'instructor' => $instructor, 'id' => $courseId];
-    //             return response()->json(['status' => 'success', 'message' => '', 'courseDetails' => $data]);
-    //         }
-    //     }
-    //     return response()->json(['status' => 'failed', 'message' => 'Some error']);
-    // }
+    
 
     /**
      * For editing a course
@@ -262,40 +251,7 @@ class CourseController extends Controller
         
     }
 
-    // public function updateCourse1(Request $request) {
-    //     $html = '';
-    //     $slNo = 1;
-    //     $courseTitle = $request->input('course_title');
-    //     $courseDesc = $request->input('description');
-    //     $courseCategory = $request->input('course_category');
-    //     $instructor = $request->input('instructor');
-    //     $courseId = $request->input('course_id');
-    //     $user = Auth::user();
-    //     $userId = $user->id;
-    //     $course = Course::find($courseId);
-    //     $course->course_title = $courseTitle;
-    //     $course->description = $courseDesc;
-    //     $course->category = $courseCategory;
-    //     $course->created_by = $userId;
-    //     $course->save();
-    //     $assignedCourse = AssignedCourse::where('course_id', 'like', $courseId)->update(['course_id' => $course->id, 'user_id' => $instructor]);
-    //     $courses = Course::all();
-
-    //     foreach($courses as $course) {
-    //         $categoryName = CourseCategory::where('id', $course->category)->value('category_name');
-    //         $html = $html . '<tr id="' . $course->id .'">';
-    //         $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
-    //         $html = $html . ' <td class="align-middle">' . $course->course_title . '</td>';
-    //         $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-    //         $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-    //         $html = $html . '<td class="text-center align-middle"><button class="btn btn-primary add_new_course_btn" data-bs-toggle="modal" data-bs-target="#view_course_modal" data-bs-id="' . $course->id . '">View</button></td>';
-    //         $html = $html . '<td class="text-center align-middle"><button class="btn btn-success edit_new_course_btn" data-bs-toggle="modal" data-bs-target="#edit_course_modal" data-bs-id="' . $course->id . '">Edit</button></td>';
-    //         $html = $html . '<td class="text-center align-middle"><button class="btn btn-danger delete_new_course_btn" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '">Delete</button></td></tr>';
-    //         $slNo = $slNo + 1;
-    //     }
-
-    //     return response()->json(['status' => 'success', 'message' => 'Added successfully', 'html' => $html]);
-    // }
+   
 
     public function updateCourse(Request $request) {        
         try{
@@ -357,7 +313,7 @@ class CourseController extends Controller
                 $course->course_image = $courseFile;
                 $course->course_thumbnail_image = $courseThumbnailFile;  
                 }                      
-                // $course->created_by = $userId; //TODO
+               
                 $course->save();
                 $assignedCourse = AssignedCourse::where('course_id', 'like', $course_id)->update(['course_id' => $course->id, 'user_id' => $instructor]);
                 return redirect()->route('view-course', ['course_id' => $course->id]);
@@ -435,31 +391,10 @@ class CourseController extends Controller
                 $content->save();
             }
         }
-        // 'view-subtopics', ['course_id' => $course_id]
+       
         return redirect()->route('view-subtopics', ['course_id' => $course_id]);
     }
 
-    // public function saveBatch(Request $request) {
-        
-        
-    //     $course = $request->batchCourse;
-    //     $batchName = $request->batchname;
-    //     $startDate = $request->startDate;
-    //     $startTime = $request->startTime;
-    //     $endTime = $request->endTime;
-    //     $batchDuration = $request->batch_duration;
-    //     $zone = $request->zone;
-    //     $batch = new CohortBatch;
-    //     $batch->course_id = $course;
-    //     $batch->batchname = $batchName;
-    //     $batch->start_date = $startDate;
-    //     $batch->start_time = $startTime;
-    //     $batch->end_time = $endTime;
-    //     $batch->duration = $batchDuration;
-    //     $batch->region = $zone;
-    //     $batch->save();
-    //     return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
-    // }
 
     /**
      * For viewing a subTopics details
@@ -503,7 +438,6 @@ class CourseController extends Controller
         $course_id = $request->input('course_id');
         if($course_id) {
             $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
-        // dd($course_title);
         $subtopics = Topic::where('course_id', $course_id)->get();
         foreach($subtopics as $topics){
 
@@ -528,28 +462,6 @@ class CourseController extends Controller
 
     }
 
-    //Adding assignments
-    // public function addAssignment(Request $request){
-    //   $topicId =intval($request->assignment_topic_id);
-
-    //   $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
-    //   $instructorId = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
-
-
-    //   $topicAssignment = new TopicAssignment;
-    //   $topicAssignment->assignment_title= $request->assignment_title;
-    //   $topicAssignment->assignment_description= $request->assignment_description;
-    //   $topicAssignment->topic_id = $topicId;
-    //   $topicAssignment->course_id = $courseId ;
-    //   $topicAssignment->instructor_id = $instructorId;
-
-      
-    //     $filename = $request->assignment_attachments->getClientOriginalName();
-    //     $request->assignment_attachments->storeAs('assignmentAttachments',$filename,'public');
-    //     $topicAssignment->document = $filename;
-    //     $topicAssignment->save();
-    //     return redirect()->back();
-    // }
 
     public function createAssignment(Request $request){
         $course_id = $request->input('course_id');
@@ -627,7 +539,6 @@ class CourseController extends Controller
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
 
-        //TODO: Assignment due date
         if($request->file()){
             $filename = $request->document->getClientOriginalName();
             $request->document->storeAs('assignmentAttachments',$filename,'public');
@@ -686,18 +597,7 @@ class CourseController extends Controller
     }
 
     public function saveCohortBatch(Request $request) {
-
-        $request->validate([
-            'cohortbatch_title'=>'required',
-            'cohortbatch_startdate' => 'required',
-            'cohortbatch_enddate' =>'required',
-            'cohortbatch_batchname' => 'required',
-            'cohortbatch_starttime' =>'required',
-            'cohortbatch_endtime' =>'required',
-            'cohortbatch_timezone' =>'required',
-            'zone'=>'required',
-        ]);
-      
+       
         $cohortbatch = new CohortBatch();
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->course_id = $request->input('course_id');  
