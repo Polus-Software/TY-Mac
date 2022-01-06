@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="69" viewBox="0 0 69 69">
+  <g id="Badge" transform="translate(-613 -436)">
+    <g id="Ellipse_36" data-name="Ellipse 36" transform="translate(613 436)" fill="#fff" stroke="#e0e0e0" stroke-width="1">
+      <circle cx="34.5" cy="34.5" r="34.5" stroke="none"/>
+      <circle cx="34.5" cy="34.5" r="34" fill="none"/>
+    </g>
+    <g id="Badge-2" data-name="Badge" transform="translate(-614.893 212.006)">
+      <path id="Icon_material-star" data-name="Icon material-star" d="M18.83,27.173l9.783,5.9-2.6-11.129,8.643-7.488L23.279,13.5,18.83,3,14.382,13.5,3,14.461l8.643,7.488-2.6,11.129Z" transform="translate(1243.393 238.707)" fill="#0d88a8"/>
+      <path id="Icon_feather-hexagon" data-name="Icon feather-hexagon" d="M50.107,38.47V18.2a5.067,5.067,0,0,0-2.534-4.383L29.837,3.682a5.067,5.067,0,0,0-5.067,0L7.034,13.817A5.067,5.067,0,0,0,4.5,18.2V38.47a5.067,5.067,0,0,0,2.534,4.383L24.77,52.988a5.067,5.067,0,0,0,5.067,0L47.573,42.853a5.067,5.067,0,0,0,2.534-4.383Z" transform="translate(1235.393 229.991)" fill="none" stroke="#0d88a8" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

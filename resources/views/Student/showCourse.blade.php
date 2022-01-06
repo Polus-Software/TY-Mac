@@ -25,7 +25,7 @@
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
           <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
@@ -58,6 +58,9 @@
         </li>
         @endif
         @else
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
@@ -228,38 +231,11 @@
     </div>
   </div>
 <!-- signup modal ends -->
-<!-- review modal -->
-<!-- <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="rating text-center mb-3">
-            <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
-            <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
-            <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
-            <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
-            <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
-        </div>
-          
-        <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
-            <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength ="60"></textarea> 
-        </div>                         
-      </div>
-       <div class="modal-footer border-0 mb-3">
-        <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
-      </div>
-    </div>
-  </div>
-</div> -->
- <!-- end review modal -->
 
-    <header class="ty-mac-header-bg d-flex align-items-center">
+
+    <header class="ty-mac-header-bg d-flex align-items-center mt-3">
         <div class="container">
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 ">
                
                 <div class="text-content-wrapper w-100 text-lg-start">
@@ -269,16 +245,18 @@
                     </p>
                 </div>
                 <div class="row row-1">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-4">
-                        <p class="border-end"><i class="far fa-clock"></i>Duration</p>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-3">
+                        <p class="border-end"><i class="far fa-clock"></i>@foreach($singleCourseDetails as $singleCourseDetail)
+                    {{$singleCourseDetail['duration']}}
+                    @endforeach</p>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-4 col-4">
                         <p class="border-end">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_difficulty']}}
                     @endforeach</p>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-4">
-                        <p>@foreach($singleCourseDetails as $singleCourseDetail)
+                    <div class="col-lg-4 col-md-4 col-sm-5 col-5 p-0">
+                        <p class="ms-2">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_category']}}
                     @endforeach</p>
                     </div>
@@ -302,7 +280,7 @@
                         </strong></p>
                     </div>
                     <div class="col-lg-6">
-                        <p>Upcoming Cohort:<strong>11/10/2021</strong></p>
+                        <p>Upcoming Cohort: <strong>11/10/2021</strong></p>
                     </div>
                 </div>
                 
@@ -320,7 +298,7 @@
                      <h6>Already enrolled!</h6>
                     @endif
                 @endunless
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/19" target="_blank">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/19" target="_blank" style="text-decoration:none; color:inherit;">
                     Share on Facebook
                 </a>
                 </div>
@@ -498,7 +476,7 @@
 <!-- student reviews --> 
     <section>
         <div class="container">
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card card-5 mb-2">
                         <div class="card-body">
@@ -540,6 +518,87 @@
         </div>
     </section>
 <!-- student reviews end--> 
+<footer>
+        <div class="ty-mac-footer">
+            <div class="container">
+                <div class="row pt-5 pb-4">
+                    <div class="col-lg-6 mb-4">
+                        <h4 class="pb-2">LOGO</h4>
+                        <p>At vero eos et accusamus et iusto 
+                            odio dignissimos ducimus qui blanditiis
+                             praesentium voluptatum deleniti atque 
+                             corrupti quos dolores et quas molestias
+                              excepturi sint occaecati cupiditate non 
+                              provident, similique sunt in culpa qui officia deserunt 
+                              mollitia animi, id est laborum et dolorum fuga.</p>
+                        <h4 class="pt-2 pb-3">
+                            Social Links
+                        </h4>
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-12">
+                                <a href=""><i class="fab fa-facebook"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                    </div>
+
+                    <div class="col-lg-5">
+                        <h4 class="pb-3">Quick Links</h4>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                        <h4 class="pb-2">Help</h4>
+                            <div class="col-lg-12 col-md-6 col-sm-8 col-10">
+                                <a href="#">Terms and Conditions | Privacy Policy</a>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <a href="#">Cookies</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-dark copyRight">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <p class="pt-2">© Copyright TY Mac 2021</p>
+            </div>
+        </div>
+    </footer>
+
 
 <script>
     document.getElementById('enrollButton').addEventListener('click', (e) => {

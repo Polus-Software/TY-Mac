@@ -90,6 +90,13 @@ color: white;
     text-decoration: none;
 
 }
+.btn-secondary{
+  font-size: 16px;
+    font-family:'Lato', sans-serif;
+    font-weight: bold;
+    background-color:#2C3443;
+    color: white;
+}
 
 .forgotpass a{
     color:inherit;

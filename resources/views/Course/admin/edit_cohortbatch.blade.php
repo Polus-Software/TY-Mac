@@ -157,7 +157,6 @@
             </div>
           </div>          
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-          <!-- <button class="btn btn-primary" id="save_course" type="submit">Save as draft & continue</button> -->
           <button class="btn btn-primary" id="update_course" type="submit" value="Update">Update</button>
           </div>
           @endforeach

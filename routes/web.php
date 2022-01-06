@@ -59,7 +59,6 @@ Route::get('/', function () {
     Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
-    // Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
 
@@ -128,8 +127,7 @@ Route::get('/', function () {
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
 
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
-   // Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
-
+  
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
     Route::get('generate-token/{session}', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');

@@ -39,6 +39,7 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
+       
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
@@ -64,6 +65,7 @@
         
         @endif
         @else
+        
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
@@ -115,7 +117,7 @@
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Small class sizes</li>
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Interactive learning</li>
           </ul>
-          <button type="button" class="btn btn-secondary">Enroll now</button>
+          <a href="{{ route('student.courses.get') }}" class="btn btn-secondary">Enroll now</a>
         </div>
         <div class="col-md-6 intros text-end">
           <div class="video-box">

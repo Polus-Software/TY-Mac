@@ -91,6 +91,7 @@ class CoursesCatalogController extends Controller
         $courseContents = [];
 
         $course = Course::findOrFail($id);
+        $duration = $course->course_duration . "h";
         $liveSessions = LiveSession::where('course_id', $id)->get();
         $short_description = explode(";",$course->short_description);
         $course_details_points = explode(";",$course->course_details_points);
@@ -174,6 +175,7 @@ class CoursesCatalogController extends Controller
             'instructorTwitter' => $instructorTwitter,
             'instructorLinkedin' => $instructorLinkedin,
             'instructorYoutube' => $instructorYoutube,
+            'duration' => $duration
 
         );
         array_push($singleCourseDetails, $singleCourseData);
@@ -237,11 +239,11 @@ class CoursesCatalogController extends Controller
         foreach($batches as $batch){
             $singleCourseData =  array (
             'batch_id' => $batch->id,
-            'batchname' => $batch->batchname,
+            'title' => $batch->title,
             'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
             'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
             'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
-            'region' => $batch->region,
+            'time_zone' => $batch->time_zone,
         );
         
         array_push($singleCourseDetails, $singleCourseData);
@@ -255,7 +257,9 @@ class CoursesCatalogController extends Controller
         'instructor_firstname' => $instructorfirstname,
         'instructor_lastname' => $instructorlastname,
         'course_thumbnail_image' => $course->course_thumbnail_image,
+        'duration' => $course->course_duration
       );
+     
         return view('Student.registerCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'courseDetails' => $courseDetails
