@@ -15,7 +15,7 @@
           <h3>Students</h3>
         </div>
         <div class="row mt-4">
-          <table class="table llp-table">
+          <table class="table llp-table table-responsive">
             <thead>
               <tr>
                 <th scope="col">#</th>

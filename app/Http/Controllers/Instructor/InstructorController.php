@@ -42,6 +42,8 @@ class InstructorController extends Controller
     }
 
     public function saveInstructor(Request $request) {
+      //  dd($request->signature);
+      
         $validatedData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -52,9 +54,14 @@ class InstructorController extends Controller
             'twitter_social' => 'required',
             'linkedin_social' => 'required',
             'youtube_social' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'signature' => 'required'
         ]);
+
         $userType = UserType::where('user_role', 'instructor')->value('id');
+        $signatureFile = $request->file('signature')->getClientOriginalName();
+        $request->signature->storeAs('signatures',$signatureFile,'public');
+       
         $instructor = new User;
         $instructor->firstname = $request->input('firstname');
         $instructor->lastname = $request->input('lastname');
@@ -66,6 +73,8 @@ class InstructorController extends Controller
         $instructor->linkedin_social = $request->input('linkedin_social');
         $instructor->youtube_social = $request->input('youtube_social');
         $instructor->description = $request->input('description');
+       
+        $instructor->signature = $signatureFile;
         $instructor->role_id = $userType;
         $instructor->save();
         return redirect()->route('manage-instructors');
@@ -93,6 +102,7 @@ class InstructorController extends Controller
                     'instructor_linkedin_social' => $instructor->value('linkedin_social'),
                     'instructor_youtube_social' => $instructor->value('youtube_social'),
                     'instructor_description' => $instructor->value('description'),
+                    'instructor_signature' => $instructor->value('signature'),
                     'instructor_id' => $instructor->value('id'),
                   
                 ];

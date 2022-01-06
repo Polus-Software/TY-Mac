@@ -13,7 +13,7 @@
     cursor: pointer;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,17 +33,15 @@
         </li>
         @endif
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
+        
         @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+          <a class="nav-link active" href="{{ route('my-courses') }}">My courses</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
