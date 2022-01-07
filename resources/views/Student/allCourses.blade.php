@@ -529,9 +529,6 @@
             </div>
             </div>
            @endforeach
-            <div class="d-flex justify-content-center">
-              {{ $courseDatas->links() }}
-            </div>
 
            </div>
           </div>

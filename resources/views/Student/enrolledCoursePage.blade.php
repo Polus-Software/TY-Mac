@@ -10,6 +10,35 @@
   color: #000000 !important;
 }
   </style>
+  <!-- question modal -->
+<div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="questionModalLabel">Ask a question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="questionForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="studentQuestion" class="question-label">Question</label>
+                <textarea name="message" class="form-control mt-2" id="studentQuestion" placeholder="Type your question here" required></textarea>
+                <small id="question_error" style="color:red;"></small>
+              </div>
+              <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
+                <button type="button" class="btn btn-dark" id="submitStudentQuestion"><span class="button">Submit</span></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+  <!-- question modal ends -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
@@ -534,39 +563,52 @@
                                                 <h5 class="card-title">Questions & Answers</h5>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end mb-3">
-                                                <button type="button" class="btn">Ask a question</button>
+                                                @if($userType == "student")
+                                                <button id="ask_a_question" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#questionModal">Ask a question</button>
+                                                @endif
                                             </div>
                                             
                                         </div>
                                       
                                         <div class="row">
+
+                                        @foreach($qas as $qa)
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <p class="card-title text-left">
-                                                            Lorem ipsum dolor sit amet.
+                                                            {{ $qa['student'] }}
                                                         </p>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <p class="text-end time">4 months ago</p>
+                                                            <p class="text-end time">{{ $qa['date'] }}</p>
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                               quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                               soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                               Et voluptatem sunt vel Quis labore vel laborum
-                                                               repellendus eum galisum blanditiis.
+                                                            <p class="para-1">{{ $qa['question'] }}
                                                             </p>
                                                         </div>
                                                     </div>
+                                                    @if($userType == "instructor" && !$qa['hasReplied'])
+                                                    <div class="row" id="replyTextArea_{{ $qa['id'] }}">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            @csrf
+                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
+                                                            <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
+                                                        </div>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
+                                            @if($qa['hasReplied'])
                                             <div class="row ps-5">
+                                            @else
+                                            <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
+                                            @endif
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
                                                 @foreach($singleCourseDetails as $course)
                                                 <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
@@ -582,85 +624,23 @@
                                                             </p>
                                                             </div>
                                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                                                                <p class="text-end time">4 months ago</p>
+                                                                <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">4 months ago</p>
                                                             </div>
                                                         </div>
                                                         
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                                   quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                                   soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                   Et voluptatem sunt vel Quis labore vel laborum
-                                                                   repellendus eum galisum blanditiis.
+                                                                <p class="para-1" id="replyContent_{{ $qa['id'] }}">{{ $qa['reply'] }}
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <h5 class="card-title text-left">
-                                                            Lorem ipsum dolor sit amet.
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <p class="text-end time">4 months ago</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                               quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                               soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                               Et voluptatem sunt vel Quis labore vel laborum
-                                                               repellendus eum galisum blanditiis.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row ps-5">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
-                                                    <img src="courselist/Avatar Instructor.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <h5 class="card-title text-left">
-                                                                @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
-                                                                @endforeach
-                                                           
-                                                                </h5>
-                                                            </div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <p class="text-end time">4 months ago</p>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="row">
-                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                                   quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                                   soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                   Et voluptatem sunt vel Quis labore vel laborum
-                                                                   repellendus eum galisum blanditiis.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                           
-                                        </div>
-
-                                      
+                                            
+                                        @endforeach
+                                            
+                                        </div>   
                                     </div>
                                 </div>
                                </div>
@@ -931,7 +911,7 @@
        let comment =document.getElementById('comment').value;
 
        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
-       //console.log(path);
+     
         fetch(path, {
             method: 'POST',
             headers: {
@@ -960,6 +940,53 @@
   let searchTerm = document.getElementById('search-box').value;
   let path = "/course-search?search=" + searchTerm;
   window.location = '/course-search?search=' + searchTerm;
+});
+
+let replyEle = document.getElementsByClassName('replyBtn');
+let replyEleCount = replyEle.length;
+
+for(index = 0;index < replyEleCount;index++) {
+    replyEle[index].addEventListener('click', function(e) {
+        qaId = this.getAttribute('data-id');
+        replyContent = document.getElementById('reply_' + qaId).value;
+        let path = "{{ route('reply.to.student') }}?qaId=" + qaId + "&replyContent=" + replyContent;
+     
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if (data.status =='success'){
+                document.getElementById("replyDiv_" + qaId).style.display = "block";
+                document.getElementById('replyContent_' + qaId).innerHTML = data.reply;
+                document.getElementById('updatedAt_' + qaId).innerHTML = data.updatedAt;
+                document.getElementById("replyTextArea_" + qaId).style.display = "none";
+            }
+        });
+    });
+}
+
+document.getElementById('submitStudentQuestion').addEventListener('click', function(e) {
+    let question = document.getElementById('studentQuestion').value;
+    let path = "{{ route('ask.question') }}?question=" + question + '&course_id=' + document.getElementById('course_id').value;
+     
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if(data.status == "success") {
+                location.reload();
+            }
+        });
 });
 </script>
 @endsection('content')

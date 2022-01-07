@@ -9,13 +9,90 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <title>TY- MAC</title>
 </head>
+<style>
+  .dropdown-menu {
+  min-width: 25rem !important;
+  left: -22rem !important;
+  top: 2.7rem !important;
+  border-radius: 15px !important;
+}
+.dropdown {
+    display:inline-block;
+    margin-left:20px;
+    padding:10px;
+  }
+
+
+.glyphicon-bell {
+   
+    font-size:1.5rem;
+  }
+
+.notifications {
+   min-width:420px; 
+  }
+  
+  .notifications-wrapper {
+     overflow:auto;
+      max-height:250px;
+    }
+    
+ .menu-title {
+     color:#ff7788;
+     font-size:1.5rem;
+      display:inline-block;
+      }
+ 
+.glyphicon-circle-arrow-right {
+      margin-left:10px;     
+   }
+  
+   
+ .notification-heading, .notification-footer  {
+ 	padding:2px 10px;
+       }
+      
+        
+.dropdown-menu.divider {
+  margin:5px 0;          
+  }
+
+
+
+.item-title {
+  
+ font-size:1.3rem;
+ color:#000;
+    
+}
+
+.notifications a.content {
+ text-decoration:none;
+ background:#ccc;
+
+ }
+    
+.notification-item {
+ padding:10px;
+ margin:5px;
+ background:#ccc;
+ border-radius:4px;
+ }
+
+
+
+
+</style>
 
 <body>
   <!-- NAVBAR SECTION  -->
+  
   @if(Auth::check())
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
@@ -33,9 +110,11 @@
 
       <ul class="navbar-nav">
       @if (Auth::check())
+        
         <li class="nav-item">
           <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
         </li>
+        
         @endif
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -54,11 +133,71 @@
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
         <li class="nav-item">
+        <li class="dropdown">
+          <a style="color:#2C3443;position:relative;top:-1px !important;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i></a>
+          <ul class="dropdown-menu notify-drop p-3">
+            <div class="notify-drop-title">
+            	<div class="row">
+            		<div class="col-md-6 col-sm-6 col-xs-6 mb-3">Your notifications</div>
+                
+            		<div class="col-md-6 col-sm-6 col-xs-6 text-right"><a href="" class="rIcon allRead" data-tooltip="tooltip" data-placement="bottom" title="tümü okundu."><i class="fa fa-dot-circle-o"></i></a></div>
+            	</div>
+            </div>
+            <!-- end notify title -->
+            <!-- notify content -->
+            <div class="drop-content">
+            	<li>
+                <div id="notif-body">
+            		    
+                </div>
+            		<div class="col-md-12 col-sm-9 col-xs-9 pd-l0">       		
+            		<hr>
+            		</div>
+            	</li>
+            	
+            </div>
+            <div class="notify-drop-footer text-center">
+            	<a style="text-decoration:none;color:#2C3443;" href=""><i class="fas fa-times"></i> Close</a>
+            </div>
+          </ul>
+        </li>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
         @else
         <li class="nav-item">
           <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+        <li class="dropdown">
+          <a style="color:#2C3443;position:relative;top:-1px !important;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i></a>
+          <ul class="dropdown-menu notify-drop p-3">
+            <div class="notify-drop-title">
+            	<div class="row">
+            		<div class="col-md-6 col-sm-6 col-xs-6 mb-3">Your notifications</div>
+                
+            		<div class="col-md-6 col-sm-6 col-xs-6 text-right"><a href="" class="rIcon allRead" data-tooltip="tooltip" data-placement="bottom" title="tümü okundu."><i class="fa fa-dot-circle-o"></i></a></div>
+            	</div>
+            </div>
+            <!-- end notify title -->
+            <!-- notify content -->
+            <div class="drop-content">
+            	<li>
+                <div id="notif-body">
+            		    
+                </div>
+            		<div class="col-md-12 col-sm-9 col-xs-9 pd-l0">       		
+            		<hr>
+            		</div>
+            	</li>
+            	
+            </div>
+            <div class="notify-drop-footer text-center">
+            	<a style="text-decoration:none;color:#2C3443;" href=""><i class="fas fa-times"></i> Close</a>
+            </div>
+          </ul>
+        </li>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
@@ -79,6 +218,7 @@
     </div>
   </div>
 </nav>
+
   @else
   <nav class="navbar navbar-expand-lg fixed-top llp-navbar navbar-light bg-light">
     <div class="container">
@@ -120,6 +260,7 @@
   </nav>
   @endif
   <!-- top banner-->
+  
   <section id="home" class="intro-section">
     <div class="container">
       <div class="row align-items-center pb-5">
@@ -449,7 +590,7 @@
               </div>
               <div class="form-group mx-sm-5 mx-0">
                 <label for="message" class="message-label">Message</label>
-                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <textarea name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0">
@@ -752,7 +893,28 @@
     console.log(modal);
     modal.hide();
   }
+window.onload = function(e) {
+  var url = window.location.href;
+  
+  let parameter = url.substr(url.indexOf('?'), url.length);
+  if(parameter == "?redirect=true") {
+      document.getElementById('login_navlink').click();
+  }
 
+      let path = "{{ route('get-notifications')}}";
+
+      fetch(path, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+             
+          }
+      }).then((response) => response.json()).then((data) => {
+          document.getElementById('notif-body').innerHTML = data.html;
+      });
+
+}
   </script>
 </body>
 

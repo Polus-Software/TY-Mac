@@ -37,7 +37,7 @@ Route::group(['middleware' => 'prevent-back-history'],function() {
     
 Route::get('/', function () {
     return view('homepage');
-});
+})->name('home');
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
     Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -45,6 +45,7 @@ Route::get('/', function () {
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/user-contact', [AuthController::class, 'contactUs'])->name('user.contact');
+    Route::get('/get-notifications', [AuthController::class, 'getNotifications'])->name('get-notifications');
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -144,6 +145,7 @@ Route::get('/', function () {
     Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
     Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
     Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
+    Route::post('student-exit', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -157,6 +159,8 @@ Route::get('/', function () {
     Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
     Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');
     Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
+    Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');
+    Route::post('/ask-question', [EnrolledCourseController::class, 'askQuestion'])->name('ask.question');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');

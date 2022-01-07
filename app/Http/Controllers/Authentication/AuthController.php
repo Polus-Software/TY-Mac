@@ -16,6 +16,7 @@ use App\Models\EnrolledCourse;
 use App\Models\LiveSession;
 use App\Models\CohortBatch;
 use App\Models\Topic;
+use App\Models\Notification;
 use Session;
 use Hash;
 use Carbon\Carbon;
@@ -122,9 +123,9 @@ class AuthController extends Controller
 
             $liveSessions = LiveSession::all();
             $current_date = Carbon::now()->format('Y-m-d');
-            $date =  Carbon::now()->subDays(10)->format('Y-m-d');
+            $backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
            
-            foreach($liveSessions as $session){
+            foreach($liveSessions as $session) {
                
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
@@ -147,23 +148,32 @@ class AuthController extends Controller
                         'enrolledCourses' => $enrolledCourses,
                         'date' => $date
                     ));
+                } elseif ($currentBatchStartDate < $current_date && $currentBatchStartDate > $backLimitDate) {
+                    $session_title = $session->session_title;
+                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+
+                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                    
+                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    array_push($recentSessionDetails, array(
+                        'session_title'=>  $session_title,
+                        'instructor' => $instructor,
+                        'enrolledCourses' => $enrolledCourses,
+                        'date' => $date
+                    ));
                 }
-                
-               
-
             }
-
 
             return view('Auth.Dashboard', [
                 'userType' => $userType,
                 'instructor_count' => $instructor_count,
                 'registered_course_count' => $registered_course_count,
                 'students_registered' => $students_registered,
-                'session_title' =>$session_title,
-                'enrolledCourses'=> $enrolledCourses,
                 'upComingSessionDetails' => $upComingSessionDetails,
-                'recentSessionDetails' => $recentSessionDetails,
-                'instructor' =>   $instructor
+                'recentSessionDetails' => $recentSessionDetails
             ]);
         }
         
@@ -202,6 +212,21 @@ class AuthController extends Controller
             return redirect('/');
         }
         
+    }
+
+    public function getNotifications(Request $request) {
+        $html = "";
+        $user = Auth::user();
+
+        if($user) {
+            $userId = $user->id;
+            $notifications = Notification::where('user', $userId)->get();
+
+            foreach($notifications as $notification) {
+                $html = $html . '<div class="col-md-3 col-sm-3 col-xs-3 mt-2"><div style="white-space:nowrap;" class="notify-img"><span><i class="far fa-square"></i> '. $notification->notification .'</span></div></div>';
+            }
+            return response()->json(['status' => 'success', 'msg' => '', 'html' => $html]);
+        }
     }
     
 }

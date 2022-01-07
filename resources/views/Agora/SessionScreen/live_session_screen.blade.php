@@ -304,7 +304,7 @@ svg.svg-img.prefix-more.can-hover {
 }
   </style>
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
-  <input id="user_type" type="hidden" value="" />
+  <input id="user_type" type="hidden" value="{{ $userType }}" />
   <div class="main-container">
   <div id="root1"></div>
     
@@ -411,12 +411,57 @@ svg.svg-img.prefix-more.can-hover {
     )
 
         });
+        
+let timer = 0;
+
+$(document).on('click', '.btn:contains("Confirm")', function(){
+  let sessionId = document.getElementById('session_hidden_id').value;
+  let userType = document.getElementById('user_type').value;
+
+  if(userType == "student" && timer < 900) {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+    }).then((response) => response.json()).then((data) => {
+
+    });
+  }
+});
 
 
+window.addEventListener("beforeunload", function (e) {
+  var confirmationMessage = "Are you sure you want to exit?";
+  let sessionId = document.getElementById('session_hidden_id').value;
+  let userType = document.getElementById('user_type').value;
+
+  if(userType == "student" && timer < 900) {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+    }).then((response) => response.json()).then((data) => {
+
+    });
+  }
+  (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+  return confirmationMessage;                            //Webkit, Safari, Chrome
+});
  jQuery(document).ready(function(){
 
-//    jQuery('.course_contents').addClass('unclickable');
-// document.getElementsByClassName('course_contents')[0].classList.remove("unclickable");
+  var start = new Date;
+
+  setInterval(function() {
+      timer = Math.round((new Date - start) / 1000));
+  }, 1000);
 
  jQuery(".nav-tabs li.active").click(); 
  jQuery(".nav-tabs li").click(function(e){
@@ -431,7 +476,7 @@ svg.svg-img.prefix-more.can-hover {
 });
 
 setInterval(function () {
-  let session = document.getElementById('session_hidden_id').value;
+    let session = document.getElementById('session_hidden_id').value;
     let path = "{{ route('get-push-record') }}?session=" + session;
     fetch(path, {
       method: 'POST',

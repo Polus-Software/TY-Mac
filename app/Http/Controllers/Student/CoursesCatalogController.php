@@ -31,9 +31,7 @@ use App\Models\AchievementBadge;
 
 class CoursesCatalogController extends Controller
 {
-    public function viewAllCourses(Request $request)
-    {
-    
+    public function viewAllCourses(Request $request) {
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
         $courses = Course::where('is_published', true)->get();
@@ -66,9 +64,7 @@ class CoursesCatalogController extends Controller
             array_push($courseDetails, $courseData);
         }
         $courseDetailsObj = collect($courseDetails);
-        $courseDatas = $this->paginate($courseDetailsObj);
-        $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
+        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
         
     }
         

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\AssignedCourse;
+use App\Models\UserType;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -22,11 +24,12 @@ use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
 use PDF;
 use App\Models\StudentFeedbackCount;
+use App\Models\CourseQA;
 
 
 class EnrolledCourseController extends Controller
 {
-    public function afterEnrollView(Request $request, $courseId){
+    public function afterEnrollView(Request $request, $courseId) {
         $courseDetails =[];
         $topicDetails = [];
         $achievedBadgeDetails = [];
@@ -36,11 +39,14 @@ class EnrolledCourseController extends Controller
         $upcoming = [];
         $singleRec = [];
         $finalRec = [];
+        $qaArray = [];
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
+        $userType = "";
 
         if($user){
-
+        $currentUserRoleId = User::where('id', $user->id)->value('role_id');
+        $userType = Usertype::where('id', $currentUserRoleId)->value('user_role');
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructor = User::where('id', $assigned);
@@ -165,13 +171,38 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
+
+        $qas = CourseQA::where('course_id', $courseId)->get();
+
+        foreach($qas as $qa) {
+            $student = User::where('id', $qa->student);
+            $instructor = User::where('id', $qa->instructor);
+            $instructorName = $instructor->value('firstname') . ' ' . $instructor->value('lastname');
+            $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+            $question = $qa->question;
+            $reply = $qa->reply;
+            $hasReplied = $qa->has_replied;
+            $date = $qa->created_at->format('d M H:m');
+            array_push($qaArray, array(
+                'id' => $qa->id,
+                'student' => $studentName,
+                'instructor' => $instructorName,
+                'question' => $question,
+                'reply' => $reply,
+                'hasReplied' => $hasReplied,
+                'date' => $date
+            ));
+        }
+
         return view('Student.enrolledCoursePage',[
             'singleCourseDetails' => $courseDetails,
             'topicDetails' =>  $topicDetails,
             'achievedBadgeDetails' => $achievedBadgeDetails,
             'badgesDetails' => $badgesDetails,
             'upcoming' => $upcoming,
-            'recommendations' => $finalRec
+            'recommendations' => $finalRec,
+            'qas' => $qaArray,
+            'userType' => $userType
         ]);
 
     }else{
@@ -317,6 +348,49 @@ class EnrolledCourseController extends Controller
     }else{
         return redirect('/403');
     }
+    }
+
+    public function replyToStudent(Request $request) {
+        $qaId = $request->qaId;
+        $reply = $request->replyContent;
+
+        $courseQA = CourseQA::find($qaId);
+        $courseQA->reply = $reply;
+        $courseQA->has_replied = true;
+        $updatedAt = $courseQA->updated_at->format('d M H:m');
+        $courseQA->save();
+
+        return response()->json([
+            'status' => 'success',
+            'reply' => $reply, 
+            'updatedAt' => $updatedAt,
+            'message' => 'Replied successfully'
+         ]);
+    }
+
+    public function askQuestion(Request $request) {
+        $question = $request->question;
+        $course_id = $request->course_id;
+        $student = 0;
+
+        $qa = new CourseQA;
+        $qa->course_id = $course_id;
+        $instructor = AssignedCourse::where('assigned_course_id', $course_id)->value('user_id');
+    
+        $user =Auth::user();
+        if($user) {
+            $student = User::where('id', $user->id)->value('id');
+        }
+
+        $qa->student = $student;
+        $qa->instructor = $instructor;
+        $qa->question = $question;
+        $qa->has_replied = false;
+
+        $qa->save();
+
+        return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
+
     }
 
 }

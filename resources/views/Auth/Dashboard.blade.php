@@ -59,7 +59,6 @@
                     <th scope="col">Instructor</th>
                     <th scope="col">Participants</th>
                     <th scope="col">Date/Time</th>
-                    <th scope="col" class="text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -77,30 +76,6 @@
                     <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
                   </tr>
                  @endforeach
-                  <!-- <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Otto</td>
-                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Otto</td>
-                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Otto</td>
-                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-                  </tr> -->
                 </tbody>
               </table>
               
@@ -118,7 +93,6 @@
                 <th scope="col">Instructor</th>
                 <th scope="col">Participants</th>
                 <th scope="col">Date/Time</th>
-                <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -128,10 +102,9 @@
               <tr>
                 <td>{{ $slno }}</td>
                 <td>{{$recentSessionDetail['session_title']}}</td>
-                <td class="text-capitalize"></td>
-                <td></td>
-                <td></td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                <td>{{$recentSessionDetail['instructor']}}</td>
+                <td>{{$recentSessionDetail['enrolledCourses']}}</td>
+                <td>{{$recentSessionDetail['date']}}</td>
               </tr>
            @endforeach
               <!-- <tr>
