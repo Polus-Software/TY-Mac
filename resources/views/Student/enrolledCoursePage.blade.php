@@ -99,193 +99,193 @@
       </ul>
       
     </div>
-  </div>
 </nav>
 <!-- review modal -->
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="rating text-center mb-3">
-            <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
-            <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
-            <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
-            <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
-            <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="rating text-center mb-3">
+                    <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
+                    <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
+                    <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
+                    <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
+                    <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
+                    <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength="60"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0 mb-3">
+                @csrf
+                <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
+            </div>
         </div>
-          
-        <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
-            <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength ="60"></textarea> 
-        </div>                         
-      </div>
-       <div class="modal-footer border-0 mb-3">
-           @csrf
-        <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
-      </div>
     </div>
-  </div>
 </div>
 <!-- review modal ends -->
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-   <div class="modal-dialog">
-   <div class="modal-content">
-      <div class="modal-body">
-     <div class="container-overlay">
-      <div class="mx-auto">
-        <div class="wrapper row flex-column my-5" >  
-            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
-                <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
-                    @csrf
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label for="email" class="email-label">Email</label>
-                        <input type="email"  name="email"class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
-                        value="{{old('email')}}">
-                        <small>Error message</small>
-                        @if ($errors->has('email'))
-                        <span class="text-danger">{{ $errors->first('email') }}</span>
-                        @endif        
-                    </div>
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label for="inputPassword" class="password-label">Password</label>
-                        <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
-                        <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
-                        <small>Error message</small>
-                        @if ($errors->has('password'))
-                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                        @endif
-                    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container-overlay">
+                    <div class="mx-auto">
+                        <div class="wrapper row flex-column my-5">
+                            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
+                            <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
+                                @csrf
+                                <div class="form-group mx-sm-5 mx-0">
+                                    <label for="email" class="email-label">Email</label>
+                                    <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                                    <small>Error message</small>
+                                    @if ($errors->has('email'))
+                                    <span class="text-danger">{{ $errors->first('email') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mx-sm-5 mx-0">
+                                    <label for="inputPassword" class="password-label">Password</label>
+                                    <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value="{{old('password')}}">
+                                    <span><i class="fas fa-eye-slash" id="togglePassword" onClick="viewPassword()"></i></span>
+                                    <small>Error message</small>
+                                    @if ($errors->has('password'))
+                                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                                    @endif
+                                </div>
 
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label class="form-check-label rememberme">
-                        <input  class="form-check-input"  name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+                                <div class="form-group mx-sm-5 mx-0">
+                                    <label class="form-check-label rememberme">
+                                        <input class="form-check-input" name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+                                </div>
+
+                                <div class="d-grid form-group  mx-sm-5 mx-0">
+                                    <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
+                                </div>
+
+                                <div class="text-center forgotpass">
+                                    <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
+
+                                </div>
+
+                                <div class="text-center bottom-text">
+                                    <span>
+                                        <p>Don't have an account?
+                                    </span>
+                                    <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="d-grid form-group  mx-sm-5 mx-0">
-                        <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
-                    </div>
+            </div>
 
-                    <div class="text-center forgotpass">
-                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
-                        
-                    </div>
-
-                    <div class="text-center bottom-text">
-                        <span><p>Don't have an account? </span>
-                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
-                    </div>            
-            
-                </form>
-            </div> 
-        </div>      
-     </div>          
-
+        </div>
     </div>
-    
-   </div>
-</div>
 </div>
 </div>
 <!-- login modal ends -->
- <!-- signup modal -->
- <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+<!-- signup modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-container mx-auto p-3 rounded">
-      <div class="modal-content border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content border-0">
+            <div class="modal-header border-0">
+                <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-overlay">
+                    <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
+                        @csrf
+                        <input type="hidden" name="_method" value="POST">
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label for="firstName" class="firstname-label">First Name</label>
+                            <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
+                            <small>Error message</small>
+
+                            @if ($errors->has('firstname'))
+                            <span class="text-danger">{{ $errors->first('firstname') }}</span>
+                            @endif
+                            </span>
+                        </div>
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label for="lastName" class="lastname-label">Last Name</label>
+                            <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
+                            <small>Error message</small>
+
+                            @if ($errors->has('lastname'))
+                            <span class="text-danger">{{ $errors->first('lastname') }}</span>
+                            @endif
+
+                        </div>
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label for="email" class="email-label">Email</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
+                            <small>Error message</small>
+
+                            @if ($errors->has('email'))
+                            <span class="text-danger">{{ $errors->first('email') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label for="inputPassword" class="password-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                            <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
+                            <small>Error message</small>
+
+
+                            @if ($errors->has('password'))
+                            <span class="text-danger">{{ $errors->first('password') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label for="confirmPassword" class="password-label">Confirm Password</label>
+                            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
+                            <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
+                            <small>Error message</small>
+
+                            @if ($errors->has('password_confirmation'))
+                            <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mx-sm-5 mx-0">
+                            <label class="form-check-label checkbox-text">
+                                <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
+                                <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+                            @if ($errors->has('privacy_policy'))
+                            <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="d-grid form-group mx-sm-5 mx-0">
+                            <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
+                        </div>
+
+                        <div class="text-center bottom-text">
+                            <span>
+                                <p>Already have an account?
+                            </span>
+                            <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-0"></div>
         </div>
-        <div class="modal-body">
-          <div class="container-overlay">
-            <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
-              @csrf
-              <input type="hidden" name="_method" value="POST">
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="firstName" class="firstname-label">First Name</label>
-                <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('firstname'))
-                <span class="text-danger">{{ $errors->first('firstname') }}</span>
-                @endif
-                </span>
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="lastName" class="lastname-label">Last Name</label>
-                <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('lastname'))
-                <span class="text-danger">{{ $errors->first('lastname') }}</span>
-                @endif
-
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="email" class="email-label">Email</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('email'))
-                <span class="text-danger">{{ $errors->first('email') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="inputPassword" class="password-label">Password</label>
-                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
-                <small>Error message</small>
-
-
-                @if ($errors->has('password'))
-                <span class="text-danger">{{ $errors->first('password') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="confirmPassword" class="password-label">Confirm Password</label>
-                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
-                <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
-                <small>Error message</small>
-
-                @if ($errors->has('password_confirmation'))
-                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label class="form-check-label checkbox-text">
-                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
-                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
-                @if ($errors->has('privacy_policy'))
-                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
-                @endif
-              </div>
-
-              <div class="d-grid form-group mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
-              </div>
-
-              <div class="text-center bottom-text">
-                <span>
-                  <p>Already have an account?
-                </span>
-                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="modal-footer border-0"></div>
-      </div>
     </div>
-  </div>
+</div>
 <!-- signup modal ends -->
 
 
@@ -303,9 +303,9 @@
                 <div class="card card-1  border-0 mb-3 mt-4">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                        @foreach($singleCourseDetails as $course)
+                            @foreach($singleCourseDetails as $course)
                             <img src="{{asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
-                        @endforeach
+                            @endforeach
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
@@ -315,38 +315,46 @@
                                 </h5>
                                 <p class="card-text">
                                     @foreach($singleCourseDetails as $course)
-                                        {{ $course['description'] }}
-                                    @endforeach</p>
+                                    {{ $course['description'] }}
+                                    @endforeach
+                                </p>
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
+                                        <div class="progress rounded-pill">
+                                            <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                        <p class="para-1"><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
+                                            @foreach($singleCourseDetails as $course)
+                                            {{ $course['course_category'] }}
+                                            @endforeach
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-3 col-12">
+                                        <p class="para-1"><i class="far fa-user pe-1"></i>
+                                            @foreach($singleCourseDetails as $course)
+                                            {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
+                                            @endforeach
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-12">
+                                        <p class="para-2"><i class="far fa-user pe-1"></i>
+                                            @foreach($singleCourseDetails as $course)
+                                            {{ $course['course_difficulty'] }}
+                                            @endforeach
+
+                                        </p>
+                                    </div>
                                     <div class="row">
-                                        <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
-                                            <div class="progress rounded-pill">
-                                                <div class="progress-bar rounded-pill text-end pe-2" role="progressbar"
-                                                    style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                                                    aria-valuemax="100">25%</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                            <p class="para-1"><i
-                                                    class="fas fa-tag fa-flip-horizontal ps-1"></i>
-                                                    @foreach($singleCourseDetails as $course)
-                                                        {{ $course['course_category'] }}
-                                                    @endforeach
+                                        <div class="col-lg-8 col-md-8 col-sm-8 col-12">
+                                            <p class="duration"><i class="far fa-clock pe-1"></i>
+                                                Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
+
                                             </p>
-                                        </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-3 col-12">
-                                            <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
-                                                {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
+                                            <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
                                             @endforeach
-                                            </p>
-                                        </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                            <p class="para-2"><i class="far fa-user pe-1"></i>
-                                            @foreach($singleCourseDetails as $course)
-                                                {{ $course['course_difficulty'] }}
-                                            @endforeach
-                                            
-                                            </p>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
@@ -357,12 +365,13 @@
                                                
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
+                                            @if($userType == 'student')
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
                                                 Add review
-                                                </a>
-                                                <input type="hidden" id="course_id" value="{{$course['id']}}">
-                                                <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
-                                            </div>
+                                            </a>
+                                            @endif
+                                            <input type="hidden" id="course_id" value="{{$course['id']}}">
+                                            <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -373,193 +382,277 @@
             </div>
         </div>
     </div>
+    </div>
 </header>
 
-    <section>
-        <div class="container flex-column">
-            <div class="row mb-5">
-                <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
-                    <div class="row sidebar pt-4">
-                        <h3 class="text-center">Cohort Details</h3>
-                        <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button class="nav-link active mb-2 ps-5 text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
-                                <i class="far fa-clock pe-3"></i>Cohort Schedule
-                            </button>
-                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
-                                <img src="" alt="" class="pe-2">Personalized recommendations
-                            </button>
-                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
-                                <img src="" alt="" class="pe-2">Cohort Q&A
-                            </button>
-                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
-                                <img src="" alt="" class="pe-2">Cohort Info
-                            </button>
-                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
-                                <img src="" alt="" class="pe-2">Assignments
-                            </button>
-                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
+<section>
+    <div class="container flex-column">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
+                <div class="row sidebar pt-4">
+                    <h3 class="text-center">Cohort Details</h3>
+                    <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        @if($userType == 'instructor')
+                        <button class="nav-link mb-2 ps-5 text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                            <i class="fas fa-chart-bar pe-3"></i>Cohort Overview
+                        </button>
+                        @endif
+                        <button class="nav-link {{($userType == 'student') ? 'active' : ''}} mb-2 ps-5 text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                            <i class="far fa-clock pe-3"></i>Cohort Schedule
+                        </button>
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <i class="fas fa-tv pe-3"></i>Personalized recommendations
+                        </button>
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <i class="fas fa-comments pe-3"></i>Cohort Q&A
+                        </button>
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
+                        <i class="fas fa-info-circle pe-3"></i>Cohort Info
+                        </button>
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
+                        <i class="fas fa-newspaper pe-3"></i>Assignments
+                        </button>
+                        @if($userType == 'student')
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
                                 <img src="" alt="" class="pe-2">Completion Certificate
                             </button>
-                           
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
-                            <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
-                            
-                                <div class="container">
-                                    <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
-                                    <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
-                                    <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
-                                        <div class="badge-shadow left--45">
-                                            <button class="nav-link bg-transparent p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
-                                                <img src="/Badges/More.svg" alt="">
-                                            </button>
-                                        </div>
-                                </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
+                        <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
+
+                        <div class="container">
+                            <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
+                            <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
+                            <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
+                            <div class="badge-shadow left--45">
+                                <button class="nav-link bg-transparent p-0" id="v-pills-achievements-tab" data-bs-toggle="pill" data-bs-target="#v-pills-achievements" type="button" role="tab" aria-controls="v-pills-achievements" aria-selected="false">
+                                    <img src="/Badges/More.svg" alt="">
+                                </button>
+                            </div>
                         </div>
+                        @endif
                     </div>
+
                 </div>
-                   
-                <div class="col-lg-9 col-md-8 col-sm-12 col-12 gx-5">
-                    <div class="tab-content" id="v-pills-tabContent">
+            </div>
 
-                        <div class="tab-pane fade show active" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
-                            <div class="card card-2 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
-                                    @foreach($topicDetails as $topicDetail)
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                            <button type="button" class="btn"><i class="fas fa-undo pe-2"></i>View again</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <ul class="list-group list-group-flush border-bottom pb-3">
-                                        @foreach($topicDetail['topic_content'] as $content)
-                                            <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
-                                        @endforeach
-                                    </ul>   
-                                    @endforeach                                    
-                                </div>
-                            </div>
-
-                            <div class="row border-bottom">
-                                <div class="col-lg-12">
-                                    <h5 class="recommendation">Recommended Topics to Review</h5>
-                                </div>
-                            </div>
-
-                            <div class="row mt-3 mb-3">
-                            @foreach($recommendations as $recommendation)
-                                <div class="col-lg-6 mb-3">
-                                    <div class="card card-3" style="height: 560px;">
-                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <a href="#" class="btn btn-primary w-100">View again</a>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-4">
-                                                        <div class="card-body">
-                                                          We recommend that you view this topic again.
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
-                                                    <ul class="list-group list-group-flush border-bottom pb-3">
-                                                        <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
-                                                    </ul>   
-                                                </div>
-                                            </div>
-                                        </div>
+            <div class="col-lg-9 col-md-8 col-sm-12 col-12 gx-5">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <!-- overview tab -->
+                    @if($userType == 'instructor')
+                    <div class="tab-pane fade show {{($userType == 'instructor') ? 'active' : ''}}" id="cohort-overview" role="tabpanel" aria-labelledby="cohort-overview">
+                        <div class="row mb-5">
+                            <div class="col-sm-3">
+                                <div class="card llp-countbox">
+                                    <div class="card-body text-center">
+                                        <h1 class="card-title">18</h1>
+                                        <p class="card-text">Hours spent</p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card llp-countbox">
+                                    <div class="card-body text-center">
+                                        <h1 class="card-title">700</h1>
+                                        <p class="card-text">Students joined</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card llp-countbox">
+                                    <div class="card-body text-center">
+                                        <h1 class="card-title">08</h1>
+                                        <p class="card-text">Likes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card llp-countbox">
+                                    <div class="card-body text-center">
+                                        <h1 class="card-title">180</h1>
+                                        <p class="card-text">Dislikes</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div id="chart_div" style="height: 500px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="row border-bottom">
+                            <div class="col-lg-12">
+                                <h5 class="recommendation">Recommended Topics to Review</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table class="table llp-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Sub content</th>
+                                        <th scope="col">Session</th>
+                                        <th scope="col">Likes</th>
+                                        <th scope="col">Dislikes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($recommendations as $recommendation)
+                                    <tr>
+                                        <td>{{ $loop->iteration}}</td>
+                                        <td>{{ $recommendation['content_title'] }}</td>
+                                        <td>{{ $recommendation['topic_title'] }}</td>
+                                        <td>{{ $recommendation['likes'] }}</td>
+                                        <td>{{ $recommendation['dislikes'] }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    @endif
+                    <!-- overview tab -->
+                    <!-- schedule tab -->
+                    <div class="tab-pane fade show {{($userType == 'student') ? 'active' : ''}}" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
+                        <div class="card card-2 mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                @foreach($topicDetails as $topicDetail)
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
+                                        <button type="button" class="btn"><i class="fas fa-undo pe-2"></i>View again</button>
+                                    </div>
+                                </div>
+
+                                <ul class="list-group list-group-flush border-bottom pb-3">
+                                    @foreach($topicDetail['topic_content'] as $content)
+                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
+                                    @endforeach
+                                </ul>
                                 @endforeach
                             </div>
-                            
                         </div>
 
-                        <div class="tab-pane fade" id="v-pills-personalizedRecommendations" role="tabpanel" aria-labelledby="v-pills-personalizedRecommendations-tab">
-                        
-                            <div class="row border-bottom">
-                                <div class="col-lg-12">
-                                    <h5 class="heading-1">Recommended Topics to Review</h5>
+                        <div class="row border-bottom">
+                            <div class="col-lg-12">
+                                <h5 class="recommendation">Recommended Topics to Review</h5>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 mb-3">
+                            @foreach($recommendations as $recommendation)
+                            <div class="col-lg-6 mb-3">
+                                <div class="card card-3" style="height: 560px;">
+                                    <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-12">
+                                                <div class="card card-4">
+                                                    <div class="card-body">
+                                                        We recommend that you view this topic again.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
+                                                <ul class="list-group list-group-flush border-bottom pb-3">
+                                                    <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            @endforeach
+                        </div>
 
-                            <div class="row mt-3 mb-3">
-                                <div class="col-lg-6 mb-3">
-                                    <div class="card card-3" style="height: 550px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <a href="#" class="btn btn-primary w-100">View again</a>
+                    </div>
+                    <!-- schedule tab -->
+                    <!-- Recommendations tab -->
+                    <div class="tab-pane fade" id="v-pills-personalizedRecommendations" role="tabpanel" aria-labelledby="v-pills-personalizedRecommendations-tab">
+
+                        <div class="row border-bottom">
+                            <div class="col-lg-12">
+                                <h5 class="heading-1">{{($userType == 'student') ? 'Recommended Topics to Review' : 'Personalized Recommendations'}}</h5>
+                            </div>
+                        </div>
+                        @if($userType == 'student')
+                        <div class="row mt-3 mb-3">
+                            <div class="col-lg-6 mb-3">
+                                <div class="card card-3" style="height: 550px;">
+                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-12">
+                                                <div class="card card-4">
+                                                    <div class="card-body">
+                                                        We recommend you to view again these topics.
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row mt-3">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-4">
-                                                        <div class="card-body">
-                                                            We recommend you to view again these topics.
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-5">
-                                                        <div class="card-body">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card card-5">
+                                                    <div class="card-body">
                                                         <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                            <ul class="list-group list-group-flush pb-3">
-                                                                <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                                <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                            </ul>   
-                                                        </div>
+                                                        <ul class="list-group list-group-flush pb-3">
+                                                            <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                            <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                 <div class="col-lg-6">
-                                    <div class="card card-3" style="height: 550px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <a href="#" class="btn btn-primary w-100">View again</a>
+                            <div class="col-lg-6">
+                                <div class="card card-3" style="height: 550px;">
+                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-12">
+                                                <div class="card card-4">
+                                                    <div class="card-body">
+                                                        <p class="card-text">This is some text within a card body.</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row mt-3">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-4">
-                                                        <div class="card-body">
-                                                          <p class="card-text">This is some text within a card body.</p>
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="card card-5">
-                                                        <div class="card-body">
-                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                            <ul class="list-group list-group-flush pb-3">
-                                                                <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                                <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                                <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                                <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                            </ul>   
-                                                        </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card card-5">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                        <ul class="list-group list-group-flush pb-3">
+                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
@@ -568,11 +661,72 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @if($userType == 'instructor')
 
-                       
-                        <div class="tab-pane fade" id="v-pills-CohortQuestions" role="tabpanel" aria-labelledby="v-pills-CohortQuestions-tab">
-                           <div class="row">
-                               <div class="col-lg-12">
+                        <div class="row mt-3 mb-3">
+                            <div class="accordion" id="accordionExample">
+                                @foreach($studentsEnrolled as $student)
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <i class="fas fa-user-circle pe-3"></i>{{ $student->firstname .' '. $student->lastname }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row mt-3 mb-3">
+                                                @foreach($recommendations as $recommendation)
+                                                @if($recommendation['student_id'] == $student->user_id)
+                                                <div class="col-lg-6 mb-3">
+                                                    <div class="card card-3" style="height: 550px;">
+                                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <a href="#" class="btn btn-primary w-100">1-on-1 Session</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                <div class="col-lg-12">
+                                                                    <div class="card card-4">
+                                                                        <div class="card-body">
+                                                                            She has understood 33% of the topic. We recommend her to view again these topics.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="card card-5">
+                                                                        <div class="card-body">
+                                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                                            <ul class="list-group list-group-flush pb-3">
+                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
+                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>@endforeach
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <!-- Recommendations tab -->
+
+                    <div class="tab-pane fade" id="v-pills-CohortQuestions" role="tabpanel" aria-labelledby="v-pills-CohortQuestions-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
                                 <div class="card card-6">
                                     <div class="card-body">
                                         <div class="row border-bottom">
@@ -582,9 +736,9 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end mb-3">
                                                 <button type="button" class="btn">Ask a question</button>
                                             </div>
-                                            
+
                                         </div>
-                                      
+
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
                                                 <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
@@ -592,21 +746,21 @@
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <p class="card-title text-left">
-                                                            Lorem ipsum dolor sit amet.
-                                                        </p>
+                                                                Lorem ipsum dolor sit amet.
+                                                            </p>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <p class="text-end time">4 months ago</p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                               quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                               soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                               Et voluptatem sunt vel Quis labore vel laborum
-                                                               repellendus eum galisum blanditiis.
+                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
+                                                                quaerat in nihil tempore rem quam sint. Aut itaque officia et
+                                                                soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
+                                                                Et voluptatem sunt vel Quis labore vel laborum
+                                                                repellendus eum galisum blanditiis.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -614,31 +768,31 @@
                                             </div>
                                             <div class="row ps-5">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
-                                                @foreach($singleCourseDetails as $course)
-                                                <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                @endforeach
+                                                    @foreach($singleCourseDetails as $course)
+                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                    @endforeach
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
-                                                                @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at  {{ $course['institute'] }}
-                                                               @endforeach
-                                                           
-                                                            </p>
+                                                                    @foreach($singleCourseDetails as $course)
+                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at {{ $course['institute'] }}
+                                                                    @endforeach
+
+                                                                </p>
                                                             </div>
                                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                                                                 <p class="text-end time">4 months ago</p>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                                   quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                                   soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                   Et voluptatem sunt vel Quis labore vel laborum
-                                                                   repellendus eum galisum blanditiis.
+                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
+                                                                    quaerat in nihil tempore rem quam sint. Aut itaque officia et
+                                                                    soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
+                                                                    Et voluptatem sunt vel Quis labore vel laborum
+                                                                    repellendus eum galisum blanditiis.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -652,21 +806,21 @@
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <h5 class="card-title text-left">
-                                                            Lorem ipsum dolor sit amet.
+                                                                Lorem ipsum dolor sit amet.
                                                             </h5>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <p class="text-end time">4 months ago</p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                               quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                               soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                               Et voluptatem sunt vel Quis labore vel laborum
-                                                               repellendus eum galisum blanditiis.
+                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
+                                                                quaerat in nihil tempore rem quam sint. Aut itaque officia et
+                                                                soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
+                                                                Et voluptatem sunt vel Quis labore vel laborum
+                                                                repellendus eum galisum blanditiis.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -679,134 +833,148 @@
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                                 <h5 class="card-title text-left">
-                                                                @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
-                                                                @endforeach
-                                                           
+                                                                    @foreach($singleCourseDetails as $course)
+                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
+                                                                    @endforeach
+
                                                                 </h5>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                                 <p class="text-end time">4 months ago</p>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                                   quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                                   soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                   Et voluptatem sunt vel Quis labore vel laborum
-                                                                   repellendus eum galisum blanditiis.
+                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
+                                                                    quaerat in nihil tempore rem quam sint. Aut itaque officia et
+                                                                    soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
+                                                                    Et voluptatem sunt vel Quis labore vel laborum
+                                                                    repellendus eum galisum blanditiis.
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                           
+
                                         </div>
 
-                                      
+
                                     </div>
                                 </div>
-                               </div>
-                           </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-7">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title">Course description</h5>
+                                        <p class="card-text-1">
+                                            @foreach($singleCourseDetails as $course)
+                                            {{ $course['description'] }}
+                                            @endforeach
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
-                 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-7">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title">Course description</h5>
-                                            <p class="card-text-1">
+                        <div class="row mt-3">
+                            <div class="col-lg-12">
+                                <div class="card card-8 mb-5">
+                                    <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
+                                        <div class="col-lg-2 col-sm-4 col-4">
                                             @foreach($singleCourseDetails as $course)
-                                                {{ $course['description'] }}
+                                            <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" alt="..." style="width:94px; height:94px;">
                                             @endforeach
+
+
+                                        </div>
+                                        <div class="col-lg-8 col-sm-8 col-8">
+                                            <div class="card-body">
+                                                <h5 class="instructor-name pt-2">
+                                                    @foreach($singleCourseDetails as $course)
+                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
+                                                    @endforeach
+                                                </h5>
+                                                <p class="card-text-1">
+                                                    @foreach($singleCourseDetails as $course)
+                                                    {{ $course['designation'] }} at {{ $course['institute'] }}
+                                                    @endforeach
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="card-text-1 p-3">
+                                                @foreach($singleCourseDetails as $course)
+                                                {{ $course['instructorDescription'] }}
+                                                @endforeach
+                                            </p>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorTwitter']}}
+                                            @endforeach"><i class="fab fa-twitter pe-2"></i></a>
+                                                <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorLinkedin']}}
+                                            @endforeach"><i class="fab fa-linkedin-in pe-2"></i></a>
+                                                <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                        {{$singleCourseDetail['instructorYoutube']}}
+                                            @endforeach"><i class="fab fa-youtube"></i></a>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="row mt-3">
-                                <div class="col-lg-12">
-                                    <div class="card card-8 mb-5">
-                                        <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
-                                                <div class="col-lg-2 col-sm-4 col-4">
-                                                @foreach($singleCourseDetails as $course)
-                                                <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" 
-                                                alt="..." style="width:94px; height:94px;">
-                                                @endforeach
-                                               
-                                                
-                                            </div>
-                                            <div class="col-lg-8 col-sm-8 col-8">
-                                            <div class="card-body">
-                                                <h5 class="instructor-name pt-2">
-                                                @foreach($singleCourseDetails as $course)
-                                                {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
-                                                @endforeach
-                                                </h5>
-                                                <p class="card-text-1">
-                                                @foreach($singleCourseDetails as $course)
-                                                {{ $course['designation'] }} at   {{ $course['institute'] }}
-                                                @endforeach</p>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <p class="card-text-1 p-3">
-                                                @foreach($singleCourseDetails as $course)
-                                                {{ $course['instructorDescription'] }}
-                                                @endforeach</p>
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
-                                        {{$singleCourseDetail['instructorTwitter']}}
-                                            @endforeach"><i class="fab fa-twitter pe-2"></i></a>
-                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
-                                        {{$singleCourseDetail['instructorLinkedin']}}
-                                            @endforeach"><i class="fab fa-linkedin-in pe-2"></i></a>
-                                                    <a href="@foreach($singleCourseDetails as $singleCourseDetail)
-                                        {{$singleCourseDetail['instructorYoutube']}}
-                                            @endforeach"><i class="fab fa-youtube"></i></a>
-                                                </p>
-                                            </div>
-                                        </div>
+                    <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-2">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title border-bottom pt-2 pb-2">Assignment info</h5>
+
+                                        @php ($slno = 0)
+                                        @foreach($topicDetails as $topicDetail)
+                                        @php ($slno = $slno + 1)
+                                        <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
+                                        <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                                            @foreach($topicDetail['assignmentList'] as $assignment)
+                                            <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
+                                                <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
+                                                    {{$assignment['assignment_title']}}
+                                                </li>
+                                            </a>
+                                            @endforeach
+                                        </ul>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-2">
-                                        <div class="card-body p-4">
-                                        <h5 class="card-title border-bottom pt-2 pb-2">Assignment info</h5>
-                                           
-                                            @php ($slno = 0)
-                                            @foreach($topicDetails as $topicDetail)
-                                            @php ($slno = $slno + 1)
-                                            <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
-                                            <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
-                                                    @foreach($topicDetail['assignmentList'] as $assignment)
-                                                    <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
-                                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
-                                                    {{$assignment['assignment_title']}}
-                                                    </li>
-                                                    </a>
-                                                @endforeach
-                                                </ul>
-                                            @endforeach
-                                        </div>
-                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    @if($userType == 'student')
+                    <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
+                        <div class="card card-8 mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
+                                <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
+                                    @foreach($achievedBadgeDetails as $achievedBadgeDetail)
+                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                                        <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">
+                                        <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
+                                        <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
+                                    </div>
+                                    @endforeach
 
                         <div class="tab-pane fade" id="v-pills-certificate" role="tabpanel" aria-labelledby="v-pills-certificate-tab">
                             <div class="row">
@@ -914,31 +1082,43 @@
                                         @endforeach
                                         </div>
 
-                                        <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
-                                        @foreach($badgesDetails as $badgesData)
-                                        <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                            <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt=""> 
-                                                <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
-                                                <small>---</small>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                                <p class="badges">{{ $badgesData['badge_name'] }}</p>
-                                                <p>{{ $badgesData['badge_description'] }}</p>
-                                            </div>  
-                                        </div>
-                                        @endforeach
+                                <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
+                                <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
+                                    @foreach($upcoming as $upcomingBadge)
+                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                                        <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">
+                                        <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
+                                        <!-- <small>-----</small> -->
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
+                                @foreach($badgesDetails as $badgesData)
+                                <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-4">
+                                        <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt="">
+                                        <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
+                                        <small>---</small>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                                        <p class="badges">{{ $badgesData['badge_name'] }}</p>
+                                        <p>{{ $badgesData['badge_description'] }}</p>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
-                       
-                       
                     </div>
+                    @endif
                 </div>
+
+
             </div>
         </div>
-    </section>
+    </div>
+    </div>
+</section>
 
     <footer>
         <div class="ty-mac-footer">
@@ -1025,39 +1205,39 @@
 
 <script>
     let finalRating = 0;
-   
-   let stars = document.getElementsByClassName('rating-star');
-   for(var index = 0; index < stars.length; index++){
-       stars[index].addEventListener('click', function (event){
-           let starRating = parseInt(this.getAttribute('star-rating'));
 
-            for(var i = 0; i < starRating; i++) {
+    let stars = document.getElementsByClassName('rating-star');
+    for (var index = 0; index < stars.length; index++) {
+        stars[index].addEventListener('click', function(event) {
+            let starRating = parseInt(this.getAttribute('star-rating'));
+
+            for (var i = 0; i < starRating; i++) {
                 stars[i].classList.add("active-stars");
             }
-            for(var i = starRating; i < index; i++) {
+            for (var i = starRating; i < index; i++) {
                 console.log(i);
                 stars[i].classList.remove("active-stars");
             }
-           finalRating= starRating; 
-   });
-   }
+            finalRating = starRating;
+        });
+    }
 
-   document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
-      let starElement = document.getElementsByClassName('rating-star');
-      for (var i = 0; i < 5 ; i++) {
-          starElement[i].classList.remove("active-stars");
-      }
-      document.getElementById('comment').value = "";
-   });
+    document.getElementById('reviewModal').addEventListener('hide.bs.modal', function(event) {
+        let starElement = document.getElementsByClassName('rating-star');
+        for (var i = 0; i < 5; i++) {
+            starElement[i].classList.remove("active-stars");
+        }
+        document.getElementById('comment').value = "";
+    });
 
-   document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-    
-       let courseId = document.getElementById('course_id').value;
-       let userId = document.getElementById('user_id').value;
-       let comment =document.getElementById('comment').value;
+    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
 
-       let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
-       //console.log(path);
+        let courseId = document.getElementById('course_id').value;
+        let userId = document.getElementById('user_id').value;
+        let comment = document.getElementById('comment').value;
+
+        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
+        //console.log(path);
         fetch(path, {
             method: 'POST',
             headers: {
@@ -1065,19 +1245,19 @@
                 'Content-Type': 'application/json',
                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
             },
-           body: JSON.stringify({})
+            body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
-            if (data.status =='success'){
+            if (data.status == 'success') {
                 closeModal('reviewModal');
                 window.location.reload();
             }
         });
 
-   });
-   
-   function closeModal(modalId) {
+    });
+
+    function closeModal(modalId) {
         const truck_modal = document.querySelector('#' + modalId);
-        const modal = bootstrap.Modal.getInstance(truck_modal);    
+        const modal = bootstrap.Modal.getInstance(truck_modal);
         modal.hide();
     }
 
@@ -1087,5 +1267,37 @@
   let path = "/course-search?search=" + searchTerm;
   window.location = '/course-search?search=' + searchTerm;
 });
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    google.charts.load('current', {
+        'packages': ['bar']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Sub content', 'Likes', 'Dislikes'],
+            <?php
+            foreach ($recommendations as $recommendation) {
+                echo '["' . $recommendation['content_title'] . '",' . $recommendation['likes'] . ',' . $recommendation['dislikes'] . '],';
+            }
+            ?>
+        ]);
+
+
+        var options = {
+            chart: {
+                title: 'Session vise Likes and Dislikes',
+                subtitle: '',
+                width: 600,
+                height: 400
+            }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
 </script>
 @endsection('content')

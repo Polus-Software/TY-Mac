@@ -24,7 +24,8 @@ use App\Models\CohortBatch;
 use PDF;
 use SnappyImage;
 use App\Models\StudentFeedbackCount;
-
+use App\Models\UserType;
+use App\Models\EnrolledCourse;
 
 class EnrolledCourseController extends Controller
 {
@@ -40,11 +41,14 @@ class EnrolledCourseController extends Controller
         $finalRec = [];
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
-        $student_firstname = $user->firstname;
-        $student_lastname = $user->lastname;
+        if(Auth::check()){
+            $userType = UserType::find($user->role_id)->user_role;
+        }
+        
 
         if($user){
-
+        $student_firstname = $user->firstname;
+        $student_lastname = $user->lastname;
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructor = User::where('id', $assigned);
@@ -180,20 +184,38 @@ class EnrolledCourseController extends Controller
                     'content_title' => $content->value('topic_title'),
                     'topic_id' => $topicId,
                     'topic_title' => $topic->value('topic_title'),
+                    'student_id' => $feedback->value('student'),
+                    'likes' => $feedback->value('positive'),
+                    'dislikes' => $feedback->value('negative')
                 );
 
                 array_push($finalRec, $singleRec);
             }
         }
-        return view('Student.enrolledCoursePage',[
-            'singleCourseDetails' => $courseDetails,
-            'topicDetails' =>  $topicDetails,
-            'achievedBadgeDetails' => $achievedBadgeDetails,
-            'badgesDetails' => $badgesDetails,
-            'upcoming' => $upcoming,
-            'recommendations' => $finalRec,
-            'next_live_cohort' =>  $next_live_cohort
-        ]);
+
+        if($userType === 'student') {
+            return view('Student.enrolledCoursePage',[
+                'singleCourseDetails' => $courseDetails,
+                'topicDetails' =>  $topicDetails,
+                'achievedBadgeDetails' => $achievedBadgeDetails,
+                'badgesDetails' => $badgesDetails,
+                'upcoming' => $upcoming,
+                'recommendations' => $finalRec,
+                'next_live_cohort' =>  $next_live_cohort
+            ]);
+        }
+        
+        if($userType === 'instructor') {
+            $recommendations = $this->instructorRecommendations($courseId);
+            return view('Student.enrolledCoursePage',[
+                'singleCourseDetails' => $courseDetails,
+                'topicDetails' =>  $topicDetails,
+                'recommendations' => $recommendations,
+                'userType' => $userType,
+                'studentsEnrolled' => $this->studentsEnrolled($courseId)
+            ]);
+        }        
+        
 
     }else{
         return redirect('/403');
@@ -327,5 +349,44 @@ class EnrolledCourseController extends Controller
         }
 
     }
-}
 
+
+    private function studentsEnrolled($courseId) {
+        $studentsEnrolled = DB::table('enrolled_courses as a')
+                            ->join('users as b', 'a.user_id', '=', 'b.id')
+                            ->where('a.course_id', $courseId)
+                            ->get();
+        return $studentsEnrolled;
+    }
+
+    private function instructorRecommendations($courseId) {
+        $singleRecommendation = [];
+        $finalRecommendation = [];
+        $studentsEnrolled = $this->studentsEnrolled($courseId);
+        foreach($studentsEnrolled as $student) {
+            $student_name = User::where('id', $student->user_id)->get();
+            $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();
+            foreach($studentFeedbackCounts as $feedback) {
+                if($feedback->value('negative') > $feedback->value('positive')) {
+                    $topicId = $feedback->topic_id;
+                    $topic = Topic::where('topic_id',  $topicId);
+                    $contentId = $feedback->content_id;
+                    $content = TopicContent::where('topic_content_id',  $contentId);                    
+                    $singleRecommendation = array(
+                        'content_id' => $contentId,
+                        'content_title' => $content->value('topic_title'),
+                        'topic_id' => $topicId,
+                        'topic_title' => $topic->value('topic_title'),
+                        'student_id' => $feedback->value('student'),
+                        'likes' => $feedback->value('positive'),
+                        'dislikes' => $feedback->value('negative')
+                    );
+    
+                    array_push($finalRecommendation, $singleRecommendation);
+                }
+            }
+        }
+        return $finalRecommendation;
+    }
+
+}
