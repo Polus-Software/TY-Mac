@@ -26,6 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
+        @csrf
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
@@ -64,7 +65,7 @@
         @else
         
         <li class="nav-item">
-        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
+        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
@@ -82,7 +83,7 @@
         LOGO
       </a>
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,11 +91,26 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav" style="width:max-content;">
-          <li class="nav-item border-bottom border-warning border-3"><a class="nav-link active" aria-curent="page" href="/">Home</a></li>
+         
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
+        </li>
+        @endif
+          <li class="nav-item border-bottom border-warning border-3"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('student.courses.get')}}">All Courses</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
-          <li class="nav-item"><a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
-          <li class="nav-item"><a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+          @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @else
+        <li class="nav-item"><a class="nav-link" id="signup_navlink" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
+          <li class="nav-item"><a id="login_navlink" class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+        @endif
           </li>
         </ul>
       </div>
@@ -114,7 +130,7 @@
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Small class sizes</li>
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Interactive learning</li>
           </ul>
-          <a href="{{ route('student.courses.get') }}" class="btn btn-secondary">Enroll now</a>
+          <a type="button" class="btn btn-secondary" href="{{ route('student.courses.get') }}">Enroll now</a>
         </div>
         <div class="col-md-6 intros text-end">
           <div class="video-box">
@@ -332,7 +348,7 @@
             <h2 class="fw-bold text-capitalize text-center text-white mb-4">
               Have a question?
             </h2>
-            <button class="btn btn-secondary" type="button">CONTACT US</button>
+            <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
           </div>
         </div>
 
@@ -401,6 +417,52 @@
   <a href="#" class="shadow btn-primary rounded-circle back-to-top">
     <i class="fas fa-chevron-up"></i>
   </a>
+
+<!-- contact modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="contactModalLabel">Contact us</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="name" class="name-label">Name</label>
+                <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="phone" class="phone-label">Phone</label>
+                <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="message" class="message-label">Message</label>
+                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <small>Error message</small>
+              </div>
+              <div class="d-grid form-group  mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+  <!-- contact modal ends -->
+
   <!-- login modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-container mx-auto p-3 rounded">
@@ -450,7 +512,7 @@
                 <span>
                   <p>Don't have an account?
                 </span>
-                <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
 
             </form>
@@ -548,7 +610,7 @@
                 <span>
                   <p>Already have an account?
                 </span>
-                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+                <span class="login"><a href="" id="loginLink">&nbsp;Login</a></p></span>
               </div>
             </form>
           </div>
@@ -669,6 +731,26 @@
       const small = formControl.querySelector('small');
       small.style.visibility = 'hidden';
     }
+
+    document.getElementById('signup_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('loginModal');
+      document.getElementById('signup_navlink').click();
+    });
+
+    document.getElementById('loginLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('signupModal');
+      document.getElementById('login_navlink').click();
+    });
+
+    function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    console.log(modal);
+    modal.hide();
+  }
+
   </script>
 </body>
 

@@ -169,7 +169,7 @@ class EnrolledCourseController extends Controller
         $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->get();
         
         foreach($studentFeedbackCounts as $feedback) {
-            if($feedback->value('negative') > $feedback->value('positive')) {
+            if($feedback->value('negative') == 1) {
                 $topicId = $feedback->topic_id;
                 $topic = Topic::where('topic_id',  $topicId);
                 $contentId = $feedback->content_id;

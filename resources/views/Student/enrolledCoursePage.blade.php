@@ -64,7 +64,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+      @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
@@ -578,7 +579,7 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                                                 <h5 class="card-title">Questions & Answers</h5>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end mb-3">
                                                 <button type="button" class="btn">Ask a question</button>
                                             </div>
                                             
@@ -1079,5 +1080,12 @@
         const modal = bootstrap.Modal.getInstance(truck_modal);    
         modal.hide();
     }
+
+    document.getElementById('search-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  let searchTerm = document.getElementById('search-box').value;
+  let path = "/course-search?search=" + searchTerm;
+  window.location = '/course-search?search=' + searchTerm;
+});
 </script>
 @endsection('content')

@@ -9,12 +9,15 @@ use App\Models\User;
 use App\Models\EnrolledCourse;
 use App\Models\Filter;
 use App\Models\UserType;
+use App\Models\GeneralSetting;
 use Auth;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\Course;
+use App\Models\CourseCategory;
 
 
 class AdminController extends Controller
@@ -181,5 +184,67 @@ class AdminController extends Controller
         }
         $filter->save();
         return response()->json(['status' => 'success', 'message' => ' Changed status successfully']);
+    }
+
+    public function saveThreshold(Request $request) {
+        $value = $request->value;
+        $setting = GeneralSetting::where('setting', 'recommendation_threshold')->get();
+        if(count($setting)) {
+            $settingId = GeneralSetting::where('setting','recommendation_threshold')->value('id');
+            $setting = GeneralSetting::find($settingId);
+            $setting->value = $value;
+            $setting->save();
+            return response()->json(['status' => 'success', 'message' => 'Updated threshold successfully']);
+        } else {
+            $newSettings = new GeneralSetting;
+            $newSettings->setting = 'recommendation_threshold';
+            $newSettings->value = $value;
+            $newSettings->save();
+            return response()->json(['status' => 'success', 'message' => 'Added threshold successfully']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Something went wrong!']);
+        
+    }
+
+    public function courseSearch(Request $request) {
+
+        $courseDetails = [];
+        $searchTerm = $request->search;
+        $allCourseCategory = CourseCategory::all();
+        $courses = Course::where('course_title', 'LIKE', '%' . $searchTerm . '%')->get();
+
+        $filters = Filter::all();
+        $userType =  UserType::where('user_role', 'instructor')->value('id');
+
+        $instructors = User::where('role_id', $userType)->get();
+
+        foreach($courses as $course)
+        {
+            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+            $instructorfirstname = User::where('id', $assigned)->value('firstname');
+            $instructorlastname = User::where('id', $assigned)->value('lastname');
+            $duration = $course->course_duration . "h";
+       
+            $courseData =  array (
+                'id' => $course->id,
+                'course_title' => $course->course_title,
+                'course_category' => $courseCategory,
+                'description' => $course->description,
+                'course_thumbnail_image' => $course->course_thumbnail_image,
+                'course_difficulty' => $course->course_difficulty,
+                'instructor_firstname' => $instructorfirstname,
+                'instructor_lastname' => $instructorlastname,
+                'rating' => $course->course_rating,
+                'duration' => $duration
+            );
+            array_push($courseDetails, $courseData);
+        }
+        $courseDetailsObj = collect($courseDetails);
+        $courseDatas = $this->paginate($courseDetailsObj);
+        $courseDatas->withPath('');
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
+
     }
 }

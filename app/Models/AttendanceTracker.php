@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CohortBatch extends Model
+class AttendanceTracker extends Model
 {
     use HasFactory;
+
+    protected $table = 'attendance_tracker';
 }

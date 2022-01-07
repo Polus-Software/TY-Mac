@@ -21,8 +21,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+        <button class="btn btn-outline-success" id="search-btn">Search</button>
       </form>
 
       <ul class="navbar-nav me-2">
@@ -696,6 +697,19 @@ const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
+
+document.getElementById('search-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  let searchTerm = document.getElementById('search-box').value;
+  let path = "/course-search?search=" + searchTerm;
+  window.location = '/course-search?search=' + searchTerm;
+});
+
+
+  // document.getElementById('search-box').addEventListener('onkeyup', function(e) {
+  //   e.preventDefault();
+  // alert('ss');
+  // });
 }
 
 </script>

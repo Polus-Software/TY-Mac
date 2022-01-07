@@ -36,7 +36,7 @@ class CoursesCatalogController extends Controller
     
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
-        $courses = Course::all();
+        $courses = Course::where('is_published', true)->get();
 
         $filters = Filter::all();
         $userType =  UserType::where('user_role', 'instructor')->value('id');

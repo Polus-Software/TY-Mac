@@ -44,6 +44,7 @@ Route::get('/', function () {
     Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.login');
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/user-contact', [AuthController::class, 'contactUs'])->name('user.contact');
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -61,6 +62,7 @@ Route::get('/', function () {
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
+    Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
 
 
 
@@ -103,9 +105,11 @@ Route::get('/', function () {
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
     Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
     Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
+    Route::post('/save-threshold', [AdminController::class, 'saveThreshold'])->name('save-threshold');
     Route::get('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
     Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
+    Route::get('/course-search', [AdminController::class, 'courseSearch'])->name('course-search');
     
 
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');

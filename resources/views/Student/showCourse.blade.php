@@ -9,6 +9,17 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+.question-btn {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    background: #2C3443;
+    border-radius: 10px;
+    width: 190px;
+    height: 40px;
+    font-size: 14x;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
   </style>
 
   
@@ -21,7 +32,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+          @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
         <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
       </form>
 
@@ -231,8 +243,50 @@
     </div>
   </div>
 <!-- signup modal ends -->
+<!-- contact modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="contactModalLabel">Contact us</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="name" class="name-label">Name</label>
+                <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="phone" class="phone-label">Phone</label>
+                <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="message" class="message-label">Message</label>
+                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <small>Error message</small>
+              </div>
+              <div class="d-grid form-group  mx-sm-5 mx-0">
+                <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              </div>
 
-
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
+    </div>
+  </div>
+  <!-- contact modal ends -->
     <header class="ty-mac-header-bg d-flex align-items-center mt-3">
         <div class="container">
             <div class="row mt-5">
@@ -297,25 +351,19 @@
                     @else
                      <h6>Already enrolled!</h6>
                     @endif
+                    <a class="btn question-btn" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="far fa-comment-alt"></i> Have a question?</a>
                 @endunless
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/19" target="_blank" style="text-decoration:none; color:inherit;">
-                    Share on Facebook
-                </a>
                 </div>
                 <div class="row mt-2">
-                   
-                        <p class="fw-bold">share this course: </p>
-                        @foreach($singleCourseDetails as $singleCourseDetail)
+                   @foreach($singleCourseDetails as $singleCourseDetail)
                         <div class="col-lg-12">
-                            <!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Facebook" target="_blank"><i class="fab fa-facebook fa-lg btn-dark pe-3"></i></a> -->
+                        <span class="fw-bold">share this course: </span>
                             <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
                             <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
 
-                            <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a>
+                            <!-- <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a> -->
                         </div>
-                        @endforeach
-                
-                
+                    @endforeach
                 </div>
               </div>
              
@@ -644,39 +692,6 @@
            finalRating= starRating; 
    });
    }
-
-//    document.getElementById('reviewModal').addEventListener('hide.bs.modal',function(event){
-//       let starElement = document.getElementsByClassName('rating-star');
-//       for (var i = 0; i < 5 ; i++) {
-//           starElement[i].classList.remove("active-stars");
-//       }
-//       document.getElementById('comment').value = "";
-//    });
-
-
-//    document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-//        let courseId = document.getElementById('course_id').value;
-//        let userId = document.getElementById('user_id').value;
-//        let comment =document.getElementById('comment').value;
-
-//        let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
-       
-//         fetch(path, {
-//             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//                 "X-CSRF-Token": document.querySelector('input[name=_token]').value
-//             },
-//            body: JSON.stringify({})
-//         }).then((response) => response.json()).then((data) => {
-//             if (data.status =='success'){
-//                 closeModal('reviewModal');
-//                 window.location.reload();
-//             }
-//         });
-
-//    });
    
    
    function closeModal(modalId) {
