@@ -12,7 +12,7 @@
   </style>
 
  
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,25 +21,24 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+      @csrf
+        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
+        <button class="btn btn-outline-success" id="search-btn">Search</button>
       </form>
 
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
-        <li class="nav-item">
+       
+        <li class="nav-item border-bottom border-warning border-3">
           <a class="nav-link active" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li> -->
         @if (Auth::check())
         @if(Auth::user()->role_id == 3)
 
@@ -58,6 +57,9 @@
         </li>
         @endif
         @else
+        <li class="nav-item">
+          <a class="nav-link" href="#">Apply to be an instructor?</a>
+        </li>
         <li class="nav-item">
         <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
         </li>
@@ -227,7 +229,7 @@
     </div>
   </div>
 <!-- signup modal ends -->
-<header class="ty-mac-header-bg d-flex align-items-center">
+<header class="ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
       <div class="row">
         <div class="col-lg-5 col-sm-12 d-flex align-items-center p-3">
@@ -451,7 +453,7 @@
           </div>
           @endif
           @endforeach
-</div>
+        </div>
         </div>
       </div>
 
@@ -468,7 +470,7 @@
         </div>
 
         <div class="row" id="course_view_section">
-          <!-- <div id="course_view_section"> -->
+      
           @foreach($courseDatas as $courseData)
             <div class="col-lg-6">
               <div class="card mb-4">
@@ -527,7 +529,6 @@
             </div>
             </div>
            @endforeach
-           <!-- </div> -->
             <div class="d-flex justify-content-center">
               {{ $courseDatas->links() }}
             </div>
@@ -539,6 +540,86 @@
     </div>
   </div>
 </section>
+<footer>
+        <div class="ty-mac-footer">
+            <div class="container">
+                <div class="row pt-5 pb-4">
+                    <div class="col-lg-6 mb-4">
+                        <h4 class="pb-2">LOGO</h4>
+                        <p>At vero eos et accusamus et iusto 
+                            odio dignissimos ducimus qui blanditiis
+                             praesentium voluptatum deleniti atque 
+                             corrupti quos dolores et quas molestias
+                              excepturi sint occaecati cupiditate non 
+                              provident, similique sunt in culpa qui officia deserunt 
+                              mollitia animi, id est laborum et dolorum fuga.</p>
+                        <h4 class="pt-2 pb-3">
+                            Social Links
+                        </h4>
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-12">
+                                <a href=""><i class="fab fa-facebook"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                    </div>
+
+                    <div class="col-lg-5">
+                        <h4 class="pb-3">Quick Links</h4>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 1</a>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4">
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-3">
+                                <a href="">Menu 5</a>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                        <h4 class="pb-2">Help</h4>
+                            <div class="col-lg-12 col-md-6 col-sm-8 col-10">
+                                <a href="#">Terms and Conditions | Privacy Policy</a>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <a href="#">Cookies</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-dark copyRight">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <p class="pt-2">© Copyright TY Mac 2021</p>
+            </div>
+        </div>
+    </footer>
 
 @endsection('content')
 
@@ -616,6 +697,19 @@ const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
+
+document.getElementById('search-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  let searchTerm = document.getElementById('search-box').value;
+  let path = "/course-search?search=" + searchTerm;
+  window.location = '/course-search?search=' + searchTerm;
+});
+
+
+  // document.getElementById('search-box').addEventListener('onkeyup', function(e) {
+  //   e.preventDefault();
+  // alert('ss');
+  // });
 }
 
 </script>

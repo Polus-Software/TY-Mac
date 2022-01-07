@@ -12,8 +12,13 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Gmail;
 use App\Models\User;
 use App\Models\UserType;
+use App\Models\EnrolledCourse;
+use App\Models\LiveSession;
+use App\Models\CohortBatch;
+use App\Models\Topic;
 use Session;
 use Hash;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -94,8 +99,7 @@ class AuthController extends Controller
         }else{
             return redirect('dashboard');
            }
-        //    return back()->with('Error','Credentials are wrong.');
-         return redirect('login')->withErrors('Credentials are wrong.');
+           return back()->with('Error','Credentials are wrong.');
         }
     }
     
@@ -104,15 +108,63 @@ class AuthController extends Controller
      * Render dashboard after login
      */
     public function dashboardView() {
+
+        $upComingSessionDetails = [];
+        $recentSessionDetails = [];
         $user = Auth::user();
        
         if(Auth::check()) {
             $userType =  UserType::find($user->role_id)->user_role;
+
+            $instructor_count = DB::table('users')->where('role_id', '=', 3)->count();
+            $registered_course_count = DB::table('courses')->count();
+            $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
+
+            $liveSessions = LiveSession::all();
+            $current_date = Carbon::now()->format('Y-m-d');
+            $date =  Carbon::now()->subDays(10)->format('Y-m-d');
+           
+            foreach($liveSessions as $session){
+               
+                $batchId = $session->batch_id;
+                $batch = CohortBatch::where('id', $batchId);
+
+                $currentBatchStartDate = $batch->value('start_date');
+
+                if($currentBatchStartDate > $current_date) {
+                    $session_title = $session->session_title;
+                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+
+                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                    
+                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    array_push($upComingSessionDetails, array(
+                        'session_title'=>  $session_title,
+                        'instructor' => $instructor,
+                        'enrolledCourses' => $enrolledCourses,
+                        'date' => $date
+                    ));
+                }
+                
+            }
+
+
             return view('Auth.Dashboard', [
-                'userType' => $userType
+                'userType' => $userType,
+                'instructor_count' => $instructor_count,
+                'registered_course_count' => $registered_course_count,
+                'students_registered' => $students_registered,
+                'session_title' =>$session_title,
+                'enrolledCourses'=> $enrolledCourses,
+                'upComingSessionDetails' => $upComingSessionDetails,
+                'recentSessionDetails' => $recentSessionDetails,
+                'instructor' =>   $instructor
             ]);
         }
-        //return redirect('login')->withErrors('Access is not permitted');
+        
         return redirect('/403');
     }
     
@@ -120,10 +172,34 @@ class AuthController extends Controller
      * Logout student user
      */
     public function logout() {
-        auth()->user()->tokens()->delete();
-        Session::flush();
-        Auth::logout();
+        if(auth()->user()) {
+            auth()->user()->tokens()->delete();
+            Session::flush();
+            Auth::logout();
+        }
         return Redirect('/');
+    }
+
+    public function contactUs(Request $request) {
+        
+        try {
+            $name = $request->name;
+            $phone = $request->phone;
+            $message = $request->message;
+            $email = $request->email;
+    
+            $details =[
+                'title' => 'Hey there, you have a new query!',
+                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
+            ];
+    
+            Mail::to('support@thinklit.com')->send(new Gmail($details));
+    
+            return redirect('/')->withSuccess('Sent successfully!');
+        } catch (Exception $exception) {
+            return redirect('/');
+        }
+        
     }
     
 }

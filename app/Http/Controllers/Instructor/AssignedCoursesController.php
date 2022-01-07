@@ -118,7 +118,7 @@ class AssignedCoursesController extends Controller
         }
         return view('Instructor.viewCourseContent',[
             'courseContents' => $courseContents,
-            'userType' =>  $userType
+            'userType' =>  $userType,
         ]);
     }else{
         return redirect('/403');

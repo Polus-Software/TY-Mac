@@ -20,6 +20,7 @@ use App\Models\TopicContent;
 use App\Models\LiveSession;
 use App\Models\LiveFeedbacksPushRecord;
 use App\Models\StudentFeedbackCount;
+use App\Models\AttendanceTracker;
 use Illuminate\Support\Facades\DB;
 
 require_once "AccessToken.php";
@@ -40,13 +41,21 @@ class RtmTokenGeneratorController extends Controller
         $sessionObj = LiveSession::where('live_session_id', $session);
         $topicId = $sessionObj->value('topic_id');
         $topic = Topic::where('topic_id', $topicId)->value('topic_title');
-
+        $participants = [];
         $contents = TopicContent::where('topic_id', $topicId)->get();
         
         if($userObj) {
             $userTypeLoggedIn =  UserType::find($userObj->role_id)->user_role;
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->get();
             
+            foreach($attendanceRec as $rec) {
+                $student = User::where('id', $rec->student);
+                $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+                array_push($participants, $studentName);
+            }
+
             return view('Agora.SessionScreen.live_session_screen', [
+                'participants'=> $participants,
                 'session' => $session,
                 'topic_title' => $topic,
                 'contents' => $contents,
@@ -68,6 +77,15 @@ class RtmTokenGeneratorController extends Controller
         if($userObj->role_id == 2) {
             $role = self::RoleSubscriber;
             $roleName = $userObj->firstname;
+
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('student', $userObj->id)->get();
+            if(!count($attendanceRec)) {
+                $attendance = New AttendanceTracker;
+                $attendance->live_session_id = $session;
+                $attendance->student = $userObj->id;
+                $attendance->start_time = (new DateTime("now", new DateTimeZone('UTC')));
+                $attendance->save();
+            }
         } else {
             $role = self::RolePublisher;
             $roleName = "Instructor";
@@ -108,7 +126,7 @@ class RtmTokenGeneratorController extends Controller
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
-            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
 
             array_push($sessionsArray, array(
@@ -141,7 +159,7 @@ class RtmTokenGeneratorController extends Controller
         $topics = Topic::where('course_id', $course)->get();
 
         foreach($batches as $batch) {
-            $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->batchname . "</option>";
+            $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->title . "</option>";
         }
         foreach($topics as $topic) {
             $topicHtml = $topicHtml . "<option value=" . $topic->topic_id . ">" . $topic->topic_title . "</option>";
@@ -181,7 +199,7 @@ class RtmTokenGeneratorController extends Controller
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
-            $batch = CohortBatch::where('id', $session->batch_id)->value('batchname');
+            $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
 
             array_push($sessionsArray, array(
@@ -247,11 +265,11 @@ class RtmTokenGeneratorController extends Controller
         if(count($feedbackCountExists)) {
             $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId);
             if($type == "positive") {
-                $positiveCount = $feedbackCountExists->value('positive');
-                $feedbackCountExists->update(['positive' => $positiveCount + 1]);
+                $feedbackCountExists->update(['positive' => 1]);
+                $feedbackCountExists->update(['negative' => 0]);
             } else {
-                $negativeCount = $feedbackCountExists->value('negative');
-                $feedbackCountExists->update(['negative' => $negativeCount + 1]);
+                $feedbackCountExists->update(['positive' => 0]);
+                $feedbackCountExists->update(['negative' => 1]);
             }
         } else {
             $feedbackCount = new StudentFeedbackCount;

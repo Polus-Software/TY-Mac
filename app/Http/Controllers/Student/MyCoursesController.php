@@ -11,6 +11,7 @@ use App\Models\CourseCategory;
 use App\Models\EnrolledCourse;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\CohortBatch;
 
 class MyCoursesController extends Controller
 {
@@ -48,6 +49,7 @@ class MyCoursesController extends Controller
             'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
+            
           );
         array_push($singleEnrolledCourseData, $enrolledCourseData);
       }

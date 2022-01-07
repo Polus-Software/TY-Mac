@@ -14,14 +14,8 @@
         @csrf
         <section class="row g-3 llp-view">
         <div class="py-4"><h3>Instructor details</h3><hr class="my-4"></div>
-       
           <div class="col-md-2">
           <img src="{{ asset('/storage/images/'.$instructorDetails['instructor_image']) }}" class="img-fluid rounded-circle float-start" alt="" style="width:94px; height:94px;">
-          <!-- @if(isset($instructorDetails['instructor_image'])) -->
-          <!-- <i class="fas fa-user-circle fa-5x"></i> -->
-          <!-- @else -->
-          
-        <!-- @endif -->
        </div>
         <div class="col-md-3">
             <label>First Name</label>

@@ -44,6 +44,7 @@ Route::get('/', function () {
     Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.login');
     Route::get('/dashboard', [AuthController::class, 'dashboardView'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/user-contact', [AuthController::class, 'contactUs'])->name('user.contact');
 
     Route::get('/edit', [EditController::class, 'edituser'])->name('edituser');
     Route::post('/update',[EditController::class, 'profileUpdate'])->name('profileUpdate');
@@ -59,9 +60,9 @@ Route::get('/', function () {
     Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
     Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
-    // Route::get('/view-cohort', [CourseController::class, 'viewCohort'])->name('view-cohort');
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
+    Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
 
 
 
@@ -104,9 +105,11 @@ Route::get('/', function () {
     Route::post('/students/delete', [AdminController::class, 'destroyStudent'])->name('admin.deletestudent');
     Route::get('/admin-settings', [AdminController::class, 'adminSettings'])->name('admin-settings');
     Route::post('/change-filter-status', [AdminController::class, 'changeFilterStatus'])->name('change-filter-status');
+    Route::post('/save-threshold', [AdminController::class, 'saveThreshold'])->name('save-threshold');
     Route::get('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
     Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
+    Route::get('/course-search', [AdminController::class, 'courseSearch'])->name('course-search');
     
 
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
@@ -128,8 +131,7 @@ Route::get('/', function () {
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
 
     Route::get('view-sub-topic/{topic}', [CourseController::class, 'viewSubTopic'])->name('view-sub-topic');
-   // Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');
-
+  
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
     Route::get('generate-token/{session}', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
@@ -162,5 +164,6 @@ Route::get('/', function () {
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
-    Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');
+    
 });
+Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

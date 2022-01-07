@@ -17,9 +17,7 @@
               
 
           <div class="btn-toolbar mb-2 mb-md-0">
-            <!-- <button id="add_new_course" data-bs-toggle="modal" data-bs-target="#new_course_modal" class="btn btn-primary add_new_course_btn">Add New Course</button>
-            <button id="add_sub_topics" data-bs-toggle="modal" data-bs-target="#new_sub_modal" class="btn btn-secondary add_new_topics_btn ms-2">Add Sub Topics</button>
-            <button id="add_batches" data-bs-toggle="modal" data-bs-target="#batch_modal" class="btn btn-secondary add_batches_btn ms-2">Add Batches</button> -->
+           
           </div>
         </div>
         <div class="row mt-4">
