@@ -36,12 +36,6 @@
                 <td>{{ $slno }}</td>
                 <td class="align-middle text-center">
                 <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
-                  <!-- @if(isset($studentData['image'])) -->
-                  <!-- <i class="fas fa-user-circle fa-2x"></i> -->
-                  <!-- <img src="{{asset('/storage/images/user.png')}}" class="rounded-circle" alt="" style="width:30px; height:30px;"> -->
-                  <!-- @else -->
-                  <!-- <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:30px; height:30px;"> -->
-                  <!-- @endif                   -->
                 </td>
                 <td>{{$studentData['firstname'] }}</td>
                 <td>{{$studentData['lastname'] }}</td>

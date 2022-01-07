@@ -9,51 +9,28 @@
                       <div class="side-heading">
                         <p class="heading-1">My Account</p>
                        </div>
-            
-                <ul class="nav nav-pills flex-column mb-auto mt-5">
-                
-                  <li class="nav-item">
-                    <a class="nav-link link-dark" href="{{ route('edituser') }}">
-                    <i class="fas fa-user pe-2"></i>
-                      My Profile</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link link-dark active" href="{{ route('change.password.get') }}">
-                    <i class="fas fa-lock pe-2"></i>
-                      Change Password</a>
-                  </li>
-                  
-                  <!-- <li class="nav-item">
-                    <a class="nav-link link-dark" href="#">
-                    <i class="far fa-bell pe-2"></i>
-                      Email Notifications</a>
-                  </li>
-                  
-                  <li class="nav-item">
-                    <a class="nav-link link-dark" href="#">
-                    <i class="far fa-heart pe-2"></i>
-                      My Favourite Courses</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link link-dark" href="#">
-                    <i class="fas fa-book-open pe-2"></i>
-                      My Favourite Courses</a>
-                  </li> -->
-                  
-                </ul>
-              </div>
-          </div>
+                        <ul class="nav nav-pills flex-column mb-auto mt-5">
+                            <li class="nav-item">
+                                <a class="nav-link link-dark" href="{{ route('edituser') }}">
+                                <i class="fas fa-user pe-2"></i>
+                                My Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-dark active" href="{{ route('change.password.get') }}">
+                                <i class="fas fa-lock pe-2"></i>
+                                Change Password</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                
-               <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-                   
-                     <div class="content-page">
-                       
+                <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                    <div class="content-page">
                         @if (Session::has('message'))
                             <div class="alert alert-success" role="alert">
                                 {{ Session::get('message') }}
                             </div>
                         @endif
-                      
                         <form class="form" id="changePasswordForm" method="POST" action="{{ route('change.password.post') }}">
                             @csrf
                             <input type="hidden" name="_method" value="PUT">

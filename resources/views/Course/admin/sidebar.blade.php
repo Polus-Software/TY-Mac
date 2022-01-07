@@ -3,7 +3,12 @@
   <ul class="nav nav-pills flex-column mb-auto mt-5">
     <li class="nav-item">
       <a class="nav-link link-dark" href="">
-      Status: <span class="badge bg-warning text-dark">Draft</span>
+      Status: 
+      @if($courseStatus == 0)
+      <span class="badge bg-warning text-dark">Draft</span>
+      @else
+      <span class="badge bg-success text-dark">Published</span>
+      @endif
       </a>
     </li>
     <li class="nav-item">
@@ -31,8 +36,40 @@
     </li>    
   </ul>
   <div class="position-relative btn-bottom-container">
-    <a class="btn btn-primary d-block">Publish</a>
+      @if($courseStatus == 0)
+      <a class="btn btn-primary d-block" id="publish">Publish</a>
+      @else
+      <a class="btn btn-primary d-block" id="publish">Unpublish</a>
+      @endif
+
     <a class="btn btn-outline-secondary d-block mt-2" href="{{ route('manage-courses') }}">Back to course list</a>
   </div>
 </div>
 <!-- sidebar ends -->
+
+<script>
+  document.getElementById('publish').addEventListener('click', function(e) {
+    console.log('aa');
+      let courseId = document.getElementById('course_id').value;
+      if(courseId == null) {
+        return false;
+      } else {
+        let path = "{{ route('publish-course') }}?course_id=" + courseId
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if (data.status =='published'){
+              document.getElementById('publish').innerHTML = "Unpublish";
+            } else {
+              document.getElementById('publish').innerHTML = "Publish";
+            }
+        });
+      }
+  });
+  </script>

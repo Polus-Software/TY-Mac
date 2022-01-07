@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     @foreach($singleCourseDetails as $singleCourseDetail)
-        <!-- <meta property="og:title" content="{{$singleCourseDetail['course_title']}}" />  
-        <meta property="og:description" content="{{$singleCourseDetail['description']}}" />
-        <meta property="og:image" content="{{ url('/') }}/storage/courseImages/{{$singleCourseDetail['course_image']}}"> -->
+       
 
     <meta name="twitter:title" content="{{$singleCourseDetail['course_title']}}" />
     <meta name="twitter:description" content="{{$singleCourseDetail['description']}}" />
@@ -23,6 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/assets/singlecourse.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/footer.css') }}">
   
 </head>
 <body>

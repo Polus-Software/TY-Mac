@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('/assets/courses.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/paginator.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/footer.css') }}">
     <meta property="og:title" content="Custom title" />
     <meta property="og:image" content="https://enliltdev.fibiweb.com/storage/courseImages/course-image.png" />
     <meta property="og:type" content="website" />

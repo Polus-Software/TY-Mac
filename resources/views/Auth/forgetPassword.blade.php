@@ -25,13 +25,14 @@
                         @endif        
                     </div>
                     <div class="d-grid form-group pt-2 mx-sm-5 mx-0">
-                    <button type="submit" class="btn btn-block"><span class="button">Send Password Reset Link</span></button>
+                    <button type="submit" class="btn btn-secondary btn-block"><span class="button">Send Password Reset Link</span></button>
                     </div>
                 </form>
             </div> 
         </div>      
     </div>          
 </div>
+
 <script>
     document.querySelector('#passwordResetLink').addEventListener('submit', (e) => {
         if(email.value === '') {
