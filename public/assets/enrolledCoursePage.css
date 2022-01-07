@@ -240,9 +240,9 @@
 
 
 
-.container {
+/* .container {
     display: flex;
-}
+} */
 
 .badge-shadow {
     box-shadow: -4px 0px 6px #00000029;
@@ -270,4 +270,10 @@
 .left--45 {
     position: relative;
     left: -45px;
+}
+
+.llp-countbox {
+background-color: #FFF9E8;
+border-color: #FFF9E8;
+border-radius: 10px;
 }

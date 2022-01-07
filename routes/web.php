@@ -168,5 +168,6 @@ Route::get('/', function () {
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
-    Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');
+    
 });
+Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

@@ -35,6 +35,7 @@ final class Versions
     const VERSIONS          = array (
   'asm89/stack-cors' => 'v2.0.3@9cb795bf30988e8c96dd3c40623c48a877bc6714',
   'barryvdh/laravel-dompdf' => 'v0.9.0@5b99e1f94157d74e450f4c97e8444fcaffa2144b',
+  'barryvdh/laravel-snappy' => 'v0.4.8@1903ab84171072b6bff8d98eb58d38b2c9aaf645',
   'brick/math' => '0.9.3@ca57d18f028f84f777b2168cd1911b0dee2343ae',
   'composer/package-versions-deprecated' => '1.11.99.4@b174585d1fe49ceed21928a945138948cb394600',
   'dflydev/dot-access-data' => 'v3.0.1@0992cc19268b259a39e86f296da5f0677841f42c',
@@ -52,6 +53,7 @@ final class Versions
   'guzzlehttp/guzzle' => '7.4.0@868b3571a039f0ebc11ac8f344f4080babe2cb94',
   'guzzlehttp/promises' => '1.5.0@136a635e2b4a49b9d79e9c8fee267ffb257fdba0',
   'guzzlehttp/psr7' => '2.1.0@089edd38f5b8abba6cb01567c2a8aaa47cec4c72',
+  'knplabs/knp-snappy' => 'v1.4.0@b4db557ef3794cc661165b1900792ca180cd0e49',
   'laravel/framework' => 'v8.64.0@3337c029e1bb31d9712d27437cc27010ba302c9e',
   'laravel/sanctum' => 'v2.11.4@2cc0c0f79eb92578f606f6130fafd31b18229db1',
   'laravel/serializable-closure' => 'v1.0.3@6cfc678735f22ccedad761b8cae2bab14c3d8e5b',

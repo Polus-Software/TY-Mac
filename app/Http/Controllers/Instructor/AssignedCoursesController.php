@@ -134,7 +134,7 @@ class AssignedCoursesController extends Controller
      }
    }
 
-    public function viewStudentList($id){
+    public function viewStudentList(Request $request, $id){
 
         $studentLists =[];
         $enrolled = EnrolledCourse::where('course_id',$id)->get();
@@ -218,6 +218,4 @@ class AssignedCoursesController extends Controller
         return redirect('/404');
         
         }
-
 }
-

@@ -11,7 +11,7 @@
   color: #000000 !important;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
       <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">

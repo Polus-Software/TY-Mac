@@ -94,7 +94,7 @@
   <!-- NAVBAR SECTION  -->
   
   @if(Auth::check())
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,23 +112,20 @@
       @if (Auth::check())
         
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}">
+          <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
         </li>
         
         @endif
-        <li class="nav-item">
+        <li class="nav-item border-bottom border-warning border-3">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
        
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li> -->
         @if (Auth::check())
         @if(Auth::user()->role_id == 3)
-
         <li class="nav-item">
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
@@ -200,7 +197,7 @@
         </li>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+          <a class="nav-link" href="{{ route('logout') }}">Signout</a>
         </li>
         
         @endif
@@ -220,7 +217,7 @@
 </nav>
 
   @else
-  <nav class="navbar navbar-expand-lg fixed-top llp-navbar navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg fixed-top llp-navbar navbar-light bg-light shadow-sm p-3 mb-5 bg-body">
     <div class="container">
       <a class="navbar-brand" href="">
         LOGO
@@ -234,12 +231,13 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav" style="width:max-content;">
+         
         @if (Auth::check())
         <li class="nav-item">
           <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
         </li>
         @endif
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+          <li class="nav-item border-bottom border-warning border-3"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('student.courses.get')}}">All Courses</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
           @if (Auth::check())

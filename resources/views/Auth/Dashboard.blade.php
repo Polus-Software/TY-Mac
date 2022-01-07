@@ -107,31 +107,6 @@
                 <td>{{$recentSessionDetail['date']}}</td>
               </tr>
            @endforeach
-              <!-- <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Otto</td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
-              </tr> -->
-              
             </tbody>
           </table>
         </div>
@@ -142,13 +117,4 @@
     </div>
   </div>
 </div>
-<!-- container ends -->
-<!-- <div class="card-header"> Welcome {{Auth::user()->firstname}}</div> -->
-<!-- <div class="card-body">
-@if (session('success'))
-<div class="alert alert-success" role="alert">
-  {{ session('success') }}
-</div>
-@endif
-</div> -->
 @endsection

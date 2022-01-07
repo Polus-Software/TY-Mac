@@ -61,14 +61,6 @@ class AdminController extends Controller
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
-
-    // public function showStudent($id){
-    //     $students =User::findOrFail($id);
-    //     return view ('Auth.Admin.ShowStudent', compact('students'));
-
-    // }
-
-
     public function viewStudent(Request $request)
     {
         try {
