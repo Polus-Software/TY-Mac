@@ -9,8 +9,53 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+
+.card-title-certificate{
+    padding-bottom:35px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    margin-top:55px;
+    
+}
+
+
+.card-title-1-certificate{
+    color:#F5BC29;
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top:20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    font-size:28px;
+   
+}
+.card-text-1-certificate{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400; 
+    color: #6E7687;
+}
+.card-text-2-certificate{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900; 
+    border-bottom:1px solid #F5BC29;
+    padding-bottom:30px;
+    font-size:28px;
+}
+.signature-img{
+    display: block;
+    margin: 0 auto;
+    /* border-bottom:1px solid #F5BC29; */
+    
+}
+.signature{
+    border-bottom:1px solid #F5BC29;
+    padding-bottom:30px;
+}
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TY-Mac</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +71,7 @@
       <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
@@ -247,7 +292,7 @@
 
 
 
-<header class="d-flex align-items-center mb-3">
+<header class="d-flex align-items-center mb-3 mt-4">
 <!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com" target="_blank">
   Share on Facebook
 </a> -->
@@ -305,12 +350,10 @@
                                         <div class="row">
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
-                                                    Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
+                                                    Next Live Class: - <small>{{$next_live_cohort}}</small>
                                                    
                                                 </p>
-                                                @foreach($singleCourseDetails as $course)
-                                                <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
-                                                @endforeach
+                                               
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
@@ -352,6 +395,9 @@
                             </button>
                             <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
                                 <img src="" alt="" class="pe-2">Assignments
+                            </button>
+                            <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
+                                <img src="" alt="" class="pe-2">Completion Certificate
                             </button>
                            
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
@@ -755,6 +801,86 @@
                                                 @endforeach
                                                 </ul>
                                             @endforeach
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-certificate" role="tabpanel" aria-labelledby="v-pills-certificate-tab">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card card-2">
+                                        <div class="card-body p-4">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-8 col-sm-6 col-12 mb-4  border-bottom">
+                                                <h5 class="card-title pt-2 pb-2">Completion Certificate</h5>
+                                                </div>
+                                                    <div class="col-lg-6 col-md-4 col-sm-6 col-12 mb-4 border-bottom">
+                                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                        <li class="nav-item" role="presentation" style="list-style:none;">
+                                                            <button class="nav-link" id="pills-back-tab" data-bs-toggle="pill" data-bs-target="#pills-back" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Back to Normal View</button>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation" style="list-style:none;">
+                                                            <button class="nav-link" id="pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#pills-certificate" type="button" role="tab" aria-controls="pills-certificate" aria-selected="true">View Certificate</button>
+                                                        </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="tab-content" id="pills-tabContent">
+                                                            <div class="tab-pane fade show active" id="pills-back" role="tabpanel" aria-labelledby="pills-back-tab">
+                                                                No certificates
+                                                            </div>
+                                                            <div class="tab-pane fade" id="pills-certificate" role="tabpanel" aria-labelledby="pills-back-certificate">
+                                                                <div class="col-lg-12 d-flex justify-content-center">
+                                                                    <div class="card text-center" style="margin: auto; width: 100%; border: 1px solid grey; margin-bottom:30px;">
+                                                                        <div class="card-body">
+                                                                        
+                                                                            <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
+                                                                            <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :  
+                                                                            @foreach($singleCourseDetails as $course)
+                                                                                {{ $course['date_of_issue'] }} 
+                                                                            @endforeach</small>
+                                                                            <small style="position: absolute; right: 45px; top:40px;"></small>
+                                                                            <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1>
+                                                                            <div style="background:#FFF9E8;">
+                                                                            <h3 class="card-title-1-certificate">Certificate of completion</h3>
+                                                                            <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
+                                                                                        {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
+                                                                                        @endforeach</p>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-12">
+                                                                                <p class="card-text-1">Has successfully completed the  <br>
+                                                                                    online cohort on (course completion date)</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-12">
+                                                                            @foreach($singleCourseDetails as $course)
+                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
+                                                                            @endforeach
+                                                                            </div>
+                                                                            <div class="col-lg-12">
+                                                                                <p class="card-text-1">@foreach($singleCourseDetails as $course)
+                                                                                    {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
+                                                                                        @endforeach
+                                                                                </p>
+                                                                                <p class="card-text-1">&<br> Team ThinkLit</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        </div>
+                                                                        
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                @foreach($singleCourseDetails as $course)
+                                                                        <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                         </div>
                                      </div>
                                 </div>
