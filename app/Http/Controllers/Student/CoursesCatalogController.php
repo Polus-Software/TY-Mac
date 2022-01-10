@@ -404,9 +404,10 @@ class CoursesCatalogController extends Controller
 
     public static function getAllCourses() {
         return DB::table('courses as a')
-                            ->select('a.id as course_id', 'a.course_title', 'a.description', 'a.course_difficulty', 'c.firstname', 'c.lastname')
+                            ->select('a.id as course_id', 'a.course_title', 'a.description', 'a.course_difficulty', 'a.course_rating', 'a.course_duration', 'c.firstname', 'c.lastname', 'd.category_name')
                             ->join('assigned_courses as b', 'a.id', '=', 'b.course_id')
                             ->join('users as c', 'b.user_id', '=', 'c.id')
+                            ->join('course_category as d', 'a.category', '=', 'd.id')
                             ->distinct()
                             ->get();
                         }

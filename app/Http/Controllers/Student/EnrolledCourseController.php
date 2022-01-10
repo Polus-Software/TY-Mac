@@ -46,6 +46,7 @@ class EnrolledCourseController extends Controller
         $singleRec = [];
         $finalRec = [];
         $qaArray = [];
+        $next_live_cohort = '';
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
         $userType = "";
