@@ -55,51 +55,36 @@
     padding-bottom:30px;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">TY-Mac</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
-      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-      @csrf
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
-      </form>
+  <!-- question modal -->
+<div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="questionModalLabel">Ask a question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+            <form id="questionForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-sm-5 mx-0">
+                <label for="studentQuestion" class="question-label">Question</label>
+                <textarea name="message" class="form-control mt-2" id="studentQuestion" placeholder="Type your question here" required></textarea>
+                <small id="question_error" style="color:red;"></small>
+              </div>
+              <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
+                <button type="button" class="btn btn-dark" id="submitStudentQuestion"><span class="button">Submit</span></button>
+              </div>
 
-      <ul class="navbar-nav me-2">
-      @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
-        </li>
-        @endif
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
-        </li>
-        @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @else
-        <li class="nav-item">
-        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-        </li>
-        @endif
-      </ul>
-      
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer border-0"></div>
+      </div>
     </div>
-</nav>
+  </div>
+  <!-- question modal ends -->
+  @extends('header')
 <!-- review modal -->
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -321,7 +306,7 @@
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                         <div class="progress rounded-pill">
-                                            <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                            <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
@@ -353,15 +338,15 @@
 
                                             </p>
                                             @foreach($singleCourseDetails as $course)
-                                            <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
+                                            <!-- <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a> -->
                                             @endforeach
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
-                                                <p class="duration"><i class="far fa-clock pe-1"></i>
+                                                <!-- <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>{{$next_live_cohort}}</small>
                                                    
-                                                </p>
+                                                </p> -->
                                                
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
@@ -419,7 +404,7 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                         <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
 
-                        <div class="container">
+                        <div class="container d-flex">
                             <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
                             <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
                             <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
@@ -524,7 +509,11 @@
                                         <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                        <button type="button" class="btn"><i class="fas fa-undo pe-2"></i>View again</button>
+                                        @if($topicDetail['liveId'] != null)
+                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        @else
+                                        <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -589,9 +578,10 @@
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
+                        @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
-                                <div class="card card-3" style="height: 550px;">
-                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                <div class="card card-3" style="height: 560px;">
+                                    <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -602,64 +592,25 @@
                                             <div class="col-lg-12">
                                                 <div class="card card-4">
                                                     <div class="card-body">
-                                                        We recommend you to view again these topics.
+                                                        We recommend that you view this topic again.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <div class="card card-5">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                        <ul class="list-group list-group-flush pb-3">
-                                                            <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
+                                                <ul class="list-group list-group-flush border-bottom pb-3">
+                                                    <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
-                            <div class="col-lg-6">
-                                <div class="card card-3" style="height: 550px;">
-                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <a href="#" class="btn btn-primary w-100">View again</a>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-lg-12">
-                                                <div class="card card-4">
-                                                    <div class="card-body">
-                                                        <p class="card-text">This is some text within a card body.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="card card-5">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                        <ul class="list-group list-group-flush pb-3">
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                         @endif
                         @if($userType == 'instructor')
@@ -734,39 +685,52 @@
                                                 <h5 class="card-title">Questions & Answers</h5>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end mb-3">
-                                                <button type="button" class="btn">Ask a question</button>
+                                                @if($userType == "student")
+                                                <button id="ask_a_question" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#questionModal">Ask a question</button>
+                                                @endif
                                             </div>
 
                                         </div>
 
                                         <div class="row">
+
+                                        @foreach($qas as $qa)
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <p class="card-title text-left">
-                                                                Lorem ipsum dolor sit amet.
-                                                            </p>
+                                                            {{ $qa['student'] }}
+                                                        </p>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <p class="text-end time">4 months ago</p>
+                                                            <p class="text-end time">{{ $qa['date'] }}</p>
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
-                                                                quaerat in nihil tempore rem quam sint. Aut itaque officia et
-                                                                soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                Et voluptatem sunt vel Quis labore vel laborum
-                                                                repellendus eum galisum blanditiis.
+                                                            <p class="para-1">{{ $qa['question'] }}
                                                             </p>
                                                         </div>
                                                     </div>
+                                                    @if($userType == "instructor" && !$qa['hasReplied'])
+                                                    <div class="row" id="replyTextArea_{{ $qa['id'] }}">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            @csrf
+                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
+                                                            <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
+                                                        </div>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
+                                            @if($qa['hasReplied'])
                                             <div class="row ps-5">
+                                            @else
+                                            <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
+                                            @endif
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
                                                     @foreach($singleCourseDetails as $course)
                                                     <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
@@ -782,85 +746,23 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                                                                <p class="text-end time">4 months ago</p>
+                                                                <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">4 months ago</p>
                                                             </div>
                                                         </div>
 
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
-                                                                    quaerat in nihil tempore rem quam sint. Aut itaque officia et
-                                                                    soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                    Et voluptatem sunt vel Quis labore vel laborum
-                                                                    repellendus eum galisum blanditiis.
+                                                                <p class="para-1" id="replyContent_{{ $qa['id'] }}">{{ $qa['reply'] }}
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <h5 class="card-title text-left">
-                                                                Lorem ipsum dolor sit amet.
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <p class="text-end time">4 months ago</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
-                                                                quaerat in nihil tempore rem quam sint. Aut itaque officia et
-                                                                soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                Et voluptatem sunt vel Quis labore vel laborum
-                                                                repellendus eum galisum blanditiis.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row ps-5">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
-                                                    <img src="courselist/Avatar Instructor.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <h5 class="card-title text-left">
-                                                                    @foreach($singleCourseDetails as $course)
-                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
-                                                                    @endforeach
-
-                                                                </h5>
-                                                            </div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <p class="text-end time">4 months ago</p>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt
-                                                                    quaerat in nihil tempore rem quam sint. Aut itaque officia et
-                                                                    soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                                    Et voluptatem sunt vel Quis labore vel laborum
-                                                                    repellendus eum galisum blanditiis.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
+                                            
+                                        @endforeach
+                                            
+                                        </div>   
                                     </div>
                                 </div>
                             </div>
@@ -1194,7 +1096,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>
@@ -1261,11 +1163,52 @@
         modal.hide();
     }
 
-    document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
+
+let replyEle = document.getElementsByClassName('replyBtn');
+let replyEleCount = replyEle.length;
+
+for(index = 0;index < replyEleCount;index++) {
+    replyEle[index].addEventListener('click', function(e) {
+        qaId = this.getAttribute('data-id');
+        replyContent = document.getElementById('reply_' + qaId).value;
+        let path = "{{ route('reply.to.student') }}?qaId=" + qaId + "&replyContent=" + replyContent;
+     
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if (data.status =='success'){
+                document.getElementById("replyDiv_" + qaId).style.display = "block";
+                document.getElementById('replyContent_' + qaId).innerHTML = data.reply;
+                document.getElementById('updatedAt_' + qaId).innerHTML = data.updatedAt;
+                document.getElementById("replyTextArea_" + qaId).style.display = "none";
+            }
+        });
+    });
+}
+
+document.getElementById('submitStudentQuestion').addEventListener('click', function(e) {
+    let question = document.getElementById('studentQuestion').value;
+    let path = "{{ route('ask.question') }}?question=" + question + '&course_id=' + document.getElementById('course_id').value;
+     
+        fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+            },
+           body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+            if(data.status == "success") {
+                location.reload();
+            }
+        });
 });
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -1300,4 +1243,4 @@
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
-@endsection('content')
+@endsection('content')  

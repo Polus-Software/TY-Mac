@@ -24,6 +24,7 @@ class InstructorController extends Controller
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
                 ->paginate(10);
         return view('Instructor.manage_instructors', [
             'instructors' => $instructors,
@@ -196,28 +197,31 @@ class InstructorController extends Controller
         $slNo = 1;
         $userType = UserType::where('user_role', 'instructor')->value('id');
         $userId = $request->input('user_id');
-        
         if ($userId) {
-            $instructor = User::find($userId);
+            
+            $instructor = User::where('id', $userId);
             if ($instructor) {
+                
                 $instructor->delete();
                 
                 $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
                 ->get();
+
                 foreach($instructors as $instructor) {
                     $html = $html . '<tr id="' . $instructor->id .'">';
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
                     $html = $html . '<td class="align-middle" colspan="2">' . $instructor->firstname . ' ' . $instructor->lastname . '</td>';
                     $html = $html . '<td class="align-middle">' . $instructor->email . '</th>';
-                    $html = $html . '<td class="align-middle">Carbon::createFromFormat("Y-m-d H:i:s", $instructor->created_at)->format("F d, Y")</td>';
-                    $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i>>View</a>';
+                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $instructor->created_at)->format("F d, Y") . '</td>';
+                    $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i></a>';
                     $html = $html . '<a  href="" title="Edit instructor"><i class="fas fa-pen"></i></a>';
                     $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $instructor->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
-                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
+                
             }
-            
+            return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
         }
         return response()->json(['status' => 'failed', 'message' => 'Some error']);
     }

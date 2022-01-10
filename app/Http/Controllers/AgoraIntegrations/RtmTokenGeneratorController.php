@@ -299,4 +299,16 @@ class RtmTokenGeneratorController extends Controller
         $negativeCount = $finalCounts->value('negative');
         return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
     }
+
+    public function studentExit(Request $request) {
+        $sessionId = $request->sessionId;
+        $user = Auth::user();
+        if($user) {
+            $student =  $user->id;
+            $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
+            $attendance->delete();
+
+            return response()->json(['status' => 'success', 'msg' => 'Student closed window']);
+        }
+    }
 }

@@ -9,15 +9,92 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ asset('/assets/styles.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <title>TY- MAC</title>
 </head>
+<style>
+  .dropdown-menu {
+  min-width: 25rem !important;
+  left: -22rem !important;
+  top: 2.7rem !important;
+  border-radius: 15px !important;
+}
+.dropdown {
+    display:inline-block;
+    margin-left:20px;
+    padding:10px;
+  }
+
+
+.glyphicon-bell {
+   
+    font-size:1.5rem;
+  }
+
+.notifications {
+   min-width:420px; 
+  }
+  
+  .notifications-wrapper {
+     overflow:auto;
+      max-height:250px;
+    }
+    
+ .menu-title {
+     color:#ff7788;
+     font-size:1.5rem;
+      display:inline-block;
+      }
+ 
+.glyphicon-circle-arrow-right {
+      margin-left:10px;     
+   }
+  
+   
+ .notification-heading, .notification-footer  {
+ 	padding:2px 10px;
+       }
+      
+        
+.dropdown-menu.divider {
+  margin:5px 0;          
+  }
+
+
+
+.item-title {
+  
+ font-size:1.3rem;
+ color:#000;
+    
+}
+
+.notifications a.content {
+ text-decoration:none;
+ background:#ccc;
+
+ }
+    
+.notification-item {
+ padding:10px;
+ margin:5px;
+ background:#ccc;
+ border-radius:4px;
+ }
+
+
+
+
+</style>
 
 <body>
 @extends('header')
   <!-- top banner-->
+  
   <section id="home" class="intro-section">
     <div class="container">
       <div class="row align-items-center pb-5">
@@ -115,6 +192,7 @@
   @php
   use App\Http\Controllers\Student\CoursesCatalogController;
   $courses = CoursesCatalogController::getAllCourses();
+  
   @endphp
 
 
@@ -144,14 +222,14 @@
                     <div class="card-1">
                       <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                       <div class="card-body">
-                        <h5 class="card-title text-center text-truncate">{{ $course->course_title }}</h5>
-                        <p class="card-text text-sm-start text-truncate">{{ $course->description }}</p>
+                        <h5 class="card-title text-center text-truncate">{{ $course['course_title'] }}</h5>
+                        <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
                         
 
 <div class="row mb-3">
   <div class="col-lg-6 col-sm-6 col-6">
 @for($i = 1; $i <= 5; $i++)
-@if($i <= $course->course_rating)
+@if($i <= $course['rating'])
 <i class="fas fa-star rateCourse"></i>
 @else
 <i class="far fa-star rateCourse"></i>
@@ -160,7 +238,7 @@
     (60)
   </div>
   <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course->category_name }}
+    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
   </div>
 </div>
 
@@ -169,19 +247,19 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item">
                             <div class="row">
-                            <div class="col-lg-2 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{ $course->course_duration }}</div>
+                            <div class="col-lg-2 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
                               <div class="col-lg-5 col-4 item-2 text-center">
-                                <p><i class="far fa-user pe-1"></i>{{ $course->firstname ." ". $course->lastname}}</p>
+                                <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-lg-5 col-4 item-3 d-flex justify-content-end">
-                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course->course_difficulty }}</p>
+                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
                               </div>
                             </div>
                           </li>
                         </ul>
                         <div class="row bg-light">
                           <div class="text-center border-top">
-                            <a href="{{ route('student.course.show', $course->course_id)}}" class="card-link btn">Join now</a>
+                            <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn">Join now</a>
                           </div>
                         </div>
 
@@ -219,16 +297,16 @@
       <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
         <div class="col-md-3">
           <div class="p-4">
-            <h2 class="fw-bold text-capitalize text-center">
-              1000+
+            <h2 id="student_count" class="fw-bold text-capitalize text-center">
+              
             </h2>
             <p>Happy students</p>
           </div>
         </div>
         <div class="col-md-3">
           <div class="p-4">
-            <h2 class="fw-bold text-capitalize text-center">
-              1000+
+            <h2 id="course_count" class="fw-bold text-capitalize text-center">
+              
             </h2>
             <p>Courses</p>
           </div>
@@ -374,7 +452,7 @@
               </div>
               <div class="form-group mx-sm-5 mx-0">
                 <label for="message" class="message-label">Message</label>
-                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <textarea name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0">
@@ -551,6 +629,30 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   <script>
+
+let counterFlag = 0;
+let courseCounter = 0;
+let studentCounter = 0;
+
+window.addEventListener("scroll", () => {
+    let counterTop = document.getElementById('portfolio').getBoundingClientRect().top;
+    if(counterTop <= 1000 && counterFlag == 0) {
+        let interval = setInterval(function(event){
+            counterFlag = 1;
+            studentCounter++;
+            courseCounter+=5;
+            if(courseCounter <= 1000) {
+              document.getElementById('course_count').innerHTML = courseCounter + "+";
+            }
+            if(studentCounter <= 50) {
+              document.getElementById('student_count').innerHTML = studentCounter + "+";
+            }
+              
+           
+        }, 100)
+    }
+});
+
     document.querySelector('#signupForm').addEventListener('submit', (e) => {
       if (firstname.value === '') {
         e.preventDefault();
@@ -677,6 +779,30 @@
     console.log(modal);
     modal.hide();
   }
+window.onload = function(e) {
+  var url = window.location.href;
+  
+  let parameter = url.substr(url.indexOf('?'), url.length);
+  if(parameter == "?redirect=true") {
+      document.getElementById('login_navlink').click();
+  }
+
+      let path = "{{ route('get-notifications')}}";
+
+      fetch(path, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+             
+          }
+      }).then((response) => response.json()).then((data) => {
+          // document.getElementById('notif-body').innerHTML = data.html;
+      });
+
+}
+
+
 
   </script>
 </body>

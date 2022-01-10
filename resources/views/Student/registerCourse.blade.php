@@ -375,7 +375,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>

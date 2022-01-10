@@ -335,9 +335,8 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-      // document.getElementById('creator_tbody').innerHTML = '';
-      // document.getElementById('creator_tbody').innerHTML = data.html;
-      console.log('anisjshh  '+data);
+      document.getElementById('creator_tbody').innerHTML = '';
+      document.getElementById('creator_tbody').innerHTML = data.html;
       closeModal('delete_creator_modal');
       // window.location.reload();
     });

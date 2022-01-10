@@ -9,6 +9,13 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+
+.no_courses{
+  height: 20rem;
+    position: relative;
+    text-align: center;
+    top: 10rem;
+}
   </style>
 
 @extends('header')
@@ -226,7 +233,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                Learning Levels
+                <span style="font-weight: 500;">Learning Levels</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
@@ -260,7 +267,7 @@
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                 <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                  Ratings
+                  <span style="font-weight: 500;">Ratings</span>
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
@@ -335,7 +342,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                Course Duration
+                <span style="font-weight: 500;">Course Duration</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFour" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFour">
@@ -375,7 +382,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                Instructors
+                <span style="font-weight: 500;">Instructors</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFive" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFive">
@@ -469,9 +476,6 @@
             </div>
             </div>
            @endforeach
-            <div class="d-flex justify-content-center">
-              {{ $courseDatas->links() }}
-            </div>
 
            </div>
           </div>
@@ -554,7 +558,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>
@@ -576,6 +580,7 @@ window.onload = function(event) {
       let categoryFilters = [];
       let levelFilters = [];
       let ratingFilter = [];
+      let durationFilter = [];
       filterType = this.getAttribute('filtertype');
       for(var i = 0; i < filterOption.length; i++) {
         if(filterOption[i].checked) {
@@ -585,10 +590,12 @@ window.onload = function(event) {
             levelFilters.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           } else if (filterOption[i].getAttribute('filterType') == "rating") {
             ratingFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
+          } else if (filterOption[i].getAttribute('filterType') == "duration") {
+            durationFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           }
         }
       }
-      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter;
+      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter + "&duration=" + durationFilter;
       fetch(path, {
           method: 'POST',
           headers: {
@@ -638,18 +645,6 @@ const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
 
-document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
-
-
-  // document.getElementById('search-box').addEventListener('onkeyup', function(e) {
-  //   e.preventDefault();
-  // alert('ss');
-  // });
 }
 
 </script>

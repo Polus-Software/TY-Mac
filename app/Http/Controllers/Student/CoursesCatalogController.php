@@ -31,9 +31,7 @@ use App\Models\AchievementBadge;
 
 class CoursesCatalogController extends Controller
 {
-    public function viewAllCourses(Request $request)
-    {
-    
+    public function viewAllCourses(Request $request) {
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
         $courses = Course::where('is_published', true)->get();
@@ -49,7 +47,12 @@ class CoursesCatalogController extends Controller
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
             $instructorlastname = User::where('id', $assigned)->value('lastname');
-            $duration = $course->course_duration . "h";
+            $duration = $course->course_duration;
+            $hours = intval($duration);
+            $minutesDecimal = $duration - $hours;
+            $minutes = ($minutesDecimal/100) * 6000;
+
+            $duration = $hours . 'h ' . $minutes . 'm';
        
             $courseData =  array (
                 'id' => $course->id,
@@ -66,9 +69,7 @@ class CoursesCatalogController extends Controller
             array_push($courseDetails, $courseData);
         }
         $courseDetailsObj = collect($courseDetails);
-        $courseDatas = $this->paginate($courseDetailsObj);
-        $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
+        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
         
     }
         
@@ -319,9 +320,12 @@ class CoursesCatalogController extends Controller
      $categoryFlag = 0;
      $levelsFlag = 0;
      $ratingsFlag = 0;
+     $durationFlag = 0;
      $categories = $request->categories;
      $levels = $request->levels;
      $ratings = $request->ratings;
+     $duration = $request->duration;
+     
      $courses = DB::table('courses');
      
 
@@ -368,9 +372,52 @@ class CoursesCatalogController extends Controller
         }
     }
 
+    if($duration) {
+        $durationArr = explode(",", $duration);
+        foreach($durationArr as $durationFil) {
+            $durationPair = explode('=', $durationFil);
+            if($durationFlag == 0) {
+                $durationFlag = 1;
+                if($durationPair[1] == "less_than_1") {
+                    $courses = $courses->where('course_duration', '<', 1);
+                } else if($durationPair[1] == "less_than_2") {
+                    $courses = $courses->where('course_duration', '<', 2);
+                } else if($durationPair[1] == "less_than_5") {
+                    $courses = $courses->where('course_duration', '<', 5);
+                } else if($durationPair[1] == "greater_than_5") {
+                    $courses = $courses->where('course_duration', '>', 5);
+                }  
+            } else {
+                if($durationPair[1] == "less_than_1") {
+                    $courses = $courses->orWhere('course_duration', '<', 1);
+                } else if($durationPair[1] == "less_than_2") {
+                    $courses = $courses->orWhere('course_duration', '<', 2);
+                } else if($durationPair[1] == "less_than_5") {
+                    $courses = $courses->orWhere('course_duration', '<', 5);
+                } else if($durationPair[1] == "greater_than_5") {
+                    $courses = $courses->orWhere('course_duration', '>', 5);
+                }  
+            }
+        }
+    }
+
 
      $courses = $courses->get();
+     if(count($courses)) {
            foreach($courses as $course) {
+
+                $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');     
+                $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+                $instructorfirstname = User::where('id', $assigned)->value('firstname');
+                $instructorlastname = User::where('id', $assigned)->value('lastname');
+                
+                $duration = $course->course_duration;
+                $hours = intval($duration);
+                $minutesDecimal = $duration - $hours;
+                $minutes = ($minutesDecimal/100) * 6000;
+    
+                $duration = $hours . 'h ' . $minutes . 'm';
+
                 $html = $html . '<div class="col-lg-6"><div class="card mb-4">';
                 $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="..."><div class="card-body">';
                 $html = $html . '<h5 class="card-title text-center">'. $course->course_title .'</h5>';
@@ -388,16 +435,18 @@ class CoursesCatalogController extends Controller
 
                 $html = $html . '(60)</div>';  
                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
-                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>Course category</div></div></div>';   //$courseCategory 
+                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>'. $courseCategory .'</div></div></div>';   //$courseCategory 
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
-                $html = $html . '<div class="col-lg-4 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>1h 50m</div>';
-                $html = $html . '<div class="col-lg-4 col-4 item-2 text-center"><i class="far fa-user pe-1"></i></div>'; //$instructorName
+                $html = $html . '<div class="col-lg-4 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
+                $html = $html . '<div class="col-lg-4 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</div>'; //$instructorName
                 $html = $html . '<div class="col-lg-4 col-4 item-3">'. $course->course_difficulty .'</div></div></li></ul>';
                 $html = $html . '<div class="card-body"><div class="row"><div class="btn-group border-top" role="group" aria-label="Basic example">'; 
                 $html = $html . '<a href="" class="card-link btn border-end">Register now</a>'; 
                 $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a></div></div></div></div></div>';        
             }
-     
+        } else {
+            $html = '<h5 class="no_courses">No courses to display</h5>';
+        }
      return response()->json([
         'status' => 'success', 
         'message' => 'submitted successfully',
@@ -407,13 +456,34 @@ class CoursesCatalogController extends Controller
     }
 
     public static function getAllCourses() {
-        return DB::table('courses as a')
-                            ->select('a.id as course_id', 'a.course_title', 'a.description', 'a.course_difficulty', 'a.course_rating', 'a.course_duration', 'c.firstname', 'c.lastname', 'd.category_name')
-                            ->join('assigned_courses as b', 'a.id', '=', 'b.course_id')
-                            ->join('users as c', 'b.user_id', '=', 'c.id')
-                            ->join('course_category as d', 'a.category', '=', 'd.id')
-                            ->distinct()
-                            ->get();
-                        }
+
+        $courseDetails = [];
+
+        $courses = Course::where('is_published', true)->get();
+
+        foreach($courses as $course)
+        {
+            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+            $instructorfirstname = User::where('id', $assigned)->value('firstname');
+            $instructorlastname = User::where('id', $assigned)->value('lastname');
+            $duration = $course->course_duration . "h";
+       
+            $courseData =  array (
+                'id' => $course->id,
+                'course_title' => $course->course_title,
+                'course_category' => $courseCategory,
+                'description' => $course->description,
+                'course_thumbnail_image' => $course->course_thumbnail_image,
+                'course_difficulty' => $course->course_difficulty,
+                'instructor_firstname' => $instructorfirstname,
+                'instructor_lastname' => $instructorlastname,
+                'rating' => $course->course_rating,
+                'duration' => $duration
+            );
+            array_push($courseDetails, $courseData);
+        }
+        return $courseDetails;
+    }
 
 }

@@ -205,26 +205,25 @@
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         <div class="row">
+                                            
+                                            @foreach($liveSessionDetails as $liveSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
                                                         class="card-img-top" alt="...">
+                                                        <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 1</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
+                                                        <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
+                                                        <p class="card-text text-sm-start">{{ $liveSessionDetail['course_desc'] }}</p>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
+                                                                        <p><i class="far fa-user pe-1"></i> {{ $liveSessionDetail['instructor'] }}</p>
                                                                     </div>
                                                                     <div class="col-lg-6 col-sm-6 col-6">
                                                                         <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
+                                                                                class="far fa-user pe-1"></i> {{ $liveSessionDetail['course_diff'] }}</p>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -238,81 +237,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12  mb-4">
-                                                <div class="card-1 position-relative">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                        <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 2</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 3</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
-
+                                </div>
                                     <!-- first slide ends -->
 
-                                    <div class="carousel-item">
+                                    <!-- <div class="carousel-item">
                                         <div class="row">
+                                            
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
@@ -344,7 +277,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> 
 
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
@@ -412,9 +345,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel"
+                                    </div> -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel"
                                     data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
@@ -425,34 +357,34 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
+                                
+                            </div>
                         </div>
                     </div>
-
+                    <div class="tab-content">
                     <div id="upcoming" class="tab-pane fade" aria-labelledby="upcoming-tab">
                         <div class="col-lg-12">
                             <div id="upcomingCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         <div class="row">
+                                            @foreach($upComingSessionDetails as $upComingSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
                                                         class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 1</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
+                                                        <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>
+                                                        <p class="card-text text-sm-start">{{ $upComingSessionDetail['course_desc'] }}</p>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
+                                                                        <p><i class="far fa-user pe-1"></i>{{ $upComingSessionDetail['instructor'] }}</p>
                                                                     </div>
                                                                     <div class="col-lg-6 col-sm-6 col-6">
                                                                         <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
+                                                                                class="far fa-user pe-1"></i> {{ $upComingSessionDetail['course_diff'] }}</p>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -466,8 +398,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endforeach
 
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
+                                            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
                                                         class="card-img-top" alt="...">
@@ -497,9 +430,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
+                                            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
                                                         class="card-img-top" alt="...">
@@ -529,13 +462,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
 
                                     <!-- first slide ends -->
 
-                                    <div class="carousel-item">
+                                    <!-- <div class="carousel-item">
                                         <div class="row">
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
@@ -567,7 +500,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> 
 
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
@@ -599,7 +532,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> 
 
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
@@ -633,7 +566,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#upcomingCarousel"
                                     data-bs-slide="prev">
@@ -648,6 +581,7 @@
                             </div>
                         </div>
                     </div>
+</div>
                 </div>
             </div>
         </div>
@@ -812,7 +746,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>
@@ -820,12 +754,6 @@
     </footer>
 
 <script>
-    document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
 
     var elements = document.getElementsByClassName('card-2');
     var length = elements.length;
@@ -836,5 +764,15 @@
             window.location.replace('/enrolled-course/' + courseId);
         });
     }
+
+    document.getElementById('upcoming-tab').addEventListener('click', function(e){
+        document.getElementById('upcoming').classList.add('active', 'show');
+        document.getElementById('live').classList.remove('active', 'show');
+    });
+
+    document.getElementById('live-tab').addEventListener('click', function(e){
+        document.getElementById('upcoming').classList.remove('active', 'show');
+        document.getElementById('live').classList.add('active', 'show');
+    });
 </script>
 @endsection('content')
