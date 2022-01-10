@@ -9,122 +9,26 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('/assets/styles.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <title>TY- MAC</title>
 </head>
 
 <body>
-  <!-- NAVBAR SECTION  -->
-  @if(Auth::check())
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">TY-Mac</a>
-    <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
-      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
-        @csrf
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
-      </form>
-
-      <ul class="navbar-nav">
-      @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">
-          <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
-        </li>
-        @endif
-        <li class="nav-item border-bottom border-warning border-3">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-       
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
-        </li>
-        @if (Auth::check())
-        @if(Auth::user()->role_id == 3)
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @else
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Signout</a>
-        </li>
-        
-        @endif
-        @else
-        
-        <li class="nav-item">
-        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-        </li>
-        @endif
-      </ul>
-      
-    </div>
-  </div>
-</nav>
-  @else
-  <nav class="navbar navbar-expand-lg fixed-top llp-navbar navbar-light bg-light shadow-sm p-3 mb-5 bg-body">
-    <div class="container">
-      <a class="navbar-brand" href="">
-        LOGO
-      </a>
-      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
-      </form>
-      <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav" style="width:max-content;">
-         
-        @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="#">Welcome, {{Auth::user()->firstname}}</a>
-        </li>
-        @endif
-          <li class="nav-item border-bottom border-warning border-3"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('student.courses.get')}}">All Courses</a></li>
-          <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>
-          @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @else
-        <li class="nav-item"><a class="nav-link" id="signup_navlink" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a></li>
-          <li class="nav-item"><a id="login_navlink" class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-        @endif
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  @endif
+@extends('header')
   <!-- top banner-->
   <section id="home" class="intro-section">
     <div class="container">
       <div class="row align-items-center pb-5">
         <div class="col-md-6 intros text-start">
-          <h1 class="display-2">
-            <span class="display-2--intro">Learn new skills in a personalized way.</span>
+          <h1 class="display-2 lh-1">
+            <p class="welcome-text mb-0">Welcome to TY-Mac</p>
+            <span class="display-2--intro">Learn new skills <br>in a <span class="fw-bold">personalized way.</span></span>
           </h1>
+          <div class="mb-3">
+          <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
+        </div>
           <ul>
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Live instructor led courses</li>
             <li class="list-inline"><i class="fas fa-angle-double-right mx-2"></i>Small class sizes</li>
@@ -168,37 +72,37 @@
   <section id="services" class="services mb-5">
     <div class="container">
       <div class="row text-center">
-        <h1 class="display-3 fw-bold">Why we are out of Ordinary</h1>
+        <h1 class="display-3 fw-bold think-title-home">Why we are out of Ordinary</h1>
         <div class="mb-5">
           <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
         </div>
       </div>
       <div class="row pt-2 pb-2 mt-0 mb-3">
-        <div class="col-md-4 border-right">
+        <div class="col-md-4 border-right think-feature-box">
           <div class="bg-white p-3 text-center">
             <img src="courselist/images/setting-lines.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
             <h2 class="fw-bold text-capitalize text-center mb-4">Personalized learning</h2>
-            <p class="fw-light mb-4">
+            <p class="fw-light mb-5">
               Small class sizes create a personalized learning experience
             </p>
             <a href="">learn more</a>
           </div>
         </div>
-        <div class="col-md-4 border-right">
+        <div class="col-md-4 border-right think-feature-box">
           <div class="bg-white p-3 text-center">
             <img src="courselist/images/simple_icon.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
             <h2 class="fw-bold text-capitalize text-center mb-4">Simple</h2>
-            <p class="fw-light mb-4">
+            <p class="fw-light mb-5">
               Our teaching format makes it easy and fun to learn any new skill!
             </p>
             <a href="">learn more</a>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 think-feature-box">
           <div class="bg-white p-3 text-center">
             <img src="courselist/images/interactive.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
             <h2 class="fw-bold text-capitalize text-center mb-4">Interactive</h2>
-            <p class="fw-light mb-4">
+            <p class="fw-light mb-5">
               Courses are not just taught, they are made to be interactive between the teacher and student
             </p>
             <a href="">learn more</a>
@@ -217,7 +121,7 @@
   <section id="Our courses" class="services">
     <div class="container">
       <div class="row text-center">
-        <h1 class="display-3 fw-bold">Our courses</h1>
+        <h1 class="display-3 fw-bold think-title-home">Our courses</h1>
         <div class="mb-5">
           <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
         </div>
@@ -225,7 +129,7 @@
       <div class="row">
         <div class="col-lg-12">
           <div id="liveCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+            <div class="carousel-inner think-carousel-home">
               @foreach($courses as $course)
               @if($loop->first)
               <div class="carousel-item active">
@@ -240,15 +144,36 @@
                     <div class="card-1">
                       <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                       <div class="card-body">
-                        <h5 class="card-title text-center">{{ $course->course_title }}</h5>
+                        <h5 class="card-title text-center text-truncate">{{ $course->course_title }}</h5>
                         <p class="card-text text-sm-start text-truncate">{{ $course->description }}</p>
+                        
+
+<div class="row mb-3">
+  <div class="col-lg-6 col-sm-6 col-6">
+@for($i = 1; $i <= 5; $i++)
+@if($i <= $course->course_rating)
+<i class="fas fa-star rateCourse"></i>
+@else
+<i class="far fa-star rateCourse"></i>
+@endif
+@endfor
+    (60)
+  </div>
+  <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
+    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course->category_name }}
+  </div>
+</div>
+
+
+
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item">
                             <div class="row">
-                              <div class="col-lg-6 col-sm-6 col-6">
+                            <div class="col-lg-2 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{ $course->course_duration }}</div>
+                              <div class="col-lg-5 col-4 item-2 text-center">
                                 <p><i class="far fa-user pe-1"></i>{{ $course->firstname ." ". $course->lastname}}</p>
                               </div>
-                              <div class="col-lg-6 col-sm-6 col-6">
+                              <div class="col-lg-5 col-4 item-3 d-flex justify-content-end">
                                 <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course->course_difficulty }}</p>
                               </div>
                             </div>
@@ -293,19 +218,19 @@
     <div class="container">
       <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
         <div class="col-md-3">
-          <div class="bg-white p-4">
+          <div class="p-4">
             <h2 class="fw-bold text-capitalize text-center">
               1000+
             </h2>
-            <p class="fw-light">Happy students</p>
+            <p>Happy students</p>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="bg-white p-4">
+          <div class="p-4">
             <h2 class="fw-bold text-capitalize text-center">
               1000+
             </h2>
-            <p class="fw-light">Courses</p>
+            <p>Courses</p>
           </div>
         </div>
       </div>
@@ -313,10 +238,10 @@
   </section>
 
   <!-- THE TESTIMONIALS -->
-  <section id="testimonials" class="mb-5">
+  <section id="testimonials" class="think-testimonials mb-5">
     <div class="container">
       <div class="row text-center">
-        <h1 class="display-3 fw-bold">What's our learners mind</h1>
+        <h1 class="display-3 fw-bold think-title-home">What's our learners mind</h1>
         <div class="mb-5">
           <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
         </div>
@@ -327,13 +252,15 @@
             <img src="courselist/images/testimonials.png" alt="web development illustration" class="img-fluid">
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 services mt-4">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 services">
           <div class="services__content">
+          <i class="fas fa-quote-left fa-3x"></i>
             <h3 class="fw-bold text-capitalize text-center mt-1">TY-Mac makes learning new skills incredibly simple & interactive</h3>
-            <p class="lh-lg">
+            <p class="lh-lg mb-5">
               I signed up for the Fundamentals of Quality Analysis course without having any prior knowledge in the field, but by the time I completed the course, I became proficient in functional QA & got a job in the field! The instructor did a wonderful job at teaching the subjects in a simple way!
             </p>
-            <span>YANA SIZIKOVA</span><span>Software Engineer, Canada</span>
+            <label class="d-block text-center">YANA SIZIKOVA</label>
+            <span class="d-block text-center">Software Engineer, Canada</span>
           </div>
         </div>
       </div>
@@ -344,11 +271,11 @@
     <div class="container">
       <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
         <div class="col-md-10">
-          <div class="bg-warning p-4 rounded-3 p-5">
+          <div class="think-yellow-container bg-warning p-4 rounded-3 p-5">
             <h2 class="fw-bold text-capitalize text-center text-white mb-4">
               Have a question?
             </h2>
-            <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
+            <button class="btn bg-white" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
           </div>
         </div>
 

@@ -39,6 +39,7 @@ class EnrolledCourseController extends Controller
         $upcoming = [];
         $singleRec = [];
         $finalRec = [];
+        $next_live_cohort = '';
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
         if(Auth::check()){
@@ -66,12 +67,15 @@ class EnrolledCourseController extends Controller
         $current_date = Carbon::now()->format('Y-m-d');
 
        $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>', $current_date)->orderBy('start_date')->get();
+            if(count($batches)) {
+                $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
+                $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+                $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
+            }
+       
 
-       $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-       $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-       $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-
-       $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
+       
     
 
         $achievements = StudentAchievement::where('student_id', $user->id)->get();
@@ -201,7 +205,8 @@ class EnrolledCourseController extends Controller
                 'badgesDetails' => $badgesDetails,
                 'upcoming' => $upcoming,
                 'recommendations' => $finalRec,
-                'next_live_cohort' =>  $next_live_cohort
+                'next_live_cohort' =>  $next_live_cohort,
+                'userType' => $userType
             ]);
         }
         
@@ -212,7 +217,8 @@ class EnrolledCourseController extends Controller
                 'topicDetails' =>  $topicDetails,
                 'recommendations' => $recommendations,
                 'userType' => $userType,
-                'studentsEnrolled' => $this->studentsEnrolled($courseId)
+                'studentsEnrolled' => $this->studentsEnrolled($courseId),
+                'next_live_cohort' =>  $next_live_cohort
             ]);
         }        
         

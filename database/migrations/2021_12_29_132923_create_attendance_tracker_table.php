@@ -19,7 +19,6 @@ class CreateAttendanceTrackerTable extends Migration
             $table->foreign('student')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('live_session_id');
             $table->foreign('live_session_id')->references('live_session_id')->on('live_sessions')->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamps('start_time');
             $table->timestamps();
         });
     }
