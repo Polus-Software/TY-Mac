@@ -296,16 +296,16 @@
       <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
         <div class="col-md-3">
           <div class="p-4">
-            <h2 class="fw-bold text-capitalize text-center">
-              1000+
+            <h2 id="student_count" class="fw-bold text-capitalize text-center">
+              
             </h2>
             <p>Happy students</p>
           </div>
         </div>
         <div class="col-md-3">
           <div class="p-4">
-            <h2 class="fw-bold text-capitalize text-center">
-              1000+
+            <h2 id="course_count" class="fw-bold text-capitalize text-center">
+              
             </h2>
             <p>Courses</p>
           </div>
@@ -628,6 +628,31 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   <script>
+
+let counterFlag = 0;
+let courseCounter = 0;
+let studentCounter = 0;
+
+window.addEventListener("scroll", () => {
+    let counterTop = document.getElementById('portfolio').getBoundingClientRect().top;
+    if(counterTop >= 1000 && counterFlag == 0) {
+        let interval = setInterval(function(event){
+            counterFlag = 1;
+            studentCounter++;
+            courseCounter+=20;
+            console.log(courseCounter);
+            if(courseCounter <= 1000) {
+              document.getElementById('course_count').innerHTML = courseCounter;
+            }
+            if(studentCounter <= 50) {
+              document.getElementById('student_count').innerHTML = studentCounter;
+            }
+              
+           
+        }, 50)
+    }
+});
+
     document.querySelector('#signupForm').addEventListener('submit', (e) => {
       if (firstname.value === '') {
         e.preventDefault();
