@@ -29,6 +29,7 @@ use App\Models\StudentFeedbackCount;
 use App\Models\CourseQA;
 use App\Models\EnrolledCourse;
 use App\Models\AttendanceTracker;
+use App\Models\LiveSession;
 
 class EnrolledCourseController extends Controller
 {
@@ -48,10 +49,25 @@ class EnrolledCourseController extends Controller
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
         $userType = "";
+        $attendedTopics = 0;
+        $progress = 0;
         
         if($user){
+        $attendanceRecs = AttendanceTracker::where('student', $user->id)->get();
+        $topics = Topic::where('course_id', $courseId)->get();
+        $totalTopics = count($topics);
+        foreach($attendanceRecs as $attendanceRec) {
+            $liveSessionId = $attendance->value('live_session_id');
+
+            $sessionCourse = LiveSession::where('live_session_id', $liveSessionId);
+
+            if($sessionCourse == $courseId) {
+                $attendedTopics = $attendedTopics + 1;
+            }
+        }
 
         
+       
         
         $currentUserRoleId = User::where('id', $user->id)->value('role_id');
         $userType = Usertype::where('id', $currentUserRoleId)->value('user_role');
@@ -145,9 +161,15 @@ class EnrolledCourseController extends Controller
                 $topic_title =  $topic->topic_title;
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
+                $liveSession = LiveSession::where('topic_id', $topicId);
+                $liveId = null;
+                if($liveSession) {
+                    $liveId = $liveSession->value('live_session_id');
+                }
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
+                    'liveId' => $liveId,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
@@ -234,7 +256,8 @@ class EnrolledCourseController extends Controller
                 'recommendations' => $finalRec,
                 'qas' => $qaArray,
                 'userType' => $userType,
-                'next_live_cohort' =>  $next_live_cohort
+                'next_live_cohort' =>  $next_live_cohort,
+                'progress' => ($attendedTopics / $totalTopics) * 100
             ]);
         }
         
@@ -245,7 +268,10 @@ class EnrolledCourseController extends Controller
                 'topicDetails' =>  $topicDetails,
                 'recommendations' => $recommendations,
                 'userType' => $userType,
-                'studentsEnrolled' => $this->studentsEnrolled($courseId)
+                'studentsEnrolled' => $this->studentsEnrolled($courseId),
+                'next_live_cohort' =>  $next_live_cohort,
+                'qas' => $qaArray,
+                'progress' => $progress
             ]);
         }      
 

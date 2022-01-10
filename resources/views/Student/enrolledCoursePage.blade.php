@@ -350,7 +350,7 @@
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                         <div class="progress rounded-pill">
-                                            <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                            <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
@@ -382,15 +382,15 @@
 
                                             </p>
                                             @foreach($singleCourseDetails as $course)
-                                            <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a>
+                                            <!-- <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a> -->
                                             @endforeach
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
-                                                <p class="duration"><i class="far fa-clock pe-1"></i>
+                                                <!-- <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>{{$next_live_cohort}}</small>
                                                    
-                                                </p>
+                                                </p> -->
                                                
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
@@ -448,7 +448,7 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                         <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
 
-                        <div class="container">
+                        <div class="container d-flex">
                             <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
                             <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
                             <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
@@ -553,7 +553,11 @@
                                         <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-                                        <button type="button" class="btn"><i class="fas fa-undo pe-2"></i>View again</button>
+                                        @if($topicDetail['liveId'] != null)
+                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        @else
+                                        <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -618,9 +622,10 @@
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
+                        @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
-                                <div class="card card-3" style="height: 550px;">
-                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                <div class="card card-3" style="height: 560px;">
+                                    <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -631,64 +636,25 @@
                                             <div class="col-lg-12">
                                                 <div class="card card-4">
                                                     <div class="card-body">
-                                                        We recommend you to view again these topics.
+                                                        We recommend that you view this topic again.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <div class="card card-5">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                        <ul class="list-group list-group-flush pb-3">
-                                                            <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
+                                                <ul class="list-group list-group-flush border-bottom pb-3">
+                                                    <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
-                            <div class="col-lg-6">
-                                <div class="card card-3" style="height: 550px;">
-                                    <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <a href="#" class="btn btn-primary w-100">View again</a>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-lg-12">
-                                                <div class="card card-4">
-                                                    <div class="card-body">
-                                                        <p class="card-text">This is some text within a card body.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="card card-5">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
-                                                        <ul class="list-group list-group-flush pb-3">
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                            <li class="ms-4 border-0 pb-2">How to use Google Drive</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                         @endif
                         @if($userType == 'instructor')
@@ -1174,7 +1140,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>
@@ -1327,4 +1293,4 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
-@endsection('content')
+@endsection('content')  
