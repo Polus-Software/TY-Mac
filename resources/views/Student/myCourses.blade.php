@@ -211,6 +211,7 @@
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
                                                         class="card-img-top" alt="...">
+                                                        <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
                                                         <p class="card-text text-sm-start">{{ $liveSessionDetail['course_desc'] }}</p>
@@ -753,12 +754,6 @@
     </footer>
 
 <script>
-    document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
 
     var elements = document.getElementsByClassName('card-2');
     var length = elements.length;

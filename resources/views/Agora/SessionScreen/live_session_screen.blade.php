@@ -303,6 +303,7 @@ svg.svg-img.prefix-more.can-hover {
     transition-duration: 0.2s;
 }
   </style>
+
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
   <div class="main-container">
@@ -414,7 +415,14 @@ svg.svg-img.prefix-more.can-hover {
         
 let timer = 0;
 
-$(document).on('click', '.btn:contains("Confirm")', function(){
+$(document).ready(function(){
+  var start = new Date;
+  setInterval(function() {
+      timer = Math.round((new Date - start) / 1000);
+  }, 1000);
+});
+
+$(document).on('click', '.btn:contains("Confirm")', function() {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
 
@@ -455,16 +463,10 @@ window.addEventListener("beforeunload", function (e) {
   (e || window.event).returnValue = confirmationMessage; //Gecko + IE
   return confirmationMessage;                            //Webkit, Safari, Chrome
 });
- jQuery(document).ready(function(){
 
-  var start = new Date;
 
-  setInterval(function() {
-      timer = Math.round((new Date - start) / 1000));
-  }, 1000);
 
- jQuery(".nav-tabs li.active").click(); 
- jQuery(".nav-tabs li").click(function(e){
+jQuery(".nav-tabs li").click(function(e){
       e.preventDefault();
       jQuery(".nav-tabs li").removeClass('active');
       jQuery(this).addClass('active');
@@ -473,7 +475,6 @@ window.addEventListener("beforeunload", function (e) {
       jQuery('.tab-pane').removeClass('active in');
       jQuery(tid).addClass('active in');
   });
-});
 
 setInterval(function () {
     let session = document.getElementById('session_hidden_id').value;
@@ -494,6 +495,7 @@ setInterval(function () {
       }
     });
   }, 2000);
+  
 if(document.getElementById('show_video')) {
   document.getElementById('show_video').addEventListener('click', function(event){
     document.getElementById('course_content_iframe').classList.add('nodisplay');

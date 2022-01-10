@@ -192,6 +192,7 @@
   @php
   use App\Http\Controllers\Student\CoursesCatalogController;
   $courses = CoursesCatalogController::getAllCourses();
+  
   @endphp
 
 
@@ -221,14 +222,14 @@
                     <div class="card-1">
                       <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                       <div class="card-body">
-                        <h5 class="card-title text-center text-truncate">{{ $course->course_title }}</h5>
-                        <p class="card-text text-sm-start text-truncate">{{ $course->description }}</p>
+                        <h5 class="card-title text-center text-truncate">{{ $course['course_title'] }}</h5>
+                        <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
                         
 
 <div class="row mb-3">
   <div class="col-lg-6 col-sm-6 col-6">
 @for($i = 1; $i <= 5; $i++)
-@if($i <= $course->course_rating)
+@if($i <= $course['rating'])
 <i class="fas fa-star rateCourse"></i>
 @else
 <i class="far fa-star rateCourse"></i>
@@ -237,7 +238,7 @@
     (60)
   </div>
   <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course->category_name }}
+    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
   </div>
 </div>
 
@@ -246,19 +247,19 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item">
                             <div class="row">
-                            <div class="col-lg-2 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{ $course->course_duration }}</div>
+                            <div class="col-lg-2 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
                               <div class="col-lg-5 col-4 item-2 text-center">
-                                <p><i class="far fa-user pe-1"></i>{{ $course->firstname ." ". $course->lastname}}</p>
+                                <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-lg-5 col-4 item-3 d-flex justify-content-end">
-                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course->course_difficulty }}</p>
+                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
                               </div>
                             </div>
                           </li>
                         </ul>
                         <div class="row bg-light">
                           <div class="text-center border-top">
-                            <a href="{{ route('student.course.show', $course->course_id)}}" class="card-link btn">Join now</a>
+                            <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn">Join now</a>
                           </div>
                         </div>
 
@@ -635,21 +636,20 @@ let studentCounter = 0;
 
 window.addEventListener("scroll", () => {
     let counterTop = document.getElementById('portfolio').getBoundingClientRect().top;
-    if(counterTop >= 1000 && counterFlag == 0) {
+    if(counterTop <= 1000 && counterFlag == 0) {
         let interval = setInterval(function(event){
             counterFlag = 1;
             studentCounter++;
-            courseCounter+=20;
-            console.log(courseCounter);
+            courseCounter+=5;
             if(courseCounter <= 1000) {
-              document.getElementById('course_count').innerHTML = courseCounter;
+              document.getElementById('course_count').innerHTML = courseCounter + "+";
             }
             if(studentCounter <= 50) {
-              document.getElementById('student_count').innerHTML = studentCounter;
+              document.getElementById('student_count').innerHTML = studentCounter + "+";
             }
               
            
-        }, 50)
+        }, 100)
     }
 });
 
@@ -797,10 +797,13 @@ window.onload = function(e) {
              
           }
       }).then((response) => response.json()).then((data) => {
-          document.getElementById('notif-body').innerHTML = data.html;
+          // document.getElementById('notif-body').innerHTML = data.html;
       });
 
 }
+
+
+
   </script>
 </body>
 

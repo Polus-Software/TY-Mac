@@ -38,12 +38,6 @@ function showPassword()
 }
 
 
-document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
 
 
 
