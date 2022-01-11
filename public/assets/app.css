@@ -188,7 +188,7 @@ form i {
 
 .intro-section {
   background-color: #fff;
-  padding: 10rem 0 0 0;
+  padding: 8rem 0 0 0;
   width: 100%;
   height: 100%;
 }
@@ -271,11 +271,18 @@ form i {
   color: var(--color-primary);
 }
 
-.services {
+.services,
+.our-courses {
   position: relative;
-  padding: 1rem 0;
+  padding: 60px 0 60px 0;
 }
 
+.think-services-bg,
+.think-portfolio-bg {
+    background-color: #FFFDF7;
+    border-top: 1px solid #E9E9E9;
+    border-bottom: 1px solid #E9E9E9;
+}
 .services__content {
   padding: 1rem;
   margin-top: 0;
@@ -383,7 +390,7 @@ form i {
 }
 
 .welcome-text {
-  font-size: 24px;
+  font-size: 22px;
   color: var(--color-primary);
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
@@ -392,7 +399,7 @@ form i {
 .welcome-text::before {
   display: inline-block;
   content: "";
-  border-top: 0.2rem solid var(--color-primary);
+  border-top: 0.15rem solid var(--color-primary);
   width: 4rem;
   margin: 0 1rem -0.6rem 0;
   transform: translateY(-1rem);
@@ -405,7 +412,7 @@ form i {
 }
 
 .think-title-home {
-  font-size: 3.75rem;
+  font-size: 3.25rem;
   font-family: var(--font-secondary);
   color: var(--text-primary);
 }
@@ -434,9 +441,9 @@ form i {
   color: var(--color-grey);
 }
 
-.portfolio div.row {
+/* .portfolio div.row {
   background-color: var(--color-primary-light);
-}
+} */
 
 .portfolio h2 {
   color: var(--color-tertiary);
@@ -456,7 +463,8 @@ form i {
   font-size: 1.5rem;
 }
 
-.think-testimonials i.fa-quote-left {
+.think-testimonials i.fa-quote-left,
+.think-testimonials i.fa-quote-right {
   color: var(--color-black);
   opacity: 6%;
   margin-left: -100px;
