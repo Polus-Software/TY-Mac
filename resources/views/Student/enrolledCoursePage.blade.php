@@ -504,11 +504,12 @@
                             <div class="card-body">
                                 <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
                                 @foreach($topicDetails as $topicDetail)
+                                
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                         <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] != null)
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @else
@@ -516,8 +517,11 @@
                                         @endif
                                     </div>
                                 </div>
-
+                                @if($loop->count == $loop->iteration)
+                                <ul class="list-group list-group-flush pb-3">
+                                @else
                                 <ul class="list-group list-group-flush border-bottom pb-3">
+                                @endif
                                     @foreach($topicDetail['topic_content'] as $content)
                                     <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
                                     @endforeach
@@ -865,20 +869,55 @@
                         </div>
                     </div>
                     @if($userType == 'student')
-                    <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
-                        <div class="card card-8 mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
-                                <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
-                                    @foreach($achievedBadgeDetails as $achievedBadgeDetail)
+                        <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
+                            <div class="card card-8 mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
+                                        <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
+                                        @if(!empty($achievedBadgeDetails))
+                                        @foreach($achievedBadgeDetails as $achievedBadgeDetail)
+                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                                                <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">  
+                                                <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
+                                                <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
+                                            </div>
+                                        @endforeach
+                                        @else
+                                        <h5 style="text-align:center;">No badges earned. Keep trying!</h5>
+                                        @endif
+                                        </div>
+
+                                <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
+                                <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
+                                    @foreach($upcoming as $upcomingBadge)
                                     <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                        <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">
-                                        <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
-                                        <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
+                                        <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">
+                                        <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
+                                        
                                     </div>
                                     @endforeach
+                                </div>
 
-                        <div class="tab-pane fade" id="v-pills-certificate" role="tabpanel" aria-labelledby="v-pills-certificate-tab">
+                                <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
+                                @foreach($badgesDetails as $badgesData)
+                                <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-4">
+                                        <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt="">
+                                        <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
+                                        
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                                        <p class="badges">{{ $badgesData['badge_name'] }}</p>
+                                        <p>{{ $badgesData['badge_description'] }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="v-pills-certificate" role="tabpanel" aria-labelledby="v-pills-certificate-tab">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card card-2">
@@ -958,60 +997,6 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
-                            <div class="card card-8 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title border-bottom pt-2 pb-2">Badges Earned</h5>
-                                        <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
-                                        @foreach($achievedBadgeDetails as $achievedBadgeDetail)
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">  
-                                                <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
-                                                <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
-                                            </div>
-                                            @endforeach
-                                           
-                                        </div>
-                                     
-                                        <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
-                                        <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
-                                        @foreach($upcoming as $upcomingBadge)
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">  
-                                                <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
-                                                <!-- <small>-----</small> -->
-                                            </div>
-                                        @endforeach
-                                        </div>
-
-                                <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
-                                <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
-                                    @foreach($upcoming as $upcomingBadge)
-                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                        <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">
-                                        <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
-                                        <!-- <small>-----</small> -->
-                                    </div>
-                                    @endforeach
-                                </div>
-
-                                <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
-                                @foreach($badgesDetails as $badgesData)
-                                <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-4">
-                                        <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt="">
-                                        <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
-                                        <small>---</small>
-                                    </div>
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                        <p class="badges">{{ $badgesData['badge_name'] }}</p>
-                                        <p>{{ $badgesData['badge_description'] }}</p>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
                     @endif
                 </div>
 

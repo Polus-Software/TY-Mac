@@ -665,7 +665,7 @@
             let courseId = document.getElementById('course_id').value;
             window.location.href ="/register-course?id="+courseId;
             
-           }else{
+           } else {
                let loginModal = new bootstrap.Modal(
                document.getElementById("loginModal"),{
                });

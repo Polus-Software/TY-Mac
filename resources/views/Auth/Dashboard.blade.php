@@ -63,6 +63,7 @@
                 </thead>
                 <tbody>
                 @php ($slno = 0)
+                @if(!empty($upComingSessionDetails))
                @foreach($upComingSessionDetails as $upComingSessionDetail)
                 @php ($slno = $slno + 1)
                   <tr id="">
@@ -76,6 +77,11 @@
                     <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
                   </tr>
                  @endforeach
+                  @else
+                  <tr>
+                      <td colspan="5"><h6 style="text-align:center;">No upcoming cohorts.</h6></td>
+                  </tr>
+                  @endif
                 </tbody>
               </table>
               
@@ -97,6 +103,7 @@
             </thead>
             <tbody>
               @php ($slno = 0)
+              @if(!empty($recentSessionDetails))
             @foreach($recentSessionDetails as $recentSessionDetail)
               @php ($slno = $slno + 1)
               <tr>
@@ -107,6 +114,11 @@
                 <td>{{$recentSessionDetail['date']}}</td>
               </tr>
            @endforeach
+           @else
+                 <tr>
+                     <td colspan="5"><h6 style="text-align:center;">No recent cohorts.</h6></td>
+                 </tr>
+                 @endif
             </tbody>
           </table>
         </div>

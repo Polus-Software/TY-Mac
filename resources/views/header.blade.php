@@ -63,6 +63,15 @@ document.getElementById('search-btn').addEventListener('click', function(e) {
   let path = "/course-search?search=" + searchTerm;
   window.location = '/course-search?search=' + searchTerm;
 });
+document.getElementById("search-box").addEventListener("keyup", function(e) {
+  if(e.which == 13) {
+    e.preventDefault();
+    let searchTerm = document.getElementById('search-box').value;
+    let path = "/course-search?search=" + searchTerm;
+    window.location = '/course-search?search=' + searchTerm;
+  }
+
+});
 
     </script>
   <!-- navbar new ends -->

@@ -45,7 +45,7 @@ class AdminController extends Controller
             array_push($studentDetails, $studentData);
         }
         $studentDetailsObj = collect($studentDetails);
-        $studentDatas = $this->paginate($studentDetailsObj);
+        $studentDatas = $this->paginate($studentDetailsObj, 10);
         $studentDatas->withPath('');
 
         return view('Auth.Admin.AdminDashboard', [
