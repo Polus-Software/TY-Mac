@@ -506,7 +506,7 @@ class CourseController extends Controller
      */
     public function viewAssignments($course_id) {
         try {
-            if($course_id) {
+            if($course_id){
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
               
                 $assignments = DB::table('topic_assignments')
