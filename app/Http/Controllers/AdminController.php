@@ -45,7 +45,7 @@ class AdminController extends Controller
             array_push($studentDetails, $studentData);
         }
         $studentDetailsObj = collect($studentDetails);
-        $studentDatas = $this->paginate($studentDetailsObj);
+        $studentDatas = $this->paginate($studentDetailsObj, 10);
         $studentDatas->withPath('');
 
         return view('Auth.Admin.AdminDashboard', [
@@ -162,9 +162,18 @@ class AdminController extends Controller
             $userType =  UserType::find($user->role_id)->user_role;
             $filters = Filter::all();
 
+            $recSettings = GeneralSetting::where('setting', 'recommendation_threshold')->value('value');
+            $f1Settings = GeneralSetting::where('setting', 'feedback_question_1')->value('value');
+            $f2Settings = GeneralSetting::where('setting', 'feedback_question_2')->value('value');
+            $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
+
             return view('Auth.Admin.AdminSettings', [
                 'userType' => $userType,
-                'filters' => $filters
+                'filters' => $filters,
+                'rec' => $recSettings,
+                'f1Question' => $f1Settings,
+                'f2Question' => $f2Settings,
+                'attendanceSetting' => $attendanceSettings
             ]);
         } else {
             return redirect('/403');
@@ -187,23 +196,65 @@ class AdminController extends Controller
     }
 
     public function saveThreshold(Request $request) {
-        $value = $request->value;
-        $setting = GeneralSetting::where('setting', 'recommendation_threshold')->get();
-        if(count($setting)) {
+        $threshold = $request->threshold;
+        $feedback1 = $request->feedback1;
+        $feedback2 = $request->feedback2;
+        $attendance = $request->attendance;
+        $settingRec = GeneralSetting::where('setting', 'recommendation_threshold')->get();
+        $settingFQ1 = GeneralSetting::where('setting', 'feedback_question_1')->get();
+        $settingFQ2 = GeneralSetting::where('setting', 'feedback_question_2')->get();
+        $settingAttendance = GeneralSetting::where('setting', 'attendance_timer')->get();
+
+        if(count($settingRec)) {
             $settingId = GeneralSetting::where('setting','recommendation_threshold')->value('id');
             $setting = GeneralSetting::find($settingId);
-            $setting->value = $value;
+            $setting->value = $threshold;
             $setting->save();
-            return response()->json(['status' => 'success', 'message' => 'Updated threshold successfully']);
         } else {
             $newSettings = new GeneralSetting;
             $newSettings->setting = 'recommendation_threshold';
-            $newSettings->value = $value;
+            $newSettings->value = $threshold;
             $newSettings->save();
-            return response()->json(['status' => 'success', 'message' => 'Added threshold successfully']);
         }
 
-        return response()->json(['status' => 'error', 'message' => 'Something went wrong!']);
+        if(count($settingFQ1)) {
+            $settingId = GeneralSetting::where('setting','feedback_question_1')->value('id');
+            $setting = GeneralSetting::find($settingId);
+            $setting->value = $feedback1;
+            $setting->save();
+        } else {
+            $newSettings = new GeneralSetting;
+            $newSettings->setting = 'feedback_question_1';
+            $newSettings->value = $feedback1;
+            $newSettings->save();
+        }
+
+        if(count($settingFQ2)) {
+            $settingId = GeneralSetting::where('setting','feedback_question_2')->value('id');
+            $setting = GeneralSetting::find($settingId);
+            $setting->value = $feedback2;
+            $setting->save();
+        } else {
+            $newSettings = new GeneralSetting;
+            $newSettings->setting = 'feedback_question_2';
+            $newSettings->value = $feedback2;
+            $newSettings->save();
+        }
+
+        if(count($settingAttendance)) {
+            $settingId = GeneralSetting::where('setting','attendance_timer')->value('id');
+            $setting = GeneralSetting::find($settingId);
+            $setting->value = $attendance;
+            $setting->save();
+        } else {
+            $newSettings = new GeneralSetting;
+            $newSettings->setting = 'attendance_timer';
+            $newSettings->value = $attendance;
+            $newSettings->save();
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Updated settings successfully']);
+        
         
     }
 

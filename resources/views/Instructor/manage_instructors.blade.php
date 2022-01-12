@@ -32,6 +32,7 @@
             </thead>
             <tbody id="instructor_tbody">
               @php ($slno = 0)
+              @if(!empty($instructors))
               @foreach ($instructors as $instructor)
               @php ($slno = $slno + 1)
               <tr id="{{$instructor->id}}">
@@ -55,6 +56,11 @@
           <td class="text-center align-middle"><button class="btn btn-danger delete_new_instructor_btn" data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="{{$instructor->id}}">Delete</button></td> -->
               </tr>
               @endforeach
+              @else
+                 <tr>
+                     <td colspan="8"><h6 style="text-align:center;">No Intructors added.</h6></td>
+                 </tr>
+                 @endif
             </tbody>
           </table>
         </div>

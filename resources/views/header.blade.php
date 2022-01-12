@@ -17,7 +17,7 @@
       @endif
       
     
-    <ul class="navbar-nav">      
+    <ul class="navbar-nav mx-0 think-custom-nav-1">      
       <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
         <a class="nav-link" aria-current="page" href="/">Home</a>
       </li>
@@ -44,10 +44,10 @@
         @else
         <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>        
         <li class="nav-item">
-        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
+        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal"><span class="me-2"><img src="/icons/signup__icon.svg" alt="error"></span>Signup</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="me-2"><img src="/icons/login__icon.svg" alt="error"></span>Login</a></li>
         </li>
         @endif
     </ul>
@@ -62,6 +62,15 @@ document.getElementById('search-btn').addEventListener('click', function(e) {
   let searchTerm = document.getElementById('search-box').value;
   let path = "/course-search?search=" + searchTerm;
   window.location = '/course-search?search=' + searchTerm;
+});
+document.getElementById("search-box").addEventListener("keyup", function(e) {
+  if(e.which == 13) {
+    e.preventDefault();
+    let searchTerm = document.getElementById('search-box').value;
+    let path = "/course-search?search=" + searchTerm;
+    window.location = '/course-search?search=' + searchTerm;
+  }
+
 });
 
     </script>
