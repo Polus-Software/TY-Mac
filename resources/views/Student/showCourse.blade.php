@@ -435,7 +435,7 @@
                 </div>
             </div>
 <!-- instructor profile -->
-            <div class="col-lg-4">
+            <div class="col-lg-4 d-flex flex-column">
                 <div class="card card-3 mb-3">
                     <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
                          <div class="col-lg-4 col-sm-4 col-4">
@@ -497,7 +497,7 @@
                   </div>
 <!-- instructor profile end -->    
 <!-- live cohorts -->      
-                  <div class="card card-4 mb-3 mt-3" style="background: #F8F7FC;">
+                  <div class="card card-4 mb-3 mt-3 flex-grow-1" style="background: #F8F7FC;">
                     <div class="card-body">
                         <h5 class="card-title p-3">Upcoming Live Cohorts</h5>
                         @foreach($liveSessions as $liveSession)
