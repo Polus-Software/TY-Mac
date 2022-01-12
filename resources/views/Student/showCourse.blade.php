@@ -339,7 +339,7 @@
                     </div>
                 </div>
                 
-                <div class="row pt-2">
+                <div class="row align-items-center mt-2">
                 @unless($userType == 'admin' ||  $userType == 'instructor' || $userType == 'content-creator')
                     @if($enrolledFlag == false)
                     <div class="col-md-auto">
@@ -350,7 +350,7 @@
                         <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                     </div>
                     @else
-                     <h6>Already enrolled!</h6>
+                     <div class="col-md-auto"><h6 class="m-0 think-color-primary">Already enrolled!</h6></div>
                     @endif
                     <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><span>Have a question?</span></a></div>
                 @endunless
