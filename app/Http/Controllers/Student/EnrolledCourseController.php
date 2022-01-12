@@ -112,12 +112,12 @@ class EnrolledCourseController extends Controller
    
             array_push($badgeComparisonArray, $achievement->badge_id);
 
-        array_push($achievedBadgeDetails, array(
-            'id'=> $achievement->badge_id,
-            'badge_name' =>  $badge_name,
-            'badge_image' => $badge_image,
-            'badge_created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $badge_created_at)->format('F d, Y'),
-        ));
+            array_push($achievedBadgeDetails, array(
+                'id'=> $achievement->badge_id,
+                'badge_name' =>  $badge_name,
+                'badge_image' => $badge_image,
+                'badge_created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $badge_created_at)->format('F d, Y'),
+            ));
         }
 
         $achievementBadges = AchievementBadge::all(); 
@@ -473,11 +473,24 @@ class EnrolledCourseController extends Controller
 
         $qa = new CourseQA;
         $qa->course_id = $course_id;
-        $instructor = AssignedCourse::where('assigned_course_id', $course_id)->value('user_id');
-    
+        $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
+        
         $user =Auth::user();
         if($user) {
             $student = User::where('id', $user->id)->value('id');
+            
+            
+            $badgeId = AchievementBadge::where('title', 'Q&A')->value('id');
+            $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('badge_id', $badgeId)->count();
+            
+            if(!$achievementCheck) {
+                $student_achievement = new StudentAchievement;
+                $student_achievement->student_id = $user->id;
+                $student_achievement->badge_id =  $badgeId;
+                $student_achievement->is_achieved = true;
+                $student_achievement->save();
+            }
+            
         }
 
         $qa->student = $student;

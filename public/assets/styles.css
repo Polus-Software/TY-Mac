@@ -1,307 +1,355 @@
 :root {
     --color-white: #fff;
-    --color-black: #000;  
-    --font-primary: 'Roboto', sans-serif;
-    --font-secondary: 'Lato', sans-serif;
-    --color-primary: #F5BC29;
-    --color-secondary: #2C3443;
-    --color-tertiary: #AF7E00;
+    --color-black: #000;
+    --font-primary: "Roboto", sans-serif;
+    --font-secondary: "Lato", sans-serif;
+    --color-primary: #f5bc29;
+    --color-secondary: #2c3443;
+    --color-tertiary: #af7e00;
     --text-primary: var(--color-black);
     --text-secondary: #737373;
     --text-tertiary: #474747;
-    --color-grey: #6E7687;  
-    --color-primary-light: #FFFDF7;
-  }
+    --color-grey: #6e7687;
+    --color-primary-light: #fffdf7;
+}
 
-  /* overriding boostrap btn class */
-  .btn {
-    border-radius: .31rem;
-  }
+/* overriding boostrap btn class */
+.btn {
+    border-radius: 0.31rem;
+}
 
-  /* Utilities */
-  .fs-18 {
+/* Utilities */
+.fs-18 {
     font-size: 1.1rem;
-  }
-  .fs-16 {
+}
+.fs-16 {
     font-size: 1rem;
-  }
-  .fs-14 {
-    font-size: 0.9rem;
-  }
-  .think-mt-75 {
+}
+.fs-14 {
+    font-size: 0.9rem !important;
+}
+.think-mt-75 {
     margin-top: 75px;
-  }
-  .think-mb-75 {
+}
+.think-mb-75 {
     margin-bottom: 75px;
-  }
-  .h-32 {
+}
+.h-32 {
     height: 32px;
-  }
-  .think-btn-secondary {
+}
+.think-px-25 {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+.think-btn-secondary {
     min-height: 38px;
     padding-left: 25px;
     padding-right: 25px;
-    background: #2C3443;
+    background: #2c3443;
     font-size: 1rem;
-  }
-  .think-btn-secondary-outline {
+}
+.think-btn-secondary-outline {
     text-decoration: none !important;
     min-height: 38px;
     padding-left: 25px;
     padding-right: 25px;
-    border: 1px solid #2C3443;
+    border: 1px solid #2c3443;
     font-size: 1rem !important;
     background-color: transparent !important;
-  }
-  .think-btn-secondary-outline:hover {
-    color: #2C3443;
-  }
-  .think-btn-secondary-outline:focus {
+}
+.think-btn-secondary-outline:hover {
+    color: #2c3443;
+}
+.think-btn-secondary-outline:focus {
     outline: 0;
     box-shadow: none;
-  }
-  .hr-line {
+}
+/* Tertiary Button */
+.think-btn-tertiary {
+    display: inline-block;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    color: var(--color-black);
+    background-color: var(--color-white);
+    font-size: 1rem;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+.think-btn-tertiary-outline {
+    text-decoration: none !important;
+    display: inline-block;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+    font-size: 1rem !important;
+    background-color: transparent !important;
+    cursor: pointer;
+}
+.think-btn-tertiary-outline:hover {
+    color: var(--color-white);
+}
+.think-btn-tertiary-outline:focus {
+    outline: 0;
+    box-shadow: none;
+}
+/* In this class, I have written for adjusting the basic height of 38px of buttons. Some button has 48px height*/
+.think-h-48 {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+/*  */
+.hr-line {
     background-color: #d5d5d5;
-  }
-  
-  /*  */
-  body {font-family: var(--font-primary) !important;}
+}
 
-  a.navbar-brand {
+/*  */
+body {
+    font-family: var(--font-primary) !important;
+}
+
+a.navbar-brand {
     font-weight: 700;
-  }
-  .think-navbar .navbar-nav .nav-link {
+}
+.think-navbar .navbar-nav .nav-link {
     color: var(--text-tertiary);
     font-weight: 700;
     padding-left: 0;
     padding-right: 0;
-  }
+}
 
-  .think-custom-nav-1 > li {
+.think-custom-nav-1 > li {
     position: relative;
     display: inline-block;
     margin-left: 30px;
     width: max-content;
     font-size: 14px;
-  }
-  .think-navbar .think-custom-nav-1 .nav-item.active::after {
-    content: '';
+}
+.think-navbar .think-custom-nav-1 .nav-item.active::after {
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
     bottom: -18px;
     height: 3px;
     background-color: var(--color-primary);
-  }
-  .think-personalized-way-text {
+}
+.think-personalized-way-text {
     position: relative;
-  }
-  .think-personalized-way-underline{
+}
+.think-personalized-way-underline {
     position: absolute;
     left: 0;
     right: 0;
     bottom: -24px;
-  }
+}
 
-  .think-services-underline,
-  .think-courses-underline,
-  .think-testimonial-underline {
+.think-services-underline,
+.think-courses-underline,
+.think-testimonial-underline {
     position: absolute;
     left: 0;
     right: 0;
     bottom: -30px;
-  }
+}
 
-  .dotted-decoaration {
+.dotted-decoaration {
     text-align: end;
     padding-right: 178px;
     margin-bottom: -54px;
     position: relative;
     z-index: 2;
-    }
-    .dotted-decoaration > img {
+}
+.dotted-decoaration > img {
     width: 150px;
-    }
-    .card-1 {
-      max-width: 396px;
-      box-shadow: 0 1px 8px #d4d4d4;
-      border-radius: 20px;
-      overflow: hidden;
-    }
+}
+.card-1 {
+    max-width: 396px;
+    box-shadow: 0 1px 8px #d4d4d4;
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-    /* BOOTSTRAP CLASS OVERRIDING */
-    .carousel-control-next, .carousel-control-prev {
-      display: flex;
-      align-items: center;
-      justify-content: start;
-      width: 4%;
-      background: 0 0;
-      border: 0;
-      opacity: .5;
-      transition: opacity .15s ease;
-    }
-    .bg-dark {
-      background-color: var(--color-primary) !important;
-    }
-    .card-body {
-      padding: 1rem 1.25rem;
-    }
-    /*  */
-    .far.fa-star.rateCourse,
-    .fas.fa-star.rateCourse {
-      color: var(--color-primary);
-    }
-    :root {
-      --color-white: #fff;
-      --color-black: #000;  
-      --font-primary: 'Roboto', sans-serif;
-      --font-secondary: 'Lato', sans-serif;
-      --color-primary: #F5BC29;
-      --color-secondary: #2C3443;
-      --color-tertiary: #AF7E00;
-      --text-primary: var(--color-black);
-      --text-secondary: #737373;
-      --text-tertiary: #474747;
-      --color-grey: #6E7687;  
-      --color-primary-light: #FFFDF7;
-    }
-  
-    /* overriding boostrap btn class */
-    .btn {
-      border-radius: .31rem;
-    }
-  
-    /* Utilities */
-    .fs-18 {
-      font-size: 1.1rem;
-    }
-    .fs-16 {
-      font-size: 1rem;
-    }
-    .fs-14 {
-      font-size: 0.9rem;
-    }
-    .think-mt-75 {
-      margin-top: 75px;
-    }
-    .think-mb-75 {
-      margin-bottom: 75px;
-    }
-    .h-32 {
-      height: 32px;
-    }
-    .think-btn-secondary {
-      min-height: 38px;
-      padding-left: 25px;
-      padding-right: 25px;
-      background: #2C3443;
-      font-size: 1rem;
-    }
-    .think-btn-secondary-outline {
-      text-decoration: none !important;
-      min-height: 38px;
-      padding-left: 25px;
-      padding-right: 25px;
-      border: 1px solid #2C3443;
-      font-size: 1rem !important;
-      background-color: transparent !important;
-    }
-    .think-btn-secondary-outline:hover {
-      color: #2C3443;
-    }
-    .think-btn-secondary-outline:focus {
-      outline: 0;
-      box-shadow: none;
-    }
-    .hr-line {
-      background-color: #d5d5d5;
-    }
-    
-    /*  */
-    body {font-family: var(--font-primary) !important;}
-  
-    a.navbar-brand {
-      font-weight: 700;
-    }
-    .think-navbar .navbar-nav .nav-link {
-      color: var(--text-tertiary);
-      font-weight: 700;
-      padding-left: 0;
-      padding-right: 0;
-    }
-  
-    .think-custom-nav-1 > li {
-      position: relative;
-      display: inline-block;
-      margin-left: 30px;
-      width: max-content;
-      font-size: 14px;
-    }
-    .think-navbar .think-custom-nav-1 .nav-item.active::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -18px;
-      height: 3px;
-      background-color: var(--color-primary);
-    }
-    .think-personalized-way-text {
-      position: relative;
-    }
-    .think-personalized-way-underline{
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -24px;
-    }
-  
-    .think-services-underline,
-    .think-courses-underline,
-    .think-testimonial-underline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -30px;
-    }
-  
-    .dotted-decoaration {
-      text-align: end;
-      padding-right: 178px;
-      margin-bottom: -54px;
-      position: relative;
-      z-index: 2;
-      }
-      .dotted-decoaration > img {
-      width: 150px;
-      }
-      .card-1 {
-        max-width: 396px;
-        box-shadow: 0 1px 8px #d4d4d4;
-        border-radius: 20px;
-        overflow: hidden;
-      }
-  
-      /* BOOTSTRAP CLASS OVERRIDING */
-      .carousel-control-next, .carousel-control-prev {
-        display: flex;
-        align-items: center;
-        justify-content: start;
-        width: 4%;
-        background: 0 0;
-        border: 0;
-        opacity: .5;
-        transition: opacity .15s ease;
-      }
-      .bg-dark {
-        background-color: var(--color-primary) !important;
-      }
-      .card-body {
-        padding: 1rem 1.25rem;
-      }
-      /*  */
-      .far.fa-star.rateCourse,
-      .fas.fa-star.rateCourse {
-        color: var(--color-primary);
-      }
-      
+/* BOOTSTRAP CLASS OVERRIDING */
+.carousel-control-next,
+.carousel-control-prev {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 4%;
+    background: 0 0;
+    border: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+}
+.bg-dark {
+    background-color: var(--color-primary) !important;
+}
+.card-body {
+    padding: 1rem 1.25rem;
+}
+/*  */
+.far.fa-star.rateCourse,
+.fas.fa-star.rateCourse {
+    color: var(--color-primary);
+}
+:root {
+    --color-white: #fff;
+    --color-black: #000;
+    --font-primary: "Roboto", sans-serif;
+    --font-secondary: "Lato", sans-serif;
+    --color-primary: #f5bc29;
+    --color-secondary: #2c3443;
+    --color-tertiary: #af7e00;
+    --text-primary: var(--color-black);
+    --text-secondary: #737373;
+    --text-tertiary: #474747;
+    --color-grey: #6e7687;
+    --color-primary-light: #fffdf7;
+}
+
+/* overriding boostrap btn class */
+.btn {
+    border-radius: 0.31rem;
+}
+
+/* Utilities */
+.fs-18 {
+    font-size: 1.1rem;
+}
+.fs-16 {
+    font-size: 1rem;
+}
+.fs-14 {
+    font-size: 0.9rem;
+}
+.think-mt-75 {
+    margin-top: 75px;
+}
+.think-mb-75 {
+    margin-bottom: 75px;
+}
+.h-32 {
+    height: 32px;
+}
+.think-btn-secondary {
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    background: #2c3443;
+    font-size: 1rem;
+}
+.think-btn-secondary-outline {
+    text-decoration: none !important;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border: 1px solid #2c3443;
+    font-size: 1rem !important;
+    background-color: transparent !important;
+}
+.think-btn-secondary-outline:hover {
+    color: #2c3443;
+}
+.think-btn-secondary-outline:focus {
+    outline: 0;
+    box-shadow: none;
+}
+.hr-line {
+    background-color: #d5d5d5;
+}
+
+/*  */
+body {
+    font-family: var(--font-primary) !important;
+}
+
+a.navbar-brand {
+    font-weight: 700;
+}
+.think-navbar .navbar-nav .nav-link {
+    color: var(--text-tertiary);
+    font-weight: 700;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.think-custom-nav-1 > li {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+    width: max-content;
+    font-size: 14px;
+}
+.think-navbar .think-custom-nav-1 .nav-item.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -18px;
+    height: 3px;
+    background-color: var(--color-primary);
+}
+.think-personalized-way-text {
+    position: relative;
+}
+.think-personalized-way-underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -24px;
+}
+
+.think-services-underline,
+.think-courses-underline,
+.think-testimonial-underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -30px;
+}
+
+.dotted-decoaration {
+    text-align: end;
+    padding-right: 178px;
+    margin-bottom: -54px;
+    position: relative;
+    z-index: 2;
+}
+.dotted-decoaration > img {
+    width: 150px;
+}
+.card-1 {
+    max-width: 396px;
+    box-shadow: 0 1px 8px #d4d4d4;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* BOOTSTRAP CLASS OVERRIDING */
+.carousel-control-next,
+.carousel-control-prev {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 4%;
+    background: 0 0;
+    border: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+}
+.bg-dark {
+    background-color: var(--color-primary) !important;
+}
+.card-body {
+    padding: 1rem 1.25rem;
+}
+/*  */
+.far.fa-star.rateCourse,
+.fas.fa-star.rateCourse {
+    color: var(--color-primary);
+}

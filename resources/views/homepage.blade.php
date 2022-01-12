@@ -201,7 +201,6 @@
   @php
   use App\Http\Controllers\Student\CoursesCatalogController;
   $courses = CoursesCatalogController::getAllCourses();
-  
   @endphp
 
 
@@ -217,9 +216,10 @@
       </div>
       <div class="row">
         <div class="col-lg-12">
+        @if(!empty($courses))
           <div id="liveCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner think-carousel-home">
-              @foreach($courses as $course)
+            @foreach($courses as $course)
               @if($loop->first)
               <div class="carousel-item active">
                 <div class="row">
@@ -237,30 +237,28 @@
                         <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
                         
 
-<div class="row mb-3">
-  <div class="col-lg-6 col-sm-6 col-6">
-@for($i = 1; $i <= 5; $i++)
-@if($i <= $course['rating'])
-<i class="fas fa-star rateCourse"></i>
-@else
-<i class="far fa-star rateCourse"></i>
-@endif
-@endfor
-    (60)
-  </div>
-  <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-    <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
-  </div>
-</div>
-
-
+                        <div class="row mb-3">
+                          <div class="col-lg-6 col-sm-6 col-6">
+                        @for($i = 1; $i <= 5; $i++)
+                        @if($i <= $course['rating'])
+                        <i class="fas fa-star rateCourse"></i>
+                        @else
+                        <i class="far fa-star rateCourse"></i>
+                        @endif
+                        @endfor
+                            (60)
+                          </div>
+                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
+                            <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
+                          </div>
+                        </div>
 
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item">
                             <div class="row">
-                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>1h50m</div>
+                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
                               <div class="col item-2 px-0 text-center">
-                                <p><i class="far fa-user pe-1"></i>Dummy Instructor</p>
+                              <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-auto item-3 px-0 d-flex">
                                 <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
@@ -270,7 +268,7 @@
                         </ul>
                         <div class="row py-2">
                           <div class="text-center border-top">
-                            <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn">Join now</a>
+                            <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn d-inline-block w-100 px-0">Join now</a>
                           </div>
                         </div>
 
@@ -282,8 +280,7 @@
               </div>
               @endif
               @endforeach
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel" data-bs-slide="prev">
+              <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel" data-bs-slide="prev">
               <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
@@ -291,7 +288,12 @@
               <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
+              @else
+              <h2 style="text-align:center;">No courses to be shown! Please add courses.</h2>
+            </div>
+            
           </div>
+          @endif
         </div>
       </div>
       <div class="row mt-3 mb-4 text-center">
@@ -657,15 +659,13 @@ window.addEventListener("scroll", () => {
         let interval = setInterval(function(event){
             counterFlag = 1;
             studentCounter++;
-            courseCounter+=5;
+            courseCounter+=10;
             if(courseCounter <= 1000) {
               document.getElementById('course_count').innerHTML = courseCounter + "+";
             }
             if(studentCounter <= 50) {
               document.getElementById('student_count').innerHTML = studentCounter + "+";
-            }
-              
-           
+            }   
         }, 100)
     }
 });

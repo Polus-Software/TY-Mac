@@ -302,31 +302,35 @@ svg.svg-img.prefix-more.can-hover {
     background-color: white !important;
     transition-duration: 0.2s;
 }
+
+.nodisplay {
+  display:none;
+}
   </style>
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
-  <div class="main-container">
-  <div id="root1"></div>
-    
-  <div class="tab-contents">
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
-    <li><a data-toggle="tab" href="#chat">Chat</a></li>
-  </ul>
-  <div class="tab-content">
-    <div id="participants" class="tab-pane fade in active">
-     @foreach($participants as $participant)
-     <p>{{ $participant }}</p>
-     @endforeach
-    </div>
-    <div id="chat" class="tab-pane fade">
-     <p> Chat screen </p>
+  <div class="tab-container">
+    <div id="root1"></div>
+
+    <div class="tab-contents nodisplay">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
+        <li><a data-toggle="tab" href="#chat">Chat</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="participants" class="tab-pane fade in active">
+        @foreach($participants as $participant)
+        <p>{{ $participant }}</p>
+        @endforeach
+        </div>
+        <div id="chat" class="tab-pane fade">
+        <p> Chat screen </p>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-  </div>
-  
+<div id="feedback-container" class="nodisplay">
   @if($userType == 'student')
   <div class="row"></div>
   <div class="row1">
@@ -337,6 +341,7 @@ svg.svg-img.prefix-more.can-hover {
       <p class="notif-text">Did you understand this topic?</p> <button data-id="" class="feedbackbtn" id="positive" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;"><i style="margin-right:10px;" class="fas fa-thumbs-up"></i>Yes <span id="positive_count"></span></button> <button class="feedbackbtn" id="negative" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;" data-id=""><i style="margin-right:10px;" class="fas fa-thumbs-down"></i>No<span id="negative_count"></span></button>
     </div>
   </div>
+
   <div class="row2" style="margin-bottom:20px;">
     <h6 class="notif-text">Session Info</h6>
     <hr>
@@ -346,12 +351,12 @@ svg.svg-img.prefix-more.can-hover {
     <div style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i>{{ $content->topic_title }}</div>
     @endforeach
   </div>
+
   @elseif($userType == 'instructor')
   <div class="row">
-  <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
   <div class="row1">
-  
     <div class="col11">
       <button id="back_to_course">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
     </div>
@@ -368,8 +373,9 @@ svg.svg-img.prefix-more.can-hover {
     <div class="course_contents_div" data-id="3" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 3</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="3">Start</button></div>
     
   </div>
-  
+
 @endif
+</div>
   <script type="text/javascript">
         
         let session = document.getElementById('session_hidden_id').value;
@@ -422,12 +428,16 @@ $(document).ready(function(){
   }, 1000);
 });
 
+$(document).on('click', '.btn:contains("Finish")', function() {
+    $('.tab-contents').removeClass('nodisplay');
+    $('#feedback-container').removeClass('nodisplay');
+});
 $(document).on('click', '.btn:contains("Confirm")', function() {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
 
-  if(userType == "student" && timer < 900) {
-    let path = "{{ route('student-exit') }}?sessionId=" + sessionId;
+  if(userType == "student") {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
     fetch(path, {
       method: 'POST',
       headers: {
@@ -447,8 +457,8 @@ window.addEventListener("beforeunload", function (e) {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
 
-  if(userType == "student" && timer < 900) {
-    let path = "{{ route('student-exit') }}?sessionId=" + sessionId;
+  if(userType == "student") {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
     fetch(path, {
       method: 'POST',
       headers: {

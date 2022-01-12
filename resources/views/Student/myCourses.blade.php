@@ -12,6 +12,9 @@
 .card-2:hover {
     cursor: pointer;
 }
+.no_course_div {
+    text-align: center;
+}
   </style>
 @extends('header')
 <!-- login modal -->
@@ -201,6 +204,7 @@
                 <div class="tab-content">
                     <div id="live" class="tab-pane fade show active" aria-labelledby="live-tab">
                         <div class="col-lg-12">
+                            @if(!empty($liveSessionDetails))
                             <div id="liveCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
@@ -241,111 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                    <!-- first slide ends -->
-
-                                    <!-- <div class="carousel-item">
-                                        <div class="row">
-                                            
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 4</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> 
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 5</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Fundamentals of Google Docs &
-                                                            Google Drive 6</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                    
                                     <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel"
                                     data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
@@ -357,13 +257,16 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
-                                
+                            @else
+                             <h2 style="text-align:center;">No live classes at the moment!</h2>
+                            @endif
                             </div>
                         </div>
                     </div>
                     <div class="tab-content">
                     <div id="upcoming" class="tab-pane fade" aria-labelledby="upcoming-tab">
                         <div class="col-lg-12">
+                            @if(!empty($upComingSessionDetails))
                             <div id="upcomingCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
@@ -400,173 +303,9 @@
                                             </div>
                                             @endforeach
 
-                                            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 2</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-
-                                            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 3</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
+                                            
                                         </div>
                                     </div>
-
-                                    <!-- first slide ends -->
-
-                                    <!-- <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 4</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> 
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 5</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> 
-
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">upcoming 6</h5>
-                                                        <p class="card-text text-sm-start">By learning both of these apps,
-                                                            you will gain valuable productivity skills &
-                                                            become more efficient at creating documents, spreadsheets, and
-                                                            presentations.</p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>instructor</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> beginner</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row bg-light">
-                                                            <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#upcomingCarousel"
                                     data-bs-slide="prev">
@@ -579,6 +318,9 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
+                            @else
+                            <h2 style="text-align:center;">No upcoming classes at the moment.</h2>
+                            @endif
                         </div>
                     </div>
 </div>
@@ -602,6 +344,7 @@
 
             <div class="row mb-5">
                 <div class="col-lg-12">
+                    @if(!empty($singleEnrolledCourseData))
                     @foreach ($singleEnrolledCourseData as $singleEnrolledCourse)
                         <div class="card-2 mb-3 mt-4" data-id="{{ $singleEnrolledCourse['course_id'] }}">
                             <div class="row g-0">
@@ -639,7 +382,7 @@
                                                 </p>
                                             </div>
                                             <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                                <p class="para-2"><i class="far fa-user pe-1"></i>
+                                                <p class="para-2"><i class="far fa- pe-1"></i>
                                                     {{ $singleEnrolledCourse['course_difficulty'] }}
                                                 </p>
                                             </div>
@@ -662,6 +405,12 @@
                             </div>
                         </div>
                     @endforeach
+                    @else
+                    <div style="padding:5rem 0rem;" class="no_course_div">
+                        <h6 style="text-align:center;">You have not enrolled for any courses yet. Click below to check out our courses!</h6>
+                        <a type="button" class="btn btn-secondary mt-5" href="{{ route('student.courses.get') }}">Enroll now</a>
+                    </div>
+                    @endif
                 </div>
             </div>
 

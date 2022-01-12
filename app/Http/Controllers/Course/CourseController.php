@@ -403,6 +403,7 @@ class CourseController extends Controller
     try {
         $courseContents = [];
         $course_id = $request->input('course_id');
+        
         if($course_id) {
             $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
             
@@ -421,10 +422,12 @@ class CourseController extends Controller
             ));
             }
         }
+        $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
             return view('Course.admin.view.view_subtopics', [
                 'courseContents' => $courseContents,
                 'course_id' => $course_id,
-                'course_title' => $course_title
+                'course_title' => $course_title,
+                'courseStatus' => $courseStatus
             ]);
         
         }catch (Exception $exception) {
@@ -467,10 +470,12 @@ class CourseController extends Controller
         $course_id = $request->input('course_id');
         $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
         $subTopics = DB::table('topics')->where('course_id', $course_id)->get();
+        $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
         return view('Course.admin.create_assignment', [
             'course_id' => $course_id,
             'subTopics' => $subTopics,
-            'course_title' => $course_title
+            'course_title' => $course_title,
+            'courseStatus' => $courseStatus
         ]);
     }
 
@@ -501,7 +506,7 @@ class CourseController extends Controller
      */
     public function viewAssignments($course_id) {
         try {
-            if($course_id) {
+            if($course_id){
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
               
                 $assignments = DB::table('topic_assignments')

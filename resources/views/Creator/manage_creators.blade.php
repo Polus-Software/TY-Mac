@@ -33,6 +33,7 @@
             </thead>
             <tbody id="creator_tbody">
               @php ($slno = 0)
+              @if(!empty($creators))
               @foreach ($creators as $creator)
               @php ($slno = $slno + 1)
               <tr id="{{$creator->id}}">
@@ -53,6 +54,11 @@
                 </td>
               </tr>
               @endforeach
+              @else
+                 <tr>
+                     <td colspan="8"><h6 style="text-align:center;">No creators added.</h6></td>
+                 </tr>
+              @endif
             </tbody>
           </table>
         </div>

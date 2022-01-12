@@ -30,6 +30,7 @@
             </thead>
             <tbody>
               @php ($slno = 0)
+              @if(!empty($studentDatas))
               @foreach($studentDatas as $studentData)
               @php ($slno = $slno + 1)
               <tr id="{{$studentData['id'] }}">
@@ -52,6 +53,11 @@
                 </td>
               </tr>
               @endforeach
+              @else
+                 <tr>
+                     <td colspan="8"><h6 style="text-align:center;">No students registered.</h6></td>
+                 </tr>
+                 @endif
             </tbody>
           </table>
           <div class="d-flex justify-content-end">

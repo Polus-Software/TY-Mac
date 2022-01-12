@@ -27,6 +27,7 @@ use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
+use App\Models\AssignedCourse;
 
 
 class CoursesCatalogController extends Controller
@@ -195,13 +196,10 @@ class CoursesCatalogController extends Controller
     }
 
     public function enrollCourse(){
-
         if (Auth::check() == true) {
-            return response()->json(
-                ['status' => 'success', 'message' => 'User logged in !']);
-       }else{
-        return response()->json(
-                ['status' => 'failed', 'message' => 'Not Logged in']);
+            return response()->json(['status' => 'success', 'message' => 'User logged in !']);
+        } else {
+            return response()->json(['status' => 'failed', 'message' => 'Not Logged in']);
        }
     }
     
@@ -321,6 +319,8 @@ class CoursesCatalogController extends Controller
      $levelsFlag = 0;
      $ratingsFlag = 0;
      $durationFlag = 0;
+     $instructorFlag = 0;
+     $instructors = $request->instructors;
      $categories = $request->categories;
      $levels = $request->levels;
      $ratings = $request->ratings;
@@ -328,6 +328,19 @@ class CoursesCatalogController extends Controller
      
      $courses = DB::table('courses');
      
+     if($instructors) {
+        $instructorsArr = explode(",", $instructors);
+        foreach($instructorsArr as $instructor) {
+           $instructorPair = explode('=', $instructor);
+           $assignedCourse = AssignedCourse::where('user_id', $instructorPair[1])->value('course_id');
+           if($instructorFlag == 0) {
+               $courses = $courses->where('id', $assignedCourse);
+               $instructorFlag = 1;
+           } else {
+               $courses = $courses->orWhere('id', $assignedCourse);
+           }
+        }
+    }
 
      if($categories) {
          $categoriesArr = explode(",", $categories);

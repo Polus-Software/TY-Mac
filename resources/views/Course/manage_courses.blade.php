@@ -34,6 +34,7 @@
             </thead>
             <tbody id="course_tbody">
               @php ($slno = 0)
+              @if(!empty($courseDatas))
               @foreach ($courseDatas as $courseData)
               @php ($slno = $slno + 1)
               <tr id="{{$courseData['id']}}">
@@ -52,6 +53,11 @@
                 </td>
               </tr>
               @endforeach
+              @else
+                 <tr>
+                     <td colspan="8"><h6 style="text-align:center;">No courses added.</h6></td>
+                 </tr>
+              @endif
             </tbody>
           </table>
           <div class="d-flex justify-content-end">

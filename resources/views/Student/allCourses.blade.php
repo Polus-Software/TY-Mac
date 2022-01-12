@@ -389,7 +389,7 @@
               <div class="accordion-body">
               @foreach($instructors as $instructor)
               <div class="form-check">
-                <input class="form-check-input instructor_filter" type="checkbox" value="{{$instructor->id}}">
+                <input class="form-check-input instructor_filter filter_option" filtertype="instructor" type="checkbox" value="{{$instructor->id}}">
                 <label class="form-check-label" for="flexCheckDefault">
                   {{$instructor->firstname}} {{$instructor->lastname}}
                 </label>
@@ -581,6 +581,7 @@ window.onload = function(event) {
       let levelFilters = [];
       let ratingFilter = [];
       let durationFilter = [];
+      let instructorFilter = [];
       filterType = this.getAttribute('filtertype');
       for(var i = 0; i < filterOption.length; i++) {
         if(filterOption[i].checked) {
@@ -592,10 +593,12 @@ window.onload = function(event) {
             ratingFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           } else if (filterOption[i].getAttribute('filterType') == "duration") {
             durationFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
+          } else if (filterOption[i].getAttribute('filterType') == "instructor") {
+            instructorFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           }
         }
       }
-      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter + "&duration=" + durationFilter;
+      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter + "&duration=" + durationFilter + "&instructors=" + instructorFilter;
       fetch(path, {
           method: 'POST',
           headers: {
