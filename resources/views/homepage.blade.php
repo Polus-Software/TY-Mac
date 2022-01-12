@@ -256,9 +256,9 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item">
                             <div class="row">
-                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>1h50m</div>
+                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
                               <div class="col item-2 px-0 text-center">
-                                <p><i class="far fa-user pe-1"></i>Dummy Instructor</p>
+                              <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-auto item-3 px-0 d-flex">
                                 <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>

@@ -35,9 +35,7 @@
         </div>
             <div class="form-group">
               <label for="threshold">Threshold (In %) :</label>
-              <input id="threshold" type="text" class="form-control mt-3" />
-              <button class="btn btn-secondary mt-2" id="threshold-save">Save</button>
-              <label style="color:green;" id="threshold-success-msg"></label>
+              <input id="threshold" type="text" class="form-control mt-3" value="{{ $rec }}"/>
             </div>
           </div>
         </div>
@@ -45,18 +43,41 @@
 
 
         <div class="row mt-4">
-          <div class="col-5 col-sm-5 col-md-5 p-3">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Feedback survey questions</h3>
-        </div>
+          <div class="col-6 col-sm-6 col-md-6 p-3">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h3>Feedback survey questions</h3>
+            </div>
             <div class="form-group">
               <label for="question_1">Question 1</label>
-              <textarea id="question_1" type="text" class="form-control mt-3"></textarea>
+              <textarea id="question_1" type="text" class="form-control mt-3">{{ $f1Question }}</textarea>
               <label for="question_2">Question 2</label>
-              <textarea id="question_2" type="text" class="form-control mt-3"></textarea>
-              <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
-              <label style="color:green;" id="survey-success-msg"></label>
+              <textarea id="question_2" type="text" class="form-control mt-3">{{ $f2Question }}</textarea>
+              <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
+              <label style="color:green;" id="survey-success-msg"></label> -->
             </div>
+          </div>
+
+          <div class="col-6 col-sm-6 col-md-6 p-3">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h3>Live session attendance settings</h3>
+            </div>
+            <div class="form-group">
+              <label for="attendance">Minimum time required for attendance to be tracked (in %)</label>
+              <input id="attendance" type="text" class="form-control mt-3" value="{{ $attendanceSetting }}"/>
+              <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
+              <label style="color:green;" id="survey-success-msg"></label> -->
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row mt-4">
+        <div class="col-10 col-sm-10 col-md-10 p-3 float-end">
+                
+          </div>
+          <div class="col-2 col-sm-2 col-md-2 p-3">
+                <label style="color:green;" id="threshold-success-msg"></label> 
+                <button class="btn btn-secondary mt-2 w-100" id="threshold-save">Save</button>
           </div>
         </div>
       </main>
@@ -92,7 +113,10 @@
 
   document.getElementById('threshold-save').addEventListener('click', function(event) {
       let threshold = document.getElementById('threshold').value;
-      let path = "{{ route('save-threshold')}}?value=" + threshold;
+      let feedbackQues1 = document.getElementById('question_1').value;
+      let feedbackQues2 = document.getElementById('question_2').value;
+      let attendance = document.getElementById('attendance').value;
+      let path = "{{ route('save-threshold')}}?threshold=" + threshold + "&feedback1=" + feedbackQues1 + "&feedback2=" + feedbackQues2 + "&attendance=" + attendance;
         fetch(path, {
         method: 'POST',
         headers: {
