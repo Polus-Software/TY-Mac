@@ -290,50 +290,51 @@
     <header class="ty-mac-header-bg d-flex align-items-center mt-3">
         <div class="container">
             <div class="row mt-5">
-                <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 ">
+                <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 pt-4">
                
                 <div class="text-content-wrapper w-100 text-lg-start">
-                    <p>@foreach($singleCourseDetails as $singleCourseDetail)
+                    <p class="mb-2">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_title']}}
                     @endforeach
                     </p>
                 </div>
                 <div class="row row-1">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-3">
-                        <p class="border-end"><i class="far fa-clock"></i>@foreach($singleCourseDetails as $singleCourseDetail)
+                    <div class="col-auto">
+                        <p class="border-end pe-4"><i class="far fa-clock"></i>@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['duration']}}
                     @endforeach</p>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-4">
-                        <p class="border-end">@foreach($singleCourseDetails as $singleCourseDetail)
+                    <div class="col-auto">
+                        <p class="border-end pe-4">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_difficulty']}}
                     @endforeach</p>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-5 col-5 p-0">
+                    <div class="col-auto p-0">
                         <p class="ms-2">@foreach($singleCourseDetails as $singleCourseDetail)
                     {{$singleCourseDetail['course_category']}}
                     @endforeach</p>
                     </div>
                 </div>
-                <div class="row row-2">
+                <div class="row row-2 mb-2">
                     <div class="col-lg-12">
-                        <p class="para-1">What You'll Learn</p>
+                        <p class="para-1 mb-2">What You'll Learn</p>
                         @foreach($short_description as $value)
-                        <p class="para-2"><i class="fas fa-check-circle"></i> &nbsp; {{$value}} <br>
+                        <p class="para-2 mb-1"><img class="me-2" src="/icons/tick__icon.svg" alt="error">{{$value}} <br>
                         @endforeach
                     </p>
                        
                     </div>
                 </div>
                 <div class="row row-3 pt-2">
-                    <div class="col-lg-6">
-                        <p class="para-3">Instructed by <strong class="text-capitalize">
+                    <div class="col-auto">
+                        <p class="">Instructed by <strong class="text-capitalize">
                         @foreach($singleCourseDetails as $singleCourseDetail)
                           {{$singleCourseDetail['instructor_firstname']}} {{$singleCourseDetail['instructor_lastname']}}
                         @endforeach
                         </strong></p>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-auto">|</div>
+                    <div class="col-auto">
                         <p>Upcoming Cohort: <strong>11/10/2021</strong></p>
                     </div>
                 </div>
@@ -341,8 +342,8 @@
                 <div class="row pt-2">
                 @unless($userType == 'admin' ||  $userType == 'instructor' || $userType == 'content-creator')
                     @if($enrolledFlag == false)
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-6 mb-3">
-                        <a class="btn enroll-button" id="enrollButton">
+                    <div class="col-md-auto">
+                        <a class="btn think-btn-tertiary think-h-48" id="enrollButton">
                             Enroll now
                         </a>
                         <input type="hidden" id="course_id" value="{{$singleCourseDetail['id']}}">
@@ -351,7 +352,7 @@
                     @else
                      <h6>Already enrolled!</h6>
                     @endif
-                    <a class="btn question-btn" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="far fa-comment-alt"></i> Have a question?</a>
+                    <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><span>Have a question?</span></a></div>
                 @endunless
                 </div>
                 <div class="row mt-2">
@@ -383,7 +384,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card card-1">
+                    <div class="card">
                         <div class="card-body p-4">
                           <h5 class="card-title">Course description</h5>
                           @foreach($singleCourseDetails as $singleCourseDetail)
@@ -403,14 +404,14 @@
                 <div class="col-lg-8">
                     <div class="card card-2 mb-3">
                         <div class="card-body">
-                            <h5 class="card-title border-bottom pb-2">Course Content</h5>
+                            <h5 class="card-title border-bottom pb-3 pt-2">Course Content</h5>
                             @php ($slno = 0)
                             @foreach($courseContents as $courseContent)
                             @php ($slno = $slno + 1)
                             <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
                             <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
                                 @foreach($courseContent['contentsData'] as $content)
-                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
+                                    <li class="ms-3 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
                                 @endforeach
                             </ul>
                             @endforeach 
@@ -420,14 +421,14 @@
 <!-- Who this course is for -->
                 <div class="col-lg-12">
                     <div class="card mb-3">
-                        <div class="card-body p-3">
-                            <h5 class="card-title p-2">Who this course is for</h5>
-                            <p class="card-text-1 p-2">@foreach($singleCourseDetails as $singleCourseDetail)
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Who this course is for</h5>
+                            <p class="card-text-1">@foreach($singleCourseDetails as $singleCourseDetail)
                                {{$singleCourseDetail['course_details']}}</p>
                                 @endforeach
                              @foreach($course_details_points as $course_details_point)
                              @if($course_details_point != '')
-                             <p class="card-text-1"><i class="far fa-check-circle"></i> &nbsp;{{$course_details_point}} </p>
+                             <p class="card-text-1 mb-2"><img class="me-2" src="/icons/tick__icon.svg" alt="error">{{$course_details_point}} </p>
                              @endif
                              @endforeach
                         </div>
@@ -438,14 +439,14 @@
             <div class="col-lg-4 d-flex flex-column">
                 <div class="card card-3 mb-3">
                     <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
-                         <div class="col-lg-4 col-sm-4 col-4">
+                         <div class="col-sm-auto col-12">
                          @foreach($singleCourseDetails as $singleCourseDetail)
                            <img src="{{ asset('/storage/images/'.$singleCourseDetail['profile_photo']) }}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" 
                            alt="..." style="width:94px; height:94px;">
                            @endforeach
                         </div>
-                        <div class="col-lg-8 col-sm-8 col-8">
-                        <div class="card-body">
+                        <div class="col-sm col-12">
+                        <div class="card-body ps-2">
                           <h5 class="card-title pt-2">
                             @foreach($singleCourseDetails as $singleCourseDetail)
                               {{$singleCourseDetail['instructor_firstname']}} {{$singleCourseDetail['instructor_lastname']}}
@@ -468,26 +469,26 @@
                               </p>
                           </div>
                            
-                                <div class="row d-flex justify-content-center mb-2">
-                                    <div class="col-1">
+                                <div class="row d-flex justify-content-center mb-4">
+                                    <div class="col-auto">
                                       <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                        {{$singleCourseDetail['instructorTwitter']}}
                                         @endforeach">
-                                        <i class="fab fa-twitter"></i>
+                                        <img class="me-2" src="/icons/twitter__icon.svg" alt="error">
                                       </a>
                                     </div>
-                                <div class="col-1">
+                                <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
                                             @endforeach">
-                                        <i class="fab fa-linkedin-in"></i>
+                                            <img class="me-2" src="/icons/linkedin__icon.svg" alt="error">
                                     </a>
                                 </div>
-                                <div class="col-1">
+                                <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                             {{$singleCourseDetail['instructorYoutube']}}
                                             @endforeach">
-                                        <i class="fab fa-youtube"></i>
+                                            <img class="me-2" src="/icons/youtube__icon.svg" alt="error">
                                     </a>
                                 </div>
                             </div>
@@ -498,14 +499,14 @@
 <!-- instructor profile end -->    
 <!-- live cohorts -->      
                   <div class="card card-4 mb-3 mt-3 flex-grow-1" style="background: #F8F7FC;">
-                    <div class="card-body">
-                        <h5 class="card-title p-3">Upcoming Live Cohorts</h5>
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Upcoming Live Cohorts</h5>
                         @foreach($liveSessions as $liveSession)
                             <div class="row g-0 border-bottom">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                                    <img src="/courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block p-2" alt="...">
+                                <div class="col-auto">
+                                    <img src="/courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block py-2" alt="error">
                                 </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                                <div class="col">
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <a style="text-decoration:none;color:#2C3443;" href="{{ route('session-view', 7) }}">{{$liveSession['session_title']}}</a>
@@ -527,8 +528,8 @@
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card card-5 mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title p-3">Student Reviews</h5>
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Student Reviews</h5>
                             <div class="row">
                               @foreach($singleCourseFeedbacks as $singleCourseFeedback)
                                 <div class="col-lg-8 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
