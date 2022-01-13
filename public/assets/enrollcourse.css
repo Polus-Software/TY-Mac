@@ -21,7 +21,7 @@ section .card-2{
     color: #F5BC29;
     font-size: 30px;
 }
-.btn{
+/* .btn{
     background-color:#2C3443;
     color: white;
     font-size: 16px;
@@ -32,7 +32,7 @@ section .card-2{
 }
 .btn:hover{
     color: white;
-}
+} */
 
 .card-1 h5{
     font-family: 'Roboto', sans-serif;

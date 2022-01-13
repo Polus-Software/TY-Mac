@@ -175,6 +175,7 @@
     </div>
   </div>
 <!-- signup modal ends -->
+@if(!$searchTerm)
 <header class="think-banner-allcourses ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
       <div class="row">
@@ -195,7 +196,8 @@
       </div>
     </div>
 </header>
-<section class="section-2 pt-5">
+@endif
+<section class="section-2 pt-5 {{ (!!$searchTerm) ? 'mt-5' : '' }}">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -406,7 +408,11 @@
       <div class="col-md-8">
         <div class="row border-bottom mb-4">
           <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-start p-4">
+            @if(!!$searchTerm)
+            <h3>Search results for "{{ $searchTerm }}"</h3>
+            @else
             <h3>Courses For You</h3>
+            @endif
           </div>
           <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end p-4">
             <select name="" id="" class="rounded">
@@ -419,8 +425,8 @@
       
           @foreach($courseDatas as $course)
           <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4">
-                    <div class="card-1">
-                      <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                    <div class="card-1">                                                  
+                      <img src="/storage/courseThumbnailImages/{{ ($course['course_thumbnail_image']) ?  $course['course_thumbnail_image'] : 'defaultImage.png'}}" class="card-img-top" alt="{{ $course['course_title'] }}">
                       <div class="card-body pb-0 fs-14">
                         <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
                         <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
