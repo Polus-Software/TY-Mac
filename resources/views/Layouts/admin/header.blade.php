@@ -16,7 +16,7 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{{ route('edituser') }}" title="View profile">
          
-           <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;">
+           <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;">
           
          <!-- <i class="fas fa-user-circle"></i> -->
          

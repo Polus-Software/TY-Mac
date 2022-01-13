@@ -438,7 +438,7 @@
                             (60)
                           </div>
                           <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-                            <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
+                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                           </div>
                         </div>
 
@@ -450,7 +450,7 @@
                               <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-auto item-3 px-0 d-flex">
-                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
+                                <p class="text-end"><img class="me-1" src="/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
                               </div>
                             </div>
                           </li>

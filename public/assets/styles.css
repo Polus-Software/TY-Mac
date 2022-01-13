@@ -107,7 +107,7 @@
     outline: 0;
     box-shadow: none;
     color: #2c3443 !important;
-    border: none;
+    /* border: none; */
 }
 /* Tertiary Button */
 .think-btn-tertiary {
@@ -246,5 +246,8 @@ a.navbar-brand {
 .far.fa-star.rateCourse,
 .fas.fa-star.rateCourse {
     color: var(--color-primary);
+}
+.think-w-14_5 {
+    width: 14.5px;
 }
 
