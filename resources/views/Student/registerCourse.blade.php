@@ -219,42 +219,42 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-lg-12">
-                <div class="card-1 mb-3 mt-5">
+                <div class="think-horizontal-card mb-3 mt-5">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                             <img src="{{asset('/storage/courseThumbnailImages/'.$courseDetails['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 card-image h-100" alt="coursepicture">
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                             <div class="card-body">
-                                <h5 class="card-title pb-3">
+                                <h5 class="card-title pb-3 mb-0">
                                     {{$courseDetails['course_title']}}
                                 </h5>
-                                <p class="card-text"> {{$courseDetails['description']}}</p>
+                                <p class="card-text think-text-color-grey"> {{$courseDetails['description']}}</p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i>
-                                            <i class="fas fa-star rateCourse"></i><small>(60 ratings) 100 participants</small>
+                                            <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6 think-text-color-grey">
                                             <p><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6">
-                                            <p><i class="far fa-user pe-1"></i>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
+                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>
                                                 {{$courseDetails['instructor_firstname']}} {{$courseDetails['instructor_lastname']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6 p-lg-0">
-                                            <p><i class="far fa-user pe-1"></i>        
+                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6 think-text-color-grey">
+                                            <p class="fw-bold"><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}} h</p>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
+                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>        
                                                 {{$courseDetails['course_difficulty']}}
                                             </p>
-                                        </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-3 col-6">
-                                            <p><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}} h</p>
                                         </div>
                                     </div> 
                                 </div>
@@ -280,8 +280,9 @@
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>
-                        <p class="card-text-1">Cohort starts - {{$singleCourseDetail['start_date']}}</p>
-                        <p class="card-text-1">{{$singleCourseDetail['title']}}</p>
+                        <p class="think-register-card-title think-tertiary-color">Cohort 1: Weekly Livestream</p>
+                        <p class="card-text-1 mb-1">Cohort starts - {{$singleCourseDetail['start_date']}}</p>
+                        <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}} MON - WED - FRI</p>
                         <p class="card-text">
                             {{$singleCourseDetail['start_time']}} {{$singleCourseDetail['time_zone']}} - {{$singleCourseDetail['end_time']}}
                             {{$singleCourseDetail['time_zone']}}
