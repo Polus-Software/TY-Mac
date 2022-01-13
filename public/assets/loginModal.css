@@ -31,10 +31,10 @@
     position: absolute;
 }
 
-.form-group input:focus{
+/* .form-group input:focus{
     border: 1px solid grey;
     box-shadow: none;
-}
+} */
 
 .firstname-label{
     font-family:'Roboto', sans-serif;
