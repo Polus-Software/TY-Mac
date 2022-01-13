@@ -361,8 +361,6 @@
                         <span class="fw-bold">share this course: </span>
                             <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
                             <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
-
-                            <!-- <a href="https://twitter.com/intent/tweet?url=https://enliltdev.fibiweb.com/show-course/{{$singleCourseDetail['id']}}" rel="me" title="Twitter" target="_blank"><i class="fab fa-twitter-square fa-lg btn-dark"></i></a> -->
                         </div>
                     @endforeach
                 </div>
@@ -674,12 +672,15 @@
            }
         });
     });
+
+
    let finalRating = 0;
    
    let stars = document.getElementsByClassName('rating-star');
    for(var index = 0; index < stars.length; index++){
        stars[index].addEventListener('click', function (event){
            let starRating = parseInt(this.getAttribute('star-rating'));
+
             for(var i = 0; i < starRating; i++) {
                 stars[i].classList.add("active-stars");
             }
@@ -697,6 +698,7 @@
         const modal = bootstrap.Modal.getInstance(truck_modal);    
         modal.hide();
     }
+
     document.querySelector('#loginForm').addEventListener('submit', function(e) {
         if(loginemail.value === '') {
             e.preventDefault();
@@ -711,10 +713,12 @@
             removeError(loginpassword);
         }
     });
+
 const loginform = document.getElementById('loginForm');
 const loginemail = document.getElementById('inputEmail');
 const loginpassword = document.getElementById('inputPassword');
    
+
 function showError(input,message){
   input.style.borderColor = 'red';
   const formControl=input.parentElement;
@@ -722,12 +726,14 @@ function showError(input,message){
   small.innerText=message;
   small.style.visibility = 'visible';
 }
+
 function removeError(input){
 input.style.borderColor = '#ced4da';
 const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
+
 </script>
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
 @endsection('content')

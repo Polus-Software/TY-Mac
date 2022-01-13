@@ -607,10 +607,10 @@ window.addEventListener("scroll", () => {
             studentCounter++;
             courseCounter+=10;
             if(courseCounter <= 1000) {
-              document.getElementById('course_count').innerHTML = courseCounter + "+";
+              document.getElementById('student_count').innerHTML = courseCounter + "+";
             }
             if(studentCounter <= 50) {
-              document.getElementById('student_count').innerHTML = studentCounter + "+";
+              document.getElementById('course_count').innerHTML = studentCounter + "+";
             }   
         }, 100)
     }
