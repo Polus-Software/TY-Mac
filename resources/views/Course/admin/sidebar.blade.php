@@ -25,7 +25,7 @@
         Sub topics</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('create-assignment') }}">
+      <a id="assignment-link" class="nav-link link-dark" href="{{ route('create-assignment') }}">
       <i class="fas fa-users"></i>
         Assignments</a>
     </li>
@@ -49,7 +49,6 @@
 
 <script>
   document.getElementById('publish').addEventListener('click', function(e) {
-    console.log('aa');
       let courseId = document.getElementById('course_id').value;
       if(courseId == null) {
         return false;
@@ -64,10 +63,16 @@
             },
            body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
-            if (data.status =='published'){
+          if (data.status =='published'){
               document.getElementById('publish').innerHTML = "Unpublish";
+              document.getElementById('publish-badge').innerHTML = "Published"
+              document.getElementById('publish-badge').classList.remove('bg-warning');
+              document.getElementById('publish-badge').classList.add('bg-success');
             } else {
               document.getElementById('publish').innerHTML = "Publish";
+              document.getElementById('publish-badge').innerHTML = "Draft"
+              document.getElementById('publish-badge').classList.remove('bg-success');
+              document.getElementById('publish-badge').classList.add('bg-warning');
             }
         });
       }

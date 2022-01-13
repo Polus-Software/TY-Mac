@@ -12,14 +12,18 @@
       <!-- main -->
       <main>
         @if(Route::current()->getName() == 'edit-course')
+        <input type="hidden" id="route_val" value="edit" />
         <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         <input type="hidden" id="course_id" name="course_id" value="{{ $course_id}}">
+        <input type="hidden" id="what_learn_points_count" name="what_learn_points_count" value="{{ count($whatLearn) }}">
+        <input type="hidden" id="who_learn_points_count" name="who_learn_points_count"  value="{{ count($whoThis) }}">
         @else
+        <input type="hidden" id="route_val" value="new" />
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
-        @endif
-        @csrf
         <input type="hidden" id="what_learn_points_count" name="what_learn_points_count">
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
+        @endif
+        @csrf
           <div class="py-4"><h3>Course Overview</h3>
           <hr class="my-4">
         </div>
@@ -110,10 +114,15 @@
               <span class="text-danger">{{ $errors->first('course_duration') }}</span>
             @endif
           </div>
+         
           <div class="col-12">
             <label for="what-learn">What you'll learn</label>            
-            @if(isset($course_details['whatlearn']))
-            <input type="text" class="form-control" id="what-learn" name="what_learn_1" value="{{ $course_details['whatlearn'] }}">
+            @if(isset($whatLearn))
+            @php ($whatCount = 0)
+            @foreach($whatLearn as $learn)
+            @php ($whatCount = $whatCount + 1)
+                <input type="text" class="form-control mt-2" id="what-learn" name="what_learn_{{ $whatCount }}" value="{{ $learn }}">
+            @endforeach
             @else
             <input type="text" class="form-control" id="what-learn" name="what_learn_1">
             @endif
@@ -126,20 +135,24 @@
           <div class="col-12">
             <label for="who-course">Who this course is for?</label><br>
             
-            <label for="who-course-description">Description</label>            
-            @if(isset($course_details['whothis']))
-            <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4" maxlength ="60">{{ $course_details['whothis'] }}</textarea>
+            <!-- <label for="who-course-description">Description</label>            
+            @if(isset($course_details['short_description']))
+            <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4">{{ $course_details['short_description'] }}</textarea>
             @else
-            <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4" maxlength ="60"></textarea>
+            <textarea class="form-control mb-3" id="who_learn_description" name="who_learn_description" rows="4"></textarea>
             @endif
 
             @if ($errors->has('who_learn_description'))
               <span class="text-danger mb-3">This field is required</span><br>
-            @endif
+            @endif -->
             
             <label for="who-course-points mt-2">Points</label>
-            @if(isset($course_details['whothis']))
-            <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1" value="{{ $course_details['whothis'] }}">
+            @if(isset($whoThis))
+            @php ($whoCount = 0)
+            @foreach($whoThis as $who)
+            @php ($whoCount = $whoCount + 1)
+            <input type="text" class="form-control mt-2" id="who_learn_points" name="who_learn_points_{{ $whoCount }}" value="{{ $who }}">
+            @endforeach
             @else
             <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1">
             @endif 
@@ -163,7 +176,9 @@
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
+             
               <input type="file" class="form-control mb-2" id="course-image" name="course_image">
+
               <label class="input-group-text col-12" for="course-image">Upload</label>
             </div>
             @if ($errors->has('course_image'))
@@ -210,14 +225,20 @@
 
 
 <script>
-  let coursePoint = 2;
-  let descPoint = 2;
+  let coursePoint = 1;
+  let descPoint = 1;
+  if(document.getElementById('route_val').value == "edit") {
+    coursePoint = document.getElementById('who_learn_points_count').value;
+    descPoint = document.getElementById('what_learn_points_count').value;
+    alert(descPoint);
+  }
+
   document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{
 
   var input = document.createElement("INPUT");
+  coursePoint++;
   input.setAttribute("name", "who_learn_points_" + coursePoint);
   document.getElementById('who_learn_points_count').value = coursePoint;
-  coursePoint++;
   document.getElementById("add-points").appendChild(input);
    
   });
@@ -225,13 +246,14 @@
   document.getElementById('add-more-what-learn').addEventListener('click', (event) =>{
 
   var inputElement = document.createElement("INPUT");
+  descPoint++;
   inputElement.setAttribute("name", "what_learn_" + descPoint);
   document.getElementById('what_learn_points_count').value = descPoint;
-  descPoint++;
   document.getElementById("add-more-points").appendChild(inputElement);
 
    
   });
+
 
 </script>
 @endsection('content')
