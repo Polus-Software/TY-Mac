@@ -354,9 +354,9 @@
                         <div class="card-2 mb-3 mt-4" data-id="{{ $singleEnrolledCourse['course_id'] }}">
                             <div class="row g-0">
                                 <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                                    <img src="{{ asset('/storage/courseImages/' . $singleEnrolledCourse['course_image']) }}"
+                                    <img src="{{ asset('/storage/courseImages/' . (($singleEnrolledCourse['course_image']) ? $singleEnrolledCourse['course_image'] : 'defaultImage.png')) }}"
                                         class="img-fluid coursepicture col-md-12 col-sm-12 col-12 h-100"
-                                        alt="coursepicture">
+                                        alt="{{ $singleEnrolledCourse['course_title'] }}">
                                 </div>
                                 <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                                     <div class="card-body">

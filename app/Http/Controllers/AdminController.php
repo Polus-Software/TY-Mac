@@ -295,7 +295,7 @@ class AdminController extends Controller
         $courseDetailsObj = collect($courseDetails);
         $courseDatas = $this->paginate($courseDetailsObj);
         $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => $searchTerm]);
 
     }
 }

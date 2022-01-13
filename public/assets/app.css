@@ -231,27 +231,6 @@ form i {
   filter: grayscale(120);
 }
 
-.campany-list {
-  display: flex;
-  flex-direction: row;
-  list-style-type: none;
-  position: relative;
-}
-
-.campany-list li {
-  margin-bottom: 0.5rem;
-  text-decoration: none;
-}
-
-.campany-list li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.campany-list li a:hover {
-  color: var(--color-primary);
-}
-
 .services,
 .our-courses {
   position: relative;

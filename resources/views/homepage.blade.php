@@ -232,7 +232,7 @@
                   @endif
                   <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                     <div class="card-1">
-                      <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                      <img src="/storage/courseThumbnailImages/{{ ($course['course_thumbnail_image']) ?  $course['course_thumbnail_image'] : 'defaultImage.png'}}" class="card-img-top" alt="{{ $course['course_title'] }}">
                       <div class="card-body pb-0 fs-14">
                         <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
                         <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>

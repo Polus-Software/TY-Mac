@@ -65,12 +65,12 @@ class CoursesCatalogController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'rating' => $course->course_rating,
-                'duration' => $duration
+                'duration' => $duration                
             );
             array_push($courseDetails, $courseData);
         }
         $courseDetailsObj = collect($courseDetails);
-        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors]);
+        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => '']);
         
     }
         
@@ -430,14 +430,16 @@ class CoursesCatalogController extends Controller
                 $minutes = ($minutesDecimal/100) * 6000;
     
                 $duration = $hours . 'h ' . $minutes . 'm';
-
-                $html = $html . '<div class="col-lg-6"><div class="card mb-4">';
-                $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="..."><div class="card-body">';
-                $html = $html . '<h5 class="card-title text-center">'. $course->course_title .'</h5>';
-                $html = $html . '<p class="card-text">';
-                $html = $html . \Illuminate\Support\Str::limit($course->description, $limit = 150, $end = '....');
-                $html = $html . '<a href="/show-course/' . $course->id . '" class="">Read More</a></p>';
-                $html = $html . '<div class="row"><div class="col-lg-6 col-sm-6 col-6">';
+                $html = $html . '<div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4"><div class="card-1">';
+                if(!$course->course_thumbnail_image) {
+                    $html = $html . '<img src="/storage/courseThumbnailImages/defaultImage.png" class="card-img-top" alt="'. $course->course_title .'"><div class="card-body pb-0 fs-14">';
+                } else {
+                    $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="'. $course->course_title .'"><div class="card-body pb-0 fs-14">';
+                }
+                
+                $html = $html . '<h5 class="card-title text-center text-truncate fs-16 fw-bold">'. $course->course_title .'</h5>';
+                $html = $html . '<p class="card-text text-sm-start text-truncate">'. $course->description .'</p>';
+                $html = $html . '<div class="row mb-3"><div class="col-lg-6 col-sm-6 col-6">';
                 for($i=1;$i<=5;$i++) {
                     if($i <= $course->course_rating) {
                         $html = $html . '<i class="fas fa-star rateCourse"></i>';
@@ -447,15 +449,15 @@ class CoursesCatalogController extends Controller
                 } 
 
                 $html = $html . '(60)</div>';  
-                $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
-                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>'. $courseCategory .'</div></div></div>';   //$courseCategory 
+                $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">';  
+                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>'. $courseCategory .'</div></div>';
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
-                $html = $html . '<div class="col-lg-4 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
-                $html = $html . '<div class="col-lg-4 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</div>'; //$instructorName
-                $html = $html . '<div class="col-lg-4 col-4 item-3">'. $course->course_difficulty .'</div></div></li></ul>';
-                $html = $html . '<div class="card-body"><div class="row"><div class="btn-group border-top" role="group" aria-label="Basic example">'; 
-                $html = $html . '<a href="" class="card-link btn border-end">Register now</a>'; 
-                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a></div></div></div></div></div>';        
+                $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
+                $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
+                $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><i class="far fa-user pe-1"></i>'. $course->course_difficulty .'</p></div></div></li></ul>';
+                $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
+                $html = $html . "<a href='{{ route('student.course.show', ' . $course->id . ')}}' class='card-link btn d-inline-block w-100 px-0'>Join now</a>"; 
+                $html = $html . '</div></div></div></div></div>';        
             }
         } else {
             $html = '<h5 class="no_courses">No courses to display</h5>';
