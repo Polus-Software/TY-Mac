@@ -111,7 +111,7 @@ class CoursesCatalogController extends Controller
         $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
 
         $topics = Topic::where('course_id', $id)->get();
- 
+        
          foreach($topics as $topic){
  
              $courseId =  $topic->course_id;
@@ -127,7 +127,7 @@ class CoursesCatalogController extends Controller
              ));
          }
 
-
+         
         $user = Auth::user();
         $userType = "";
         if($user){
@@ -148,7 +148,6 @@ class CoursesCatalogController extends Controller
             $studentFirstname = User::where('id', $generalCourseFeedback->user_id )->value('firstname');
             $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');
             $studentProfilePhoto = User::where('id', $generalCourseFeedback->user_id)->value('image');
-
         array_push($singleCourseFeedbacks, array(
             'user_id' => $generalCourseFeedback->user_id,
             'rating' => $generalCourseFeedback->rating,
@@ -159,6 +158,7 @@ class CoursesCatalogController extends Controller
             'studentProfilePhoto' => $studentProfilePhoto,
             ));   
         }
+        
 
         $singleCourseData =  array (
             'id' => $course->id,
@@ -181,7 +181,7 @@ class CoursesCatalogController extends Controller
 
         );
         array_push($singleCourseDetails, $singleCourseData);
-      
+        
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,

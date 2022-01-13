@@ -58,7 +58,7 @@ class EnrolledCourseController extends Controller
         $topics = Topic::where('course_id', $courseId)->get();
         $totalTopics = count($topics);
         foreach($attendanceRecs as $attendanceRec) {
-            $liveSessionId = $attendance->value('live_session_id');
+            $liveSessionId = $attendanceRec->value('live_session_id');
 
             $sessionCourse = LiveSession::where('live_session_id', $liveSessionId);
 
@@ -474,7 +474,7 @@ class EnrolledCourseController extends Controller
         $qa = new CourseQA;
         $qa->course_id = $course_id;
         $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
-        
+        dd($instructor);
         $user =Auth::user();
         if($user) {
             $student = User::where('id', $user->id)->value('id');
