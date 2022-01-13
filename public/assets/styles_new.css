@@ -1,0 +1,105 @@
+
+/* all courses */
+.think-banner-allcourses li{
+    list-style-type: none;
+    text-align: left;
+   font-weight: 400;
+    color: var(--color-grey);
+    font-size: 20px;
+  }
+  
+  .think-banner-allcourses i:before {
+    padding-right: 15px;
+  }
+  
+  .think-banner-allcourses i{
+    color: var(--color-grey);
+  }
+  .think-banner-allcourses p{
+    font-weight:bold ;
+    letter-spacing: 1.6px;
+    font-size:20px;
+    color: var(--color-tertiary);
+  }
+  .think-banner-allcourses h1{
+    font-weight:bold ;
+    color: var(--color-secondary);
+  }
+  .think-filters-sidebar h6 {
+    font-weight: 700;
+  }
+  
+  .think-course-small .card-1 {
+    max-width: 396px;
+    box-shadow: 0 1px 8px #d4d4d4;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  /* footer section */
+  .footer-sm a {
+    color: #fff;
+  }
+  
+  .footer-sm a i {
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+  
+  @media (min-width: 576px) {
+    .footer-sm a i {
+      font-size: 1.6rem;
+    }
+  }
+  
+  .footer-sm a:hover {
+    color: var(--color-primary);
+  }
+  .footer {
+    padding-top: 1rem;
+    background-color: #2C3443;
+  }
+  
+  .footer-bottom {
+    background-color: var(--color-black);
+  }
+  
+  .footer-bottom__copyright {
+    color: #6c757d;
+    font-weight: 400;
+  }
+  
+  .footer-bottom__copyright a {
+    color: #dee2e6;
+    text-decoration: none;
+  }
+  
+  .footer-bottom__copyright a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+  .footer .campany-list {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    position: relative;
+  }
+  
+  .footer .campany-list li {
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+  }
+  
+  .footer .campany-list li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .footer .campany-list li a:hover {
+    color: var(--color-primary);
+  }
+
+.think-nodata-box {
+    background-color: #FFFDF7;
+    border: 1px solid #F2F2F2;
+}
+  
