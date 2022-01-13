@@ -476,6 +476,7 @@
   </div>
 </section>
 
+
 @endsection('content')
 
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>

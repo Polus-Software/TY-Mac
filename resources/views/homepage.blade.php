@@ -580,7 +580,7 @@
                 <span>
                   <p>Already have an account?
                 </span>
-                <span class="login"><a href="" id="loginLink">&nbsp;Login</a></p></span>
+                <span class="login"><a href="" id="login_link">&nbsp;Login</a></p></span>
               </div>
             </form>
           </div>
@@ -607,10 +607,10 @@ window.addEventListener("scroll", () => {
             studentCounter++;
             courseCounter+=10;
             if(courseCounter <= 1000) {
-              document.getElementById('course_count').innerHTML = courseCounter + "+";
+              document.getElementById('student_count').innerHTML = courseCounter + "+";
             }
             if(studentCounter <= 50) {
-              document.getElementById('student_count').innerHTML = studentCounter + "+";
+              document.getElementById('course_count').innerHTML = studentCounter + "+";
             }   
         }, 100)
     }
@@ -730,7 +730,7 @@ window.addEventListener("scroll", () => {
       document.getElementById('signup_navlink').click();
     });
 
-    document.getElementById('loginLink').addEventListener('click', function(e) {
+    document.getElementById('login_link').addEventListener('click', function(e) {
       e.preventDefault();
       closeModal('signupModal');
       document.getElementById('login_navlink').click();

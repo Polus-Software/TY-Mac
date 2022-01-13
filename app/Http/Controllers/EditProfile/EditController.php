@@ -34,8 +34,11 @@ class EditController extends Controller
         $user->lastname = $request['lastname'];
         $user->email = $request['email'];
         $user->save();
-        return redirect('dashboard')->with('message','Profile Updated');
-        
+        if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3){
+            return redirect('/')->with('message','Profile Updated');
+        }else{
+            return redirect('/dashboard')->with('message','Profile Updated');
+        }
     }
 
     public function showChangePasswordForm(){ 
@@ -64,7 +67,7 @@ class EditController extends Controller
         auth()->user()->tokens()->delete();
         Session::flush();
         Auth::logout();
-        return redirect('login')->withSuccess('Your password has been changed!');
+        return redirect('/')->withSuccess('Your password has been changed!');
 
     }
 

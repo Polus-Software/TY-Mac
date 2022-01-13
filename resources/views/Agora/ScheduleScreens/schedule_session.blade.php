@@ -85,6 +85,151 @@
 <!-- container ends -->
 
 
+<!-- New course modal -->
+<div id="new_course_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add a new course</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          @csrf
+          <div class="mb-3">
+            <label for="course_category" class="col-form-label">Course Category</label>
+            <select class="form-control" id="course_category">
+             
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="course_title" class="col-form-label">Course Title</label>
+            <input type="text" class="form-control" id="course_title">
+          </div>
+          <div class="mb-3">
+            <label for="course_description" class="col-form-label">Course Description</label>
+            <textarea class="form-control" id="course_description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="course_instructor" class="col-form-label">Course Instructor</label>
+            <select class="form-control" id="course_instructor">
+              @foreach ($instructors as $instructor)
+              <option value="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option>
+              @endforeach
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="save_course" class="btn btn-primary">Add course</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- New course modal ends here -->
+<!-- View course modal -->
+<div id="view_course_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Course details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <tr>
+            <td><strong>Course Name:</strong></td>
+            <td class="text-right"><label id="view_course_name"></label></td>
+          </tr>
+          <tr>
+            <td><strong>Category:</strong></td>
+            <td class="text-right"><label id="view_course_category"></label></td>
+          </tr>
+          <tr>
+            <td><strong>Description:</strong></td>
+            <td class="text-right"><label id="view_course_description"></label></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- View course modal ends here -->
+<!--  Edit course modal -->
+<div id="edit_course_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit course details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          @csrf
+          <div class="mb-3">
+            <label for="edit_course_title" class="col-form-label">Course Title</label>
+            <input type="text" class="form-control" id="edit_course_title"></input>
+          </div>
+          <div class="mb-3">
+            <label for="edit_course_category" class="col-form-label">Category</label>
+            <select type="text" class="form-control" id="edit_course_category">
+            
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="edit_course_description" class="col-form-label">Course Description</label>
+            <textarea type="email" class="form-control" id="edit_course_description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="edit_course_instructor" class="col-form-label">Course Instructor</label>
+            <select class="form-control" id="edit_course_instructor">
+              @foreach ($instructors as $instructor)
+              <option value="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option>
+              @endforeach
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="update_course_btn" class="btn btn-primary">Update details</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit course modal ends here -->
+<!-- Delete course modal -->
+<div id="delete_course_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete course</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          
+          <tr>
+          </tr>
+          <tr>
+            <td class="text-center"><p>
+            <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
+            Do you really want to delete this course?</p></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirm_course_delete" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete course modal ends here -->
 
 <script>
   document.getElementById('save_course').addEventListener('click', (event) => {

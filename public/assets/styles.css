@@ -12,6 +12,7 @@
     --color-grey: #6e7687;
     --color-primary-light: #fffdf7;
 }
+
 /* overriding boostrap btn class */
 .btn {
     border-radius: 0.31rem;
@@ -235,16 +236,15 @@ a.navbar-brand {
     opacity: 0.5;
     transition: opacity 0.15s ease;
 }
-
+.bg-dark {
+    background-color: var(--color-primary) !important;
+}
 .card-body {
     padding: 1rem 1.25rem;
 }
 /*  */
 .far.fa-star.rateCourse,
 .fas.fa-star.rateCourse {
-    color: var(--color-primary) !important;
-}
-.think-tertiary-color {
-   color: var(--color-tertiary) !important; 
+    color: var(--color-primary);
 }
 
