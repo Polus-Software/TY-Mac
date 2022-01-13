@@ -396,8 +396,8 @@
     <section class="mt-3">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="card card-2 mb-3">
+                <div class="col-lg-8 d-flex flex-column">
+                    <div class="card card-2 mb-3 flex-grow-1">
                         <div class="card-body">
                             <h5 class="card-title border-bottom pb-3 pt-2">Course Content</h5>
                             @php ($slno = 0)

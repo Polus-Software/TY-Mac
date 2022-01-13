@@ -79,17 +79,26 @@
     padding-left: 25px;
     padding-right: 25px;
     background: var(--color-secondary);
-    font-size: 1rem;
+    font-size: 1rem !important;
+    border: none;
 }
 
 .think-btn-secondary:focus,
-.think-btn-secondary:hover,
-.think-btn-secondary:active,
-.think-btn-secondary:focus-visible {
+.think-btn-secondary:hover {
     outline: 0;
     box-shadow: none;
     background: var(--color-secondary);
-    border: none;
+    color: var(--color-white);
+}
+
+.think-btn-secondary:active,
+.think-btn-secondary:focus-visible {
+    border: none !important;
+    color: var(--color-white) !important;
+    background: var(--color-secondary);
+}
+.think-btn-secondary:active:focus {
+    box-shadow: none;
 }
 .think-btn-secondary-outline {
     text-decoration: none !important;
@@ -102,8 +111,8 @@
 }
 .think-btn-secondary-outline:focus,
 .think-btn-secondary-outline:hover,
-.think-btn-secondary:active,
-.think-btn-secondary:focus-visible {
+.think-btn-secondary-outline:active,
+.think-btn-secondary-outline:focus-visible {
     outline: 0;
     box-shadow: none;
     color: #2c3443 !important;
@@ -148,9 +157,9 @@
     align-items: center;
 }
 .think-horizontal-card {
-	border-radius: 20px;
-	box-shadow: 0px 1px 8px #00000029;
-	background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0px 1px 8px #00000029;
+    background: #ffffff;
 }
 /*  */
 .hr-line {
@@ -237,7 +246,7 @@ a.navbar-brand {
     transition: opacity 0.15s ease;
 }
 .bg-dark {
-    background-color: var(--color-primary) !important;
+    background-color: var(--color-black) !important;
 }
 .card-body {
     padding: 1rem 1.25rem;
@@ -250,4 +259,3 @@ a.navbar-brand {
 .think-w-14_5 {
     width: 14.5px;
 }
-

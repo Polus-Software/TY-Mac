@@ -239,7 +239,7 @@
                                             <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
                                         </div>
                                         <div class="col-sm-auto col-6 think-text-color-grey">
-                                            <p><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
+                                            <p><img class="me-1" src="/icons/category__icon.svg" alt="error">
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
@@ -249,7 +249,7 @@
                                             </p>
                                         </div>
                                         <div class="col-sm-auto col-6 think-text-color-grey">
-                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>        
+                                            <p class="fw-bold"><img class="me-1" src="/icons/level__icon.svg" alt="error">       
                                                 {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>
@@ -268,7 +268,7 @@
     </div>
 </header>
 <section>
-<div class="container">
+<div class="container mb-5">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="border-bottom pb-3">Choose Your Cohort</h1>
@@ -297,7 +297,7 @@
     <div class="row mt-4 mb-4">
         <div class="form-group buttons d-flex justify-content-end">
             @csrf
-            <button type="submit" id="registerNowButton" class="btn">Register Now</button>
+            <button type="submit" id="registerNowButton" class="btn btn-secondary think-btn-secondary">Register Now</button>
             <input type="hidden" id="course_id" value="{{$courseDetails['course_id']}}">
         </div>
     </div>
