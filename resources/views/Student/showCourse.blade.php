@@ -245,44 +245,44 @@
 <!-- signup modal ends -->
 <!-- contact modal -->
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+    <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="contactModalLabel">Contact us</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="contactModalLabel">Have a question?</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>       
+            <div class="think-text-secondary-color">If do you have queries to ask us? Then ask here!</div>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
             <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
               @csrf
-              <div class="form-group mx-sm-5 mx-0">
+              <div class="form-group mx-0">
                 <label for="name" class="name-label">Name</label>
                 <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
+              <div class="form-group mx-0">
                 <label for="email" class="email-label">Email</label>
                 <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
+              <div class="form-group mx-0">
                 <label for="phone" class="phone-label">Phone</label>
                 <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
+              <div class="form-group mx-0">
                 <label for="message" class="message-label">Message</label>
                 <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
-              <div class="d-grid form-group  mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              <div class="form-group mx-0">
+                <button type="submit" class="btn btn-secondary think-btn-secondary sendContactInfo w-100"><span class="button">Submit</span></button>
               </div>
 
             </form>
           </div>
         </div>
-        <div class="modal-footer border-0"></div>
       </div>
     </div>
   </div>
