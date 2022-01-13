@@ -18,6 +18,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\CourseCategory;
+use App\Models\CohortBatch;
+use App\Models\LiveSession;
+use App\Models\AttendanceTracker;
 
 
 class AdminController extends Controller
@@ -298,4 +301,92 @@ class AdminController extends Controller
         return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => $searchTerm]);
 
     }
+    
+    public function attendanceTrackerView(Request $request) {
+
+        $courses = Course::all();
+        $user = Auth::user();
+        if($user) {
+            $userType =  UserType::find($user->role_id)->user_role;
+            return view('Auth.Admin.attendance_tracker_view', ['userType' => $userType, 'courses' => $courses]);
+        }   
+    }
+
+    public function getAttendanceData(Request $request) {
+        $user = Auth::user();
+        if($user) {
+            $userType =  UserType::find($user->role_id)->user_role;
+            return view('Auth.Admin.attendance_tracker_view', ['userType' => $userType]);
+        }   
+    }
+
+    public function getAttendanceBatches(Request $request) {
+        $courseId = $request->courseId;
+
+        $batches = CohortBatch::where('course_id', $courseId)->get();
+
+        return response()->json(['status' => 'success', 'msg' => 'Batches retrieved', 'batches' => $batches]);
+    }
+
+    public function getAttendanceSessions(Request $request) {
+        $batchId = $request->batchId;
+
+        $sessions = LiveSession::where('batch_id', $batchId)->get();
+
+        return response()->json(['status' => 'success', 'msg' => 'Batches retrieved', 'sessions' => $sessions]);
+
+    }
+
+    public function getAttendanceTable(Request $request) {
+        $sessionId = $request->sessionId;
+
+        $tracker = AttendanceTracker::where('live_session_id', $sessionId)->get();
+        $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
+
+        $session = LiveSession::where('live_session_id', $sessionId);
+
+        $batch = CohortBatch::where('id', $session->value('batch_id'));
+
+        $startTime = $batch->value('start_time');
+        $endTime = $batch->value('end_time');
+        
+        $firstTime=strtotime($startTime);
+        $lastTime=strtotime($endTime);
+        $timeDiff=$lastTime-$firstTime;
+        $totalSeconds = $timeDiff;
+        
+        $slNo = 0;
+        $html = "";
+
+        foreach($tracker as $data) {
+            $attendanceTimer = $data->attendance_time;
+            $percent = ($attendanceTimer * 100) / $totalSeconds; 
+
+            $hours = floor($attendanceTimer / 3600);
+            $minutes = floor(($attendanceTimer / 60) % 60);
+            $seconds = $attendanceTimer % 60;
+            $slNo = $slNo + 1;
+            $student = User::where('id', $data->student);
+            $studentFName = $student->value('firstname');
+            $studentLName = $student->value('lastname');
+            $html = $html . '<tr id=' . $data->id . '>';
+            $html = $html . '<td class="align-middle text-center">' . $slNo . '</td>';
+            $html = $html . '<td class="align-middle text-center">';
+            $html = $html . '<img src="/storage/images/' . $student->value('image') . '" class="rounded-circle" alt="" style="width:40px; height:40px;"></td>';    
+            $html = $html .  '<td class="align-middle">'. $studentFName .'</td>';
+            $html = $html .  '<td class="align-middle">' . $studentLName . '</td>';
+            $status = $data->attendance_Status == 1 ?  '<span class="badge rounded-pill bg-success text-dark" style="color:white !important;">Present</span>' : '<span class="badge rounded-pill bg-danger text-dark" style="color:white !important;">Absent</span>';
+            
+            $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
+            $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';
+            $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>'; 
+                // <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
+                // <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
+                
+              
+        }
+        
+        return response()->json(['status' => 'success', 'msg' => 'Batches retrieved', 'html' => $html]);
+    }
+    
 }
