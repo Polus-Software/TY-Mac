@@ -4,13 +4,12 @@ function viewPassword()
   var password = document.getElementById('password');
   var passStatus = document.getElementById('togglePassword');
   var passwordStatus = document.getElementById('togglePass');
- 
+
   if (passwordInput.type == 'password' || password.type == 'password'){
     passwordInput.type='text';
     password.type = 'text';
     passStatus.className='fas fa-eye';
     passwordStatus.className='fas fa-eye';
-    
   }
   else{
     passwordInput.type='password';
@@ -37,7 +36,17 @@ function showPassword()
 
 }
 
+function displayPassword(){
+  var newPassword = document.getElementById("newPassword");
+  var newPassStatus = document.getElementById('newPasswordStatus');
 
-
+  if (newPassword.type == 'password'){
+      newPassword.type = 'text';
+      newPassStatus.className = 'fas fa-eye';
+}else{
+   newPassword.type = 'password';
+    newPassStatus.className = 'fas fa-eye-slash';
+}
+}
 
 

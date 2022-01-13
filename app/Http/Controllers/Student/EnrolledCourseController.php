@@ -236,7 +236,7 @@ class EnrolledCourseController extends Controller
             $question = $qa->question;
             $reply = $qa->reply;
             $hasReplied = $qa->has_replied;
-            $date = $qa->created_at->format('d M H:m');
+            $date = $qa->created_at;
             array_push($qaArray, array(
                 'id' => $qa->id,
                 'student' => $studentName,
@@ -244,7 +244,7 @@ class EnrolledCourseController extends Controller
                 'question' => $question,
                 'reply' => $reply,
                 'hasReplied' => $hasReplied,
-                'date' => $date
+                'date' => Carbon::parse($date)->diffForHumans(),
             ));
         }
         if($userType === 'student') {

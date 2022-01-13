@@ -191,6 +191,7 @@
         document.getElementById('courses_category_tbody').innerHTML = '';
         document.getElementById('courses_category_tbody').innerHTML = data.html;
         closeModal('new_category_modal');
+        window.location.reload();
       }
     });
   });

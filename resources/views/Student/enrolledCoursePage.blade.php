@@ -310,7 +310,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                        <p class="para-1"><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
+                                        <p class="para-1"><img class="me-1" src="/icons/category__icon.svg" alt="error">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_category'] }}
                                             @endforeach
@@ -1025,11 +1025,11 @@
                         </h4>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
                             </div>
                         </div>
                     </div>

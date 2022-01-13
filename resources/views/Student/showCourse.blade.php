@@ -40,18 +40,15 @@
       <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li> -->
         @if (Auth::check())
         @if(Auth::user()->role_id == 3)
 
@@ -399,8 +396,8 @@
     <section class="mt-3">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="card card-2 mb-3">
+                <div class="col-lg-8 d-flex flex-column">
+                    <div class="card card-2 mb-3 flex-grow-1">
                         <div class="card-body">
                             <h5 class="card-title border-bottom pb-3 pt-2">Course Content</h5>
                             @php ($slno = 0)
@@ -453,8 +450,6 @@
                           @foreach($singleCourseDetails as $singleCourseDetail)
                           {{$singleCourseDetail['designation']}} at {{$singleCourseDetail['institute']}}</p>
                           @endforeach
-                          
-                             
                         </div>
                         </div>
                     </div>
@@ -583,11 +578,11 @@
                         </h4>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
                             </div>
                         </div>
                     </div>
