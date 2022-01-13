@@ -1,6 +1,8 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+<input id="course_id" type="hidden" value="{{ $course_id }}" />
+@csrf
 <!-- container -->
 <div class="container llp-container">
   <div class="row">

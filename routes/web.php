@@ -60,7 +60,7 @@ Route::get('/', function () {
     Route::post('/update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
     Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');
     Route::get('/create-cohortbatch', [CourseController::class, 'createCohortBatch'])->name('create-cohortbatch');
-    Route::post('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
+    Route::get('/save-cohortbatch', [CourseController::class, 'saveCohortBatch'])->name('save-cohortbatch');
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
     Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
@@ -126,7 +126,7 @@ Route::get('/', function () {
     Route::post('save-batch', [CourseController::class, 'saveBatch'])->name('save-batch');
 
     Route::get('view-subtopics', [CourseController::class, 'viewSubTopics'])->name('view-subtopics');
-    Route::get('edit-subtopics', [CourseController::class, 'editSubTopics'])->name('edit-subtopics');
+    Route::get('edit-subtopics/{topic}', [CourseController::class, 'editSubTopics'])->name('edit-subtopics');
     Route::get('view_cohortbatches', [CourseController::class, 'viewCohortbatches'])->name('view_cohortbatches');
     Route::post('update_cohortbatches', [CourseController::class, 'updateCohortbatches'])->name('update_cohortbatches');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');

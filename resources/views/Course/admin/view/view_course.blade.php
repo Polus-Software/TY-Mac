@@ -2,6 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
+<input type="hidden" id="course_id" value="{{ $course_id }}" />
 <div class="container llp-container">
   <div class="row">
   <div class="col-2 position-fixed">

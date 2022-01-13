@@ -26,7 +26,7 @@
         </ul>
       </div>
         
-        <form action="{{ route('save-cohortbatch') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+        <form action="{{ route('save-cohortbatch') }}" enctype="multipart/form-data" method="GET" class="row g-3 llp-form">
         @csrf
         <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
 
