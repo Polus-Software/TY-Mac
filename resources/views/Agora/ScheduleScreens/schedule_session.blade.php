@@ -309,9 +309,7 @@
       </div>
       <div class="modal-body">
         <table class="table table-borderless">
-          <!-- <tr>
-            <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
-          </tr> -->
+          
           <tr>
           </tr>
           <tr>

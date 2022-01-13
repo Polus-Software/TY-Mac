@@ -44,14 +44,11 @@
         </li>
         @endif
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li> -->
         @if (Auth::check())
         @if(Auth::user()->role_id == 3)
 
@@ -454,8 +451,6 @@
                           @foreach($singleCourseDetails as $singleCourseDetail)
                           {{$singleCourseDetail['designation']}} at {{$singleCourseDetail['institute']}}</p>
                           @endforeach
-                          
-                             
                         </div>
                         </div>
                     </div>

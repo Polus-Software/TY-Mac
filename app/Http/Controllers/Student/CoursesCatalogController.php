@@ -179,7 +179,7 @@ class CoursesCatalogController extends Controller
 
         );
         array_push($singleCourseDetails, $singleCourseData);
-      
+  
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,

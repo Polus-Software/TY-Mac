@@ -145,7 +145,6 @@
       document.querySelector('.student_firstname').innerHTML = data.studentDetails['firstname'];
       document.querySelector('.student_lastname').innerHTML = data.studentDetails['lastname'];
       document.querySelector('.student_email').innerHTML = data.studentDetails['email'];
-      //closeModal('view_student_modal');
     });
   });
 

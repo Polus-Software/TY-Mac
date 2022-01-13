@@ -352,11 +352,10 @@
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>
                                                     Next Live Class: - <small>{{$next_live_cohort}}</small>
-                                                   
                                                 </p>
                                                
                                             </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
                                                 Add review
                                                 </a>
@@ -497,7 +496,7 @@
                             <div class="row mt-3 mb-3">
                                 <div class="col-lg-6 mb-3">
                                     <div class="card card-3" style="height: 550px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -532,7 +531,7 @@
 
                                  <div class="col-lg-6">
                                     <div class="card card-3" style="height: 550px;">
-                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -587,7 +586,7 @@
                                       
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -647,7 +646,7 @@
                                             </div>
 
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -674,7 +673,7 @@
                                             </div>
                                             <div class="row ps-5">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
-                                                    <img src="courselist/Avatar Instructor.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                    <img src="/courselist/Avatar Instructor.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -739,8 +738,6 @@
                                                 <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" 
                                                 alt="..." style="width:94px; height:94px;">
                                                 @endforeach
-                                               
-                                                
                                             </div>
                                             <div class="col-lg-8 col-sm-8 col-8">
                                             <div class="card-body">
@@ -849,41 +846,42 @@
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
                                                                                         {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
                                                                                         @endforeach</p>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                                <p class="card-text-1">Has successfully completed the  <br>
-                                                                                    online cohort on (course completion date)</p>
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <p class="card-text-1">Has successfully completed the  <br>
+                                                                                        online cohort on (course completion date)</p>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                            @foreach($singleCourseDetails as $course)
-                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
-                                                                            @endforeach
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                @foreach($singleCourseDetails as $course)
+                                                                                <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
+                                                                                @endforeach
+                                                                                </div>
+                                                                                <div class="col-lg-12">
+                                                                                    <p class="card-text-1">@foreach($singleCourseDetails as $course)
+                                                                                        {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
+                                                                                            @endforeach
+                                                                                    </p>
+                                                                                    <p class="card-text-1">&<br> Team ThinkLit</p>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="col-lg-12">
-                                                                                <p class="card-text-1">@foreach($singleCourseDetails as $course)
-                                                                                    {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
-                                                                                        @endforeach
-                                                                                </p>
-                                                                                <p class="card-text-1">&<br> Team ThinkLit</p>
-                                                                            </div>
-                                                                        </div>
                                                                         </div>
                                                                         
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                @foreach($singleCourseDetails as $course)
-                                                                        <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
-                                                                @endforeach
-                                                            </div>
+                                                                    @foreach($singleCourseDetails as $course)
+                                                                            <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
+                                                                    @endforeach
+                                                                </div>
+                                                           </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                            </div>
                                         </div>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
