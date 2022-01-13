@@ -1,24 +1,3 @@
-//side nav links
-var nav = document.getElementById("navmenu");
-var navlink = document.getElementsByClassName("nav-link");
-
-
-for (var j = 0; j < navlink.length; j++) {
-  navlink[j].addEventListener("click", function() {
-  
-  var current = document.getElementsByClassName("active")[0];
-  const previousIcon = current.getElementsByTagName('i')[0];
-
-  previousIcon.className = previousIcon.className.replace("active", "");
-  current.className = current.className.replace(" active", "");
-  this.classList.add("active");
-  
-  const icon = this.getElementsByTagName('i')[0];
-
-  icon.classList.add("active");
-
-  });
-}
 
 //eye icon
 function viewCurrentPass()
@@ -30,7 +9,6 @@ function viewCurrentPass()
   if (currentPassword.type == 'password'){
     currentPassword.type='text';
     passStatus.className='fas fa-eye';
-    
   }
   else{
     currentPassword.type='password';
@@ -47,7 +25,6 @@ function viewNewPass()
     if (newPassword.type == 'password'){
         newPassword.type='text';
         passStatus.className='fas fa-eye';
-        
       }
       else{
         newPassword.type='password';
@@ -74,8 +51,6 @@ function viewConfirmpass(){
 
 //validation
 document.querySelector('#changePasswordForm').addEventListener('submit', (e) => {
-  
-  
     if(currentPass.value === '') {
         e.preventDefault();
         showError(currentPass,' Current Password is required');
@@ -106,10 +81,7 @@ document.querySelector('#changePasswordForm').addEventListener('submit', (e) => 
     } else if (newPass.value == confirmPass.value && newPass.value != '') {
       removeError(password)
     }
-    
-
-
-
+  
     });
   
     const changePass = document.getElementById('changePasswordForm');

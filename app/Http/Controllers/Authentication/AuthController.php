@@ -65,7 +65,7 @@ class AuthController extends Controller
         return redirect('/')->withSuccess('Successfully registered!');
 
         } catch (Exception $exception) {
-            return redirect('login')->withSuccess('Successfully registered!');
+            return redirect('/')->withSuccess('Successfully registered!');
         }
         
         
@@ -97,11 +97,11 @@ class AuthController extends Controller
            Auth::login($user, $remember_me);
            if($userType == 'student' or $userType == 'instructor'){
             return redirect('/');
-        }else{
-            return redirect('dashboard');
-           }
-           return back()->with('Error','Credentials are wrong.');
-        }
+            }else{
+                return redirect('dashboard');
+            }
+        }else
+        return back()->with('Error','Credentials are wrong.');
     }
     
     
@@ -117,7 +117,7 @@ class AuthController extends Controller
         if(Auth::check()) {
             $userType =  UserType::find($user->role_id)->user_role;
 
-            $instructor_count = DB::table('users')->where('role_id', '=', 3)->count();
+            $instructor_count = DB::table('users')->where('role_id', '=', 3)-> where('deleted_at' , '=', NULL)->count();
             $registered_course_count = DB::table('courses')->count();
             $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
 

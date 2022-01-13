@@ -26,7 +26,6 @@
     font-weight:bold ;
     font-family: 'Roboto', sans-serif;
 }
-
 .question-btn {
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
@@ -38,7 +37,6 @@
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
-
 .question-btn:hover {
     border: 1px solid #FFFFFF;
     color: #2C3443;
@@ -159,4 +157,3 @@
       border: hidden ;
   }
 }
-  

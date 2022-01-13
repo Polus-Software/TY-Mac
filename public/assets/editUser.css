@@ -1,4 +1,6 @@
-body{background: grey;}
+body{
+    background: #F1F2F6;
+}
 .custom-container{
    margin-top: 100px;
     left: 218px;
@@ -181,7 +183,6 @@ form i {
     cursor: pointer;
 }
 
-
 @media only screen and (max-width:768px) {
     .sidebar {
         width:auto;
@@ -197,3 +198,4 @@ form i {
 .dashboard-navbar a:hover {
     color:grey;
 }
+

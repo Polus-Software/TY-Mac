@@ -21,28 +21,28 @@
 // }
 
 
-//validation for edit form
+// validation for edit form
 document.querySelector('#editUserForm').addEventListener('submit', (e) => {
   
-  
-  if(firstname.value === '') {
+ 
+  if(firstname.value === '' || firstname.value == null) {
     e.preventDefault();
-      showError(firstname,'First name is required');
+    displayError(firstname,'First name is required');
   }else {
     removeError(firstname)
   }
   if(lastname.value === '') {
     e.preventDefault();
-    showError(lastname,'Last name is required');
+    displayError(lastname,'Last name is required');
   }else {
   removeError(lastname)
   }
   if(email.value === '') {
     e.preventDefault();
-    showError(email,'Email is required');
+    displayError(email,'Email is required');
   }else if(!isValidEmail(email.value)){
     e.preventDefault();
-    showError(email,'Email is not valid');
+    displayError(email,'Email is not valid');
   } else {
   removeError(email)
   }
@@ -53,13 +53,22 @@ document.querySelector('#editUserForm').addEventListener('submit', (e) => {
   const lastname = document.getElementById('lastname');
   const email = document.getElementById('email');
 
-  function showError(input,message){
-    input.style.borderColor = 'red';
-    const formControl=input.parentElement;
+  // function showError(input,message){
+  //   input.style.borderColor = 'red';
+  //   const formControl=input.parentElement;
+  //   const small=formControl.querySelector('small');
+  //   small.innerText=message;
+  //   small.style.visibility = 'visible';
+  // }
+
+  function displayError(inputs,message){
+    inputs.style.borderColor = 'red';
+    const formControl=inputs.parentElement;
     const small=formControl.querySelector('small');
     small.innerText=message;
     small.style.visibility = 'visible';
-}
+    console.log("poda patty");
+  }
 
 function removeError(input){
   input.style.borderColor = '#ced4da';
@@ -67,6 +76,14 @@ function removeError(input){
   const small=formControl.querySelector('small');
   small.style.visibility = 'hidden';
 }
+
+
+
+
+
+
+
+
 
 function isValidEmail(email)
 {

@@ -70,7 +70,7 @@
             </label>
             </div>
           </div>
-          <div class="col-12" id="cohortbatchdaycontainer">
+          <div class="col-12" id="cohortbatchdaycontainer" style="display:none;">
             <div class="form-check">
               <input class="form-check-input cohortbatchday" type="checkbox" value="Sunday">
               <label class="form-check-label" for="flexCheckDefault">
@@ -155,6 +155,13 @@
             </select>
             @if ($errors->has('cohortbatch_timezone'))
               <span class="text-danger">The time zone is required</span>
+            @endif
+          </div>
+          <div class="col-md-3">
+            <label for="students_count">No. of students</label>
+            <input type="text" class="form-control" id="students_count" name="students_count">
+            @if ($errors->has('students_count'))
+              <span class="text-danger">Number of students in the batch is required</span>
             @endif
           </div>
           <div class="col-12">

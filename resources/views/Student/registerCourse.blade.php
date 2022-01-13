@@ -28,7 +28,7 @@
       <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
@@ -238,24 +238,25 @@
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6 think-text-color-grey">
+                                        <div class="col-sm-auto col-6 think-text-color-grey">
                                             <p><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey text-truncate">
                                             <p class="fw-bold"><i class="far fa-user pe-1"></i>
                                                 {{$courseDetails['instructor_firstname']}} {{$courseDetails['instructor_lastname']}}
+                                            </p>
+                                        </div>
+                                        <div class="col-sm-auto col-6 think-text-color-grey">
+                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>        
+                                                {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-6 think-text-color-grey">
                                             <p class="fw-bold"><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}} h</p>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
-                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>        
-                                                {{$courseDetails['course_difficulty']}}
-                                            </p>
-                                        </div>
+                                       
                                     </div> 
                                 </div>
                             </div>
@@ -320,11 +321,11 @@
                         </h4>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
                             </div>
                         </div>
                     </div>
