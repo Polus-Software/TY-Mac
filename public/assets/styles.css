@@ -41,6 +41,7 @@
     padding-left: 25px !important;
     padding-right: 25px !important;
 }
+.think-color-primary { color: var(--color-primary);}
 .think-btn-secondary {
     min-height: 38px;
     padding-left: 25px;
