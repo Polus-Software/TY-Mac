@@ -10,6 +10,7 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/assets/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/enrollcourse.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/footer.css') }}">
     
