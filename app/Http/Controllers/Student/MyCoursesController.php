@@ -39,7 +39,7 @@ class MyCoursesController extends Controller
           $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
           $instructorfirstname = User::where('id', $assigned)->value('firstname');
           $instructorlastname = User::where('id', $assigned)->value('lastname');
-
+          $progress = Course::where('id', $enrolledCourse->course_id)->value('progress');
           $enrolledCourseData = array(
             'course_id' => $courseId,
             'course_title' =>  $course_title,
@@ -52,7 +52,7 @@ class MyCoursesController extends Controller
             'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
-            
+            'progress' => (!is_null($progress)) ? $progress : 0
           );
         array_push($singleEnrolledCourseData, $enrolledCourseData);
       }
