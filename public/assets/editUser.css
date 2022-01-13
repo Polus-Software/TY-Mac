@@ -148,10 +148,10 @@ button a , a:hover{
 .form-group{
     padding: 20px 15px 15px 15px;
 }
-.form-group input:focus{
+/* .form-group input:focus{
     border: 1px solid grey;
     box-shadow: none;
-}
+} */
 .form-control.error small{
     color:red;
     visibility: visible;

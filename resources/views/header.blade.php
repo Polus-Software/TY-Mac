@@ -10,7 +10,7 @@
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
         @csrf
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
-        <button class="btn btn-outline-success" type="button" id="search-btn">Search</button>
+        <button class="btn btn-outline-dark" type="button" id="search-btn">Search</button>
       </form>
       @else
       <div class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6"></div>

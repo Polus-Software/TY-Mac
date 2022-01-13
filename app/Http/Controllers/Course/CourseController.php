@@ -102,7 +102,6 @@ class CourseController extends Controller
             'instructor' =>'required',
             'course_duration' =>'required',
             'what_learn_1' =>'required',
-            'who_learn_description'=>'required',
             'course_image' =>'required',
             'course_thumbnail_image' =>'required',
         ]);
@@ -693,6 +692,7 @@ class CourseController extends Controller
         $cohortbatch->start_time = $request->input('cohortbatch_starttime');
         $cohortbatch->end_time = $request->input('cohortbatch_endtime');
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
+        $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
         $cohortbatch->save();
 
@@ -747,6 +747,7 @@ class CourseController extends Controller
         $notifications = CohortNotification::all();
         $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
         return view('Course.admin.edit_cohortbatch',[
+            'course_id' => $course_id,
             'cohortbatches' => $cohortbatches,
             'notifications' => $notifications,
             'courseStatus' => $courseStatus

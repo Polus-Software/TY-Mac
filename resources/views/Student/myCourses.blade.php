@@ -16,7 +16,6 @@
     text-align: center;
 }
   </style>
-@extends('header')
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -175,7 +174,7 @@
         <div class="container">
             <div class="row border-bottom mt-5 pb-3">
                 <div class="col-lg-6 col-md-6 col-sm-7 col-12">
-                    <h3>Current Live Classes</h3>
+                    <h3 class="think-tab-title">Current Live Classes</h3>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-5 col-12 d-flex  justify-content-lg-end justify-content-md-end justify-content-sm-end">
                     <ul class="nav nav-tabs border border-dark">
@@ -258,7 +257,10 @@
                                 </button>
                             </div>
                             @else
-                             <h2 style="text-align:center;">No live classes at the moment!</h2>
+                             <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
+                                <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
+                                <h4 class="fw-bold">No live classes at the moment!</h4>    
+                            </div>
                             @endif
                             </div>
                         </div>
@@ -319,8 +321,11 @@
                                 </button>
                             </div>
                             @else
-                            <h2 style="text-align:center;">No upcoming classes at the moment.</h2>
-                            @endif
+                            <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
+                                <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
+                                <h4 class="fw-bold">No upcoming classes at the moment!</h4>    
+                            </div>
+                            @endif.
                         </div>
                     </div>
 </div>
@@ -365,24 +370,24 @@
                                             <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                                 <div class="progress rounded-pill">
                                                     <div class="progress-bar rounded-pill text-end pe-2" role="progressbar"
-                                                        style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                                                        aria-valuemax="100">25%</div>
+                                                        style="width: {{ $singleEnrolledCourse['progress'] }}% " aria-valuenow="{{ $singleEnrolledCourse['progress'] }}" aria-valuemin="0"
+                                                        aria-valuemax="100">{{ $singleEnrolledCourse['progress'] }}%</div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                                <p class="para-1"><i
+                                                <p class="para-1 text-truncate" title="{{ $singleEnrolledCourse['category_name'] }}"><i
                                                         class="fas fa-tag fa-flip-horizontal ps-1"></i>
                                                     {{ $singleEnrolledCourse['category_name'] }}
                                                 </p>
                                             </div>
                                             <div class="col-lg-2 col-md-3 col-sm-3 col-12">
-                                                <p class="para-1"><i class="far fa-user pe-1"></i>
+                                                <p class="para-1 text-truncate" title="{{ $singleEnrolledCourse['instructor_firstname'] }} {{ $singleEnrolledCourse['instructor_lastname'] }}"><i class="far fa-user pe-1"></i>
                                                     {{ $singleEnrolledCourse['instructor_firstname'] }}
                                                     {{ $singleEnrolledCourse['instructor_lastname'] }}
                                                 </p>
                                             </div>
                                             <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                                <p class="para-2"><i class="far fa- pe-1"></i>
+                                                <p class="para-2 text-truncate" title="{{ $singleEnrolledCourse['course_difficulty'] }}"><i class="far fa- pe-1"></i>
                                                     {{ $singleEnrolledCourse['course_difficulty'] }}
                                                 </p>
                                             </div>
@@ -421,86 +426,7 @@
     </section>
 
 
-    <footer>
-        <div class="ty-mac-footer">
-            <div class="container">
-                <div class="row pt-5 pb-4">
-                    <div class="col-lg-6 mb-4">
-                        <h4 class="pb-2">LOGO</h4>
-                        <p>At vero eos et accusamus et iusto 
-                            odio dignissimos ducimus qui blanditiis
-                             praesentium voluptatum deleniti atque 
-                             corrupti quos dolores et quas molestias
-                              excepturi sint occaecati cupiditate non 
-                              provident, similique sunt in culpa qui officia deserunt 
-                              mollitia animi, id est laborum et dolorum fuga.</p>
-                        <h4 class="pt-2 pb-3">
-                            Social Links
-                        </h4>
-                        <div class="row">
-                            <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                    </div>
-
-                    <div class="col-lg-5">
-                        <h4 class="pb-3">Quick Links</h4>
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                        </div>
-                        <div class="row mt-4 mb-4">
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                        <h4 class="pb-2">Help</h4>
-                            <div class="col-lg-12 col-md-6 col-sm-8 col-10">
-                                <a href="#">Terms and Conditions | Privacy Policy</a>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                                <a href="#">Cookies</a>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bg-dark copyRight">
-            <div class="col-lg-12 d-flex justify-content-center">
-                <p class="pt-2">© Copyright TY Mac 2021</p>
-            </div>
-        </div>
-    </footer>
+    
 
 <script>
 
@@ -517,11 +443,13 @@
     document.getElementById('upcoming-tab').addEventListener('click', function(e){
         document.getElementById('upcoming').classList.add('active', 'show');
         document.getElementById('live').classList.remove('active', 'show');
+        document.querySelector('.think-tab-title').textContent = 'Upcoming Live Classes';
     });
 
     document.getElementById('live-tab').addEventListener('click', function(e){
         document.getElementById('upcoming').classList.remove('active', 'show');
         document.getElementById('live').classList.add('active', 'show');
+        document.querySelector('.think-tab-title').textContent = 'Current Live Classes';
     });
 </script>
 @endsection('content')

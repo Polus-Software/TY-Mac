@@ -6,7 +6,7 @@
   <div class="row">
   <div class="col-2 position-fixed">
       <!-- include sidebar here -->
-      @include('Course.admin.sidebar')
+      @include('Course.admin.view.sidebar')
     </div>
     <div class="col-9 ms-auto">
       <!-- main -->
@@ -46,21 +46,97 @@
           <input type="hidden" name="cohortbatch_batchname" id="batch_name" value="Daily">
           <div class="col-12">
             <div class="form-check">
+            @if($cohortbatch->occurrence == "Daily")
             <input class="form-check-input" type="radio" name="cohortbatchdaily" id="cohortbatchdaily" value="Daily" checked>
+            @else
+            <input class="form-check-input" type="radio" name="cohortbatchdaily" id="cohortbatchdaily" value="Daily">
+            @endif
             <label class="form-check-label" for="cohortbatchdaily">
             Daily
             </label>
             </div>
           </div>
+
+          @if($cohortbatch->occurrence != "Daily")
+          @php 
+          $days = explode(',', $cohortbatch->occurrence);
+          $sundayFlag = in_array('Sunday', $days) ? 'checked' : '';
+          $mondayFlag = in_array('Monday', $days) ? 'checked' : '';
+          $tuesdayFlag = in_array('Tuesday', $days) ? 'checked' : '';
+          $wednesdayFlag = in_array('Wednesday', $days) ? 'checked' : '';
+          $thursdayFlag = in_array('Thursday', $days) ? 'checked' : '';
+          $fridayFlag = in_array('Friday', $days) ? 'checked' : '';
+          $saturdayFlag = in_array('Saturday', $days) ? 'checked' : '';
+          @endphp
           <div class="col-12">
             <div class="form-check">
-            <input class="form-check-input" type="radio" name="cohortbatchdaily" id="cohortbatchcustom">
+            <input class="form-check-input" type="radio" name="cohortbatchdaily" id="cohortbatchcustom" checked> 
             <label class="form-check-label" for="cohortbatchcustom">
             Custom
             </label>
             </div>
           </div>
           <div class="col-12" id="cohortbatchdaycontainer">
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Sunday" {{$sundayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Sunday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Monday" {{$mondayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Monday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Tuesday" {{$tuesdayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Tuesday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Wednesday"  {{$wednesdayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Wednesday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Thursday" {{$thursdayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Thursday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Friday" {{$fridayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Friday
+              </label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="Saturday"  {{$saturdayFlag}}>
+              <label class="form-check-label" for="flexCheckDefault">
+              Saturday
+              </label>
+            </div>
+          </div>
+
+          @else
+          <div class="col-12">
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="cohortbatchdaily" id="cohortbatchcustom"> 
+            <label class="form-check-label" for="cohortbatchcustom">
+            Custom
+            </label>
+            </div>
+          </div>
+          <div class="col-12" id="cohortbatchdaycontainer" style="display:none;">
             <div class="form-check">
               <input class="form-check-input cohortbatchday" type="checkbox" value="Sunday">
               <label class="form-check-label" for="flexCheckDefault">
@@ -110,6 +186,9 @@
               </label>
             </div>
           </div>
+          @endif
+
+
           
           <div class="col-lg-3 col-md-3 col-sm-4 col-9">
             <label for="duration">Start time</label>
@@ -147,14 +226,23 @@
               <span class="text-danger">The time zone is required</span>
             @endif
           </div>
+          <div class="col-md-3">
+            <label for="students_count">No. of students</label>
+            <input type="text" class="form-control" id="students_count" name="students_count" value="{{$cohortbatch->students_count}}">
+            @if ($errors->has('students_count'))
+              <span class="text-danger">Number of students in the batch is required</span>
+            @endif
+          </div>
           <div class="col-12">
             <label for="description">Notification</label>
+            
             @foreach($notifications as $notification)
             <div class="form-check">
-            <input type="checkbox" value="{{$notification->id}}" name="cohortbatch_notification" checked>
+                <input type="checkbox" value="{{$notification->id}}" name="cohortbatch_notification" checked>
                 <label for="">{{ $notification->description }}</label>
-                @endforeach
             </div>
+            @endforeach
+            
           </div>          
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
           <button class="btn btn-primary" id="update_course" type="submit" value="Update">Update</button>

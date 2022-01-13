@@ -12,12 +12,40 @@
     --color-grey: #6e7687;
     --color-primary-light: #fffdf7;
 }
+
 /* overriding boostrap btn class */
 .btn {
     border-radius: 0.31rem;
 }
-
+.modal-header {
+    padding: 3rem 3rem 0 3rem;
+}
+.modal-body {
+    padding: 0 3rem 3rem 3rem;
+}
+/* Written for style all modal labels */
+.modal .form-group > label {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-secondary);
+    margin-bottom: 5px;
+}
 /* Utilities */
+.think-text-color-grey {
+    color: var(--color-grey);
+}
+.think-modal-max-w-600 {
+    max-width: 600px;
+}
+.think-modal-close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+}
+.think-text-secondary-color {
+    color: var(--text-secondary);
+}
 .fs-18 {
     font-size: 1.1rem;
 }
@@ -43,29 +71,43 @@
 .bg-yellow {
     background-color: var(--color-primary) !important;
 }
-.think-color-primary { color: var(--color-primary);}
+.think-color-primary {
+    color: var(--color-primary);
+}
 .think-btn-secondary {
     min-height: 38px;
     padding-left: 25px;
     padding-right: 25px;
-    background: #2c3443;
+    background: var(--color-secondary);
     font-size: 1rem;
+}
+
+.think-btn-secondary:focus,
+.think-btn-secondary:hover,
+.think-btn-secondary:active,
+.think-btn-secondary:focus-visible {
+    outline: 0;
+    box-shadow: none;
+    background: var(--color-secondary);
+    border: none;
 }
 .think-btn-secondary-outline {
     text-decoration: none !important;
     min-height: 38px;
     padding-left: 25px;
     padding-right: 25px;
-    border: 1px solid #2c3443;
+    border: 1px solid var(--color-secondary);
     font-size: 1rem !important;
     background-color: transparent !important;
 }
-.think-btn-secondary-outline:hover {
-    color: #2c3443;
-}
-.think-btn-secondary-outline:focus {
+.think-btn-secondary-outline:focus,
+.think-btn-secondary-outline:hover,
+.think-btn-secondary:active,
+.think-btn-secondary:focus-visible {
     outline: 0;
     box-shadow: none;
+    color: #2c3443 !important;
+    border: none;
 }
 /* Tertiary Button */
 .think-btn-tertiary {
@@ -104,6 +146,11 @@
     min-height: 48px;
     display: flex;
     align-items: center;
+}
+.think-horizontal-card {
+	border-radius: 20px;
+	box-shadow: 0px 1px 8px #00000029;
+	background: #FFFFFF;
 }
 /*  */
 .hr-line {
@@ -189,7 +236,9 @@ a.navbar-brand {
     opacity: 0.5;
     transition: opacity 0.15s ease;
 }
-
+.bg-dark {
+    background-color: var(--color-primary) !important;
+}
 .card-body {
     padding: 1rem 1.25rem;
 }
@@ -198,3 +247,4 @@ a.navbar-brand {
 .fas.fa-star.rateCourse {
     color: var(--color-primary);
 }
+

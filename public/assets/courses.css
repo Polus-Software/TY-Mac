@@ -5,8 +5,7 @@
 }
 
 .filter{
-    background:#f8f7fc;   
-    /* height: 800px; */
+    background:#f8f7fc;
 }
 
 
@@ -20,65 +19,6 @@
 
 .accordion-body {
     padding-left: 0px;
-}
-  
-.text-content-wrapper li{
-    list-style-type: none;
-    text-align: left;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    color: #6E7687;
-    font-size: 20px;
-}
-
-.text-content-wrapper i:before {
-    padding-right: 15px;
-}
-
-.text-content-wrapper i{
-    color: #6E7687;
-}
-.text-content-wrapper p{
-    font-weight:bold ;
-    font-family: 'Roboto', sans-serif;
-    letter-spacing: 1.6px;
-    font-size:20px;
-    color: #AF7E00;
-}
-.text-content-wrapper h1{
-    font-weight:bold ;
-    font-family: 'Roboto', sans-serif;
-    color: #2C3443;
-}
-.card-title{
-    font-size: 16px;
-    font-weight:bold ;
-    font-family: 'Roboto', sans-serif;
-}
-.card{
-    border:none;
-    border-radius: 29px;
-    box-shadow: 0px 1px 8px #00000029;
-    background: #FFFFFF;
-   
-}
-.card img{
-    border-top-left-radius: 29px;
-    border-top-right-radius: 29px;
-    height: 187px;
-}
-.card-text{
-    color:#6E7687;
-    font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    
-}
-.card-text a{
-    text-decoration: none;
-    color:#6E7687;
-    font-family: inherit;
-    font-size: inherit;
 }
 
 .rateCourse{
@@ -130,22 +70,4 @@ select{
 .btn:focus{
     box-shadow: none;
 }
-/* .page-item.active .page-link{
-    z-index: 3;
-    color: #fff;
-    background-color:#F5BC29;
-    
-}
-.page-link {
-    position: relative;
-    display: block;
-    color: #2C3443;
-    text-decoration: none;
-    background-color: #fff;
-}
-.page-link:hover{
-    color:#2C3443;
-}
-.page-item.active .page-link {
-    border-color:#F5BC29 ;
-} */
+

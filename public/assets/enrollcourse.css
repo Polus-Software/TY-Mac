@@ -7,9 +7,11 @@ header .card-1{
     border-radius:20px;
 }
 section .card-2:hover, .card-2:active, .active-batch{
-    border: 1px solid #AF7E00;
+    border: 1px solid #E0E0E0 !important;
     border-radius: 10px;
     background:#FFF9E8;
+    outline: 1px solid #AF7E00;
+    cursor: pointer;
 }
 section .card-2{
     border: 1px solid #E0E0E0;

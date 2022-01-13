@@ -18,7 +18,6 @@
 }
   </style>
 
-@extends('header')
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -176,7 +175,7 @@
     </div>
   </div>
 <!-- signup modal ends -->
-<header class="ty-mac-header-bg d-flex align-items-center mt-5">
+<header class="think-banner-allcourses ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
       <div class="row">
         <div class="col-lg-5 col-sm-12 d-flex align-items-center p-3">
@@ -200,7 +199,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-        <div class="filter m-4 pt-2 p-4">
+        <div class="think-filters-sidebar filter m-4 pt-2 p-4">
           <h6>Filter</h6>
           <div class="accordion" id="accordionPanelsStayOpenExample">
           @foreach($filters as $filter)
@@ -233,7 +232,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                <span style="font-weight: 500;">Learning Levels</span>
+              <h6>Learning Levels</h6>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
@@ -267,7 +266,7 @@
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                 <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                  <span style="font-weight: 500;">Ratings</span>
+                <h6>Ratings</h6>
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
@@ -342,7 +341,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                <span style="font-weight: 500;">Course Duration</span>
+              <h6>Course Duration</h6>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFour" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFour">
@@ -382,7 +381,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                <span style="font-weight: 500;">Instructors</span>
+              <h6>Instructors</h6>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFive" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFive">
@@ -418,63 +417,55 @@
 
         <div class="row" id="course_view_section">
       
-          @foreach($courseDatas as $courseData)
-            <div class="col-lg-6">
-              <div class="card mb-4">
-                <img src="{{asset('/storage/courseThumbnailImages/'.$courseData['course_thumbnail_image'])}}" class="card-img-top" alt="course-image">
-                  <div class="card-body">
-                    <h5 class="card-title text-center">
-                      {{$courseData['course_title']}}
-                    </h5>
-                    <p class="card-text">
-                      {{\Illuminate\Support\Str::limit($courseData['description'],
-                         $limit = 150, $end = '....')}} 
-                         <a href="{{ route('student.course.show',$courseData['id']) }}" class="">Read More</a>
-                    </p>
-                    <div class="row">
-                      <div class="col-lg-6 col-sm-6 col-6">
-                        @for($i = 1; $i <= 5; $i++)
-                           @if($i <= $courseData['rating'])
-                            <i class="fas fa-star rateCourse"></i>
-                           @else
-                            <i class="far fa-star rateCourse"></i>
-                           @endif
-                        @endfor
-                        (60)
-                      </div>
+          @foreach($courseDatas as $course)
+          <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4">
+                    <div class="card-1">
+                      <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                      <div class="card-body pb-0 fs-14">
+                        <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
+                        <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
                         
-                      <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-                        <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{$courseData['course_category']}}
-                      </div>
-                    </div>
-                  </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <div class="row">
-                        <div class="col-lg-3 col-sm-4 col-4 item-1"><i class="far fa-clock pe-1"></i>{{$courseData['duration']}}</div>
-                        <div class="col-lg-5 col-4 item-2 text-center"><i class="far fa-user pe-1"></i>
-                        {{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}
+
+                        <div class="row mb-3">
+                          <div class="col-lg-6 col-sm-6 col-6">
+                        @for($i = 1; $i <= 5; $i++)
+                        @if($i <= $course['rating'])
+                        <i class="fas fa-star rateCourse"></i>
+                        @else
+                        <i class="far fa-star rateCourse"></i>
+                        @endif
+                        @endfor
+                            (60)
+                          </div>
+                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
+                            <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
+                          </div>
                         </div>
-                        <div class="col-lg-4 col-sm-4 col-4 item-3 d-flex justify-content-end">{{$courseData['course_difficulty']}}</div>
+
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">
+                            <div class="row">
+                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
+                              <div class="col item-2 px-0 text-center">
+                              <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
+                              </div>
+                              <div class="col-auto item-3 px-0 d-flex">
+                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="row py-2">
+                          <div class="text-center border-top">
+                            <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn d-inline-block w-100 px-0">Join now</a>
+                          </div>
+                        </div>
+
                       </div>
-                    </li>
-                  </ul>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="btn-group border-top" role="group" aria-label="Basic example">
-                     @if(Auth::guest())
-                        <a class="card-link btn border-end" id="registerNowButton"  data-bs-toggle="modal"
-                         data-bs-target="#loginModal">Register now</a>
-                      @else
-                        <a href="{{ route('student.course.register', ['id'=>$courseData['id']])}}" class="card-link btn border-end">Register now</a>
-                      @endif
-                     
-                        <a href="{{ route('student.course.show', $courseData['id'])}}" class="card-link btn">Go to details<i class="fas fa-arrow-right ps-2"></i></a>
                     </div>
                   </div>
-              </div>
-            </div>
-            </div>
+
+            
            @endforeach
 
            </div>
@@ -484,86 +475,7 @@
     </div>
   </div>
 </section>
-<footer>
-        <div class="ty-mac-footer">
-            <div class="container">
-                <div class="row pt-5 pb-4">
-                    <div class="col-lg-6 mb-4">
-                        <h4 class="pb-2">LOGO</h4>
-                        <p>At vero eos et accusamus et iusto 
-                            odio dignissimos ducimus qui blanditiis
-                             praesentium voluptatum deleniti atque 
-                             corrupti quos dolores et quas molestias
-                              excepturi sint occaecati cupiditate non 
-                              provident, similique sunt in culpa qui officia deserunt 
-                              mollitia animi, id est laborum et dolorum fuga.</p>
-                        <h4 class="pt-2 pb-3">
-                            Social Links
-                        </h4>
-                        <div class="row">
-                            <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                    </div>
 
-                    <div class="col-lg-5">
-                        <h4 class="pb-3">Quick Links</h4>
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 1</a>
-                            </div>
-                        </div>
-                        <div class="row mt-4 mb-4">
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3">
-                                <a href="">Menu 5</a>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                        <h4 class="pb-2">Help</h4>
-                            <div class="col-lg-12 col-md-6 col-sm-8 col-10">
-                                <a href="#">Terms and Conditions | Privacy Policy</a>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-4">
-                                <a href="#">Cookies</a>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bg-dark copyRight">
-            <div class="col-lg-12 d-flex justify-content-center">
-                <p class="pt-2">© Copyright TY Mac 2021</p>
-            </div>
-        </div>
-    </footer>
 
 @endsection('content')
 
