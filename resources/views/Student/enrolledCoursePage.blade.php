@@ -754,50 +754,6 @@
                                                             </div>
                                                         </div>
 
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <h5 class="card-title text-left">
-                                                            Lorem ipsum dolor sit amet.
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <p class="text-end time">4 months ago</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">Lorem ipsum dolor sit amet. Sed aliquid voluptatem id incidunt 
-                                                               quaerat in nihil tempore rem quam sint. Aut itaque officia et 
-                                                               soluta molestiae rem iusto distinctio qui alias accusantium et veniam voluptatum.
-                                                               Et voluptatem sunt vel Quis labore vel laborum
-                                                               repellendus eum galisum blanditiis.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row ps-5">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
-                                                    <img src="/courselist/Avatar Instructor.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <h5 class="card-title text-left">
-                                                                @foreach($singleCourseDetails as $course)
-                                                               {{ $course['instructor_firstname'] }}   {{ $course['instructor_lastname'] }}
-                                                                @endforeach
-                                                           
-                                                                </h5>
-                                                            </div>
-                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                                <p class="text-end time">4 months ago</p>
-                                                            </div>
-                                                        </div>
-                                                        
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                                 <p class="para-1" id="replyContent_{{ $qa['id'] }}">{{ $qa['reply'] }}
@@ -1002,42 +958,41 @@
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
                                                                                         {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
                                                                                         @endforeach</p>
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12">
-                                                                                    <p class="card-text-1">Has successfully completed the  <br>
-                                                                                        online cohort on (course completion date)</p>
-                                                                                </div>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-12">
+                                                                                <p class="card-text-1">Has successfully completed the  <br>
+                                                                                    online cohort on (course completion date)</p>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12">
-                                                                                @foreach($singleCourseDetails as $course)
-                                                                                <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
-                                                                                @endforeach
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <p class="card-text-1">@foreach($singleCourseDetails as $course)
-                                                                                        {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
-                                                                                            @endforeach
-                                                                                    </p>
-                                                                                    <p class="card-text-1">&<br> Team ThinkLit</p>
-                                                                                </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-12">
+                                                                            @foreach($singleCourseDetails as $course)
+                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
+                                                                            @endforeach
                                                                             </div>
+                                                                            <div class="col-lg-12">
+                                                                                <p class="card-text-1">@foreach($singleCourseDetails as $course)
+                                                                                    {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
+                                                                                        @endforeach
+                                                                                </p>
+                                                                                <p class="card-text-1">&<br> Team ThinkLit</p>
+                                                                            </div>
+                                                                        </div>
                                                                         </div>
                                                                         
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    @foreach($singleCourseDetails as $course)
-                                                                            <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
-                                                                    @endforeach
-                                                                </div>
-                                                           </div>
+                                                                @foreach($singleCourseDetails as $course)
+                                                                        <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
+                                                                @endforeach
+                                                            </div>
                                                         </div>
                                                     </div>
-                                            </div>
+                                                </div>
                                         </div>
-                                    </div>
+                                     </div>
                                 </div>
                             </div>
                         </div>
@@ -1070,11 +1025,11 @@
                         </h4>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
                             </div>
                         </div>
                     </div>

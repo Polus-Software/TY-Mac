@@ -536,8 +536,6 @@ class CourseController extends Controller
                 'courseStatus' => $courseStatus
             ]);
         }
-        
-
     }
 
 
@@ -658,8 +656,7 @@ class CourseController extends Controller
             $topicAssignment->document = $filename;
         }
         $topicAssignment->save();
-        return redirect()->route('create-assignment', ['course_id' => $course_id]);
-        
+        return redirect('/view-assignments/' .$course_id);    
     }
 
     /**

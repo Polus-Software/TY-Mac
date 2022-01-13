@@ -319,11 +319,11 @@
                         </h4>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-12">
-                                <a href=""><i class="fab fa-facebook"></i></a>
-                                <a href=""><i class="fab fa-twitter ps-3"></i></a>
-                                <a href=""><i class="fab fa-instagram ps-3"></i></a>
-                                <a href=""><i class="fab fa-youtube ps-3"></i></a>
-                                <a href=""><i class="fab fa-linkedin ps-3"></i></a>
+                                <a href=""><i class="fab fa-facebook fa-2x"></i></a>
+                                <a href=""><i class="fab fa-twitter ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-instagram ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-youtube ps-3 fa-2x"></i></a>
+                                <a href=""><i class="fab fa-linkedin ps-3 fa-2x"></i></a>
                             </div>
                         </div>
                     </div>
