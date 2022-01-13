@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\AssignedCourse;
+use App\Models\UserType;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -24,11 +26,16 @@ use App\Models\CohortBatch;
 use PDF;
 use SnappyImage;
 use App\Models\StudentFeedbackCount;
-
+use App\Models\CourseQA;
+use App\Models\EnrolledCourse;
+use App\Models\AttendanceTracker;
+use App\Models\LiveSession;
 
 class EnrolledCourseController extends Controller
 {
-    public function afterEnrollView(Request $request, $courseId){
+    public function afterEnrollView(Request $request, $courseId) {
+        
+       
         $courseDetails =[];
         $topicDetails = [];
         $achievedBadgeDetails = [];
@@ -38,13 +45,35 @@ class EnrolledCourseController extends Controller
         $upcoming = [];
         $singleRec = [];
         $finalRec = [];
+        $qaArray = [];
+        $next_live_cohort = '';
         $course = Course::findOrFail($courseId);
         $user =Auth::user();
+        $userType = "";
+        $attendedTopics = 0;
+        $progress = 0;
+        
+        if($user){
+        $attendanceRecs = AttendanceTracker::where('student', $user->id)->get();
+        $topics = Topic::where('course_id', $courseId)->get();
+        $totalTopics = count($topics);
+        foreach($attendanceRecs as $attendanceRec) {
+            $liveSessionId = $attendance->value('live_session_id');
+
+            $sessionCourse = LiveSession::where('live_session_id', $liveSessionId);
+
+            if($sessionCourse == $courseId) {
+                $attendedTopics = $attendedTopics + 1;
+            }
+        }
+
+        
+       
+        
+        $currentUserRoleId = User::where('id', $user->id)->value('role_id');
+        $userType = Usertype::where('id', $currentUserRoleId)->value('user_role');
         $student_firstname = $user->firstname;
         $student_lastname = $user->lastname;
-
-        if($user){
-
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructor = User::where('id', $assigned);
@@ -60,18 +89,20 @@ class EnrolledCourseController extends Controller
         $instructorSignature = $instructor->value('signature');
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
-
+       
        $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>', $current_date)->orderBy('start_date')->get();
-
-       $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-       $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-       $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-
-       $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
-    
+       $next_live_cohort = "";
+       if(count($batches)) {
+        $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
+        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+ 
+        $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
+       
+       } 
 
         $achievements = StudentAchievement::where('student_id', $user->id)->get();
-
+        
         foreach($achievements as $achievement){
 
             $achievementBadge = AchievementBadge::where('id' , $achievement->badge_id);
@@ -81,12 +112,12 @@ class EnrolledCourseController extends Controller
    
             array_push($badgeComparisonArray, $achievement->badge_id);
 
-        array_push($achievedBadgeDetails, array(
-            'id'=> $achievement->badge_id,
-            'badge_name' =>  $badge_name,
-            'badge_image' => $badge_image,
-            'badge_created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $badge_created_at)->format('F d, Y'),
-        ));
+            array_push($achievedBadgeDetails, array(
+                'id'=> $achievement->badge_id,
+                'badge_name' =>  $badge_name,
+                'badge_image' => $badge_image,
+                'badge_created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $badge_created_at)->format('F d, Y'),
+            ));
         }
 
         $achievementBadges = AchievementBadge::all(); 
@@ -131,9 +162,15 @@ class EnrolledCourseController extends Controller
                 $topic_title =  $topic->topic_title;
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
+                $liveSession = LiveSession::where('topic_id', $topicId);
+                $liveId = null;
+                if($liveSession) {
+                    $liveId = $liveSession->value('live_session_id');
+                }
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
+                    'liveId' => $liveId,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
@@ -180,20 +217,64 @@ class EnrolledCourseController extends Controller
                     'content_title' => $content->value('topic_title'),
                     'topic_id' => $topicId,
                     'topic_title' => $topic->value('topic_title'),
+                    'student_id' => $feedback->value('student'),
+                    'likes' => $feedback->value('positive'),
+                    'dislikes' => $feedback->value('negative')
                 );
 
                 array_push($finalRec, $singleRec);
             }
         }
-        return view('Student.enrolledCoursePage',[
-            'singleCourseDetails' => $courseDetails,
-            'topicDetails' =>  $topicDetails,
-            'achievedBadgeDetails' => $achievedBadgeDetails,
-            'badgesDetails' => $badgesDetails,
-            'upcoming' => $upcoming,
-            'recommendations' => $finalRec,
-            'next_live_cohort' =>  $next_live_cohort
-        ]);
+
+        $qas = CourseQA::where('course_id', $courseId)->get();
+
+        foreach($qas as $qa) {
+            $student = User::where('id', $qa->student);
+            $instructor = User::where('id', $qa->instructor);
+            $instructorName = $instructor->value('firstname') . ' ' . $instructor->value('lastname');
+            $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+            $question = $qa->question;
+            $reply = $qa->reply;
+            $hasReplied = $qa->has_replied;
+            $date = $qa->created_at->format('d M H:m');
+            array_push($qaArray, array(
+                'id' => $qa->id,
+                'student' => $studentName,
+                'instructor' => $instructorName,
+                'question' => $question,
+                'reply' => $reply,
+                'hasReplied' => $hasReplied,
+                'date' => $date
+            ));
+        }
+        if($userType === 'student') {
+            return view('Student.enrolledCoursePage',[
+                'singleCourseDetails' => $courseDetails,
+                'topicDetails' =>  $topicDetails,
+                'achievedBadgeDetails' => $achievedBadgeDetails,
+                'badgesDetails' => $badgesDetails,
+                'upcoming' => $upcoming,
+                'recommendations' => $finalRec,
+                'qas' => $qaArray,
+                'userType' => $userType,
+                'next_live_cohort' =>  $next_live_cohort,
+                'progress' => ($attendedTopics / $totalTopics) * 100
+            ]);
+        }
+        
+        if($userType === 'instructor') {
+            $recommendations = $this->instructorRecommendations($courseId);
+            return view('Student.enrolledCoursePage',[
+                'singleCourseDetails' => $courseDetails,
+                'topicDetails' =>  $topicDetails,
+                'recommendations' => $recommendations,
+                'userType' => $userType,
+                'studentsEnrolled' => $this->studentsEnrolled($courseId),
+                'next_live_cohort' =>  $next_live_cohort,
+                'qas' => $qaArray,
+                'progress' => $progress
+            ]);
+        }      
 
     }else{
         return redirect('/403');
@@ -327,5 +408,100 @@ class EnrolledCourseController extends Controller
         }
 
     }
-}
 
+
+    private function studentsEnrolled($courseId) {
+        $studentsEnrolled = DB::table('enrolled_courses as a')
+                            ->join('users as b', 'a.user_id', '=', 'b.id')
+                            ->where('a.course_id', $courseId)
+                            ->get();
+        return $studentsEnrolled;
+    }
+
+    private function instructorRecommendations($courseId) {
+        $singleRecommendation = [];
+        $finalRecommendation = [];
+        $studentsEnrolled = $this->studentsEnrolled($courseId);
+        foreach($studentsEnrolled as $student) {
+            $student_name = User::where('id', $student->user_id)->get();
+            $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();
+            foreach($studentFeedbackCounts as $feedback) {
+                if($feedback->value('negative') > $feedback->value('positive')) {
+                    $topicId = $feedback->topic_id;
+                    $topic = Topic::where('topic_id',  $topicId);
+                    $contentId = $feedback->content_id;
+                    $content = TopicContent::where('topic_content_id',  $contentId);                    
+                    $singleRecommendation = array(
+                        'content_id' => $contentId,
+                        'content_title' => $content->value('topic_title'),
+                        'topic_id' => $topicId,
+                        'topic_title' => $topic->value('topic_title'),
+                        'student_id' => $feedback->value('student'),
+                        'likes' => $feedback->value('positive'),
+                        'dislikes' => $feedback->value('negative')
+                    );
+    
+                    array_push($finalRecommendation, $singleRecommendation);
+                }
+            }
+        }
+        return $finalRecommendation;
+    }
+
+    public function replyToStudent(Request $request) {
+        $qaId = $request->qaId;
+        $reply = $request->replyContent;
+
+        $courseQA = CourseQA::find($qaId);
+        $courseQA->reply = $reply;
+        $courseQA->has_replied = true;
+        $updatedAt = $courseQA->updated_at->format('d M H:m');
+        $courseQA->save();
+
+        return response()->json([
+            'status' => 'success',
+            'reply' => $reply, 
+            'updatedAt' => $updatedAt,
+            'message' => 'Replied successfully'
+         ]);
+    }
+
+    public function askQuestion(Request $request) {
+        $question = $request->question;
+        $course_id = $request->course_id;
+        $student = 0;
+
+        $qa = new CourseQA;
+        $qa->course_id = $course_id;
+        $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
+        
+        $user =Auth::user();
+        if($user) {
+            $student = User::where('id', $user->id)->value('id');
+            
+            
+            $badgeId = AchievementBadge::where('title', 'Q&A')->value('id');
+            $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('badge_id', $badgeId)->count();
+            
+            if(!$achievementCheck) {
+                $student_achievement = new StudentAchievement;
+                $student_achievement->student_id = $user->id;
+                $student_achievement->badge_id =  $badgeId;
+                $student_achievement->is_achieved = true;
+                $student_achievement->save();
+            }
+            
+        }
+
+        $qa->student = $student;
+        $qa->instructor = $instructor;
+        $qa->question = $question;
+        $qa->has_replied = false;
+
+        $qa->save();
+
+        return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
+
+    }
+
+}

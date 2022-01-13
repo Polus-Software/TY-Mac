@@ -5,10 +5,10 @@
 <div class="container llp-container"> 
     <div class="row">
 
-    <div class="col-2 position-fixed"> -->
+    <div class="col-2 position-fixed"> 
       <!-- include sidebar here -->
       @include('Course.admin.view.sidebar')
-    </div> -->
+    </div>
     <div class="col-9 ms-auto">
       <!-- main -->
       <main>

@@ -59,11 +59,11 @@
                     <th scope="col">Instructor</th>
                     <th scope="col">Participants</th>
                     <th scope="col">Date/Time</th>
-                    <th scope="col" class="text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                 @php ($slno = 0)
+                @if(!empty($upComingSessionDetails))
                @foreach($upComingSessionDetails as $upComingSessionDetail)
                 @php ($slno = $slno + 1)
                   <tr id="">
@@ -77,6 +77,11 @@
                     <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
                   </tr>
                  @endforeach
+                  @else
+                  <tr>
+                      <td colspan="5"><h6 style="text-align:center;">No upcoming cohorts.</h6></td>
+                  </tr>
+                  @endif
                 </tbody>
               </table>
               
@@ -94,22 +99,26 @@
                 <th scope="col">Instructor</th>
                 <th scope="col">Participants</th>
                 <th scope="col">Date/Time</th>
-                <th scope="col" class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               @php ($slno = 0)
+              @if(!empty($recentSessionDetails))
             @foreach($recentSessionDetails as $recentSessionDetail)
               @php ($slno = $slno + 1)
               <tr>
                 <td>{{ $slno }}</td>
                 <td>{{$recentSessionDetail['session_title']}}</td>
-                <td class="text-capitalize"></td>
-                <td></td>
-                <td></td>
-                <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
+                <td>{{$recentSessionDetail['instructor']}}</td>
+                <td>{{$recentSessionDetail['enrolledCourses']}}</td>
+                <td>{{$recentSessionDetail['date']}}</td>
               </tr>
            @endforeach
+           @else
+                 <tr>
+                     <td colspan="5"><h6 style="text-align:center;">No recent cohorts.</h6></td>
+                 </tr>
+                 @endif
             </tbody>
           </table>
         </div>

@@ -76,9 +76,11 @@ class EditController extends Controller
     ]);
    
         if($request->hasFile('image')){
-            $filename = $request->image->getClientOriginalName();
-           
-            $request->image->storeAs('images',$filename,'public');
+            $file = $request->image;
+            $filename = $file->getClientOriginalName();
+            $destinationPath = public_path().'/storage/images' ;
+            $file->move($destinationPath,$filename);
+            // $request->image->storeAs('images', $filename, 'public');
            
             $user = Auth::user();
             $user->image = $filename;

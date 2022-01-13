@@ -302,30 +302,35 @@ svg.svg-img.prefix-more.can-hover {
     background-color: white !important;
     transition-duration: 0.2s;
 }
+
+.nodisplay {
+  display:none;
+}
   </style>
+
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
-  <input id="user_type" type="hidden" value="" />
-  <div class="main-container">
-  <div id="root1"></div>
-    
-  <div class="tab-contents">
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
-    <li><a data-toggle="tab" href="#chat">Chat</a></li>
-  </ul>
-  <div class="tab-content">
-    <div id="participants" class="tab-pane fade in active">
-     @foreach($participants as $participant)
-     <p>{{ $participant }}</p>
-     @endforeach
-    </div>
-    <div id="chat" class="tab-pane fade">
-     <p> Chat screen </p>
+  <input id="user_type" type="hidden" value="{{ $userType }}" />
+  <div class="tab-container">
+    <div id="root1"></div>
+
+    <div class="tab-contents nodisplay">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
+        <li><a data-toggle="tab" href="#chat">Chat</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="participants" class="tab-pane fade in active">
+        @foreach($participants as $participant)
+        <p>{{ $participant }}</p>
+        @endforeach
+        </div>
+        <div id="chat" class="tab-pane fade">
+        <p> Chat screen </p>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-  </div>
-  
+<div id="feedback-container" class="nodisplay">
   @if($userType == 'student')
   <div class="row"></div>
   <div class="row1">
@@ -336,6 +341,7 @@ svg.svg-img.prefix-more.can-hover {
       <p class="notif-text">Did you understand this topic?</p> <button data-id="" class="feedbackbtn" id="positive" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;"><i style="margin-right:10px;" class="fas fa-thumbs-up"></i>Yes <span id="positive_count"></span></button> <button class="feedbackbtn" id="negative" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;" data-id=""><i style="margin-right:10px;" class="fas fa-thumbs-down"></i>No<span id="negative_count"></span></button>
     </div>
   </div>
+
   <div class="row2" style="margin-bottom:20px;">
     <h6 class="notif-text">Session Info</h6>
     <hr>
@@ -345,12 +351,12 @@ svg.svg-img.prefix-more.can-hover {
     <div style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i>{{ $content->topic_title }}</div>
     @endforeach
   </div>
+
   @elseif($userType == 'instructor')
   <div class="row">
-  <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
   <div class="row1">
-  
     <div class="col11">
       <button id="back_to_course">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
     </div>
@@ -367,8 +373,9 @@ svg.svg-img.prefix-more.can-hover {
     <div class="course_contents_div" data-id="3" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 3</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="3">Start</button></div>
     
   </div>
-  
+
 @endif
+</div>
   <script type="text/javascript">
         
         let session = document.getElementById('session_hidden_id').value;
@@ -411,15 +418,65 @@ svg.svg-img.prefix-more.can-hover {
     )
 
         });
+        
+let timer = 0;
+
+$(document).ready(function(){
+  var start = new Date;
+  setInterval(function() {
+      timer = Math.round((new Date - start) / 1000);
+  }, 1000);
+});
+
+$(document).on('click', '.btn:contains("Finish")', function() {
+    $('.tab-contents').removeClass('nodisplay');
+    $('#feedback-container').removeClass('nodisplay');
+});
+$(document).on('click', '.btn:contains("Confirm")', function() {
+  let sessionId = document.getElementById('session_hidden_id').value;
+  let userType = document.getElementById('user_type').value;
+
+  if(userType == "student") {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+    }).then((response) => response.json()).then((data) => {
+
+    });
+  }
+});
 
 
- jQuery(document).ready(function(){
+window.addEventListener("beforeunload", function (e) {
+  var confirmationMessage = "Are you sure you want to exit?";
+  let sessionId = document.getElementById('session_hidden_id').value;
+  let userType = document.getElementById('user_type').value;
 
-//    jQuery('.course_contents').addClass('unclickable');
-// document.getElementsByClassName('course_contents')[0].classList.remove("unclickable");
+  if(userType == "student") {
+    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+    }).then((response) => response.json()).then((data) => {
 
- jQuery(".nav-tabs li.active").click(); 
- jQuery(".nav-tabs li").click(function(e){
+    });
+  }
+  (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+  return confirmationMessage;                            //Webkit, Safari, Chrome
+});
+
+
+
+jQuery(".nav-tabs li").click(function(e){
       e.preventDefault();
       jQuery(".nav-tabs li").removeClass('active');
       jQuery(this).addClass('active');
@@ -428,10 +485,9 @@ svg.svg-img.prefix-more.can-hover {
       jQuery('.tab-pane').removeClass('active in');
       jQuery(tid).addClass('active in');
   });
-});
 
 setInterval(function () {
-  let session = document.getElementById('session_hidden_id').value;
+    let session = document.getElementById('session_hidden_id').value;
     let path = "{{ route('get-push-record') }}?session=" + session;
     fetch(path, {
       method: 'POST',
@@ -449,6 +505,7 @@ setInterval(function () {
       }
     });
   }, 2000);
+  
 if(document.getElementById('show_video')) {
   document.getElementById('show_video').addEventListener('click', function(event){
     document.getElementById('course_content_iframe').classList.add('nodisplay');

@@ -34,12 +34,20 @@
               @php ($slno = 0)
                 @foreach($courseContents as $courseContent)
                 @php ($slno = $slno + 1)
-                <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
                 <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                
+                <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                
                     @foreach($courseContent['contentsData'] as $content)
                         <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
                     @endforeach
+                    <div class="d-flex justify-content-end mb-4">
+                     
+                      <a class="btn btn-sm btn-outline-dark me-2" href="{{ route('edit-subtopics', ['topic' => $courseContent['topic_id']]) }}">Edit</a>
+                      <a class="btn btn-sm btn-outline-dark" href="">Delete</a>
+                    </div>
                 </ul>
+                
               @endforeach 
              
               </div>
@@ -48,10 +56,7 @@
 
               </div>
             </div>
-            <div class="d-flex justify-content-end mb-4">
-              <a class="btn btn-sm btn-outline-dark me-2" href="{{ route('edit-subtopics', ['course_id' => $course_id]) }}">Edit</a>
-              <a class="btn btn-sm btn-outline-dark" href="">Delete</a>
-            </div>
+            
 
           </div>
         

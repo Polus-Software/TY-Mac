@@ -9,69 +9,16 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+
+.no_courses{
+  height: 20rem;
+    position: relative;
+    text-align: center;
+    top: 10rem;
+}
   </style>
 
- 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">TY-Mac</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
-      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6">
-      @csrf
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="">
-        <button class="btn btn-outline-success" id="search-btn">Search</button>
-      </form>
-
-      <ul class="navbar-nav me-2">
-      @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
-        </li>
-        @endif
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
-        </li>
-       
-        <li class="nav-item border-bottom border-warning border-3">
-          <a class="nav-link active" href="{{ route('student.courses.get') }}">All Courses</a>
-        </li>
-        @if (Auth::check())
-        @if(Auth::user()->role_id == 3)
-
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @else
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @endif
-        @else
-        <li class="nav-item">
-          <a class="nav-link" href="#">Apply to be an instructor?</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-        </li>
-        @endif
-      </ul>
-      
-    </div>
-  </div>
-</nav>
+@extends('header')
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -286,7 +233,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                Learning Levels
+                <span style="font-weight: 500;">Learning Levels</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingTwo">
@@ -320,7 +267,7 @@
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                 <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                  Ratings
+                  <span style="font-weight: 500;">Ratings</span>
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
@@ -395,7 +342,7 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                Course Duration
+                <span style="font-weight: 500;">Course Duration</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFour" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFour">
@@ -435,14 +382,14 @@
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                Instructors
+                <span style="font-weight: 500;">Instructors</span>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFive" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingFive">
               <div class="accordion-body">
               @foreach($instructors as $instructor)
               <div class="form-check">
-                <input class="form-check-input instructor_filter" type="checkbox" value="{{$instructor->id}}">
+                <input class="form-check-input instructor_filter filter_option" filtertype="instructor" type="checkbox" value="{{$instructor->id}}">
                 <label class="form-check-label" for="flexCheckDefault">
                   {{$instructor->firstname}} {{$instructor->lastname}}
                 </label>
@@ -529,9 +476,6 @@
             </div>
             </div>
            @endforeach
-            <div class="d-flex justify-content-center">
-              {{ $courseDatas->links() }}
-            </div>
 
            </div>
           </div>
@@ -614,7 +558,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark copyRight">
+        <div class="bg-dark copyRight">
             <div class="col-lg-12 d-flex justify-content-center">
                 <p class="pt-2">© Copyright TY Mac 2021</p>
             </div>
@@ -636,6 +580,8 @@ window.onload = function(event) {
       let categoryFilters = [];
       let levelFilters = [];
       let ratingFilter = [];
+      let durationFilter = [];
+      let instructorFilter = [];
       filterType = this.getAttribute('filtertype');
       for(var i = 0; i < filterOption.length; i++) {
         if(filterOption[i].checked) {
@@ -645,10 +591,14 @@ window.onload = function(event) {
             levelFilters.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           } else if (filterOption[i].getAttribute('filterType') == "rating") {
             ratingFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
+          } else if (filterOption[i].getAttribute('filterType') == "duration") {
+            durationFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
+          } else if (filterOption[i].getAttribute('filterType') == "instructor") {
+            instructorFilter.push(filterOption[i].getAttribute('filterType') + '=' + filterOption[i].getAttribute('value'));
           }
         }
       }
-      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter;
+      let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter + "&duration=" + durationFilter + "&instructors=" + instructorFilter;
       fetch(path, {
           method: 'POST',
           headers: {
@@ -698,18 +648,6 @@ const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
 
-document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
-
-
-  // document.getElementById('search-box').addEventListener('onkeyup', function(e) {
-  //   e.preventDefault();
-  // alert('ss');
-  // });
 }
 
 </script>

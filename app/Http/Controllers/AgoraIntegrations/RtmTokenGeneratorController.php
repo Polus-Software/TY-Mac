@@ -22,6 +22,7 @@ use App\Models\LiveFeedbacksPushRecord;
 use App\Models\StudentFeedbackCount;
 use App\Models\AttendanceTracker;
 use Illuminate\Support\Facades\DB;
+use App\Models\GeneralSetting;
 
 require_once "AccessToken.php";
 
@@ -91,14 +92,14 @@ class RtmTokenGeneratorController extends Controller
             $roleName = "Instructor";
         }
         
-        $expireTimeInSeconds = 14400;
+        $expireTimeInSeconds = 86399;
         $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
         $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
         $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '1234', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -298,5 +299,41 @@ class RtmTokenGeneratorController extends Controller
         $positiveCount = $finalCounts->value('positive');
         $negativeCount = $finalCounts->value('negative');
         return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
+    }
+
+    public function studentExit(Request $request) {
+        $sessionId = $request->sessionId;
+        $newTime = $request->timer;
+        $user = Auth::user();
+        if($user) {
+            $student =  $user->id;
+            $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
+            if($attendance) {
+                $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
+            }
+            
+            $attendance->update(['attendance_time' => $timer]);
+
+            $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
+
+            $batchId = LiveSession::where('live_session_id', $sessionId)->value('batch_id');
+            $batch = CohortBatch::where('id', $batchId);
+            $startTime = $batch->value('start_time');
+            $endTime = $batch->value('end_time');
+            $startHour = intval($startTime[0] . $startTime[1]);
+            $startMinutes = intval($startTime[3] . $startTime[4]);
+
+            $endHour = intval($endTime[0] . $endTime[1]);
+            $endMinutes = intval($endTime[3] . $endTime[4]);
+            $totalSeconds = ((60 - $startMinutes) + $endMinutes) + ($endHour - ($startHour + 1)) * 3600;
+            
+            if($attendance->value('attendance_time') * 100 / $totalSeconds >= $attendanceSettings) {
+                $attendance->update(['attendance_Status' => true ]);
+            } else {
+                $attendance->update(['attendance_Status' => false ]);
+            }
+
+            return response()->json(['status' => 'success', 'msg' => 'Student closed window']);
+        }
     }
 }

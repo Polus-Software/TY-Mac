@@ -1,4 +1,5 @@
 <!-- sidebar -->
+
 <div class="d-flex flex-column flex-shrink-0 bg-light">
   <ul class="nav nav-pills flex-column mb-auto mt-5 llp-sidebar">
     <li class="nav-item">
@@ -59,9 +60,6 @@
     @elseif($userType == 'instructor')
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{route('sessions-view')}}">
-        <!-- <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg> -->
         View Scheduled Sessions</a>
     </li>
     <li class="nav-item">
@@ -72,13 +70,6 @@
       <a class="nav-link link-dark" href="{{ route('assigned-courses') }}">Assigned Courses</a>
     </li>
     @else
-    <!-- <li class="nav-item">
-      <a class="nav-link link-dark" href="">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#table" />
-        </svg>
-        View Sessions</a>
-    </li> -->
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('change.password.get') }}">
         <svg class="bi me-2" width="16" height="16">
@@ -96,10 +87,16 @@
   </ul>
 </div>
 <!-- sidebar ends -->
-<!-- <section>
-<div class="tab-content" id="v-pills-tabContent">
-<div class="tab-pane fade" id="v-pills-assignedCourses" role="tabpanel" aria-labelledby="v-pills-assignedCourses-tab">
-  <h1>sfnkjvbgikf</h1>
-</div>
-</div>
-</section> -->
+
+
+<script>
+
+  let navLink = document.getElementsByClassName('nav-link');
+  let navLinkLength = navLink.length;
+
+  for(index = 0; index < navLinkLength; index++) {
+    navLink[index].addEventListener('click', function(e) {
+        // this.classList.add('active');
+    });
+  }
+</script>

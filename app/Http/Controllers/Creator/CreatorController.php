@@ -10,6 +10,7 @@ use App\Models\UserType;
 use Hash;
 use Auth;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class CreatorController extends Controller
 {
@@ -20,6 +21,7 @@ class CreatorController extends Controller
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
         $creators = DB::table('users')
                 ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
                 ->paginate(10);
         return view('Creator.manage_creators', [
             'creators' => $creators,
@@ -120,14 +122,34 @@ class CreatorController extends Controller
     }
 
     public function deleteCreator(Request $request) {
+        $html = '';
+        $slNo = 1;
         $userId = $request->input('user_id');
+        $userType = UserType::where('user_role', 'content_creator')->value('id');
         if ($userId) {
             $creator = User::find($userId);
             if ($creator) {
                 $creator->delete();
-                return response()->json(['status' => 'success', 'message' => 'Updated successfully']);
+
+                $creators = DB::table('users')
+                ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
+                ->get();
+
+                foreach($creators as $creator) {
+                    $html = $html . '<tr id="' . $creator->id .'">';
+                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
+                    $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
+                    $html = $html . '<td class="align-middle">' . $creator->email . '</th>';
+                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $creator->created_at)->format("F d, Y") . '</td>';
+                    $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i></a>';
+                    $html = $html . '<a  href="" title="Edit instructor"><i class="fas fa-pen"></i></a>';
+                    $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
+                    $slNo = $slNo + 1;
+                }
+                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
         }
-        return response()->json(['status' => 'failed', 'message' => 'Some error']);
+        return response()->json(['status' => 'failed', 'message' => 'Some error', 'html' => '']);
     }
 }
