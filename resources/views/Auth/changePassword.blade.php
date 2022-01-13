@@ -3,21 +3,21 @@
 @section('content')
 @extends('header')
     <div class="container">
-        <div class="custom-container mx-auto border">
-            <div class="row">                    
-                <div class="col-lg-3 col-md-4 col-sm-4 col-sm-12 col-12 mt-3">
-                   <div class="sidebar h-100 bg-light ms-3">
-                      <div class="side-heading">
-                        <p class="heading-1">My Account</p>
+        <div class="custom-container mx-auto mb-5">
+            <div class="row ms-0 me-0 p-4">                    
+                <div class="col-lg-3 col-sm-4 col-md-4 col-sm-12 col-12 ps-0">
+                   <div class="h-100 bg-light think-bg-sidebar rounded-3">
+                      <div class="side-heading p-4">
+                        <p class="heading-1 mb-0">My Account</p>
                        </div>
-                        <ul class="nav nav-pills flex-column mb-auto mt-5">
+                        <ul class="nav nav-pills flex-column mb-auto mt-3">
                             <li class="nav-item">
-                                <a class="nav-link link-dark" href="{{ route('edituser') }}">
+                                <a class="nav-link link-dark py-3 ps-4 " href="{{ route('edituser') }}">
                                 <i class="fas fa-user pe-2"></i>
                                 My Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link link-dark active" href="{{ route('change.password.get') }}">
+                                <a class="nav-link link-dark py-3 ps-4 active" href="{{ route('change.password.get') }}">
                                 <i class="fas fa-lock pe-2"></i>
                                 Change Password</a>
                             </li>
@@ -70,9 +70,9 @@
                                 </div>
                              
                                <div class="form-group buttons d-flex justify-content-end">
-                                   <button type="button" class="btn back-btn">
+                                   <button type="button" class="btn think-btn-secondary-outline">
                                    <a href="{{route('edituser')}}">Cancel</a></button>
-                                   <button type="submit" class="btn update-btn">Update</button>
+                                   <button type="submit" class="btn btn-secondary think-btn-secondary ms-3">Update</button>
                                </div>
                             </div>
                         </form>    
