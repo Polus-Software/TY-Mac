@@ -36,7 +36,7 @@
         @endif
         <li class="nav-item">
         <a class="nav-link" href="{{ route('edituser') }}">
-        <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
+        <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
       </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
