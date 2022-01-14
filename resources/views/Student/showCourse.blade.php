@@ -241,13 +241,13 @@
                     @endforeach</p>
                     </div>
                     <div class="col-auto">
-                        <p class="border-end pe-4"><img class="me-1" src="/icons/level__icon.svg" alt="error">@foreach($singleCourseDetails as $singleCourseDetail)
+                        <p class="border-end pe-4"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">@foreach($singleCourseDetails as $singleCourseDetail)
                      {{$singleCourseDetail['course_difficulty']}}
                     @endforeach</p>
                     </div>
                     <div class="col-auto p-0">
                         <p class="ms-2">@foreach($singleCourseDetails as $singleCourseDetail)
-                        <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">  {{$singleCourseDetail['course_category']}}
+                        <img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">  {{$singleCourseDetail['course_category']}}
                     @endforeach</p>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
                     <div class="col-lg-12">
                         <p class="para-1 mb-2">What You'll Learn</p>
                         @foreach($short_description as $value)
-                        <p class="para-2 mb-1"><img class="me-2" src="/icons/tick__icon.svg" alt="error">{{$value}} <br>
+                        <p class="para-2 mb-1"><img class="me-2" src="/storage/icons/tick__icon.svg" alt="error">{{$value}} <br>
                         @endforeach
                     </p>
                        
@@ -362,7 +362,7 @@
                                 @endforeach
                              @foreach($course_details_points as $course_details_point)
                              @if($course_details_point != '')
-                             <p class="card-text-1 mb-2"><img class="me-2" src="/icons/tick__icon.svg" alt="error">{{$course_details_point}} </p>
+                             <p class="card-text-1 mb-2"><img class="me-2" src="/storage/icons/tick__icon.svg" alt="error">{{$course_details_point}} </p>
                              @endif
                              @endforeach
                         </div>
@@ -406,21 +406,21 @@
                                       <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                        {{$singleCourseDetail['instructorTwitter']}}
                                         @endforeach">
-                                        <img class="me-2" src="/icons/twitter__icon.svg" alt="error">
+                                        <img class="me-2" src="/storage/icons/twitter__icon.svg" alt="error">
                                       </a>
                                     </div>
                                 <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
                                             @endforeach">
-                                            <img class="me-2" src="/icons/linkedin__icon.svg" alt="error">
+                                            <img class="me-2" src="/storage/icons/linkedin__icon.svg" alt="error">
                                     </a>
                                 </div>
                                 <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                             {{$singleCourseDetail['instructorYoutube']}}
                                             @endforeach">
-                                            <img class="me-2" src="/icons/youtube__icon.svg" alt="error">
+                                            <img class="me-2" src="/storage/icons/youtube__icon.svg" alt="error">
                                     </a>
                                 </div>
                             </div>

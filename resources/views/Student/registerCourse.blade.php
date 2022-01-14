@@ -239,7 +239,7 @@
                                             <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
                                         </div>
                                         <div class="col-sm-auto col-6 think-text-color-grey">
-                                            <p><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                            <p><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
@@ -249,7 +249,7 @@
                                             </p>
                                         </div>
                                         <div class="col-sm-auto col-6 think-text-color-grey">
-                                            <p class="fw-bold"><img class="me-1" src="/icons/level__icon.svg" alt="error">       
+                                            <p class="fw-bold"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">       
                                                 {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>

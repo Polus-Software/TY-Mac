@@ -282,7 +282,7 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-lg-12">
-                <div class="card card-1  border-0 mb-3 mt-4">
+                <div class="card card-1  border-0 mb-3 mt-4 mw-100">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                             @foreach($singleCourseDetails as $course)
@@ -307,7 +307,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                        <p class="para-1"><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                        <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_category'] }}
                                             @endforeach

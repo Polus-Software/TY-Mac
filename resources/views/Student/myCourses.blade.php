@@ -374,7 +374,7 @@
                                                         aria-valuemax="100">{{ $singleEnrolledCourse['progress'] }}%</div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-12"><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-12"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                                     {{ $singleEnrolledCourse['category_name'] }}
                                                 </p>
                                             </div>
