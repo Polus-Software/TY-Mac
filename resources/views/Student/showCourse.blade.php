@@ -241,13 +241,13 @@
                     @endforeach</p>
                     </div>
                     <div class="col-auto">
-                        <p class="border-end pe-4">@foreach($singleCourseDetails as $singleCourseDetail)
-                    {{$singleCourseDetail['course_difficulty']}}
+                        <p class="border-end pe-4"><img class="me-1" src="/icons/level__icon.svg" alt="error">@foreach($singleCourseDetails as $singleCourseDetail)
+                     {{$singleCourseDetail['course_difficulty']}}
                     @endforeach</p>
                     </div>
                     <div class="col-auto p-0">
                         <p class="ms-2">@foreach($singleCourseDetails as $singleCourseDetail)
-                    {{$singleCourseDetail['course_category']}}
+                        <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">  {{$singleCourseDetail['course_category']}}
                     @endforeach</p>
                     </div>
                 </div>
@@ -433,6 +433,9 @@
                   <div class="card card-4 mb-3 mt-3 flex-grow-1" style="background: #F8F7FC;">
                     <div class="card-body p-4">
                         <h5 class="card-title mb-4">Upcoming Live Cohorts</h5>
+                        
+                        
+                        @if(count($liveSessions))
                         @foreach($liveSessions as $liveSession)
                             <div class="row g-0 border-bottom">
                                 <div class="col-auto">
@@ -441,13 +444,16 @@
                                 <div class="col">
                                     <div class="card-body">
                                         <h5 class="card-title">
-                                            <a style="text-decoration:none;color:#2C3443;" href="{{ route('session-view', 7) }}">{{$liveSession['session_title']}}</a>
+                                            <a style="text-decoration:none;color:#2C3443;">{{$liveSession['session_title']}}</a>
                                         </h5>
                                         <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+                        @else
+                            <h6>No upcoming live cohorts!</h6>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -463,6 +469,7 @@
                         <div class="card-body p-4">
                             <h5 class="card-title">Student Reviews</h5>
                             <div class="row">
+                              @if(!empty($singleCourseFeedbacks))
                               @foreach($singleCourseFeedbacks as $singleCourseFeedback)
                                 <div class="col-lg-8 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
                                     <img src="{{asset('/storage/images/'.$singleCourseFeedback['studentProfilePhoto'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:54px; height:54px;">
@@ -491,6 +498,9 @@
                                     </div>  
                                 </div>
                                 @endforeach
+                                @else
+                                <h6 class="mt-4" style="text-align:center;">No reviews yet.</h6>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -171,6 +171,8 @@ class InstructorController extends Controller
             $firstName = $request->input('firstname');
             $lastName = $request->input('lastname');
             $email = $request->input('email');
+            $signatureFile = $request->file('signature')->getClientOriginalName();
+            $request->signature->storeAs('signatures',$signatureFile,'public');
             if ($instructor_id) {
                 $instructor = User::findOrFail($instructor_id);
                 if ($instructor) {
@@ -183,6 +185,7 @@ class InstructorController extends Controller
                     $instructor->linkedin_social = $request->input('linkedin_social');
                     $instructor->youtube_social = $request->input('youtube_social');
                     $instructor->description = $request->input('description');
+                    $instructor->signature = $signatureFile;
                     $instructor->save();
                     return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
                 }

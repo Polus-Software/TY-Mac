@@ -70,6 +70,17 @@ class RtmTokenGeneratorController extends Controller
     public function buildToken(Request $request, $session) {
 
         $sessionObj = LiveSession::where('live_session_id', $session);
+        
+
+        $batch = CohortBatch::where('id', $sessionObj->value('batch_id'));
+        
+        $startTime = $batch->value('start_time');
+        $endTime = $batch->value('end_time');
+
+        $firstTime=strtotime($startTime);
+        $lastTime=strtotime($endTime);
+        $timeDiff=$lastTime-$firstTime;
+        $totalSeconds = $timeDiff;
 
         $sessionTitle = $sessionObj->value('session_title');
         $userObj = Auth::user();
@@ -92,14 +103,14 @@ class RtmTokenGeneratorController extends Controller
             $roleName = "Instructor";
         }
         
-        $expireTimeInSeconds = 86399;
+        $expireTimeInSeconds = $totalSeconds;
         $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
         $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
         $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '1234', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -126,12 +137,14 @@ class RtmTokenGeneratorController extends Controller
         $slNo = 1;
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
+          
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
-
+            $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
             array_push($sessionsArray, array(
                 'slNo' => $slNo,
+                'sessionCourse' => $sessionCourse,
                 'sessionTitle' => $sessionTitle,
                 'instructor' =>$instructor,
                 'batch' => $batch,
@@ -140,6 +153,7 @@ class RtmTokenGeneratorController extends Controller
 
             $slNo++;
         }
+        
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -153,6 +167,7 @@ class RtmTokenGeneratorController extends Controller
 
     public function showCourseAttributes(Request $request) {
         $course = $request->courseId;
+       
         $batchHtml = '';
         $topicHtml = '';
 

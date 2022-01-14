@@ -42,7 +42,12 @@
                 <td class="align-middle">{{$courseData['course_title']}}</td>
                 <td class="align-middle">{{$courseData['course_category']}}</td>
                 <td class="align-middle">{{$courseData['description']}}</td>
-                <td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>
+                @if($courseData['courseStatus'] == 0)
+                <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark">Draft</span></td>
+                @else
+                <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-success text-dark">Published</span></td>
+                @endif
+                <!-- <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark" class="badge bg-warning text-dark">Draft</span></td> -->
                 <td class="align-middle text-center">
                   <a href="{{ route('view-course', ['course_id' => $courseData['id']]) }}" title="View course">
                   <i class="fas fa-eye"></i>

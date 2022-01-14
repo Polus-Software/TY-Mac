@@ -34,9 +34,9 @@
               @php ($slno = 0)
                 @foreach($courseContents as $courseContent)
                 @php ($slno = $slno + 1)
-                <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                <ul class="list-group list-group-flush border-bottom pb-3">
                 
-                <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                <h6 class="card-subtitle mb-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
                 
                     @foreach($courseContent['contentsData'] as $content)
                         <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>

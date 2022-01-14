@@ -281,9 +281,9 @@
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>
-                        <p class="think-register-card-title think-tertiary-color">Cohort 1: Weekly Livestream</p>
+                        <p class="think-register-card-title think-tertiary-color">{{$singleCourseDetail['batchname']}}</p>
                         <p class="card-text-1 mb-1">Cohort starts - {{$singleCourseDetail['start_date']}}</p>
-                        <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}} MON - WED - FRI</p>
+                        <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}}</p>
                         <p class="card-text">
                             {{$singleCourseDetail['start_time']}} {{$singleCourseDetail['time_zone']}} - {{$singleCourseDetail['end_time']}}
                             {{$singleCourseDetail['time_zone']}}
