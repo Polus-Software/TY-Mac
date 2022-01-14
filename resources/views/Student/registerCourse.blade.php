@@ -28,7 +28,7 @@
       <ul class="navbar-nav me-2">
       @if (Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2 mt-1" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
+          <a class="nav-link" href="{{ route('edituser') }}"><img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;"> {{Auth::user()->firstname}}</a>
         </li>
         @endif
         <li class="nav-item">
@@ -238,24 +238,25 @@
                                             <i class="fas fa-star rateCourse"></i>
                                             <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6 think-text-color-grey">
-                                            <p><i class="fas fa-tag fa-flip-horizontal ps-1"></i>
+                                        <div class="col-sm-auto col-6 think-text-color-grey">
+                                            <p><img class="me-1" src="/icons/category__icon.svg" alt="error">
                                                 {{$courseDetails['course_category']}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey text-truncate">
                                             <p class="fw-bold"><i class="far fa-user pe-1"></i>
                                                 {{$courseDetails['instructor_firstname']}} {{$courseDetails['instructor_lastname']}}
+                                            </p>
+                                        </div>
+                                        <div class="col-sm-auto col-6 think-text-color-grey">
+                                            <p class="fw-bold"><img class="me-1" src="/icons/level__icon.svg" alt="error">       
+                                                {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-6 think-text-color-grey">
                                             <p class="fw-bold"><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}} h</p>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey">
-                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>        
-                                                {{$courseDetails['course_difficulty']}}
-                                            </p>
-                                        </div>
+                                       
                                     </div> 
                                 </div>
                             </div>
@@ -267,7 +268,7 @@
     </div>
 </header>
 <section>
-<div class="container">
+<div class="container mb-5">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="border-bottom pb-3">Choose Your Cohort</h1>
@@ -280,9 +281,9 @@
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>
-                        <p class="think-register-card-title think-tertiary-color">Cohort 1: Weekly Livestream</p>
+                        <p class="think-register-card-title think-tertiary-color">{{$singleCourseDetail['batchname']}}</p>
                         <p class="card-text-1 mb-1">Cohort starts - {{$singleCourseDetail['start_date']}}</p>
-                        <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}} MON - WED - FRI</p>
+                        <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}}</p>
                         <p class="card-text">
                             {{$singleCourseDetail['start_time']}} {{$singleCourseDetail['time_zone']}} - {{$singleCourseDetail['end_time']}}
                             {{$singleCourseDetail['time_zone']}}
@@ -296,7 +297,7 @@
     <div class="row mt-4 mb-4">
         <div class="form-group buttons d-flex justify-content-end">
             @csrf
-            <button type="submit" id="registerNowButton" class="btn">Register Now</button>
+            <button type="submit" id="registerNowButton" class="btn btn-secondary think-btn-secondary">Register Now</button>
             <input type="hidden" id="course_id" value="{{$courseDetails['course_id']}}">
         </div>
     </div>

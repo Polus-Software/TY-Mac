@@ -175,6 +175,7 @@
     </div>
   </div>
 <!-- signup modal ends -->
+@if(!$searchTerm)
 <header class="think-banner-allcourses ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
       <div class="row">
@@ -195,7 +196,8 @@
       </div>
     </div>
 </header>
-<section class="section-2 pt-5">
+@endif
+<section class="section-2 pt-5 {{ (!!$searchTerm) ? 'mt-5' : '' }}">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -406,7 +408,11 @@
       <div class="col-md-8">
         <div class="row border-bottom mb-4">
           <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-start p-4">
+            @if(!!$searchTerm)
+            <h3>Search results for "{{ $searchTerm }}"</h3>
+            @else
             <h3>Courses For You</h3>
+            @endif
           </div>
           <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end p-4">
             <select name="" id="" class="rounded">
@@ -420,7 +426,7 @@
           @foreach($courseDatas as $course)
           <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4">
                     <div class="card-1">
-                      <img src="{{ asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image']) }}" class="card-img-top" alt="..." style="height:192px;">
+                    <img src="{{ ($course['course_thumbnail_image']) ? asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image']) : asset('/storage/courseThumbnailImages/defaultImage.png')}}" class="card-img-top" alt="..." style="height:192px;">
                       <div class="card-body pb-0 fs-14">
                         <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
                         <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
@@ -438,7 +444,7 @@
                             (60)
                           </div>
                           <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-                            <i class="fas fa-tag fa-flip-horizontal ps-2"></i>{{ $course['course_category'] }}
+                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                           </div>
                         </div>
 
@@ -450,7 +456,7 @@
                               <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-auto item-3 px-0 d-flex">
-                                <p class="text-end"><i class="far fa-user pe-1"></i>{{ $course['course_difficulty'] }}</p>
+                                <p class="text-end"><img class="me-1" src="/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
                               </div>
                             </div>
                           </li>

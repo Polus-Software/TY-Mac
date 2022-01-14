@@ -23,6 +23,11 @@
     </li>
     @elseif($userType == 'admin')
     <li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('attendance.tracker.view') }}">
+      <i class="fas fa-graduation-cap"></i>
+        Attendance Tracker</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('admin.viewall') }}">
       <i class="fas fa-users"></i>
         Students</a>

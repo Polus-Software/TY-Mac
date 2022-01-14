@@ -100,6 +100,12 @@ Route::get('/', function () {
 
 
     Route::get('/students', [AdminController::class, 'viewAllStudents'])->name('admin.viewall');
+    Route::get('/attendance-tracker-view', [AdminController::class, 'attendanceTrackerView'])->name('attendance.tracker.view');
+    Route::get('/get-attendance-data', [AdminController::class, 'getAttendanceData'])->name('get.attendance.data');
+    Route::post('/get-attendance-table', [AdminController::class, 'getAttendanceTable'])->name('get.attendance.table');
+    Route::post('/get-attendance-batches', [AdminController::class, 'getAttendanceBatches'])->name('get.attendance.batches');
+    Route::post('/get-attendance-sessions', [AdminController::class, 'getAttendanceSessions'])->name('get.attendance.sessions');
+
     Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');

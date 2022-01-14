@@ -122,13 +122,13 @@ window.onload = function(event) {
     return cardEl;
   }
 
-const generateSubTopicHTMLInitial = () => {
-  const subTopicContainerEl = document.querySelector('.sub-topic-container');
-  subTopicContainerEl.appendChild(generateSubTopicHTML());
-  document.getElementById('topic_count').value = 1;
-  sub_topic_count++;
-}
-generateSubTopicHTMLInitial();
+  const generateSubTopicHTMLInitial = () => {
+    const subTopicContainerEl = document.querySelector('.sub-topic-container');
+    subTopicContainerEl.appendChild(generateSubTopicHTML());
+    document.getElementById('topic_count').value = 1;
+    sub_topic_count++;
+  }
+  generateSubTopicHTMLInitial();
 
   const generateContentHTML = (topicNum, contentCount) => {
     const contentContainerEl = createNewElement('div', ['card', 'card-body', 'mb-3']);

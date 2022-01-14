@@ -96,12 +96,13 @@ class AuthController extends Controller
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
            if($userType == 'student' or $userType == 'instructor'){
-            return redirect('/');
+                return redirect('/');
             }else{
                 return redirect('dashboard');
             }
-        }else
-        return back()->with('Error','Credentials are wrong.');
+        } else {
+            return back()->with('Error','Credentials are wrong.');
+        }
     }
     
     

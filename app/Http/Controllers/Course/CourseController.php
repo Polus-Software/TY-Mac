@@ -412,7 +412,7 @@ class CourseController extends Controller
             $topic = new Topic;
             $topic->topic_title = $request->input('topic_title'.$i);
             $topic->course_id = $course_id;
-            $topic->description = "test";
+            $topic->description = "";
             $topic->save();
             $content_count = $request->input('content_count_topic_'.$i);            
             for($j = 1; $j<=$content_count; $j++) {
@@ -427,9 +427,9 @@ class CourseController extends Controller
                 $content = new TopicContent;
                 $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
                 $content->topic_id = $topic->id;
-                $content->description = $external_links;
-                $content->content_type = 'test';
-                $content->document = 'test';
+                $content->description = "";
+                $content->content_type = 'link';
+                $content->document = $external_links;
                 $content->save();
             }
         }
@@ -685,7 +685,7 @@ class CourseController extends Controller
     public function saveCohortBatch(Request $request) {
        
         $cohortbatch = new CohortBatch();
-        $cohortbatch->title = $request->input('cohortbatch_title');
+        $cohortbatch->batchname = $request->input('batchname');
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
@@ -763,6 +763,7 @@ class CourseController extends Controller
   
         $cohortbatch = CohortBatch::find($cohort_batch_id);
         $cohortbatch->course_id = $course_id;
+        $cohortbatch->batchname = $request->input('batchname');
         $cohortbatch->title = $request->input('cohortbatch_title');
   
         $cohortbatch->course_id = $course_id;  
@@ -773,6 +774,7 @@ class CourseController extends Controller
         $cohortbatch->end_time = $request->input('cohortbatch_endtime');
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
+        $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->save();
 
         return redirect()->route('view_cohortbatches', ['course_id' => $course_id]);
