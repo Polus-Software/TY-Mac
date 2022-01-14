@@ -67,7 +67,7 @@
 
                     <div class="text-center bottom-text">
                         <span><p>Don't have an account? </span>
-                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                        <span class="login"><a href="" id ="signup_link">&nbsp;Sign up</a></p></span>
                     </div>            
             
                 </form>
@@ -169,7 +169,7 @@
                 <span>
                   <p>Already have an account?
                 </span>
-                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+                <span class="login"><a href="" id="login_link">&nbsp;Login</a></p></span>
               </div>
             </form>
           </div>
@@ -179,7 +179,7 @@
     </div>
   </div>
 <!-- signup modal ends -->
-<!-- contact modal -->
+<!-- Have a question modal -->
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
@@ -295,7 +295,7 @@
                    @foreach($singleCourseDetails as $singleCourseDetail)
                         <div class="col-lg-12">
                         <span class="fw-bold">share this course: </span>
-                            <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
+                            <a class="btn shadow-none" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode ($singleCourseDetail['course_title']);?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode( url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/'.$singleCourseDetail['course_image']); ?>">
                             <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
                         </div>
                     @endforeach
@@ -405,21 +405,21 @@
                                     <div class="col-auto">
                                       <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                        {{$singleCourseDetail['instructorTwitter']}}
-                                        @endforeach">
+                                        @endforeach" target="_blank">
                                         <img class="me-2" src="/storage/icons/twitter__icon.svg" alt="error">
                                       </a>
                                     </div>
                                 <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
-                                            @endforeach">
+                                            @endforeach" target="_blank">
                                             <img class="me-2" src="/storage/icons/linkedin__icon.svg" alt="error">
                                     </a>
                                 </div>
                                 <div class="col-auto">
                                     <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                             {{$singleCourseDetail['instructorYoutube']}}
-                                            @endforeach">
+                                            @endforeach" target="_blank">
                                             <img class="me-2" src="/storage/icons/youtube__icon.svg" alt="error">
                                     </a>
                                 </div>
@@ -439,7 +439,7 @@
                         @foreach($liveSessions as $liveSession)
                             <div class="row g-0 border-bottom">
                                 <div class="col-auto">
-                                    <img src="/courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block py-2" alt="error">
+                                    <img src="" class="img-fluid mx-auto d-block py-2" alt="error">
                                 </div>
                                 <div class="col">
                                     <div class="card-body">
@@ -595,6 +595,25 @@ const formControl=input.parentElement;
 const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
+
+ document.getElementById('signup_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('loginModal');
+      document.getElementById('signup_navlink').click();
+    });
+document.getElementById('login_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('signupModal');
+      document.getElementById('login_navlink').click();
+    });
+
+    function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    console.log(modal);
+    modal.hide();
+  }
+
 
 </script>
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>

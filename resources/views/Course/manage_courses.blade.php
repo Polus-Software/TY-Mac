@@ -26,8 +26,8 @@
               <tr>
                 <th scope="col">Slno.</th>
                 <th scope="col">Title</th>
-                <th scope="col">Category</th>
-                <th scope="col">Description</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">Last Updated</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
               </tr>
@@ -40,8 +40,8 @@
               <tr id="{{$courseData['id']}}">
                 <th class="align-middle" scope="row">{{($courseDatas->currentpage() -1) * $courseDatas->perpage() + $slno }}</th>
                 <td class="align-middle">{{$courseData['course_title']}}</td>
-                <td class="align-middle">{{$courseData['course_category']}}</td>
-                <td class="align-middle">{{$courseData['description']}}</td>
+                <td class="align-middle">{{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}</td>
+                <td class="align-middle">{{$courseData['updated_at']}}</td>
                 @if($courseData['courseStatus'] == 0)
                 <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark">Draft</span></td>
                 @else

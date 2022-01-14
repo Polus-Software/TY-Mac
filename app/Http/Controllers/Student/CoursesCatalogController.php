@@ -217,13 +217,14 @@ class CoursesCatalogController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           
+    
            if($userType == 'instructor'){
             return redirect('/');
         }else{
             return redirect()->back()->with(['success' => 'Successfully logged in!']);
             }
         }
+        return redirect('/');
     }
 
     public function registerCourse(Request $request){
@@ -239,7 +240,7 @@ class CoursesCatalogController extends Controller
         foreach($batches as $batch){
             $singleCourseData =  array (
             'batch_id' => $batch->id,
-            'batchname' => $batch->batchname,
+            // 'batchname' => $batch->batchname,
             'title' => $batch->title,
             'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
             'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),

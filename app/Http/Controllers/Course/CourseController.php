@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserType;
+use App\Models\User;
 use App\Models\AssignedCourse;
 use App\Models\Topic;
 use App\Models\CohortBatch;
@@ -21,6 +22,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
+use Carbon\Carbon;
 
 class CourseController extends Controller
 {
@@ -36,14 +38,19 @@ class CourseController extends Controller
         $courseCategories = CourseCategory::all();
         $courses = Course::all();
         foreach ($courses as $course) {
-            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            // $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
             $courseStatus = DB::table('courses')->where('id', $course->id)->value('is_published');
+            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+            $instructorfirstname = User::where('id', $assigned)->value('firstname');
+            $instructorlastname = User::where('id', $assigned)->value('lastname');
             $courseData =  array (
                 'id' => $course->id,
                 'course_title' => $course->course_title,
-                'course_category' => $courseCategory,
-                'description' => $course->description,
+                'instructor_firstname' => $instructorfirstname,
+                'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
+                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y'),
+               
               );
               array_push($courseDetails, $courseData);
         }
@@ -685,7 +692,6 @@ class CourseController extends Controller
     public function saveCohortBatch(Request $request) {
        
         $cohortbatch = new CohortBatch();
-        $cohortbatch->batchname = $request->input('batchname');
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
@@ -763,7 +769,6 @@ class CourseController extends Controller
   
         $cohortbatch = CohortBatch::find($cohort_batch_id);
         $cohortbatch->course_id = $course_id;
-        $cohortbatch->batchname = $request->input('batchname');
         $cohortbatch->title = $request->input('cohortbatch_title');
   
         $cohortbatch->course_id = $course_id;  

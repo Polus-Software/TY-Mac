@@ -331,7 +331,7 @@
                                     <div class="row">
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                             <p class="duration"><i class="far fa-clock pe-1"></i>
-                                                Next Live Class: - <small>11/19/2021 - 9 AM IST - 10 AM IST</small>
+                                                Next Live Class: - <small>{{$next_live_cohort}}</small>
 
                                             </p>
                                             @foreach($singleCourseDetails as $course)
@@ -396,8 +396,8 @@
                         </button>
                         @if($userType == 'student')
                         <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
-                                <img src="" alt="" class="pe-2">Completion Certificate
-                            </button>
+                        <img src="/storage/icons/Icon awesome-trophy.svg" alt="error" class="pe-2">Completion Certificate
+                    </button>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
                         <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
 
@@ -508,7 +508,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
-                                        <span>Next Live Class: {{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} - {{ $topicDetail['endTime'] }}</span>
+                                        <span>Next Live Class: {{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @else
@@ -694,12 +694,15 @@
                                             </div>
 
                                         </div>
-
+                                       
+                                                                                        
                                         <div class="row">
 
                                         @foreach($qas as $qa)
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                                                <img src="/courselist/avatar.png" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                            @foreach($singleCourseDetails as $course)
+                                                <img src="{{ asset('/storage/images/'.$qa['student_profile_photo']) }}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                @endforeach
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -749,7 +752,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                                                                <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">4 months ago</p>
+                                                                <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">{{ $qa['date'] }}</p>
                                                             </div>
                                                         </div>
 
@@ -826,13 +829,13 @@
                                         <div class="d-flex justify-content-center">
                                             <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorTwitter']}}
-                                            @endforeach"><i class="fab fa-twitter pe-2"></i></a>
+                                            @endforeach" target="_blank"><i class="fab fa-twitter pe-2"></i></a>
                                                 <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
-                                            @endforeach"><i class="fab fa-linkedin-in pe-2"></i></a>
+                                            @endforeach" target="_blank"><i class="fab fa-linkedin-in pe-2"></i></a>
                                                 <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorYoutube']}}
-                                            @endforeach"><i class="fab fa-youtube"></i></a>
+                                            @endforeach" target="_blank"><i class="fab fa-youtube"></i></a>
                                             </p>
                                         </div>
                                     </div>
@@ -945,14 +948,14 @@
                                                                 <div class="col-lg-12 d-flex justify-content-center">
                                                                     <div class="card text-center" style="margin: auto; width: 100%; border: 1px solid grey; margin-bottom:30px;">
                                                                         <div class="card-body">
-                                                                        
+                                                                        <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
                                                                             <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
                                                                             <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :  
                                                                             @foreach($singleCourseDetails as $course)
                                                                                 {{ $course['date_of_issue'] }} 
                                                                             @endforeach</small>
                                                                             <small style="position: absolute; right: 45px; top:40px;"></small>
-                                                                            <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1>
+                                                                            <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                                             <div style="background:#FFF9E8;">
                                                                             <h3 class="card-title-1-certificate">Certificate of completion</h3>
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
@@ -985,7 +988,7 @@
                                                                 </div>
                                                                 <div class="row">
                                                                 @foreach($singleCourseDetails as $course)
-                                                                        <a href="{{ route('generate-certificate', $course['id']) }}" class="btn btn-dark">Download certificate</a>
+                                                                        <a href="{{ route('generate-certificate', $course['id']) }}"  target="_blank" class="btn btn-dark">Download certificate</a>
                                                                 @endforeach
                                                             </div>
                                                         </div>

@@ -64,7 +64,7 @@
 
                     <div class="text-center bottom-text">
                         <span><p>Don't have an account? </span>
-                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
+                        <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
                     </div>            
             
                 </form>
@@ -165,7 +165,7 @@
                 <span>
                   <p>Already have an account?
                 </span>
-                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
+                <span class="login"><a href="" id="login_link">&nbsp;Login</a></p></span>
               </div>
             </form>
           </div>
@@ -566,8 +566,48 @@ const small=formControl.querySelector('small');
 small.style.visibility = 'hidden';
 }
 
+
+document.getElementById('signup_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('loginModal');
+      document.getElementById('signup_navlink').click();
+    });
+document.getElementById('login_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('signupModal');
+      document.getElementById('login_navlink').click();
+    });
+
+    function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    console.log(modal);
+    modal.hide();
+  }
+
 }
 
+
+document.getElementById('signup_link').addEventListener('click', function(e) {
+  consile.log('nlj');
+      e.preventDefault();
+      closeModal('loginModal');
+      document.getElementById('signup_navlink').click();
+    });
+
+    document.getElementById('login_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('signupModal');
+      document.getElementById('login_navlink').click();
+    });
+
+    function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    console.log(modal);
+    modal.hide();
+  }
 </script>
+
 
 

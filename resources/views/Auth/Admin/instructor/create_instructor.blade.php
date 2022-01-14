@@ -145,7 +145,7 @@
                 <input class="form-control" type="file" name="signature" id="signature" placeholder="Enter signature">
                 @endif
                 @if ($errors->has('signature'))
-                <div class="invalid-feedback d-block">{{ $errors->first('signature') }}</div>
+                <div class="invalid-feedback d-block">Please upload signature</div>
                 @endif
               </div>
               @if(!$isEdit)

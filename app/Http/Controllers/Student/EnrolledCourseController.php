@@ -75,6 +75,7 @@ class EnrolledCourseController extends Controller
         $userType = Usertype::where('id', $currentUserRoleId)->value('user_role');
         $student_firstname = $user->firstname;
         $student_lastname = $user->lastname;
+       
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructor = User::where('id', $assigned);
@@ -173,6 +174,7 @@ class EnrolledCourseController extends Controller
                     $startTime = $batch->value('start_time');
                     $endTime = $batch->value('end_time');
                     $endDate = $batch->value('end_date');
+                    $time_zone = $batch->value('time_zone');
                     $occurrenceArr = explode(',', $occurrence);
                     $checkDay = in_array(date("l"), $occurrenceArr);
                     
@@ -188,16 +190,17 @@ class EnrolledCourseController extends Controller
     
                 array_push($topicDetails, array(
                     'liveId' => $liveId,
-                    'startDate' => $startDate,
-                    'startTime' => $startTime,
-                    'endTime' => $endTime,
+                    'startDate' => Carbon::createFromFormat('Y-m-d',$startDate)->format('m/d/y'),
+                    'startTime' => Carbon::createFromFormat('H:i:s',$startTime)->format('h A'),
+                    'endTime' => Carbon::createFromFormat('H:i:s', $endTime)->format('h A'),
+                    'time_zone' => $time_zone,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList
                 ));
             }
-            
+           
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -218,6 +221,7 @@ class EnrolledCourseController extends Controller
             'instructor_signature' => $instructorSignature,
             'student_firstname' =>$student_firstname,
             'student_lastname' =>$student_lastname,
+         
             'date_of_issue' => Carbon::createFromFormat('Y-m-d H:i:s', $date_of_issue)->format('F d, Y'),
         );
 
@@ -253,6 +257,7 @@ class EnrolledCourseController extends Controller
             $instructor = User::where('id', $qa->instructor);
             $instructorName = $instructor->value('firstname') . ' ' . $instructor->value('lastname');
             $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+            $student_profile_photo = $student->value('image');
             $question = $qa->question;
             $reply = $qa->reply;
             $hasReplied = $qa->has_replied;
@@ -261,6 +266,7 @@ class EnrolledCourseController extends Controller
                 'id' => $qa->id,
                 'student' => $studentName,
                 'instructor' => $instructorName,
+                'student_profile_photo' => $student_profile_photo,
                 'question' => $question,
                 'reply' => $reply,
                 'hasReplied' => $hasReplied,
@@ -494,7 +500,6 @@ class EnrolledCourseController extends Controller
         $qa = new CourseQA;
         $qa->course_id = $course_id;
         $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
-        dd($instructor);
         $user =Auth::user();
         if($user) {
             $student = User::where('id', $user->id)->value('id');

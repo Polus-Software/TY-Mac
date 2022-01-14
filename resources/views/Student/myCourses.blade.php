@@ -212,7 +212,7 @@
                                             @foreach($liveSessionDetails as $liveSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
+                                                    <img src="{{ asset('/storage/courseTumbnailImages/' . (($liveSessionDetail['course_thumbnail_image']) ? $liveSessionDetail['course_thumbnail_image'] : 'defaultImage.png')) }}"
                                                         class="card-img-top" alt="...">
                                                         <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
                                                     <div class="card-body">
@@ -276,7 +276,7 @@
                                             @foreach($upComingSessionDetails as $upComingSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
+                                                    <img src="{{ asset('/storage/courseTumbnailImages/' . (($upComingSessionDetail['course_thumbnail_image']) ? $upComingSessionDetail['course_thumbnail_image'] : 'defaultImage.png')) }}"
                                                         class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>

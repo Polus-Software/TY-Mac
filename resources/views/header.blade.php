@@ -24,6 +24,7 @@
       <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
         <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
       </li>
+     
       @if (Auth::check())
         @if(Auth::user()->role_id == 3)
         <li class="nav-item {{ (request()->is('assigned-courses')) ? 'active': '' }}">

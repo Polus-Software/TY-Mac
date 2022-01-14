@@ -101,7 +101,7 @@ class AuthController extends Controller
                 return redirect('dashboard');
             }
         } else {
-            return back()->with('Error','Credentials are wrong.');
+            return redirect('/')->with('Error','Credentials are wrong.');
         }
     }
     
@@ -136,6 +136,7 @@ class AuthController extends Controller
                 if($currentBatchStartDate > $current_date) {
                     $session_title = $session->session_title;
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                  
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
@@ -208,9 +209,9 @@ class AuthController extends Controller
     
             Mail::to('support@thinklit.com')->send(new Gmail($details));
     
-            return redirect('/')->withSuccess('Sent successfully!');
+            return back()->withSuccess('Sent successfully!');
         } catch (Exception $exception) {
-            return redirect('/');
+            return back();
         }
         
     }

@@ -741,6 +741,8 @@ window.addEventListener("scroll", () => {
     const modal = bootstrap.Modal.getInstance(truck_modal);
     console.log(modal);
     modal.hide();
+    
+   
   }
 window.onload = function(e) {
   var url = window.location.href;

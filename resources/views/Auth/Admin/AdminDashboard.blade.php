@@ -19,7 +19,7 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col" class="align-middle text-center"></th>
+                <th scope="col" class="align-middle text-center">Avatar</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">E-mail ID</th>
