@@ -15,7 +15,7 @@ class AddMoreColumnsToCourses extends Migration
     {
         Schema::table('courses', function (Blueprint $table) {
             $table->text('short_description');
-            $table->text('course_details');
+            $table->text('course_details')->nullable();
             $table->text('course_details_points');
             $table->string('course_image');
         });

@@ -129,9 +129,9 @@
               <div class="col-md-12">
                 <label for="about">About</label>
                 @if(!!$isEdit)
-                <textarea class="form-control" value="{{$instructorDetails['instructor_description']}}" name="description" id="description" placeholder="Enter description" cols="30" rows="5"></textarea>
+                <textarea class="form-control" value="{{$instructorDetails['instructor_description']}}" name="description" id="description" placeholder="Enter description" cols="30" rows="5">{{$instructorDetails['instructor_description']}}</textarea>
                 @else
-                <textarea class="form-control"  name="description" id="designation" placeholder="Enter description" cols="30" rows="5"></textarea>
+                <textarea class="form-control"  name="description" id="description" placeholder="Enter description" cols="30" rows="5"></textarea>
                 @endif
                 @if ($errors->has('description'))
                 <div class="invalid-feedback d-block">{{ $errors->first('description') }}</div>

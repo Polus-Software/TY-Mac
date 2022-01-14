@@ -168,7 +168,7 @@
               @if(isset($course_details['image']))
               <div class="col"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail" alt="..."></div>
               @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.jpg') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>
@@ -192,7 +192,7 @@
             @if(isset($course_details['thumbnail']))
             <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
             @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.jpg') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>

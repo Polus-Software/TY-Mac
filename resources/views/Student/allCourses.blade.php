@@ -420,7 +420,7 @@
           @foreach($courseDatas as $course)
           <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4">
                     <div class="card-1">
-                      <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                      <img src="{{ asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image']) }}" class="card-img-top" alt="..." style="height:192px;">
                       <div class="card-body pb-0 fs-14">
                         <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
                         <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>

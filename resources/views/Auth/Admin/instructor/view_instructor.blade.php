@@ -62,8 +62,14 @@
             </div>
 
             <div class="col-md-12">
-              <label>Signature</label>
-              <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start" alt="" style="width:94px; height:94px;">
+              <div class="row">
+                <div class="col-lg-3">
+                    <label>Signature</label>
+                </div>
+                <div class="col-lg-8">
+                <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start" alt="" style="width:300px; height:94px;">
+                </div>
+              </div>
             </div>
           </div>         
 

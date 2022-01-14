@@ -126,6 +126,7 @@ class RtmTokenGeneratorController extends Controller
         $slNo = 1;
         foreach($sessions as $session) {
             $sessionTitle = $session->session_title;
+          
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
@@ -140,6 +141,7 @@ class RtmTokenGeneratorController extends Controller
 
             $slNo++;
         }
+        
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -153,6 +155,7 @@ class RtmTokenGeneratorController extends Controller
 
     public function showCourseAttributes(Request $request) {
         $course = $request->courseId;
+       
         $batchHtml = '';
         $topicHtml = '';
 

@@ -37,11 +37,13 @@ class CourseController extends Controller
         $courses = Course::all();
         foreach ($courses as $course) {
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            $courseStatus = DB::table('courses')->where('id', $course->id)->value('is_published');
             $courseData =  array (
                 'id' => $course->id,
                 'course_title' => $course->course_title,
                 'course_category' => $courseCategory,
-                'description' => $course->description
+                'description' => $course->description,
+                'courseStatus' => $courseStatus,
               );
               array_push($courseDetails, $courseData);
         }
@@ -137,7 +139,7 @@ class CourseController extends Controller
             $courseFileName = $courseFile->getClientOriginalName();
             $destinationPath = public_path().'/storage/courseImages';
             $courseFile->move($destinationPath,$courseFileName);
-
+          
             $courseThumbnailFile = $request->course_thumbnail_image;
             $courseThumbnailFileName = $courseThumbnailFile->getClientOriginalName();
             $destinationPath = public_path().'/storage/courseThumbnailImages';
@@ -155,8 +157,8 @@ class CourseController extends Controller
         $course->short_description = $what_learn ;
         $course->course_details = $whoLearnDescription;
         $course->course_details_points = $who_learn;
-        $course->course_image = $courseFile;
-        $course->course_thumbnail_image = $courseThumbnailFile;
+        $course->course_image = $courseFileName;
+        $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
         $course->save();
@@ -192,8 +194,8 @@ class CourseController extends Controller
                     'duration' => $data->value('courses.course_duration'),
                     'whatlearn' => $whatlearn,
                     'whothis' => $whothis,
-                    'image' => $data->value('courses.course_image'),
-                    'thumbnail' => $data->value('courses.course_thumbnail_image')
+                    'image' => $data->value('course_image'),
+                    'thumbnail' => $data->value('course_thumbnail_image')
                 ];
 
                 $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
@@ -555,7 +557,7 @@ class CourseController extends Controller
      
         $assignment_id = $request->get('assignment_id');
         $assignment_details = DB::table('topic_assignments')->where('id', $assignment_id);
-         $subTopics = DB::table('topics')->where('course_id', $request->course_id)->get();
+        $subTopics = DB::table('topics')->where('course_id', $request->course_id)->get();
         $assignment = [
             'id' => $assignment_details->value('id'),
             'topic_id' => $assignment_details->value('topic_id'),
@@ -683,7 +685,7 @@ class CourseController extends Controller
     public function saveCohortBatch(Request $request) {
        
         $cohortbatch = new CohortBatch();
-        $cohortbatch->batchname = $request->input('cohortbatch_title');
+        $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');

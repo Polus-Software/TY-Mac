@@ -17,14 +17,14 @@
       <input type="hidden" id="course_id" name="course_id" value="{{$course_id}}">
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
-   <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('view-assignments', $course_id) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="{{ route('create-assignment', [ 'course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Assignment</a>
-  </li> 
- </ul>
-</div> 
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{{ route('view-assignments', $course_id) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ route('create-assignment', [ 'course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Assignment</a>
+            </li> 
+          </ul>
+      </div> 
         <div class="col-12">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="assignment_title">

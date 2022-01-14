@@ -3,7 +3,7 @@
 @section('content')
 @extends('header')
     <div class="container">
-        <div class="custom-container mx-auto border">
+        <div class="custom-container mx-auto border mb-5">
             <div class="row">                    
                 <div class="col-lg-3 col-md-4 col-sm-4 col-sm-12 col-12 mt-3">
                    <div class="sidebar h-100 bg-light ms-3">
