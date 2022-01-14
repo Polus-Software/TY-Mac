@@ -282,7 +282,7 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-lg-12">
-                <div class="card card-1  border-0 mb-3 mt-4">
+                <div class="card card-1  border-0 mb-3 mt-4 mw-100">
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                             @foreach($singleCourseDetails as $course)
@@ -307,7 +307,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                        <p class="para-1"><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                        <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_category'] }}
                                             @endforeach
@@ -508,7 +508,11 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
+                                        @if(!empty($liveSessions))
                                         <span>Next Live Class: {{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} - {{ $topicDetail['endTime'] }}</span>
+                                        @else
+                                        <span>No sessions scheduled</span>
+                                        @endif
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @else

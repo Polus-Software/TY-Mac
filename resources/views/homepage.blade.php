@@ -250,7 +250,7 @@
                             (60)
                           </div>
                           <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
+                          <img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                           </div>
                         </div>
 
@@ -262,7 +262,7 @@
                               <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                               </div>
                               <div class="col-auto item-3 px-0 d-flex">
-                                <p class="text-end"><img class="me-1" src="/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
+                                <p class="text-end"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
                               </div>
                             </div>
                           </li>
@@ -367,7 +367,7 @@
   <section class="mb-5">
     <div class="container">
       <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
-        <div class="dotted-decoaration"><img src="/icons/dotted.svg" alt="error"></div>
+        <div class="dotted-decoaration"><img src="/storage/icons/dotted.svg" alt="error"></div>
         <div class="col-md-11">
           <div class="think-yellow-container bg-warning p-4 rounded-3 p-5">
             <h2 class="fw-bold text-capitalize text-center text-white mb-4">

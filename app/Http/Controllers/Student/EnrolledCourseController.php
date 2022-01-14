@@ -164,7 +164,9 @@ class EnrolledCourseController extends Controller
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
                 $liveSessions = LiveSession::where('topic_id', $topicId)->get();
-               
+                $startDate = "";
+                $startTime = "";
+                $endTime = "";
                 $liveId = null;
                 foreach($liveSessions as $liveSession) {
                     $batch = CohortBatch::where('id', $liveSession->batch_id);
@@ -187,6 +189,7 @@ class EnrolledCourseController extends Controller
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
+                    'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
                     'startDate' => $startDate,
                     'startTime' => $startTime,

@@ -217,7 +217,7 @@
                                                         <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
-                                                        <p class="card-text text-sm-start">{{ $liveSessionDetail['course_desc'] }}</p>
+                                                        <p class="card-text text-sm-start text-truncate">{{ $liveSessionDetail['course_desc'] }}</p>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item">
                                                                 <div class="row">
@@ -280,7 +280,7 @@
                                                         class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>
-                                                        <p class="card-text text-sm-start">{{ $upComingSessionDetail['course_desc'] }}</p>
+                                                        <p class="card-text text-sm-start text-truncate">{{ $upComingSessionDetail['course_desc'] }}</p>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item">
                                                                 <div class="row">
@@ -374,7 +374,7 @@
                                                         aria-valuemax="100">{{ $singleEnrolledCourse['progress'] }}%</div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col-12"><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-12"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                                     {{ $singleEnrolledCourse['category_name'] }}
                                                 </p>
                                             </div>
