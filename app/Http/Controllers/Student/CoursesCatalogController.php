@@ -218,10 +218,10 @@ class CoursesCatalogController extends Controller
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
            
-           if($userType == 'instructor'){
-            return redirect('/');
-        }else{
-            return redirect()->back()->with(['success' => 'Successfully logged in!']);
+           if($userType == 'instructor') {
+                return redirect('/');
+            }else{
+                return redirect()->back()->with(['success' => 'Successfully logged in!']);
             }
         }
     }
