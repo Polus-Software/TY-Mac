@@ -52,6 +52,7 @@
               <tr>
                 <th scope="col">Slno.</th>
                 <th scope="col">Session Title</th>
+                <th scope="col">Course</th>
                 <th scope="col">Session Instructor</th>
                 <th scope="col">Batch</th>
                 <th scope="col">Topic</th>
@@ -63,6 +64,7 @@
               <tr>
                 <td scope="col">{{ $session['slNo'] }}</td>
                 <td scope="col">{{ $session['sessionTitle'] }}</td>
+                <td scope="col">{{ $session['sessionCourse'] }}</td>
                 <td scope="col">{{ $session['instructor'] }}</td>
                 <td scope="col">{{ $session['batch'] }}</td>
                 <td scope="col">{{ $session['topic'] }}</td>
@@ -368,61 +370,8 @@
     });
   });
 
-  document.getElementById('new_sub_modal').addEventListener('show.bs.modal', function(event) {
-    let path = "{{ route('load-courses') }}";
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      document.getElementById('course').innerHTML = '';
-      document.getElementById('course').innerHTML = data.html;
-    });
-  });
 
-  document.getElementById('batch_modal').addEventListener('show.bs.modal', function(event) {
-    let path = "{{ route('load-courses') }}";
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      console.log(data);
-      document.getElementById('batch-course').innerHTML = '';
-      document.getElementById('batch-course').innerHTML = data.html;
-    });
-  });
-
-  document.getElementById('save_batch').addEventListener('click', function(event) {
-    let batchCourse = document.getElementById('batch-course').value;
-    let batchName = document.getElementById('batch_name').value;
-    let startDate = document.getElementById('start_date').value;
-    let startTime = document.getElementById('start_time').value;
-    let endTime = document.getElementById('end_time').value;
-    let batch_duration = document.getElementById('batch_duration').value;
-    let timeZone = document.getElementById('batch_region').value;
-    let path = "{{ route('save-batch') }}?batchname=" + batchName + "&startDate=" + startDate + "&startTime=" + startTime + "&endTime=" + endTime + "&batch_duration=" + batch_duration + "&batchCourse=" + batchCourse + "&zone=" + timeZone;
-   
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      closeModal('batch_modal');
-    });
-  })
+  
 
   document.getElementById('session_course').addEventListener('change', function(event) {
     let courseId = this.value;

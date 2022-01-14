@@ -279,9 +279,6 @@
 
 
 <header class="d-flex align-items-center mb-3 mt-4">
-<!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com" target="_blank">
-  Share on Facebook
-</a> -->
     <div class="container">
         <div class="row mt-5">
             <div class="col-lg-12">
@@ -510,10 +507,12 @@
                                         <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
-                                        @if($topicDetail['liveId'] != null)
-                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
-                                        @else
+                                        @if($topicDetail['liveId'] == null)
+                                        <span>Next Live Class: {{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} - {{ $topicDetail['endTime'] }}</span>
+                                        @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        @else
+                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
                                     </div>
                                 </div>
@@ -789,7 +788,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @if($userType == 'student')
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <div class="card card-8 mb-5">
@@ -840,6 +839,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
 
                     <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">

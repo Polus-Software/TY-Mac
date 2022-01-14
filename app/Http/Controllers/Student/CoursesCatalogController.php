@@ -217,6 +217,7 @@ class CoursesCatalogController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
+           
            if($userType == 'instructor'){
             return redirect('/');
         }else{
@@ -238,6 +239,7 @@ class CoursesCatalogController extends Controller
         foreach($batches as $batch){
             $singleCourseData =  array (
             'batch_id' => $batch->id,
+            'batchname' => $batch->batchname,
             'title' => $batch->title,
             'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
             'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
@@ -326,7 +328,7 @@ class CoursesCatalogController extends Controller
      $ratings = $request->ratings;
      $duration = $request->duration;
      
-     $courses = DB::table('courses');
+     $courses = DB::table('courses')->where('is_published', true);
      
      if($instructors) {
         $instructorsArr = explode(",", $instructors);

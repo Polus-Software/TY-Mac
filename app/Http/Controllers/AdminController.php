@@ -380,8 +380,7 @@ class AdminController extends Controller
             $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
             $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';
             $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>'; 
-                // <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
-                // <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
+                
                 
               
         }

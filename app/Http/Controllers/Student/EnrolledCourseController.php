@@ -38,6 +38,7 @@ class EnrolledCourseController extends Controller
        
         $courseDetails =[];
         $topicDetails = [];
+        $liveIdArr = [];
         $achievedBadgeDetails = [];
         $badgesDetails = [];
         $allBadges = [];
@@ -162,22 +163,41 @@ class EnrolledCourseController extends Controller
                 $topic_title =  $topic->topic_title;
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
-                $liveSession = LiveSession::where('topic_id', $topicId);
+                $liveSessions = LiveSession::where('topic_id', $topicId)->get();
+               
                 $liveId = null;
-                if($liveSession) {
-                    $liveId = $liveSession->value('live_session_id');
+                foreach($liveSessions as $liveSession) {
+                    $batch = CohortBatch::where('id', $liveSession->batch_id);
+                    $occurrence = $batch->value('occurrence');
+                    $startDate = $batch->value('start_date');
+                    $startTime = $batch->value('start_time');
+                    $endTime = $batch->value('end_time');
+                    $endDate = $batch->value('end_date');
+                    $occurrenceArr = explode(',', $occurrence);
+                    $checkDay = in_array(date("l"), $occurrenceArr);
+                    
+                    if(date("Y-m-d") > $startDate && date("Y-m-d") < $endDate && $checkDay == true) {
+                        $liveId = $liveSession->live_session_id;
+                    }else if(date("Y-m-d") < $startDate && $checkDay == true) {
+                        $liveId = Null;
+                    }else if(date("Y-m-d") > $endDate && $checkDay == true) {
+                        $liveId = "Over";
+                    }
                 }
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
                     'liveId' => $liveId,
+                    'startDate' => $startDate,
+                    'startTime' => $startTime,
+                    'endTime' => $endTime,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList
                 ));
             }
-
+            
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
