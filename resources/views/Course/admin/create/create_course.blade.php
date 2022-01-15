@@ -230,7 +230,6 @@
   if(document.getElementById('route_val').value == "edit") {
     coursePoint = document.getElementById('who_learn_points_count').value;
     descPoint = document.getElementById('what_learn_points_count').value;
-    alert(descPoint);
   }
 
   document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{

@@ -540,6 +540,7 @@
                         </div>
 
                         <div class="row mt-3 mb-3">
+                            @if(!empty($recommendations))
                             @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3" style="height: 560px;">
@@ -571,6 +572,12 @@
                                 </div>
                             </div>
                             @endforeach
+                            @else
+                             <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
+                                <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
+                                <h4 class="fw-bold">No recommendations for you yet!</h4>    
+                            </div>
+                            @endif
                         </div>
 
                     </div>
