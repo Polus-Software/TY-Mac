@@ -1,4 +1,4 @@
-@extends('Layouts.courses')
+@extends('Layouts.app')
 @section('content')
 <style>
   .btn-outline-success {
@@ -17,164 +17,6 @@
     top: 10rem;
 }
   </style>
-
-<!-- login modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-   <div class="modal-dialog">
-   <div class="modal-content">
-      <div class="modal-body">
-     <div class="container-overlay">
-      <div class="mx-auto">
-        <div class="wrapper row flex-column my-5" >  
-            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
-                <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
-                    @csrf
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label for="email" class="email-label">Email</label>
-                        <input type="email"  name="email"class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
-                        value="{{old('email')}}">
-                        <small>Error message</small>
-                        @if ($errors->has('email'))
-                        <span class="text-danger">{{ $errors->first('email') }}</span>
-                        @endif        
-                    </div>
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label for="inputPassword" class="password-label">Password</label>
-                        <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
-                        <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
-                        <small>Error message</small>
-                        @if ($errors->has('password'))
-                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                        @endif
-                    </div>
-
-                    <div class="form-group mx-sm-5 mx-0">
-                        <label class="form-check-label rememberme">
-                        <input  class="form-check-input"  name="remember_me" type="checkbox"> &nbsp;Remember me</label>
-                    </div>
-
-                    <div class="d-grid form-group  mx-sm-5 mx-0">
-                        <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
-                    </div>
-
-                    <div class="text-center forgotpass">
-                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
-                        
-                    </div>
-
-                    <div class="text-center bottom-text">
-                        <span><p>Don't have an account? </span>
-                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
-                    </div>            
-            
-                </form>
-            </div> 
-        </div>      
-     </div>          
-
-    </div>
-    
-   </div>
-</div>
-</div>
-</div>
-<!-- login modal ends -->
- <!-- signup modal -->
- <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
-      <div class="modal-content border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="container-overlay">
-            <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
-              @csrf
-              <input type="hidden" name="_method" value="POST">
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="firstName" class="firstname-label">First Name</label>
-                <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('firstname'))
-                <span class="text-danger">{{ $errors->first('firstname') }}</span>
-                @endif
-                </span>
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="lastName" class="lastname-label">Last Name</label>
-                <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('lastname'))
-                <span class="text-danger">{{ $errors->first('lastname') }}</span>
-                @endif
-
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="email" class="email-label">Email</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
-                <small>Error message</small>
-
-                @if ($errors->has('email'))
-                <span class="text-danger">{{ $errors->first('email') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="inputPassword" class="password-label">Password</label>
-                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
-                <small>Error message</small>
-
-
-                @if ($errors->has('password'))
-                <span class="text-danger">{{ $errors->first('password') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="confirmPassword" class="password-label">Confirm Password</label>
-                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
-                <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
-                <small>Error message</small>
-
-                @if ($errors->has('password_confirmation'))
-                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
-                @endif
-              </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label class="form-check-label checkbox-text">
-                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
-                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
-                @if ($errors->has('privacy_policy'))
-                <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
-                @endif
-              </div>
-
-              <div class="d-grid form-group mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
-              </div>
-
-              <div class="text-center bottom-text">
-                <span>
-                  <p>Already have an account?
-                </span>
-                <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="modal-footer border-0"></div>
-      </div>
-    </div>
-  </div>
-<!-- signup modal ends -->
 @if(!$searchTerm)
 <header class="think-banner-allcourses ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
@@ -443,8 +285,8 @@
                         @endfor
                             (60)
                           </div>
-                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
-                          <img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
+                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
+                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                           </div>
                         </div>
 
@@ -484,7 +326,7 @@
 
 
 @endsection('content')
-
+@push('child-scripts')
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
 <script>
 
@@ -530,44 +372,7 @@ window.onload = function(event) {
       });
    });
   }
-  
-document.querySelector('#loginForm').addEventListener('submit', function(e) {
-        if(loginemail.value === '') {
-            e.preventDefault();
-            showError(loginemail,'Email is required');
-        }else {
-            removeError(loginemail);
-        }
-        if(loginpassword.value === '') {
-            e.preventDefault();
-            showError(loginpassword,'Password is required');
-        } else {
-            removeError(loginpassword);
-        }
-    });
-
-const loginform = document.getElementById('loginForm');
-const loginemail = document.getElementById('inputEmail');
-const loginpassword = document.getElementById('inputPassword');
-   
-
-function showError(input,message){
-  input.style.borderColor = 'red';
-  const formControl=input.parentElement;
-  const small=formControl.querySelector('small');
-  small.innerText=message;
-  small.style.visibility = 'visible';
-}
-
-function removeError(input){
-input.style.borderColor = '#ced4da';
-const formControl=input.parentElement;
-const small=formControl.querySelector('small');
-small.style.visibility = 'hidden';
-}
 
 }
-
 </script>
-
-
+@endpush
