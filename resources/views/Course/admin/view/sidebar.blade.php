@@ -48,6 +48,8 @@
 <!-- sidebar ends -->
 
 <script>
+
+  
   document.getElementById('publish').addEventListener('click', function(e) {
       let courseId = document.getElementById('course_id').value;
       if(courseId == null) {
@@ -68,15 +70,19 @@
               document.getElementById('publish-badge').innerHTML = "Published"
               document.getElementById('publish-badge').classList.remove('bg-warning');
               document.getElementById('publish-badge').classList.add('bg-success');
+              document.getElementById('edit_course').style.display = "none";
             } else {
               document.getElementById('publish').innerHTML = "Publish";
               document.getElementById('publish-badge').innerHTML = "Draft"
               document.getElementById('publish-badge').classList.remove('bg-success');
               document.getElementById('publish-badge').classList.add('bg-warning');
+              document.getElementById('edit_course').style.display = "block";
             }
         });
       }
   });
   </script>
+
+
 
 

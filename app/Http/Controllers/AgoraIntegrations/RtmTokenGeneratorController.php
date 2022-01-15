@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserType;
 use App\Models\User;
 use App\Models\AssignedCourse;
+use App\Models\EnrolledCourse;
 use App\Models\Topic;
 use App\Models\CohortBatch;
 use App\Models\TopicContent;
@@ -23,6 +24,8 @@ use App\Models\StudentFeedbackCount;
 use App\Models\AttendanceTracker;
 use Illuminate\Support\Facades\DB;
 use App\Models\GeneralSetting;
+use App\Models\AchievementBadge;
+use App\Models\StudentAchievement;
 
 require_once "AccessToken.php";
 
@@ -317,11 +320,18 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function studentExit(Request $request) {
+        $attendedSessions = 0;
         $sessionId = $request->sessionId;
         $newTime = $request->timer;
         $user = Auth::user();
         if($user) {
+
+            $courseId = LiveSession::where('live_session_id', $sessionId)->value('course_id');
+
             $student =  $user->id;
+
+            
+
             $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
             if($attendance) {
                 $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
@@ -343,12 +353,50 @@ class RtmTokenGeneratorController extends Controller
             $totalSeconds = ((60 - $startMinutes) + $endMinutes) + ($endHour - ($startHour + 1)) * 3600;
             
             if($attendance->value('attendance_time') * 100 / $totalSeconds >= $attendanceSettings) {
+                $badgeId = AchievementBadge::where('title', 'Starter')->value('id');
+
+                $student_achievement = new StudentAchievement;
+                $student_achievement->student_id = $student;
+                $student_achievement->badge_id =  $badgeId;
+                $student_achievement->is_achieved = true;
+                $student_achievement->save();
+
+                $topicsCount = Topic::where('course_id', $courseId)->count();
+            $trackers = AttendanceTracker::where('student', $student)->get();
+            foreach($trackers as $tracker) {
+                $session = LiveSession::where('live_session_id', $tracker->live_session_id);
+                if($session->value('course_id') == $courseId) {
+                    $attendedSessions = $attendedSessions + 1;
+                }
+            }
+
+            $percent = $attendedSessions * 100 / $topicsCount;
+
+            $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
+
                 $attendance->update(['attendance_Status' => true ]);
             } else {
                 $attendance->update(['attendance_Status' => false ]);
             }
 
-            return response()->json(['status' => 'success', 'msg' => 'Student closed window']);
+            return response()->json(['status' => 'success', 'msg' => 'Student closed window', 'course_id' => $courseId]);
         }
+    }
+
+    public function getAttendanceList(Request $request) {
+            
+            $session = $request->session;
+            $html = "";
+
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->get();
+            
+            foreach($attendanceRec as $rec) {
+                $student = User::where('id', $rec->student);
+                $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+                    $html = $html . '<p style="color:black;margin-top:25px;">' . $studentName . '<span style="margin-left:220px;"><span style="color:green;">●</span> Online</span></p>';
+               
+                
+            }
+            return response()->json(['status' => 'success', 'html' => $html]);
     }
 }
