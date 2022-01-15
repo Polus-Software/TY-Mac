@@ -451,7 +451,7 @@ class CoursesCatalogController extends Controller
                 } 
 
                 $html = $html . '(60)</div>';  
-                $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">';  
+                $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
                 $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>'. $courseCategory .'</div></div>';
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
                 $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';

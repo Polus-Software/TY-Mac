@@ -249,7 +249,7 @@
                         @endfor
                             (60)
                           </div>
-                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end p-0 pe-2">
+                          <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
                           <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                           </div>
                         </div>
