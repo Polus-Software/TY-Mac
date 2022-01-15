@@ -54,4 +54,6 @@
       </div>
     </div>
   </footer>
-  
+<!-- signup modal -->
+@include('modal')
+<!-- signup modal ends -->
