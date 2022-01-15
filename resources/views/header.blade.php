@@ -17,13 +17,24 @@
       @endif
       
     
-    <ul class="navbar-nav mx-0 think-custom-nav-1">      
-      <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
-        <a class="nav-link" aria-current="page" href="/">Home</a>
-      </li>
-      <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-        <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
-      </li>
+    <ul class="navbar-nav mx-0 think-custom-nav-1">
+    @if (Auth::check())
+      @if(Auth::user()->role_id !== 3)      
+        <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        @endif
+        @else
+        <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        @endif
       @if (Auth::check())
         @if(Auth::user()->role_id == 3)
         <li class="nav-item {{ (request()->is('assigned-courses')) ? 'active': '' }}">
@@ -44,10 +55,10 @@
         @else
         <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>        
         <li class="nav-item">
-        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal"><span class="me-2"><img src="/icons/signup__icon.svg" alt="error"></span>Signup</a>
+        <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal"><span class="me-2"><img src="/storage/icons/signup__icon.svg" alt="error"></span>Signup</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" id="login_navlink" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="me-2"><img src="/icons/login__icon.svg" alt="error"></span>Login</a></li>
+        <a class="nav-link" id="login_navlink" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="me-2"><img src="/storage/icons/login__icon.svg" alt="error"></span>Login</a></li>
         </li>
         @endif
     </ul>

@@ -164,7 +164,9 @@ class EnrolledCourseController extends Controller
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
                 $liveSessions = LiveSession::where('topic_id', $topicId)->get();
-               
+                $startDate = "";
+                $startTime = "";
+                $endTime = "";
                 $liveId = null;
                 foreach($liveSessions as $liveSession) {
                     $batch = CohortBatch::where('id', $liveSession->batch_id);
@@ -187,6 +189,7 @@ class EnrolledCourseController extends Controller
                 $assignmentList = $assignmentsArray->toArray();
     
                 array_push($topicDetails, array(
+                    'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
                     'startDate' => $startDate,
                     'startTime' => $startTime,
@@ -245,7 +248,7 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
-
+// dd($finalRec);
         $qas = CourseQA::where('course_id', $courseId)->get();
 
         foreach($qas as $qa) {
@@ -267,6 +270,8 @@ class EnrolledCourseController extends Controller
                 'date' => Carbon::parse($date)->diffForHumans(),
             ));
         }
+
+        $progress = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId)->value('progress');
         if($userType === 'student') {
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
@@ -278,7 +283,7 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'userType' => $userType,
                 'next_live_cohort' =>  $next_live_cohort,
-                'progress' => ($attendedTopics / $totalTopics) * 100
+                'progress' => $progress
             ]);
         }
         

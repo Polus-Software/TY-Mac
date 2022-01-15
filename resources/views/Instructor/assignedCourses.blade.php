@@ -1,4 +1,4 @@
-@extends('Layouts.myCourses')
+@extends('Layouts.app')
 @section('content')
 <style>
   .btn-outline-success {
@@ -13,207 +13,7 @@
     cursor: pointer;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">TY-Mac</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
-      <form class="mb-2 mb-lg-0 d-flex me-auto mt-2 col-lg-6">
-      @csrf
-        <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style=";">
-        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
-      </form>
 
-      <ul class="navbar-nav me-2">
-      @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('edituser') }}">Welcome, {{Auth::user()->firstname}}</a>
-        </li>
-        @endif
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
-        </li>
-        
-        @if (Auth::check())
-        <li class="nav-item">
-          <a class="nav-link active" href="{{ route('assigned-courses') }}">Assigne Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-        </li>
-        @else
-        <li class="nav-item">
-        <a class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-        </li>
-        @endif
-      </ul>
-      
-    </div>
-  </div>
-</nav>
-<!-- login modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="container-overlay">
-                    <div class="mx-auto">
-                        <div class="wrapper row flex-column my-5" >  
-                            <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Log in to account</div>
-                                <form id="loginForm" class="form" method="POST" action="{{route('user.login.post')}}">
-                                    @csrf
-                                    <div class="form-group mx-sm-5 mx-0">
-                                        <label for="email" class="email-label">Email</label>
-                                        <input type="email"  name="email"class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com"
-                                        value="{{old('email')}}">
-                                        <small>Error message</small>
-                                        @if ($errors->has('email'))
-                                        <span class="text-danger">{{ $errors->first('email') }}</span>
-                                        @endif        
-                                    </div>
-                                    <div class="form-group mx-sm-5 mx-0">
-                                        <label for="inputPassword" class="password-label">Password</label>
-                                        <input type="password"  name="password" class="form-control" id="inputPassword" placeholder="Password"  value="{{old('password')}}">
-                                        <span><i class="fas fa-eye-slash"  id="togglePassword" onClick="viewPassword()"></i></span>
-                                        <small>Error message</small>
-                                        @if ($errors->has('password'))
-                                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group mx-sm-5 mx-0">
-                                        <label class="form-check-label rememberme">
-                                        <input  class="form-check-input"  name="remember_me" type="checkbox"> &nbsp;Remember me</label>
-                                    </div>
-
-                                    <div class="d-grid form-group  mx-sm-5 mx-0">
-                                        <button type="submit" class="btn btn-block loginBtn"><span class="button">Login</span></button>
-                                    </div>
-
-                                    <div class="text-center forgotpass">
-                                        <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
-                                        
-                                    </div>
-
-                                    <div class="text-center bottom-text">
-                                        <span><p>Don't have an account? </span>
-                                        <span class="login"><a href="{{ route('signup') }}">&nbsp;Sign up</a></p></span>
-                                    </div>            
-                                </form>
-                            </div> 
-                        </div>      
-                    </div>          
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- login modal ends -->
- <!-- signup modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
-        <div class="modal-content border-0">
-            <div class="modal-header border-0">
-                <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="signupModalLabel">Create an account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container-overlay">
-                    <form id="signupForm" class="form" method="POST" action="{{ route('user.create') }}">
-                       @csrf
-                        <input type="hidden" name="_method" value="POST">
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label for="firstName" class="firstname-label">First Name</label>
-                            <input type="text" name="firstname" class="form-control" id="firstName" placeholder="Eg: Denis" value="{{old('firstname')}}">
-                            <small>Error message</small>
-
-                            @if ($errors->has('firstname'))
-                            <span class="text-danger">{{ $errors->first('firstname') }}</span>
-                            @endif
-                            </span>
-                        </div>
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label for="lastName" class="lastname-label">Last Name</label>
-                            <input type="text" name="lastname" class="form-control" id="lastName" placeholder="Eg: Cheryshev" value="{{old('lastname')}}">
-                            <small>Error message</small>
-
-                            @if ($errors->has('lastname'))
-                            <span class="text-danger">{{ $errors->first('lastname') }}</span>
-                            @endif
-
-                        </div>
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label for="email" class="email-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
-                            <small>Error message</small>
-
-                            @if ($errors->has('email'))
-                            <span class="text-danger">{{ $errors->first('email') }}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label for="inputPassword" class="password-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                            <span><i class="fas fa-eye-slash" id="togglePass" onClick="viewPassword()"></i></span>
-                            <small>Error message</small>
-
-
-                            @if ($errors->has('password'))
-                            <span class="text-danger">{{ $errors->first('password') }}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label for="confirmPassword" class="password-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Retype password">
-                            <span><i class="fas fa-eye-slash" id="confirm_togglePassword" onClick="showPassword()"></i></span>
-                            <small>Error message</small>
-
-                            @if ($errors->has('password_confirmation'))
-                            <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group mx-sm-5 mx-0">
-                            <label class="form-check-label checkbox-text">
-                            <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
-                            <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
-                            @if ($errors->has('privacy_policy'))
-                            <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
-                            @endif
-                        </div>
-
-                        <div class="d-grid form-group mx-sm-5 mx-0">
-                            <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Create</span></button>
-                        </div>
-
-                        <div class="text-center bottom-text">
-                            <span>
-                            <p>Already have an account?
-                            </span>
-                            <span class="login"><a href="{{ route('login') }}">&nbsp;Login</a></p></span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer border-0"></div>
-        </div>
-    </div>
-</div>
-<!-- signup modal ends -->
     <section class="pt-5">
         <div class="container">
             <div class="row border-bottom mt-5 pb-3">
@@ -672,7 +472,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                                <p class="para-1"><img class="me-1" src="/icons/category__icon.svg" alt="error">
+                                                <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                                     {{ $singleEnrolledCourse['category_name'] }}
                                                 </p>
                                             </div>
@@ -715,7 +515,11 @@
 
 
     
-
+@endsection('content')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('/assets/myCourses.css') }}">
+@endpush
+@push('child-scripts')
 <script>
 document.getElementById('search-btn').addEventListener('click', function(e) {
   e.preventDefault();
@@ -744,4 +548,4 @@ document.getElementById('search-btn').addEventListener('click', function(e) {
         document.getElementById('live').classList.add('active', 'show');
     });
 </script>
-@endsection('content')
+@endpush

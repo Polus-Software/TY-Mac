@@ -35,7 +35,7 @@
             <div class="col-6">
                 <label for="live_session">Live session</label>
                 <select class="form-control mt-2" id="live_session" name="live_session">
-                    <option value>Select a course</option>
+                    <option value>Select a Session</option>
                 </select>
             </div>
             <div class="col-3 mt-5">

@@ -218,10 +218,10 @@ class CoursesCatalogController extends Controller
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
            
-           if($userType == 'instructor'){
-            return redirect('/');
-        }else{
-            return redirect()->back()->with(['success' => 'Successfully logged in!']);
+           if($userType == 'instructor') {
+                return redirect('/');
+            }else{
+                return redirect()->back()->with(['success' => 'Successfully logged in!']);
             }
         }
     }
@@ -458,7 +458,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
                 $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><i class="far fa-user pe-1"></i>'. $course->course_difficulty .'</p></div></div></li></ul>';
                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
-                $html = $html . "<a href='{{ route('student.course.show', ' . $course->id . ')}}' class='card-link btn d-inline-block w-100 px-0'>Join now</a>"; 
+                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Join now</a>'; 
                 $html = $html . '</div></div></div></div></div>';        
             }
         } else {

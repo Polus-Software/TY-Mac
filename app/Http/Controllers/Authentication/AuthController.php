@@ -13,6 +13,7 @@ use App\Mail\Gmail;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\EnrolledCourse;
+use App\Models\AssignedCourse;
 use App\Models\LiveSession;
 use App\Models\CohortBatch;
 use App\Models\Topic;
@@ -42,7 +43,7 @@ class AuthController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|confirmed',
+            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|confirmed',
             'password_confirmation' =>'required',
             'privacy_policy' =>'accepted'
         ]);
@@ -62,6 +63,16 @@ class AuthController extends Controller
             'body' => 'You have successfully registered'
         ];
         Mail::to($email)->send(new Gmail($details));
+        $credentials = ['email' => $request->email, 'password' => $request->password];
+        $remember_me = TRUE;
+        if (Auth::attempt($credentials)) {
+
+           $user = Auth::user();
+           $userType =  UserType::find($user->role_id)->user_role;
+           $token = $user->createToken('token')->plainTextToken;
+           Auth::login($user, $remember_me);
+        }
+
         return redirect('/')->withSuccess('Successfully registered!');
 
         } catch (Exception $exception) {
@@ -88,6 +99,7 @@ class AuthController extends Controller
         ]);
         
         $credentials = $request->only('email', 'password');
+
         $remember_me = ( !empty( $request->remember_me) ) ? TRUE :FALSE ;
         if (Auth::attempt($credentials)) {
 
@@ -95,9 +107,11 @@ class AuthController extends Controller
            $userType =  UserType::find($user->role_id)->user_role;
            $token = $user->createToken('token')->plainTextToken;
            Auth::login($user, $remember_me);
-           if($userType == 'student' or $userType == 'instructor'){
+           if($userType == 'student'){
                 return redirect('/');
-            }else{
+            } elseif($userType == 'instructor') {                
+                return redirect('assigned-courses');
+            } else{
                 return redirect('dashboard');
             }
         } else {
@@ -135,7 +149,9 @@ class AuthController extends Controller
 
                 if($currentBatchStartDate > $current_date) {
                     $session_title = $session->session_title;
-                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $course = AssignedCourse::where('course_id', $session->course_id);
+                    $instructId = $course->value('user_id');
+                    $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
@@ -151,7 +167,9 @@ class AuthController extends Controller
                     ));
                 } elseif ($currentBatchStartDate < $current_date && $currentBatchStartDate > $backLimitDate) {
                     $session_title = $session->session_title;
-                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $course = AssignedCourse::where('course_id', $session->course_id);
+                    $instructId = $course->value('user_id');
+                    $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');

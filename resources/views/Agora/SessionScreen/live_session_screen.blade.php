@@ -101,7 +101,8 @@ aside.layout-aside.big-class-aside {
 
 .video-marquee-pin.big-class {
   position: relative;
-    left: 65.3rem;
+  left: 54.3rem;
+    width: 250px;
     top: 5.15rem;
 }
 
@@ -242,19 +243,20 @@ ul.nav.nav-tabs li {
     display: flex;
 }
 .tab-contents {
-  position: relative;
-    /* right: 0px; */
-    width: 300px;
-    /* height: 90vh; */
-    /* margin: 125px 10px 0px 10px; */
+    position: absolute;
+    right: 0px;
+    top: 0px !important;
+    width: 375px;
+    height: 90vh;
+    margin: 125px 10px 0px 10px;
     border: 1px solid #e5e7eb;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
     padding: 10px;
 }
 
 .pin-right {
-    right: 0;
-    bottom: 0 !important;
+    right: -30em;
+    bottom: 75px !important;
 }
 
 #positive {
@@ -379,17 +381,24 @@ aside.layout-aside.big-class-aside {
   <!-- chat UI -->
   <div class="tab-contents nodisplay">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
+        <li class="active"><a data-toggle="tab" href="#participants">Participants List</a></li>
         <li><a data-toggle="tab" href="#chat">Chat</a></li>
       </ul>
       <div class="tab-content">
         <div id="participants" class="tab-pane fade in active">
         @foreach($participants as $participant)
-        <p>{{ $participant }}</p>
+        <p style="color:black;margin-top:5px;">{{ $participant }}</p>
         @endforeach
         </div>
         <div id="chat" class="tab-pane fade">
-        <p> Chat screen </p>
+        <div id="chat_messages">
+          <p>John Doe:<span> Hi, my name is John! :)</span></p>
+          <p>Ashish Thoppil:<span> Hi, my name is Ashish</span></p>
+          <p>Instructor:<span> Hello everyone!</span></p>
+          <p>John Doe:<span> Nice to meet you all.</span></p>
+        </div>
+        <textarea id="live_chat_text" placeholder="Enter your message.."></textarea>
+        <button id="send_live_message">Send</button>
         </div>
       </div>
     </div>
@@ -487,8 +496,20 @@ let timer = 0;
 
 $(document).ready(function(){
   var start = new Date;
+  let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
+      let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById("participants").innerHTML = data.html;
+      });
   }, 1000);
 });
 
@@ -510,7 +531,7 @@ $(document).on('click', '.btn:contains("Confirm")', function() {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
-
+      window.location.replace("/enrolled-course/" + data.course_id);
     });
   }
 });

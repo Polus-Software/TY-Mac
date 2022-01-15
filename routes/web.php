@@ -152,6 +152,7 @@ Route::get('/', function () {
     Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
     Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
     Route::post('student-exit', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
+    Route::post('get-attendance-list', [RtmTokenGeneratorController::class, 'getAttendanceList'])->name('get-attendance-list');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    

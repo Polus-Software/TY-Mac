@@ -62,7 +62,7 @@
     color: #6E7687;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 900;
+    /* font-weight: 900; */
 }
 .card-1 .duration{
     font-family: 'Lato', sans-serif;
