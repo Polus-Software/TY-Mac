@@ -17,7 +17,7 @@ use App\Models\CohortBatch;
 class MyCoursesController extends Controller
 {
     public function showMyCourses(){
-        
+      
        $singleEnrolledCourseData = [];
        $liveSessionDetails = [];
        $upComingSessionDetails = [];
@@ -113,6 +113,7 @@ class MyCoursesController extends Controller
                     ));
                 }
             }
+            
       return view('Student.myCourses', [
         'singleEnrolledCourseData' => $singleEnrolledCourseData,
         'upComingSessionDetails' => $upComingSessionDetails,

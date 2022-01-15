@@ -377,11 +377,9 @@ svg.svg-img.prefix-more.can-hover {
     <p class="notif-text">{{ $topic_title }}</p>
     @csrf
     
-    
-    <div class="course_contents_div" data-id="1" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 1</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="1">Start</button></div>
-    <div class="course_contents_div" data-id="2" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 2</span><button class="course_contents" href="https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" data-id="2">Start</button></div>
-    <div class="course_contents_div" data-id="3" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 3</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="3">Start</button></div>
-    
+    @foreach($contents as $content)
+    <div class="course_contents_div" data-id="1" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>{{ $content->topic_title }}</span><button class="course_contents" href="{{ $content->document }}" data-id="{{ $content->topic_content_id }}">Start</button></div>
+    @endforeach
   </div>
 
 @endif
@@ -519,7 +517,7 @@ setInterval(function () {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
-      if(data.content_id != null) {
+      if(data.content_id != null && data.flag == 0) {
       document.getElementById('positive').setAttribute('data-id', data.content_id);
       document.getElementById('positive').classList.add('pulsate');
       document.getElementById('negative').setAttribute('data-id', data.content_id);
@@ -589,6 +587,8 @@ document.getElementById('positive').addEventListener('click', function(event) {
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
+      document.getElementById('negative').classList.remove('pulsate');
+      document.getElementById('positive').classList.remove('pulsate');
     });
 });
 
@@ -605,6 +605,8 @@ let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negati
     },
     body: JSON.stringify({})
   }).then((response) => response.json()).then((data) => {
+      document.getElementById('negative').classList.remove('pulsate');
+      document.getElementById('positive').classList.remove('pulsate');
   });
 });
 

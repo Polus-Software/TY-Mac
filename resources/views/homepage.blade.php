@@ -18,32 +18,7 @@
   <title>TY- MAC</title>
 </head>
 <style>
-  .dropdown-menu {
-  min-width: 25rem !important;
-  left: -22rem !important;
-  top: 2.7rem !important;
-  border-radius: 15px !important;
-}
-.dropdown {
-    display:inline-block;
-    margin-left:20px;
-    padding:10px;
-  }
-
-
-.glyphicon-bell {
-   
-    font-size:1.5rem;
-  }
-
-.notifications {
-   min-width:420px; 
-  }
-  
-  .notifications-wrapper {
-     overflow:auto;
-      max-height:250px;
-    }
+ 
     
  .menu-title {
      color:#ff7788;
@@ -74,18 +49,6 @@
     
 }
 
-.notifications a.content {
- text-decoration:none;
- background:#ccc;
-
- }
-    
-.notification-item {
- padding:10px;
- margin:5px;
- background:#ccc;
- border-radius:4px;
- }
 
 
 
@@ -201,7 +164,14 @@
   <!-- Our courses -->
   @php
   use App\Http\Controllers\Student\CoursesCatalogController;
+  use App\Models\Notification;
   $courses = CoursesCatalogController::getAllCourses();
+
+  $user = Auth::user();
+
+  if($user) {
+    $notifications = Notification::where('user', $user->id)->orderBy('created_at', 'DESC')->get();
+  }
   @endphp
 
 

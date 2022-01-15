@@ -54,8 +54,6 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->role_id = $userType;
         $user->save();
-        
-        $user = Auth::user();
 
         $email= $request->get('email');
         $details =[
@@ -63,16 +61,12 @@ class AuthController extends Controller
             'body' => 'You have successfully registered'
         ];
         Mail::to($email)->send(new Gmail($details));
-        $credentials = ['email' => $request->email, 'password' => $request->password];
-        $remember_me = TRUE;
-        if (Auth::attempt($credentials)) {
-
-           $user = Auth::user();
-           $userType =  UserType::find($user->role_id)->user_role;
-           $token = $user->createToken('token')->plainTextToken;
-           Auth::login($user, $remember_me);
-        }
-
+        
+        $notification = new Notification; 
+        $notification->user = $user->id;
+        $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
+        $notification->is_read = false;
+        $notification->save();
         return redirect('/')->withSuccess('Successfully registered!');
 
         } catch (Exception $exception) {

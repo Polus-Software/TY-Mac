@@ -35,8 +35,10 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
-    const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+    // const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
+    // const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+    const appId = "0b40256a7d014ad981cf41e7b7d26910";
+    const appCertificate = "Z5iC8DIwEeyElz_HdS0DbQ/L0W2qFZIzwQASg";
 
 
     public function index(Request $request, $session) {
@@ -45,6 +47,7 @@ class RtmTokenGeneratorController extends Controller
         $sessionObj = LiveSession::where('live_session_id', $session);
         $topicId = $sessionObj->value('topic_id');
         $topic = Topic::where('topic_id', $topicId)->value('topic_title');
+
         $participants = [];
         $contents = TopicContent::where('topic_id', $topicId)->get();
         
@@ -113,7 +116,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => "124", 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -262,6 +265,8 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function getLiveRecord(Request $request) {
+        $flag = 0;
+
         $session = LiveSession::where('live_session_id', $request->session);
 
         $topicId = $session->value('topic_id');
@@ -269,10 +274,17 @@ class RtmTokenGeneratorController extends Controller
 
         $topicContentId = $push->value('topic_content_id');
 
-        $content = TopicContent::where('topic_content_id', $topicContentId);
+        $user = Auth::user();
+        $student =  $user->id;
+        $feedbackRecord = StudentFeedbackCount::where('content_id', $topicContentId)->where('student', $student)->get();
 
+        if(count($feedbackRecord) != 0) {
+            $flag = 1;
+        }
+        $content = TopicContent::where('topic_content_id', $topicContentId);
+        
         $contentTitle = $content->value('topic_title');
-        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle]);
+        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag]);
     }
 
     public function pushFeedbacks(Request $request) {

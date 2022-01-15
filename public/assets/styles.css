@@ -267,3 +267,20 @@ a.navbar-brand {
 #editUserForm .form-group label {
 	margin-bottom: 5px;
 }
+
+#notification_drop {
+    left: -17em;
+    width: 20em;
+}
+
+.notification-dot {
+    color: #f5bc29;
+    margin-right: 15px;
+}
+
+.notification-item {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: 100%;
+    font-size: 13px;
+}

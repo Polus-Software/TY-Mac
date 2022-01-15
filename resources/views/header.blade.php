@@ -1,3 +1,14 @@
+@php
+
+  use App\Models\Notification;
+  $user = Auth::user();
+
+  if($user) {
+    $notifications = Notification::where('user', $user->id)->orderBy('created_at', 'DESC')->get();
+    $newNotifications = Notification::where('user', $user->id)->where('is_read', false)->get();
+    $notificationCount = count($newNotifications);
+  }
+  @endphp
 <!-- navbar new  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
@@ -37,6 +48,21 @@
         <li class="nav-item">
         <a class="nav-link" href="{{ route('edituser') }}">
         <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
+      </li>
+      <li>
+
+          <button type="button" class="btn dropdown-toggle-split shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+            <!-- <span class="visually-hidden">Toggle Dropdown</span> --><i class="fas fa-bell"></i><span class="notifications_count">{{ $notificationCount }}</span>
+          </button>
+          
+          <ul id="notification_drop" class="dropdown-menu">
+            <h6 class="p-2">Notifications</h6>
+            @foreach($notifications as $notification)
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="notification-item dropdown-item p-2" href="#"><i class="fas fa-dot-circle notification-dot"></i> <span>{{$notification->notification}}<span></a></li>
+            @endforeach
+          </ul>
+
       </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>

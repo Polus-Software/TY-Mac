@@ -178,7 +178,7 @@ class EnrolledCourseController extends Controller
                     $occurrenceArr = explode(',', $occurrence);
                     $checkDay = in_array(date("l"), $occurrenceArr);
                     
-                    if(date("Y-m-d") > $startDate && date("Y-m-d") < $endDate && $checkDay == true) {
+                    if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
                         $liveId = $liveSession->live_session_id;
                     }else if(date("Y-m-d") < $startDate && $checkDay == true) {
                         $liveId = Null;
@@ -187,7 +187,7 @@ class EnrolledCourseController extends Controller
                     }
                 }
                 $assignmentList = $assignmentsArray->toArray();
-    
+                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
                 array_push($topicDetails, array(
                     'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
@@ -197,9 +197,11 @@ class EnrolledCourseController extends Controller
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
-                    'assignmentList'=> $assignmentList
+                    'assignmentList'=> $assignmentList,
+                    'isAssignmentSubmitted' => $isAssignmentSubmitted
                 ));
             }
+            
             
         $singleCourseData =  array (
             'id' => $course->id,
@@ -226,10 +228,10 @@ class EnrolledCourseController extends Controller
 
         array_push($courseDetails, $singleCourseData);
 
-        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->get();
+        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $user->id)->get();
         
         foreach($studentFeedbackCounts as $feedback) {
-            if($feedback->value('negative') == 1) {
+            if($feedback->negative == 1) {
                 $topicId = $feedback->topic_id;
                 $topic = Topic::where('topic_id',  $topicId);
                 $contentId = $feedback->content_id;
@@ -248,7 +250,7 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
-// dd($finalRec);
+        
         $qas = CourseQA::where('course_id', $courseId)->get();
 
         foreach($qas as $qa) {
@@ -270,7 +272,7 @@ class EnrolledCourseController extends Controller
                 'date' => Carbon::parse($date)->diffForHumans(),
             ));
         }
-
+        
         $progress = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId)->value('progress');
         if($userType === 'student') {
             return view('Student.enrolledCoursePage',[
@@ -355,19 +357,23 @@ class EnrolledCourseController extends Controller
     }
 
     public function submitAssignment(Request $request){
-       
+        
         $user = Auth::user();
         $userId = $user->id;
 
-        $assignementFile = $request->assignment_answer->getClientOriginalName();
-        $topic_assignment_id = $request->topic_assignment_id;
+        $comment = $request->input('assignment_comment');
+        $file = $request->assignment_upload;
+        
+        $topic_assignment_id = $request->input('assignment_id');
+
+        $assignementFile = $file->getClientOriginalName();
 
         $assignments = Assignment::where('student_id' , $userId)
                                   ->where('topic_assignment_id', $topic_assignment_id)->get();
       
         if(count($assignments) == 0){
 
-        $request->assignment_answer->storeAs('assignmentAnswers', $assignementFile,'public');
+        $file->storeAs('assignmentAnswers', $assignementFile,'public');
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
@@ -499,7 +505,6 @@ class EnrolledCourseController extends Controller
         $qa = new CourseQA;
         $qa->course_id = $course_id;
         $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
-        dd($instructor);
         $user =Auth::user();
         if($user) {
             $student = User::where('id', $user->id)->value('id');
