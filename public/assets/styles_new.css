@@ -136,11 +136,11 @@
   content: "";
     position: absolute;
     left: 50%;
-    width: 20px;
+    width: 10px;
     top: -20px;
-    height: 5px;
+    height: 1.25px;
     background-color: var(--color-black);
-    margin-left: -10px;
+    margin-left: -5px;
 }
 /* my courses */
 .think-truncated-text {

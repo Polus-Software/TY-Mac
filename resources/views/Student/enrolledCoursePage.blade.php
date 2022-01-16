@@ -75,7 +75,7 @@
                                 <p class="card-text position-relative">
                                     <span class="think-truncated-text">
                                     @foreach($singleCourseDetails as $course)
-                                    {{Str::limit($course['description'], 180, ' (...)')}}
+                                    {{Str::limit($course['description'], 180, '...')}}
                                     @endforeach
                                     </span>
                                 </p>
