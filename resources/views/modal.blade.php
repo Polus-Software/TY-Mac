@@ -208,30 +208,37 @@
   <!-- review modal -->
   @if(Request::is('enrolled-course/*'))
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="rating text-center mb-3">
+<div class="modal-dialog think-modal-max-w-600">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="contactModalLabel">Add review</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>       
+            <div class="think-text-secondary-color">Add a review and a star rating!!!</div>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+                <div class="form-group mx-0 text-center">
+                <i class="far fa-thumbs-up fa-3x think-review"></i>
+              </div>
+              <div class="form-group mx-0">
+              <div class="rating text-center mb-3">
                     <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
                     <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
                     <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
                     <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
                     <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
                 </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
-                    <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength="60"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer border-0 mb-3">
-                @csrf
-                <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
-            </div>
+              </div>
+              <div class="form-group mx-0">
+                <textarea class="form-control" id="comment" placeholder="Add your review..." rows="4" maxlength="60"></textarea>
+              </div>
+              <div class="form-group mx-0">
+              @csrf
+                <button type="button" id="reviewSubmitBtn" class="btn btn-secondary think-btn-secondary sendContactInfo w-100">Submit</button>
+              </div>
+          </div>
         </div>
+      </div>
     </div>
 </div>
 @endif
