@@ -508,7 +508,11 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
-                                        <span>Next Live Class: {{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
+                                        @if(!empty($liveSessions))
+                                        <span>Next Live Class:{{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
+                                        @else
+                                        <span>No sessions scheduled</span>
+                                        @endif
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @else
