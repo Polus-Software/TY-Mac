@@ -35,10 +35,8 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    // const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
-    // const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
-    const appId = "0b40256a7d014ad981cf41e7b7d26910";
-    const appCertificate = "Z5iC8DIwEeyElz_HdS0DbQ/L0W2qFZIzwQASg";
+    const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
+    const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
 
 
     public function index(Request $request, $session) {

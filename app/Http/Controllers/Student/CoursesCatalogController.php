@@ -332,14 +332,15 @@ class CoursesCatalogController extends Controller
      
      if($instructors) {
         $instructorsArr = explode(",", $instructors);
+        
         foreach($instructorsArr as $instructor) {
            $instructorPair = explode('=', $instructor);
-           $assignedCourse = AssignedCourse::where('user_id', $instructorPair[1])->value('course_id');
+           
            if($instructorFlag == 0) {
-               $courses = $courses->where('id', $assignedCourse);
+               $courses = $courses->where('instructor_id', $instructorPair[1]);
                $instructorFlag = 1;
            } else {
-               $courses = $courses->orWhere('id', $assignedCourse);
+               $courses = $courses->orWhere('instructor_id', $instructorPair[1]);
            }
         }
     }

@@ -253,20 +253,20 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Sub content</th>
-                                        <th scope="col">Session</th>
+                                        <th scope="col">Session name</th>
+                                        <th scope="col">Subtopic</th>
                                         <th scope="col">Likes</th>
                                         <th scope="col">Dislikes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recommendations as $recommendation)
+                                    @foreach($graph as $data)
                                     <tr>
                                         <td>{{ $loop->iteration}}</td>
-                                        <td>{{ $recommendation['content_title'] }}</td>
-                                        <td>{{ $recommendation['topic_title'] }}</td>
-                                        <td>{{ $recommendation['likes'] }}</td>
-                                        <td>{{ $recommendation['dislikes'] }}</td>
+                                        <td>Session - {{ $data['topic_title'] }}</td>
+                                        <td>{{ $data['topic_title'] }}</td>
+                                        <td>{{ $data['likes'] }}</td>
+                                        <td>{{ $data['dislikes'] }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -415,18 +415,18 @@
                                 @foreach($studentsEnrolled as $student)
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <i class="fas fa-user-circle pe-3"></i>{{ $student->firstname .' '. $student->lastname }}
                                         </button>
                                     </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div id="collapseOne_{{ $student->id }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <div class="row mt-3 mb-3">
                                                 @foreach($recommendations as $recommendation)
                                                 @if($recommendation['student_id'] == $student->user_id)
                                                 <div class="col-lg-6 mb-3">
                                                     <div class="card card-3" style="height: 550px;">
-                                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-lg-12">
@@ -1015,8 +1015,9 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         var data = google.visualization.arrayToDataTable([
             ['Sub content', 'Likes', 'Dislikes'],
             <?php
-            foreach ($recommendations as $recommendation) {
-                echo '["' . $recommendation['content_title'] . '",' . $recommendation['likes'] . ',' . $recommendation['dislikes'] . '],';
+            
+            foreach ($graph as $gr) {
+                echo '["' . $gr['topic_title'] . '",' . $gr['likes'] . ',' . $gr['dislikes'] . '],';
             }
             ?>
         ]);
@@ -1024,11 +1025,12 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
 
         var options = {
             chart: {
-                title: 'Session vise Likes and Dislikes',
+                title: 'Session wise Likes and Dislikes',
                 subtitle: '',
                 width: 600,
                 height: 400
-            }
+            },
+            colors: ['#A26B05','#F5BC29']
         };
 
         var chart = new google.charts.Bar(document.getElementById('chart_div'));

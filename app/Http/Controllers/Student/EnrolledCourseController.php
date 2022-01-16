@@ -291,6 +291,7 @@ class EnrolledCourseController extends Controller
         
         if($userType === 'instructor') {
             $recommendations = $this->instructorRecommendations($courseId);
+            $graph = $this->instructorGraph($courseId);
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
                 'topicDetails' =>  $topicDetails,
@@ -299,7 +300,8 @@ class EnrolledCourseController extends Controller
                 'studentsEnrolled' => $this->studentsEnrolled($courseId),
                 'next_live_cohort' =>  $next_live_cohort,
                 'qas' => $qaArray,
-                'progress' => $progress
+                'progress' => $progress,
+                'graph' => $graph
             ]);
         }      
 
@@ -457,7 +459,7 @@ class EnrolledCourseController extends Controller
             $student_name = User::where('id', $student->user_id)->get();
             $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();
             foreach($studentFeedbackCounts as $feedback) {
-                if($feedback->value('negative') > $feedback->value('positive')) {
+                if($feedback->negative > $feedback->positive) {
                     $topicId = $feedback->topic_id;
                     $topic = Topic::where('topic_id',  $topicId);
                     $contentId = $feedback->content_id;
@@ -467,17 +469,43 @@ class EnrolledCourseController extends Controller
                         'content_title' => $content->value('topic_title'),
                         'topic_id' => $topicId,
                         'topic_title' => $topic->value('topic_title'),
-                        'student_id' => $feedback->value('student'),
-                        'likes' => $feedback->value('positive'),
-                        'dislikes' => $feedback->value('negative')
+                        'student_id' => $feedback->student,
+                        'likes' => $feedback->positive,
+                        'dislikes' => $feedback->negative
                     );
-    
                     array_push($finalRecommendation, $singleRecommendation);
                 }
             }
         }
         return $finalRecommendation;
     }
+
+    public function instructorGraph($courseId) {
+        
+        $topics = Topic::where('course_id', $courseId)->get();
+        $allTopics = [];
+        foreach($topics as $topic) {
+            $positiveCount = 0;
+            $negativeCount = 0;
+            
+            $feedbackCounts = StudentFeedbackCount::where('topic_id', $topic->topic_id)->get();
+            foreach($feedbackCounts as $feedback) {
+                if($feedback->positive > $feedback->negative) {
+                    $positiveCount++;
+                } else {
+                    $negativeCount++;
+                }
+            }
+            $singleTopics = array(
+                'topic_title' => $topic->topic_title,
+                'likes' => $positiveCount,
+                'dislikes' => $negativeCount,
+            );
+            array_push($allTopics, $singleTopics);
+        }
+        return $allTopics;
+    }
+
 
     public function replyToStudent(Request $request) {
         $qaId = $request->qaId;

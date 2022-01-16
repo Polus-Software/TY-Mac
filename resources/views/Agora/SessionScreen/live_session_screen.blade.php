@@ -434,7 +434,7 @@ aside.layout-aside.big-class-aside {
       <button id="back_to_course">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
     </div>
   </div>
-  <div class="row2" style="margin-bottom:20px;">
+  <div class="row2" style="">
     <h6 class="notif-text">Session Info</h6>
     <hr>
     <p class="notif-text">{{ $topic_title }}</p>

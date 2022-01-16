@@ -1,3 +1,24 @@
+
+
+@php
+
+  use App\Models\UserType;
+  use App\Models\User;
+
+  $user = Auth::user();
+  $userType = "";
+  if($user) {
+    $userId = $user->role_id;
+
+    $userType = UserType::where('id', $userId)->value('user_role');
+  }
+@endphp
+@if($userType == "instructor") 
+  <script type="text/javascript">
+    window.location = "/assigned-courses";
+  </script>   
+@endif
+
 @extends('Layouts.app')
 @section('content')
 <!-- top banner-->
@@ -108,7 +129,7 @@
   use App\Http\Controllers\Student\CoursesCatalogController;
   use App\Models\Notification;
   $courses = CoursesCatalogController::getAllCourses();
-
+  
   $user = Auth::user();
 
   if($user) {
@@ -160,7 +181,7 @@
                             (60)
                         </div>
                         <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
-                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
+                          <img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                         </div>
                       </div>
 
