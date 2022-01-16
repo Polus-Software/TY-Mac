@@ -1,3 +1,24 @@
+
+
+@php
+
+  use App\Models\UserType;
+  use App\Models\User;
+
+  $user = Auth::user();
+  $userType = "";
+  if($user) {
+    $userId = $user->role_id;
+
+    $userType = UserType::where('id', $userId)->value('user_role');
+  }
+@endphp
+@if($userType == "instructor") 
+  <script type="text/javascript">
+    window.location = "/assigned-courses";
+  </script>   
+@endif
+
 @extends('Layouts.app')
 @section('content')
 <!-- top banner-->
@@ -102,22 +123,28 @@
     <div class="text-center">
       <a type="button" class="btn think-btn-secondary-outline" href="#">Learn more</a>
     </div>
-  </div>
-</section>
-<!-- Our courses -->
-@php
-use App\Http\Controllers\Student\CoursesCatalogController;
-$courses = CoursesCatalogController::getAllCourses();
-@endphp
+  </section>
+  <!-- Our courses -->
+  @php
+  use App\Http\Controllers\Student\CoursesCatalogController;
+  use App\Models\Notification;
+  $courses = CoursesCatalogController::getAllCourses();
+  
+  $user = Auth::user();
+
+  if($user) {
+    $notifications = Notification::where('user', $user->id)->orderBy('created_at', 'DESC')->get();
+  }
+  @endphp
 
 
-<section id="Our courses" class="our-courses">
-  <div class="container">
-    <div class="row text-center think-mb-75">
-      <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">Our courses<div class="think-courses-underline">
-            <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block h-32">
-          </div></span></h1>
-      <!-- <div class="mb-5">
+  <section id="Our courses" class="our-courses">
+    <div class="container">
+      <div class="row text-center think-mb-75">
+        <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">Our courses<div class="think-courses-underline">
+          <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block h-32">
+        </div></span></h1>
+        <!-- <div class="mb-5">
           <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
         </div> -->
     </div>
@@ -154,7 +181,7 @@ $courses = CoursesCatalogController::getAllCourses();
                             (60)
                         </div>
                         <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
-                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
+                          <img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
                         </div>
                       </div>
 

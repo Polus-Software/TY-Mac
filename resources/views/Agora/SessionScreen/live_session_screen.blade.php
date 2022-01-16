@@ -435,6 +435,13 @@ aside.layout-aside.big-class-aside {
   overflow: hidden auto;
   order: 2;
 }
+div#animation-group {
+  display: flex;
+  flex-direction: column;
+}
+div#animation-group div.video-item:first-child {
+padding-top: 2px
+}
 .video-player {
 	height: 168px;
 	width: 176px;
@@ -660,6 +667,7 @@ aside .video-wrap .bottom-left-info .username {
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
+  <input id="course_id" type="hidden" value="{{ $courseId }}" />
   <!-- agora sdk -->
   <div class="tab-container think-position-relative">
   <span id="btnOpenClose" class="button-close-open"><img src="/icons/min_max__icon.svg" alt="error"></span>
@@ -728,20 +736,24 @@ aside .video-wrap .bottom-left-info .username {
   <div class="row">
       <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
-  <div class="think-cohort-actions-container">
-      <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
-  </div>
-  <div class="row2" style="margin-bottom:20px;">
+  <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
     <hr>
     <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
     @csrf
-    
-    
-    <div class="course_contents_div" data-id="1" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 1</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="1">Start</button></div>
-    <div class="course_contents_div" data-id="2" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 2</span><button class="course_contents" href="https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" data-id="2">Start</button></div>
-    <div class="course_contents_div" data-id="3" style="margin-top:5px;"><i style="margin-right:10px;" class="thumbs fas fa-circle"></i><span>Content 3</span><button class="course_contents" href="/storage/content_documents/sample.pdf" data-id="3">Start</button></div>
-    
+    <table>
+    @foreach($contents as $content)
+    <tr>
+    <div class="course_contents_div" data-id="1" style="margin-top:5px;">
+      <td><i style="margin-right:10px;" class="thumbs fas fa-circle"></i>
+        <span>{{ $content->topic_title }}</span>></td>
+          <td><button class="course_contents" href="{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            Start
+          </button></td>
+    </div>
+  </tr>
+    @endforeach
+  </table>
   </div>
 
 @endif
@@ -793,8 +805,20 @@ let timer = 0;
 
 $(document).ready(function(){
   var start = new Date;
+  let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
+      let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById("participants").innerHTML = data.html;
+      });
   }, 1000);
 });
 
@@ -805,6 +829,7 @@ $(document).on('click', '.btn:contains("Finish")', function() {
 $(document).on('click', '.btn:contains("Confirm")', function() {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
+  let course_id = document.getElementById('course_id').value;
 
   if(userType == "student") {
     let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
@@ -816,8 +841,10 @@ $(document).on('click', '.btn:contains("Confirm")', function() {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
-
+      location.replace("/enrolled-course/" + course_id);
     });
+  } else {
+    location.replace("/enrolled-course/" + course_id);
   }
 });
 
@@ -867,7 +894,7 @@ setInterval(function () {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
-      if(data.content_id != null) {
+      if(data.content_id != null && data.flag == 0) {
       document.getElementById('positive').setAttribute('data-id', data.content_id);
       document.getElementById('positive').classList.add('pulsate');
       document.getElementById('negative').setAttribute('data-id', data.content_id);
@@ -937,6 +964,8 @@ document.getElementById('positive').addEventListener('click', function(event) {
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
+      document.getElementById('negative').classList.remove('pulsate');
+      document.getElementById('positive').classList.remove('pulsate');
     });
 });
 document.getElementById('negative').addEventListener('click', function(event) {
@@ -952,7 +981,8 @@ let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negati
     },
     body: JSON.stringify({})
   }).then((response) => response.json()).then((data) => {
-    // window.location.replace("/enrolled-course/" + data.course_id);
+      document.getElementById('negative').classList.remove('pulsate');
+      document.getElementById('positive').classList.remove('pulsate');
   });
 });
 

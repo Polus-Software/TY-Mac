@@ -92,12 +92,13 @@ class EnrolledCourseController extends Controller
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
        
-       $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>', $current_date)->orderBy('start_date')->get();
-       $next_live_cohort = "";
+       $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>=', $current_date)->orderBy('start_date')->get();
+       $next_live_cohort = "No sessions scheduled";
+
        if(count($batches)) {
         $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h:m A');
+        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->end_time)->format('h:m A');
  
         $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
        
@@ -155,8 +156,8 @@ class EnrolledCourseController extends Controller
                 
             ));
         }
-
         $topics = Topic::where('course_id',  $courseId)->get();
+        
             foreach($topics as $topic){
 
                 $courseId =  $topic->course_id;
@@ -180,7 +181,7 @@ class EnrolledCourseController extends Controller
                     $occurrenceArr = explode(',', $occurrence);
                     $checkDay = in_array(date("l"), $occurrenceArr);
                     
-                    if(date("Y-m-d") > $startDate && date("Y-m-d") < $endDate && $checkDay == true) {
+                    if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
                         $liveId = $liveSession->live_session_id;
                     }else if(date("Y-m-d") < $startDate && $checkDay == true) {
                         $liveId = Null;
@@ -188,19 +189,21 @@ class EnrolledCourseController extends Controller
                         $liveId = "Over";
                     }
                 }
+                
                 $assignmentList = $assignmentsArray->toArray();
-    
+                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
                 array_push($topicDetails, array(
                     'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
-                    'startDate' => Carbon::createFromFormat('Y-m-d',$startDate)->format('m/d/y'),
-                    'startTime' => Carbon::createFromFormat('H:i:s',$startTime)->format('h A'),
-                    'endTime' => Carbon::createFromFormat('H:i:s', $endTime)->format('h A'),
+                    'startDate' => $startDate,
+                    'startTime' => $startTime,
+                    'endTime' => $endTime,
                     'time_zone' => $time_zone,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
-                    'assignmentList'=> $assignmentList
+                    'assignmentList'=> $assignmentList,
+                    'isAssignmentSubmitted' => $isAssignmentSubmitted
                 ));
             }
            
@@ -230,10 +233,10 @@ class EnrolledCourseController extends Controller
 
         array_push($courseDetails, $singleCourseData);
 
-        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->get();
+        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $user->id)->get();
         
         foreach($studentFeedbackCounts as $feedback) {
-            if($feedback->value('negative') == 1) {
+            if($feedback->negative == 1) {
                 $topicId = $feedback->topic_id;
                 $topic = Topic::where('topic_id',  $topicId);
                 $contentId = $feedback->content_id;
@@ -252,7 +255,7 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
-// dd($finalRec);
+        
         $qas = CourseQA::where('course_id', $courseId)->get();
 
         foreach($qas as $qa) {
@@ -276,7 +279,7 @@ class EnrolledCourseController extends Controller
                 'date' => Carbon::parse($date)->diffForHumans(),
             ));
         }
-
+        
         $progress = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId)->value('progress');
         if($userType === 'student') {
             return view('Student.enrolledCoursePage',[
@@ -295,6 +298,7 @@ class EnrolledCourseController extends Controller
         
         if($userType === 'instructor') {
             $recommendations = $this->instructorRecommendations($courseId);
+            $graph = $this->instructorGraph($courseId);
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
                 'topicDetails' =>  $topicDetails,
@@ -303,7 +307,8 @@ class EnrolledCourseController extends Controller
                 'studentsEnrolled' => $this->studentsEnrolled($courseId),
                 'next_live_cohort' =>  $next_live_cohort,
                 'qas' => $qaArray,
-                'progress' => $progress
+                'progress' => $progress,
+                'graph' => $graph
             ]);
         }      
 
@@ -361,19 +366,23 @@ class EnrolledCourseController extends Controller
     }
 
     public function submitAssignment(Request $request){
-       
+        
         $user = Auth::user();
         $userId = $user->id;
 
-        $assignementFile = $request->assignment_answer->getClientOriginalName();
-        $topic_assignment_id = $request->topic_assignment_id;
+        $comment = $request->input('assignment_comment');
+        $file = $request->assignment_upload;
+        
+        $topic_assignment_id = $request->input('assignment_id');
+
+        $assignementFile = $file->getClientOriginalName();
 
         $assignments = Assignment::where('student_id' , $userId)
                                   ->where('topic_assignment_id', $topic_assignment_id)->get();
       
         if(count($assignments) == 0){
 
-        $request->assignment_answer->storeAs('assignmentAnswers', $assignementFile,'public');
+        $file->storeAs('assignmentAnswers', $assignementFile,'public');
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
@@ -457,7 +466,7 @@ class EnrolledCourseController extends Controller
             $student_name = User::where('id', $student->user_id)->get();
             $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();
             foreach($studentFeedbackCounts as $feedback) {
-                if($feedback->value('negative') > $feedback->value('positive')) {
+                if($feedback->negative > $feedback->positive) {
                     $topicId = $feedback->topic_id;
                     $topic = Topic::where('topic_id',  $topicId);
                     $contentId = $feedback->content_id;
@@ -467,17 +476,43 @@ class EnrolledCourseController extends Controller
                         'content_title' => $content->value('topic_title'),
                         'topic_id' => $topicId,
                         'topic_title' => $topic->value('topic_title'),
-                        'student_id' => $feedback->value('student'),
-                        'likes' => $feedback->value('positive'),
-                        'dislikes' => $feedback->value('negative')
+                        'student_id' => $feedback->student,
+                        'likes' => $feedback->positive,
+                        'dislikes' => $feedback->negative
                     );
-    
                     array_push($finalRecommendation, $singleRecommendation);
                 }
             }
         }
         return $finalRecommendation;
     }
+
+    public function instructorGraph($courseId) {
+        
+        $topics = Topic::where('course_id', $courseId)->get();
+        $allTopics = [];
+        foreach($topics as $topic) {
+            $positiveCount = 0;
+            $negativeCount = 0;
+            
+            $feedbackCounts = StudentFeedbackCount::where('topic_id', $topic->topic_id)->get();
+            foreach($feedbackCounts as $feedback) {
+                if($feedback->positive > $feedback->negative) {
+                    $positiveCount++;
+                } else {
+                    $negativeCount++;
+                }
+            }
+            $singleTopics = array(
+                'topic_title' => $topic->topic_title,
+                'likes' => $positiveCount,
+                'dislikes' => $negativeCount,
+            );
+            array_push($allTopics, $singleTopics);
+        }
+        return $allTopics;
+    }
+
 
     public function replyToStudent(Request $request) {
         $qaId = $request->qaId;

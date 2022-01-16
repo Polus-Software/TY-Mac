@@ -271,6 +271,7 @@ class CoursesCatalogController extends Controller
 
     public function registerCourseProcess(Request $request){
       
+    try {
        $courseId = $request->course_id;
        
        $batchId = $request->batch_id;
@@ -311,7 +312,9 @@ class CoursesCatalogController extends Controller
            'status' => 'success', 
            'message' => 'Enrolled successfully'
         ]);
-        
+    } catch (Exception $exception) {
+        return redirect('/')->withSuccess('Successfully registered!');
+    }
     }
 
 
@@ -333,14 +336,15 @@ class CoursesCatalogController extends Controller
      
      if($instructors) {
         $instructorsArr = explode(",", $instructors);
+        
         foreach($instructorsArr as $instructor) {
            $instructorPair = explode('=', $instructor);
-           $assignedCourse = AssignedCourse::where('user_id', $instructorPair[1])->value('course_id');
+           
            if($instructorFlag == 0) {
-               $courses = $courses->where('id', $assignedCourse);
+               $courses = $courses->where('instructor_id', $instructorPair[1]);
                $instructorFlag = 1;
            } else {
-               $courses = $courses->orWhere('id', $assignedCourse);
+               $courses = $courses->orWhere('instructor_id', $instructorPair[1]);
            }
         }
     }

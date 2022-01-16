@@ -168,6 +168,7 @@ class CourseController extends Controller
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
+        $course->instructor_id = $instructorName;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
@@ -345,6 +346,7 @@ class CourseController extends Controller
                 $course->course_duration = $courseDuration;
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
+                $course->instructor_id = $instructor;
 
                 if($request->file()) {
                     if($request->course_image != null) {
