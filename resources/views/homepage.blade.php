@@ -287,8 +287,7 @@
           <p class="lh-lg my-5">
             I signed up for the Fundamentals of Quality Analysis course without having any prior knowledge in the field, but by the time I completed the course, I became proficient in functional QA & got a job in the field! The instructor did a wonderful job at teaching the subjects in a simple way!
           </p>
-          <label class="d-block text-center">-</label>
-          <label class="d-block text-center">YANA SIZIKOVA</label>
+          <label class="think-testimonial-writer d-block text-center">YANA SIZIKOVA</label>
           <span class="d-block text-center">Software Engineer, Canada</span>
           <div class="text-end"><i class="fas fa-quote-right fa-3x ms-0"></i></div>
         </div>

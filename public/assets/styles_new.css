@@ -120,4 +120,35 @@
     background-color: #FFFDF7;
     border: 1px solid #F2F2F2;
 }
-  
+.think-filters-sidebar i.fas.fa-star.filter-star, 
+.think-filters-sidebar i.far.fa-star.filter-no-star {  
+  color: var(--color-primary) !important;
+}
+.think-filters-sidebar .form-check-input:checked {  
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+/* home page */
+.think-testimonial-writer {
+  position: relative;
+}
+.think-testimonial-writer::before {
+  content: "";
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    top: -20px;
+    height: 5px;
+    background-color: var(--color-black);
+    margin-left: -10px;
+}
+/* my courses */
+.think-truncated-text {
+  position: relative;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 2.6em; /* (Number of lines you want visible) * (line-height) */
+  line-height: 1.3em;
+  text-align:justify;
+}

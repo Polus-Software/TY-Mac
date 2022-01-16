@@ -28,13 +28,7 @@
               <span class="text-danger">The batch title is required</span>
             @endif
           </div>
-          <div class="col-12">
-            <label for="batchname">Batchname</label>
-            <input type="text" class="form-control" id="batchname" name="batchname" value="{{$cohortbatch->batchname}}">
-            @if ($errors->has('batchname'))
-              <span class="text-danger">The batch name is required</span>
-            @endif
-          </div>
+         
           <div class="col-md-6">
             <label for="level">Start date</label>
             <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly value="{{$cohortbatch->start_date}}">

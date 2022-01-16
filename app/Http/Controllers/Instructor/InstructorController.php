@@ -165,7 +165,8 @@ class InstructorController extends Controller
                 'twitter_social' => 'required',
                 'linkedin_social' => 'required',
                 'youtube_social' => 'required',
-                'description' => 'required'
+                'description' => 'required',
+                'signature' => 'required'
             ]);
             
             $firstName = $request->input('firstname');

@@ -73,6 +73,7 @@ class MyCoursesController extends Controller
                     $course = Course::where('id', $session->course_id);
                     $courseDesc = $course->value('description');
                     $courseDiff = $course->value('course_difficulty');
+                    $courseThumbnailImage = $course->value('course_thumbnail_image');
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
@@ -86,6 +87,7 @@ class MyCoursesController extends Controller
                         'instructor' => $instructor,
                         'course_desc' => $courseDesc,
                         'course_diff' => $courseDiff,
+                        'course_thumbnail_image' => $courseThumbnailImage,
                         'enrolledCourses' => $enrolledCourses,
                         'date' => $date
                     ));
@@ -95,6 +97,7 @@ class MyCoursesController extends Controller
                     $course = Course::where('id', $session->course_id);
                     $courseDesc = $course->value('description');
                     $courseDiff = $course->value('course_difficulty');
+                    $courseThumbnailImage = $course->value('course_thumbnail_image');
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
@@ -107,6 +110,7 @@ class MyCoursesController extends Controller
                         'session_title'=>  $session_title,
                         'course_desc' => $courseDesc,
                         'course_diff' => $courseDiff,
+                        'course_thumbnail_image' => $courseThumbnailImage,
                         'instructor' => $instructor,
                         'enrolledCourses' => $enrolledCourses,
                         'date' => $date
