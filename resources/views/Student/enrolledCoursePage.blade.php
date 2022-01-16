@@ -100,7 +100,8 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                        <p class="para-2"><i class="far fa-user pe-1"></i>
+                                        <p class="para-2">
+                                            <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_difficulty'] }}
                                             @endforeach

@@ -126,6 +126,7 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     color: #6E7687;
+    line-height: 1.62em;
 }
 .fa-twitter, .fa-linkedin-in, .fa-youtube{
     color: #6E7687;

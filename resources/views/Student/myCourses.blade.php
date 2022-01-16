@@ -218,7 +218,8 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                        <p class="para-2 text-truncate" title="{{ $singleEnrolledCourse['course_difficulty'] }}"><i class="far fa- pe-1"></i>
+                                        <p class="para-2 text-truncate" title="{{ $singleEnrolledCourse['course_difficulty'] }}">
+                                        <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             {{ $singleEnrolledCourse['course_difficulty'] }}
                                         </p>
                                     </div>
