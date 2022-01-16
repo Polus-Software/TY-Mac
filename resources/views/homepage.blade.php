@@ -303,8 +303,8 @@
     <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
       <div class="dotted-decoaration"><img src="/storage/icons/dotted.svg" alt="error"></div>
       <div class="col-md-11">
-        <div class="think-yellow-container bg-warning p-4 rounded-3 p-5">
-          <h2 class="fw-bold text-capitalize text-center text-white mb-4">
+        <div class="think-yellow-container bg-warning rounded-3">
+          <h2 class="fw-bold text-center text-white mb-4">
             Have a question?
           </h2>
           <button class="btn bg-white" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
