@@ -11,10 +11,10 @@
       </div>
       <form enctype="multipart/form-data" method="POST" action="{{ route('change.avatar.post') }}">
         @csrf
-            <div class="modal-body">
+            <div class="modal-body mt-4">
                 <div class="mb-3">
                     <label for="file-upload"></label>
-                    <input type="file" name="image" id="image"> 
+                    <input type="file" name="image" id="image" class="form-control"> 
                     <small id="profile_picture_error">Error message</small>
                     @if ($errors->has('image'))
                       <span class="text-danger">{{ $errors->first('image') }}</span>
