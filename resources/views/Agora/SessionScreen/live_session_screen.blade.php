@@ -101,7 +101,8 @@ aside.layout-aside.big-class-aside {
 
 .video-marquee-pin.big-class {
   position: relative;
-    left: 65.3rem;
+  left: 54.3rem;
+    width: 250px;
     top: 5.15rem;
 }
 
@@ -132,7 +133,7 @@ aside.layout-aside.big-class-aside {
   color: #6E7687;
   margin-top: 10px !important;
 }
-.row {
+/* .row {
     padding: 10px 10px 10px 181px;
     display: inline-flex;
     width: 57.95%;
@@ -157,8 +158,8 @@ aside.layout-aside.big-class-aside {
     border-radius: 10px;
     margin-left: 180px;
     border: 1px solid #e5e7eb;
-}
-.col12 {
+} */
+/* .feedback-btn-container {
   display: -webkit-inline-box;
     padding: 23px 0rem 23px 21.7rem;
     width: 45rem;
@@ -166,9 +167,9 @@ aside.layout-aside.big-class-aside {
     left: -191px;
     top: -10px;
 }
-.col11 {
+.back-to-course-btn {
     padding: 15px 3px;
-}
+} */
 
 .feedbackbtn {
   margin-left: 10px;
@@ -242,8 +243,9 @@ ul.nav.nav-tabs li {
     display: flex;
 }
 .tab-contents {
-  position: absolute;
+    position: absolute;
     right: 0px;
+    top: 0px !important;
     width: 375px;
     height: 90vh;
     margin: 125px 10px 0px 10px;
@@ -254,6 +256,7 @@ ul.nav.nav-tabs li {
 
 .pin-right {
     right: -30em;
+    bottom: 75px !important;
 }
 
 #positive {
@@ -306,43 +309,113 @@ svg.svg-img.prefix-more.can-hover {
 .nodisplay {
   display:none;
 }
+
+/* Author tinu */
+body {
+	display: grid;
+	width: min(95%, 1360px);
+	margin-inline: auto;
+	grid-gap: 1rem;
+	grid-template-columns: 1fr 300px;
+	grid-template-rows: fit-content(50%);
+}
+.think-cohort-actions-container {
+  display: flex;
+  justify-content: space-between;
+}
+.feedback-btn-container {
+  display: flex;
+}
+
+.root-box {
+  height: auto;
+}
+aside.layout-aside.big-class-aside {
+	position: relative;
+	left: 0;
+	top: 0;
+}
+.video-player.big-class-teacher {
+	width: 100% !important;
+	height: 38rem !important;
+}
+.video-wrap {
+	height: 600px;
+}
+
+.video-marquee-pin.big-class {
+	position: relative;
+	left: 0;
+	top: 0;
+}
+/*  */
+.layout.layout-row.horizontal 
+.layout-content.column {
+  height: 600px;
+  overflow: auto;
+  order: 2;
+}
+.video-player {
+	height: 168px;
+	width: 176px;
+}
+.board-section {
+	position: relative;
+	height: auto;
+	top: 55px;
+	margin: 0;
+	width: 100%;
+	z-index: 1;
+	overflow: hidden;
+}
+
+/*  */
   </style>
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
+  <!-- agora sdk -->
   <div class="tab-container">
     <div id="root1"></div>
-
-    <div class="tab-contents nodisplay">
+  </div>
+  <!-- chat UI -->
+  <div class="tab-contents nodisplay">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
+        <li class="active"><a data-toggle="tab" href="#participants">Participants List</a></li>
         <li><a data-toggle="tab" href="#chat">Chat</a></li>
       </ul>
       <div class="tab-content">
         <div id="participants" class="tab-pane fade in active">
         @foreach($participants as $participant)
-        <p>{{ $participant }}</p>
+        <p style="color:black;margin-top:5px;">{{ $participant }}</p>
         @endforeach
         </div>
         <div id="chat" class="tab-pane fade">
-        <p> Chat screen </p>
+        <div id="chat_messages">
+          <p>John Doe:<span> Hi, my name is John! :)</span></p>
+          <p>Ashish Thoppil:<span> Hi, my name is Ashish</span></p>
+          <p>Instructor:<span> Hello everyone!</span></p>
+          <p>John Doe:<span> Nice to meet you all.</span></p>
+        </div>
+        <textarea id="live_chat_text" placeholder="Enter your message.."></textarea>
+        <button id="send_live_message">Send</button>
         </div>
       </div>
     </div>
-  </div>
+    <!-- Course details -->
 <div id="feedback-container" class="nodisplay">
   @if($userType == 'student')
   <div class="row"></div>
-  <div class="row1">
-    <div class="col11">
+  <div class="think-cohort-actions-container">
+    <div class="back-to-course-btn">
       <button id="back_to_course">Back to course</button>
     </div>
-    <div class="col12">
+    <div class="feedback-btn-container">
       <p class="notif-text">Did you understand this topic?</p> <button data-id="" class="feedbackbtn" id="positive" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;"><i style="margin-right:10px;" class="fas fa-thumbs-up"></i>Yes <span id="positive_count"></span></button> <button class="feedbackbtn" id="negative" style="font-size: 14px;font-family: 'Roboto', sans-serif;font-weight: bold;color: #6E7687;" data-id=""><i style="margin-right:10px;" class="fas fa-thumbs-down"></i>No<span id="negative_count"></span></button>
     </div>
   </div>
 
-  <div class="row2" style="margin-bottom:20px;">
+  <div class="think-cohort-subtopics-container" style="margin-bottom:20px;">
     <h6 class="notif-text">Session Info</h6>
     <hr>
     @csrf
@@ -356,8 +429,8 @@ svg.svg-img.prefix-more.can-hover {
   <div class="row">
       <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
-  <div class="row1">
-    <div class="col11">
+  <div class="think-cohort-actions-container">
+    <div class="back-to-course-btn">
       <button id="back_to_course">Back to course</button> <button class="nodisplay" id="show_video">Show video</button>
     </div>
   </div>
@@ -423,8 +496,20 @@ let timer = 0;
 
 $(document).ready(function(){
   var start = new Date;
+  let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
+      let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById("participants").innerHTML = data.html;
+      });
   }, 1000);
 });
 
@@ -446,7 +531,7 @@ $(document).on('click', '.btn:contains("Confirm")', function() {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
-
+      window.location.replace("/enrolled-course/" + data.course_id);
     });
   }
 });

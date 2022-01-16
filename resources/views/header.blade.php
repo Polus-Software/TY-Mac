@@ -17,14 +17,24 @@
       @endif
       
     
-    <ul class="navbar-nav mx-0 think-custom-nav-1">      
-      <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
-        <a class="nav-link" aria-current="page" href="/">Home</a>
-      </li>
-      <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-        <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
-      </li>
-     
+    <ul class="navbar-nav mx-0 think-custom-nav-1">
+    @if (Auth::check())
+      @if(Auth::user()->role_id !== 3)      
+        <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        @endif
+        @else
+        <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
+          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+        </li>
+        @endif
       @if (Auth::check())
         @if(Auth::user()->role_id == 3)
         <li class="nav-item {{ (request()->is('assigned-courses')) ? 'active': '' }}">

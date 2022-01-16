@@ -39,7 +39,7 @@ class MyCoursesController extends Controller
           $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
           $instructorfirstname = User::where('id', $assigned)->value('firstname');
           $instructorlastname = User::where('id', $assigned)->value('lastname');
-          $progress = Course::where('id', $enrolledCourse->course_id)->value('progress');
+          $progress = EnrolledCourse::where('course_id', $enrolledCourse->course_id)->where('user_id', $user->id)->value('progress');
           $enrolledCourseData = array(
             'course_id' => $courseId,
             'course_title' =>  $course_title,

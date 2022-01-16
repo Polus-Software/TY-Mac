@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-            <a style="" class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
+            <a id="edit_course" style="" class="btn btn-primary" href="{{route('edit-course', ['course_id' => $course_id])}}">Edit course</a>
           </div>
           </section>
       </main>
@@ -81,6 +81,12 @@
 
 
 <script>
+  if(document.getElementById('publish').innerHTML == "Unpublish") {
+    document.getElementById('edit_course').style.display = "none";
+  } else {
+    document.getElementById('edit_course').style.display = "block";
+  }
+  
   // let coursePoint = 2;
   // let descPoint = 2;
   // document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{

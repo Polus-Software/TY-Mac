@@ -252,7 +252,7 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
-
+// dd($finalRec);
         $qas = CourseQA::where('course_id', $courseId)->get();
 
         foreach($qas as $qa) {
@@ -276,6 +276,8 @@ class EnrolledCourseController extends Controller
                 'date' => Carbon::parse($date)->diffForHumans(),
             ));
         }
+
+        $progress = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId)->value('progress');
         if($userType === 'student') {
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
@@ -287,7 +289,7 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'userType' => $userType,
                 'next_live_cohort' =>  $next_live_cohort,
-                'progress' => ($attendedTopics / $totalTopics) * 100
+                'progress' => $progress
             ]);
         }
         
