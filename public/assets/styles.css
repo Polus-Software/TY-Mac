@@ -284,3 +284,17 @@ a.navbar-brand {
     width: 100%;
     font-size: 13px;
 }
+
+.notifications_count {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    font-size: 12px;
+    background: #f5bc29;
+    padding: 0px 6px;
+    border-radius: 50%;
+    }
+    
+    
+    
+.btn.dropdown-toggle-split.shadow-none > i { font-size: 16px;}

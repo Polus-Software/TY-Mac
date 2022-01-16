@@ -912,13 +912,15 @@
         stars[index].addEventListener('click', function(event) {
             let starRating = parseInt(this.getAttribute('star-rating'));
 
+            finalRating = starRating;
+            
+            console.log(finalRating);
             for (var i = 0; i < starRating; i++) {
                 stars[i].classList.add("active-stars");
             }
             for (var i = starRating; i > index; i++) {
                 stars[i].classList.remove("active-stars");
             }
-            finalRating = starRating;
         });
     }
 
