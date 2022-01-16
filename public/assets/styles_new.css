@@ -142,4 +142,13 @@
     background-color: var(--color-black);
     margin-left: -10px;
 }
-  
+/* my courses */
+.think-truncated-text {
+  position: relative;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 2.6em; /* (Number of lines you want visible) * (line-height) */
+  line-height: 1.3em;
+  text-align:justify;
+}

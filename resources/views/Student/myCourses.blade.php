@@ -198,8 +198,10 @@
                                 <h5 class="card-title pb-3">
                                     {{ $singleEnrolledCourse['course_title'] }}
                                 </h5>
-                                <p class="card-text">
-                                    {{ $singleEnrolledCourse['description'] }}
+                                <p class="card-text position-relative">
+                                    <span class="think-truncated-text">
+                                        {{Str::limit($singleEnrolledCourse['description'], 180, ' (...)')}}
+                                    </span>
                                 </p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">

@@ -72,10 +72,12 @@
                                     {{ $course['course_title'] }}
                                     @endforeach
                                 </h5>
-                                <p class="card-text">
+                                <p class="card-text position-relative">
+                                    <span class="think-truncated-text">
                                     @foreach($singleCourseDetails as $course)
-                                    {{ $course['description'] }}
+                                    {{Str::limit($course['description'], 180, ' (...)')}}
                                     @endforeach
+                                    </span>
                                 </p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
