@@ -805,8 +805,20 @@ let timer = 0;
 
 $(document).ready(function(){
   var start = new Date;
+  let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
+      let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById("participants").innerHTML = data.html;
+      });
   }, 1000);
 });
 

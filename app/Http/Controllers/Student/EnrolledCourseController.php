@@ -92,12 +92,13 @@ class EnrolledCourseController extends Controller
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
        
-       $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>', $current_date)->orderBy('start_date')->get();
-       $next_live_cohort = "";
+       $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>=', $current_date)->orderBy('start_date')->get();
+       $next_live_cohort = "No sessions scheduled";
+
        if(count($batches)) {
         $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
-        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h A');
+        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h:m A');
+        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->end_time)->format('h:m A');
  
         $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
        

@@ -271,6 +271,7 @@ class CoursesCatalogController extends Controller
 
     public function registerCourseProcess(Request $request){
       
+    try {
        $courseId = $request->course_id;
        
        $batchId = $request->batch_id;
@@ -311,7 +312,9 @@ class CoursesCatalogController extends Controller
            'status' => 'success', 
            'message' => 'Enrolled successfully'
         ]);
-        
+    } catch (Exception $exception) {
+        return redirect('/')->withSuccess('Successfully registered!');
+    }
     }
 
 

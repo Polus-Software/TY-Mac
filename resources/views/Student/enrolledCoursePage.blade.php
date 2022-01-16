@@ -440,7 +440,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="card card-4">
                                                                         <div class="card-body">
-                                                                            She has understood 33% of the topic. We recommend her to view again these topics.
+                                                                            The student did not understand this topic. We recommended the student to view this topic again.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -449,10 +449,9 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="card card-5">
                                                                         <div class="card-body">
-                                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                                            <h6 class="card-title">Session 1 - {{ $recommendation['topic_title'] }}</h6>
                                                                             <ul class="list-group list-group-flush pb-3">
-                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                                                <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -1021,10 +1020,12 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         var data = google.visualization.arrayToDataTable([
             ['Sub content', 'Likes', 'Dislikes'],
             <?php
-            
-            foreach ($graph as $gr) {
-                echo '["' . $gr['topic_title'] . '",' . $gr['likes'] . ',' . $gr['dislikes'] . '],';
+            if(isset($graph)) {
+                foreach ($graph as $gr) {
+                    echo '["' . $gr['topic_title'] . '",' . $gr['likes'] . ',' . $gr['dislikes'] . '],';
+                }
             }
+            
             ?>
         ]);
 
