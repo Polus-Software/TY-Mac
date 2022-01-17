@@ -531,7 +531,7 @@
                                             @else
                                             <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
                                             @endif
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
                                                     @foreach($singleCourseDetails as $course)
                                                     <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                     @endforeach
@@ -545,7 +545,7 @@
 
                                                                 </p>
                                                             </div>
-                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pe-0">
                                                                 <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">{{ $qa['date'] }}</p>
                                                             </div>
                                                         </div>
