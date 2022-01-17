@@ -212,21 +212,21 @@
               <div class="col-auto">
                 <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                        {{$singleCourseDetail['instructorTwitter']}}
-                                        @endforeach">
+                                        @endforeach" target="_blank">
                   <img class="me-2" src="/storage/icons/twitter__icon.svg" alt="error">
                 </a>
               </div>
               <div class="col-auto">
                 <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
-                                            @endforeach">
+                                            @endforeach" target="_blank">
                   <img class="me-2" src="/storage/icons/linkedin__icon.svg" alt="error">
                 </a>
               </div>
               <div class="col-auto">
                 <a href="@foreach($singleCourseDetails as $singleCourseDetail)
                                             {{$singleCourseDetail['instructorYoutube']}}
-                                            @endforeach">
+                                            @endforeach" target="_blank">
                   <img class="me-2" src="/storage/icons/youtube__icon.svg" alt="error">
                 </a>
               </div>

@@ -271,6 +271,7 @@ class CoursesCatalogController extends Controller
 
     public function registerCourseProcess(Request $request){
       
+    try {
        $courseId = $request->course_id;
        
        $batchId = $request->batch_id;
@@ -311,7 +312,9 @@ class CoursesCatalogController extends Controller
            'status' => 'success', 
            'message' => 'Enrolled successfully'
         ]);
-        
+    } catch (Exception $exception) {
+        return redirect('/')->withSuccess('Successfully registered!');
+    }
     }
 
 
@@ -333,14 +336,15 @@ class CoursesCatalogController extends Controller
      
      if($instructors) {
         $instructorsArr = explode(",", $instructors);
+        
         foreach($instructorsArr as $instructor) {
            $instructorPair = explode('=', $instructor);
-           $assignedCourse = AssignedCourse::where('user_id', $instructorPair[1])->value('course_id');
+           
            if($instructorFlag == 0) {
-               $courses = $courses->where('id', $assignedCourse);
+               $courses = $courses->where('instructor_id', $instructorPair[1]);
                $instructorFlag = 1;
            } else {
-               $courses = $courses->orWhere('id', $assignedCourse);
+               $courses = $courses->orWhere('instructor_id', $instructorPair[1]);
            }
         }
     }
@@ -453,7 +457,7 @@ class CoursesCatalogController extends Controller
 
                 $html = $html . '(60)</div>';  
                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
-                $html = $html . '<i class="fas fa-tag fa-flip-horizontal ps-2"></i>'. $courseCategory .'</div></div>';
+                $html = $html . '<img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">'. $courseCategory .'</div></div>';
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
                 $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';

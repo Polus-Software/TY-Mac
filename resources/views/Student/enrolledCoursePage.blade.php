@@ -18,6 +18,10 @@
     margin-top:55px;
     
 }
+.accordion-button:not(.collapsed) {
+    color: #6E7687 !important;
+    background-color: transparent !important;
+}
 
 
 .card-title-1-certificate{
@@ -75,7 +79,7 @@
                                 <p class="card-text position-relative">
                                     <span class="think-truncated-text">
                                     @foreach($singleCourseDetails as $course)
-                                    {{Str::limit($course['description'], 180, ' (...)')}}
+                                    {{Str::limit($course['description'], 180, '...')}}
                                     @endforeach
                                     </span>
                                 </p>
@@ -252,20 +256,20 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Sub content</th>
-                                        <th scope="col">Session</th>
+                                        <th scope="col">Session name</th>
+                                        <th scope="col">Subtopic</th>
                                         <th scope="col">Likes</th>
                                         <th scope="col">Dislikes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recommendations as $recommendation)
+                                    @foreach($graph as $data)
                                     <tr>
                                         <td>{{ $loop->iteration}}</td>
-                                        <td>{{ $recommendation['content_title'] }}</td>
-                                        <td>{{ $recommendation['topic_title'] }}</td>
-                                        <td>{{ $recommendation['likes'] }}</td>
-                                        <td>{{ $recommendation['dislikes'] }}</td>
+                                        <td>Session - {{ $data['topic_title'] }}</td>
+                                        <td>{{ $data['topic_title'] }}</td>
+                                        <td>{{ $data['likes'] }}</td>
+                                        <td>{{ $data['dislikes'] }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -414,18 +418,18 @@
                                 @foreach($studentsEnrolled as $student)
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <i class="fas fa-user-circle pe-3"></i>{{ $student->firstname .' '. $student->lastname }}
                                         </button>
                                     </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div id="collapseOne_{{ $student->id }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <div class="row mt-3 mb-3">
                                                 @foreach($recommendations as $recommendation)
                                                 @if($recommendation['student_id'] == $student->user_id)
                                                 <div class="col-lg-6 mb-3">
                                                     <div class="card card-3" style="height: 550px;">
-                                                        <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
+                                                        <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-lg-12">
@@ -436,7 +440,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="card card-4">
                                                                         <div class="card-body">
-                                                                            She has understood 33% of the topic. We recommend her to view again these topics.
+                                                                            The student did not understand this topic. We recommended the student to view this topic again.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -445,10 +449,9 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="card card-5">
                                                                         <div class="card-body">
-                                                                            <h6 class="card-title">Session 1 - Intro to G Suite & Google Drive</h6>
+                                                                            <h6 class="card-title">Session 1 - {{ $recommendation['topic_title'] }}</h6>
                                                                             <ul class="list-group list-group-flush pb-3">
-                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Suite</li>
-                                                                                <li class=" ms-4 border-0 pb-2">How to use Google Drive</li>
+                                                                                <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -528,7 +531,7 @@
                                             @else
                                             <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
                                             @endif
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
                                                     @foreach($singleCourseDetails as $course)
                                                     <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                     @endforeach
@@ -542,7 +545,7 @@
 
                                                                 </p>
                                                             </div>
-                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pe-0">
                                                                 <p class="text-end time" id="updatedAt_{{ $qa['id'] }}">{{ $qa['date'] }}</p>
                                                             </div>
                                                         </div>
@@ -646,16 +649,102 @@
                                         @php ($slno = 0)
                                         @foreach($topicDetails as $topicDetail)
                                         @php ($slno = $slno + 1)
-                                        <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}">Session {{$slno}} - {{$topicDetail['topic_title']}}</h6>
-                                        <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
-                                            @foreach($topicDetail['assignmentList'] as $assignment)
-                                            <a href="{{ route('student.course.assignment', $assignment['id'] ) }}" style="text-decoration:none;">
-                                                <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$assignment['id']}}">
-                                                    {{$assignment['assignment_title']}}
-                                                </li>
-                                            </a>
+
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree_{{$slno}}" aria-expanded="false" aria-controls="collapseThree">
+                                                Session {{$slno}} - {{$topicDetail['topic_title']}}
+                                                @if($topicDetail['isAssignmentSubmitted'] == true)
+                                                <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
+                                                @else
+                                                <span style="position:absolute;left:45rem;background-color:#faffb0 !important;color:#be5a21 !important;width:6rem;" class="badge pill text-dark">Pending</span>
+                                                @endif
+                                                </button>
+                                                </h2>
+                                                <div id="collapseThree_{{$slno}}" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                @foreach($topicDetail['assignmentList'] as $assignment)
+                                                <div class="col-12 mb-3">
+                                                    <div class="card" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
+                                                    <div class="card-title p-3 bg-light border-bottom">
+                                                        Assignment: {{$assignment['assignment_title']}}</strong>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="card-text">{{$assignment['assignment_description']}}</p>
+                                                        <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                            
+
+                                                            <div class="col-lg-10">
+                                                                <p style="color:#6E7687;" class="mt-4">External Link</p>
+                                                                <a target="_blank" href="/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
+                                                            <p></p>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                            
+                                                            </div>
+                                                        </div>
+                                                    
+                                                    <div class="d-flex justify-content-center col-lg-12">
+
+                                                    <div class="card mb-3" style="border: 2px dashed rgba(0,0,0,.125);border-radius: 1rem;">
+    <div class="card-body">
+        
+        <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
+        <h5 class="card-title">Type your comment here</h5>
+        <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+        @csrf
+        <input type="hidden" name="assignment_id" value="{{ $assignment['id'] }}" />
+        <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;">
+                    
+                    <div class="row p-2 flex-fill bd-highlight">
+                        <div class="col-lg-3">Attach File:</div>
+                            <div class="col-lg-5 col-12"><label>Upload from device</label>
+                                <input class="form-control" type="file" name="assignment_upload">
+                            </div>
+                        <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
+                        
+                    </div>
+                    <div class="col-12 text-end mt-4"><a class="btn btn-sm btn-outline-secondary me-3">Cancel</a><button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
+                        </div>
+</form>
+                </div>
+                    </div>
+                    
+                </div>
+            <!-- </div> -->
+        </div>
+                                                    
+
+
+                                                    </div>
+                                                    </div>
+
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 m-auto text-center">
+                                                <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
+                                                </div>
+                                                
                                             @endforeach
-                                        </ul>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}"></h6>
+                                        <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+                                            
+                                        </ul> -->
                                         @endforeach
                                     </div>
                                 </div>
@@ -803,6 +892,19 @@
 @endpush
 @push('child-scripts')
 <script>
+
+    let startAssignment = document.getElementsByClassName('start_assignment');
+
+    let startAssignmentLength = startAssignment.length;
+
+    for(index = 0;index < startAssignmentLength;index++) {
+        startAssignment[index].addEventListener('click', function(e) {
+            e.preventDefault();
+            let card = this.getAttribute('card-id');
+
+            document.getElementById('card_' + card).style.display = "block";
+        });
+    }
     let finalRating = 0;
 
     let stars = document.getElementsByClassName('rating-star');
@@ -810,14 +912,15 @@
         stars[index].addEventListener('click', function(event) {
             let starRating = parseInt(this.getAttribute('star-rating'));
 
+            finalRating = starRating;
+            
+            console.log(finalRating);
             for (var i = 0; i < starRating; i++) {
                 stars[i].classList.add("active-stars");
             }
-            for (var i = starRating; i < index; i++) {
-                console.log(i);
+            for (var i = starRating; i > index; i++) {
                 stars[i].classList.remove("active-stars");
             }
-            finalRating = starRating;
         });
     }
 
@@ -919,20 +1022,24 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         var data = google.visualization.arrayToDataTable([
             ['Sub content', 'Likes', 'Dislikes'],
             <?php
-            foreach ($recommendations as $recommendation) {
-                echo '["' . $recommendation['content_title'] . '",' . $recommendation['likes'] . ',' . $recommendation['dislikes'] . '],';
+            if(isset($graph)) {
+                foreach ($graph as $gr) {
+                    echo '["' . $gr['topic_title'] . '",' . $gr['likes'] . ',' . $gr['dislikes'] . '],';
+                }
             }
+            
             ?>
         ]);
 
 
         var options = {
             chart: {
-                title: 'Session vise Likes and Dislikes',
+                title: 'Session wise Likes and Dislikes',
                 subtitle: '',
                 width: 600,
                 height: 400
-            }
+            },
+            colors: ['#A26B05','#F5BC29']
         };
 
         var chart = new google.charts.Bar(document.getElementById('chart_div'));
