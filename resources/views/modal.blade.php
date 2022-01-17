@@ -406,7 +406,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
   const contactPhone = document.getElementById('contactPhone');
   const contactMessage = document.getElementById('contactMessage');
   
-    document.querySelector('#contactForm').addEventListener('submit', (e) => {debugger
+    document.querySelector('#contactForm').addEventListener('submit', (e) => {
       if (contactName.value === '') {
         e.preventDefault();
         showError(contactName, 'Name is required');

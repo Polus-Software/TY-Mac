@@ -26,6 +26,18 @@
    <a href="#" class="shadow btn-primary rounded-circle back-to-top">
     <i class="fas fa-chevron-up"></i>
   </a>
+@if(session()->has('message'))
+<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1031">
+<div class="toast align-items-center text-white bg-warning bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
+  <div class="d-flex">
+    <div class="toast-body">
+    {{ session()->get('message') }}
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+</div>
+@endif
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
