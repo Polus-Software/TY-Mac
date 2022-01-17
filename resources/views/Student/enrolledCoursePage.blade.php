@@ -357,10 +357,7 @@
                             </div>
                             @endforeach
                             @else
-                             <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                                <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                                <h4 class="fw-bold">No recommendations for you yet!</h4>    
-                            </div>
+                             <x-nodatafound message="No recommendations for you yet!" />
                             @endif
                         </div>
 
