@@ -28,7 +28,7 @@
   </a>
 @if(session()->has('message'))
 <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1031">
-<div class="toast align-items-center text-white bg-warning bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
+<div class="toast align-items-center text-white border-0 think-toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
   <div class="d-flex">
     <div class="toast-body">
     {{ session()->get('message') }}

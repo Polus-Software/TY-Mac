@@ -1,6 +1,6 @@
 <!-- signup modal -->
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog think-modal-max-w-600">
+    <div class="modal-dialog">
       <div class="modal-content border-0">
         <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
           <h5 class="modal-title custom-form-header" id="signupModalLabel">Create an account</h5>
@@ -80,7 +80,7 @@
   <!-- signup modal ends -->
   <!-- login modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog think-modal-max-w-600">
+  <div class="modal-dialog">
       <div class="modal-content border-0">
         <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
           <h5 class="modal-title custom-form-header" id="loginModalLabel">Log in to account</h5>

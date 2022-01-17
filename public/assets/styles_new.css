@@ -158,3 +158,6 @@
     padding: 10px;
     color: var(--color-primary);
 }
+.think-toast {
+  background-color: #74648C;
+}
