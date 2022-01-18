@@ -49,4 +49,8 @@ function displayPassword(){
 }
 }
 
-
+const textarea = document.querySelector('textarea.autosize');
+textarea.addEventListener('input', (e) => {
+  e.target.style.height = 'auto';
+  e.target.style.height = e.target.scrollHeight + 'px';
+});
