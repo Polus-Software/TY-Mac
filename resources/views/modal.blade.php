@@ -1,6 +1,6 @@
 <!-- signup modal -->
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog think-modal-max-w-600">
+    <div class="modal-dialog">
       <div class="modal-content border-0">
         <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
           <h5 class="modal-title custom-form-header" id="signupModalLabel">Create an account</h5>
@@ -80,18 +80,17 @@
   <!-- signup modal ends -->
   <!-- login modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+  <div class="modal-dialog">
       <div class="modal-content border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="loginModalLabel">Log in to account</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="loginModalLabel">Log in to account</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-            <form id="loginForm" class="form" method="POST" action="{{route('user.login')}}">
+          <form id="loginForm" class="form" method="POST" action="{{route('user.login')}}">
               @csrf
-
-              <div class="form-group mx-sm-5 mx-0">
+              <div class="form-group mx-0">
                 <label for="email" class="email-label">Email</label>
                 <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
                 <small>Error message</small>
@@ -99,8 +98,8 @@
                 <span class="text-danger">{{ $errors->first('email') }}</span>
                 @endif
               </div>
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="inputPassword" class="password-label">Password</label>
+              <div class="form-group mx-0">
+              <label for="inputPassword" class="password-label">Password</label>
                 <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value="{{old('password')}}">
                 <span><i class="fas fa-eye-slash" id="togglePassword" onClick="viewPassword()"></i></span>
                 <small>Error message</small>
@@ -108,32 +107,24 @@
                 <span class="text-danger">{{ $errors->first('password') }}</span>
                 @endif
               </div>
-
-              <div class="form-group mx-sm-5 mx-0">
-                <label class="form-check-label rememberme">
-                  <input class="form-check-input" name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+              <div class="form-group mx-0">
+              <label class="form-check-label rememberme"><input class="form-check-input" name="remember_me" type="checkbox"> &nbsp;Remember me</label>
               </div>
-
-              <div class="d-grid form-group  mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Login</span></button>
+              <div class="form-group mx-0">
+              <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
               </div>
-
-              <div class="text-center forgotpass">
-                <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
-
+              <div class="form-group mx-0 d-grid">
+              <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Login</span></button>
               </div>
-
-              <div class="text-center bottom-text">
-                <span>
+              <div class="form-group mx-0">
+              <span>
                   <p>Don't have an account?
                 </span>
                 <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
-
             </form>
           </div>
         </div>
-        <div class="modal-footer border-0"></div>
       </div>
     </div>
   </div>
@@ -141,44 +132,43 @@
 <!-- contact modal -->
 @if(Request::is('/'))
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+<div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="contactModalLabel">Contact us</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="contactModalLabel">Contact us</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-            <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+          <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
               @csrf
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="name" class="name-label">Name</label>
+              <div class="form-group mx-0">
+              <label for="name" class="name-label">Name</label>
                 <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="email" class="email-label">Email</label>
+              <div class="form-group mx-0">
+              <label for="email" class="email-label">Email</label>
                 <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="phone" class="phone-label">Phone</label>
+              <div class="form-group mx-0">
+              <label for="phone" class="phone-label">Phone</label>
                 <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
                 <small>Error message</small>
               </div>
-              <div class="form-group mx-sm-5 mx-0">
-                <label for="message" class="message-label">Message</label>
+              <div class="form-group mx-0">
+              <label for="message" class="message-label">Message</label>
                 <textarea name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
-              <div class="d-grid form-group  mx-sm-5 mx-0">
-                <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              <div class="form-group mx-0 d-grid">
+              <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
               </div>
 
             </form>
           </div>
         </div>
-        <div class="modal-footer border-0"></div>
       </div>
     </div>
   </div>
@@ -218,30 +208,37 @@
   <!-- review modal -->
   @if(Request::is('enrolled-course/*'))
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h3 class="modal-title ms-auto" id="reviewModalLabel">Add review</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="rating text-center mb-3">
+<div class="modal-dialog think-modal-max-w-600">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="contactModalLabel">Add review</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>       
+            <div class="think-text-secondary-color">Add a review and a star rating!!!</div>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+                <div class="form-group mx-0 text-center">
+                <i class="far fa-thumbs-up fa-3x think-review"></i>
+              </div>
+              <div class="form-group mx-0">
+              <div class="rating text-center mb-3">
                     <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
                     <label for="star2" class="fas fa-star rating-star" star-rating="2"></label>
                     <label for="star3" class="fas fa-star rating-star" star-rating="3"></label>
                     <label for="star4" class="fas fa-star rating-star" star-rating="4"></label>
                     <label for="star5" class="fas fa-star rating-star" star-rating="5"></label>
                 </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6 comment-area m-auto ">
-                    <textarea class="form-control" id="comment" placeholder="Leave your comment..." rows="4" maxlength="60"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer border-0 mb-3">
-                @csrf
-                <button type="button" id="reviewSubmitBtn" class="col-lg-6 col-md-6 col-sm-6 col-6 btn btn-dark m-auto">Submit</button>
-            </div>
+              </div>
+              <div class="form-group mx-0">
+                <textarea class="form-control" id="comment" placeholder="Add your review..." rows="4" maxlength="60"></textarea>
+              </div>
+              <div class="form-group mx-0">
+              @csrf
+                <button type="button" id="reviewSubmitBtn" class="btn btn-secondary think-btn-secondary sendContactInfo w-100">Submit</button>
+              </div>
+          </div>
         </div>
+      </div>
     </div>
 </div>
 @endif
@@ -368,6 +365,39 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
     const loginform = document.getElementById('loginForm');
     const loginemail = document.getElementById('inputEmail');
     const loginpassword = document.getElementById('inputPassword');
+    document.querySelector('#loginForm').addEventListener('submit', (e) => {
+      if (loginemail.value === '') {
+        e.preventDefault();
+        showError(loginemail, 'Email is required');
+      } else {
+        removeError(loginemail)
+      }
+      if (loginpassword.value === '') {
+        e.preventDefault();
+        showError(loginpassword, 'Password is required');
+      } else {
+        removeError(loginpassword)
+      }
+    });
+
+    document.getElementById('signup_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('loginModal');
+      document.getElementById('signup_navlink').click();
+    });
+
+    document.getElementById('login_link').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal('signupModal');
+      document.getElementById('login_navlink').click();
+    });
+
+    function closeModal(modalId) {
+    const truck_modal = document.querySelector('#' + modalId);
+    const modal = bootstrap.Modal.getInstance(truck_modal);
+    console.log(modal);
+    modal.hide();
+  }
   </script>
   @if(Request::is('/'))
   <script>
@@ -376,7 +406,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
   const contactPhone = document.getElementById('contactPhone');
   const contactMessage = document.getElementById('contactMessage');
   
-    document.querySelector('#contactForm').addEventListener('submit', (e) => {debugger
+    document.querySelector('#contactForm').addEventListener('submit', (e) => {
       if (contactName.value === '') {
         e.preventDefault();
         showError(contactName, 'Name is required');

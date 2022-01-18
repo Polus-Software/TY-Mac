@@ -6,7 +6,7 @@ header .card-1{
 .card-image{
     border-radius:20px;
 }
-section .card-2:hover, .card-2:active, .active-batch{
+section .card-2:hover, .card-2:active, .card-2.active-batch{
     border: 1px solid #E0E0E0 !important;
     border-radius: 10px;
     background:#FFF9E8;

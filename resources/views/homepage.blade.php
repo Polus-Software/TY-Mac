@@ -1,3 +1,24 @@
+
+
+@php
+
+  use App\Models\UserType;
+  use App\Models\User;
+
+  $user = Auth::user();
+  $userType = "";
+  if($user) {
+    $userId = $user->role_id;
+
+    $userType = UserType::where('id', $userId)->value('user_role');
+  }
+@endphp
+@if($userType == "instructor") 
+  <script type="text/javascript">
+    window.location = "/assigned-courses";
+  </script>   
+@endif
+
 @extends('Layouts.app')
 @section('content')
 <!-- top banner-->
@@ -102,22 +123,28 @@
     <div class="text-center">
       <a type="button" class="btn think-btn-secondary-outline" href="#">Learn more</a>
     </div>
-  </div>
-</section>
-<!-- Our courses -->
-@php
-use App\Http\Controllers\Student\CoursesCatalogController;
-$courses = CoursesCatalogController::getAllCourses();
-@endphp
+  </section>
+  <!-- Our courses -->
+  @php
+  use App\Http\Controllers\Student\CoursesCatalogController;
+  use App\Models\Notification;
+  $courses = CoursesCatalogController::getAllCourses();
+  
+  $user = Auth::user();
+
+  if($user) {
+    $notifications = Notification::where('user', $user->id)->orderBy('created_at', 'DESC')->get();
+  }
+  @endphp
 
 
-<section id="Our courses" class="our-courses">
-  <div class="container">
-    <div class="row text-center think-mb-75">
-      <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">Our courses<div class="think-courses-underline">
-            <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block h-32">
-          </div></span></h1>
-      <!-- <div class="mb-5">
+  <section id="Our courses" class="our-courses">
+    <div class="container">
+      <div class="row text-center think-mb-75">
+        <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">Our courses<div class="think-courses-underline">
+          <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block h-32">
+        </div></span></h1>
+        <!-- <div class="mb-5">
           <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
         </div> -->
     </div>
@@ -137,48 +164,7 @@ $courses = CoursesCatalogController::getAllCourses();
               <div class="row">
                 @endif
                 <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                  <div class="card-1">
-                    <img src="/storage/courseThumbnailImages/{{ ($course['course_thumbnail_image']) ?  $course['course_thumbnail_image'] : 'defaultImage.png'}}" class="card-img-top" alt="{{ $course['course_title'] }}">
-                    <div class="card-body pb-0 fs-14">
-                      <h5 class="card-title text-center text-truncate fs-16 fw-bold">{{ $course['course_title'] }}</h5>
-                      <p class="card-text text-sm-start text-truncate">{{ $course['description'] }}</p>
-
-
-                      <div class="row mb-3">
-                        <div class="col-lg-6 col-sm-6 col-6">
-                          @for($i = 1; $i <= 5; $i++) @if($i <=$course['rating']) <i class="fas fa-star rateCourse"></i>
-                            @else
-                            <i class="far fa-star rateCourse"></i>
-                            @endif
-                            @endfor
-                            (60)
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">
-                          <img class="me-1 think-w-14_5" src="/icons/category__icon.svg" alt="error">{{ $course['course_category'] }}
-                        </div>
-                      </div>
-
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                          <div class="row">
-                            <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
-                            <div class="col item-2 px-0 text-center">
-                              <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
-                            </div>
-                            <div class="col-auto item-3 px-0 d-flex">
-                              <p class="text-end"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                      <div class="row py-2">
-                        <div class="text-center border-top">
-                          <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn d-inline-block w-100 px-0">Join now</a>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
+                  <x-Courseboxsmall :course="$course" />
                 </div>
                 @if($loop->last)
               </div>
@@ -276,8 +262,8 @@ $courses = CoursesCatalogController::getAllCourses();
     <div class="row pt-2 pb-2 mt-0 mb-3 justify-content-center text-center">
       <div class="dotted-decoaration"><img src="/storage/icons/dotted.svg" alt="error"></div>
       <div class="col-md-11">
-        <div class="think-yellow-container bg-warning p-4 rounded-3 p-5">
-          <h2 class="fw-bold text-capitalize text-center text-white mb-4">
+        <div class="think-yellow-container bg-warning rounded-3">
+          <h2 class="fw-bold text-center text-white mb-4">
             Have a question?
           </h2>
           <button class="btn bg-white" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
@@ -334,6 +320,14 @@ $courses = CoursesCatalogController::getAllCourses();
       // document.getElementById('notif-body').innerHTML = data.html;
     });
 
+  }
+  window.onload = (event)=> {
+  var toastLiveExample = document.getElementById('liveToast');
+  if(toastLiveExample) {debugger
+    var toast = new bootstrap.Toast(toastLiveExample);
+    toast.show();
+  }
+  
   }
 </script>
 @endpush

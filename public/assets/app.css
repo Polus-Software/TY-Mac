@@ -423,6 +423,10 @@ form i {
   position: relative;
   border-radius: 50px !important;
   overflow: hidden;
+  padding: 5rem 3rem;
+}
+.think-yellow-container h2{
+  font-size: 3.2rem;
 }
 
 .think-yellow-container::before,
@@ -437,8 +441,8 @@ form i {
 }
 
 .think-yellow-container::before {
-  left: -60px;
-  bottom: -185px;
+  left: -25px;
+  bottom: -160px;
 }
 
 .think-yellow-container::after {

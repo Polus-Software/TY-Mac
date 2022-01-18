@@ -57,7 +57,7 @@
                                         @foreach($liveSessionDetails as $liveSessionDetail)
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                             <div class="card-1">
-                                                <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                                <img src="/storage/courseThumbnailImages/{{ $liveSessionDetail['course_thumbnail_image'] }}" class="card-img-top" alt="...">
                                                 <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
                                                 <div class="card-body">
                                                     <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
@@ -117,7 +117,7 @@
                                         @foreach($upComingSessionDetails as $upComingSessionDetail)
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                             <div class="card-1">
-                                                <img src="courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
+                                                <img src="/storage/courseThumbnailImages/{{ $upComingSessionDetail['course_thumbnail_image'] }}" class="card-img-top" alt="...">
                                                 <div class="card-body">
                                                     <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>
                                                     <p class="card-text text-sm-start text-truncate">{{ $upComingSessionDetail['course_desc'] }}</p>
@@ -198,8 +198,10 @@
                                 <h5 class="card-title pb-3">
                                     {{ $singleEnrolledCourse['course_title'] }}
                                 </h5>
-                                <p class="card-text">
-                                    {{ $singleEnrolledCourse['description'] }}
+                                <p class="card-text position-relative">
+                                <span class="think-truncated-text">
+                                    {{Str::limit($singleEnrolledCourse['description'], 180, '...')}}
+                                </span>
                                 </p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
@@ -218,7 +220,8 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                        <p class="para-2 text-truncate" title="{{ $singleEnrolledCourse['course_difficulty'] }}"><i class="far fa- pe-1"></i>
+                                        <p class="para-2 text-truncate" title="{{ $singleEnrolledCourse['course_difficulty'] }}">
+                                        <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             {{ $singleEnrolledCourse['course_difficulty'] }}
                                         </p>
                                     </div>

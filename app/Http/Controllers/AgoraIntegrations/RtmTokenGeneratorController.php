@@ -43,8 +43,10 @@ class RtmTokenGeneratorController extends Controller
         $userObj = Auth::user();
 
         $sessionObj = LiveSession::where('live_session_id', $session);
+        $courseId = $sessionObj->value('course_id');
         $topicId = $sessionObj->value('topic_id');
         $topic = Topic::where('topic_id', $topicId)->value('topic_title');
+
         $participants = [];
         $contents = TopicContent::where('topic_id', $topicId)->get();
         
@@ -63,7 +65,8 @@ class RtmTokenGeneratorController extends Controller
                 'session' => $session,
                 'topic_title' => $topic,
                 'contents' => $contents,
-                'userType' => $userTypeLoggedIn
+                'userType' => $userTypeLoggedIn,
+                'courseId' => $courseId
             ]);
         } else {
             return redirect('/403');
@@ -262,6 +265,8 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function getLiveRecord(Request $request) {
+        $flag = 0;
+
         $session = LiveSession::where('live_session_id', $request->session);
 
         $topicId = $session->value('topic_id');
@@ -269,10 +274,17 @@ class RtmTokenGeneratorController extends Controller
 
         $topicContentId = $push->value('topic_content_id');
 
-        $content = TopicContent::where('topic_content_id', $topicContentId);
+        $user = Auth::user();
+        $student =  $user->id;
+        $feedbackRecord = StudentFeedbackCount::where('content_id', $topicContentId)->where('student', $student)->get();
 
+        if(count($feedbackRecord) != 0) {
+            $flag = 1;
+        }
+        $content = TopicContent::where('topic_content_id', $topicContentId);
+        
         $contentTitle = $content->value('topic_title');
-        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle]);
+        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag]);
     }
 
     public function pushFeedbacks(Request $request) {
@@ -388,14 +400,14 @@ class RtmTokenGeneratorController extends Controller
             $session = $request->session;
             $html = "";
 
-            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->get();
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('attendance_Status', true)->get();
             
             foreach($attendanceRec as $rec) {
                 $student = User::where('id', $rec->student);
                 $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
-                    $html = $html . '<p style="color:black;margin-top:25px;">' . $studentName . '<span style="margin-left:220px;"><span style="color:green;">●</span> Online</span></p>';
-               
-                
+                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/icons/placeholder-avatar.svg" alt="error">';
+                $html = $html . '<span class="think-online-status-light-container online-status-green"></span></span>';
+                $html = $html . '<span class="think-participant-name">'. $studentName .'</span></span></div>'; 
             }
             return response()->json(['status' => 'success', 'html' => $html]);
     }

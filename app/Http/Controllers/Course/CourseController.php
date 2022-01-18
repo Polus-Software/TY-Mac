@@ -38,7 +38,6 @@ class CourseController extends Controller
         $courseCategories = CourseCategory::all();
         $courses = Course::all();
         foreach ($courses as $course) {
-            // $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
             $courseStatus = DB::table('courses')->where('id', $course->id)->value('is_published');
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -49,7 +48,7 @@ class CourseController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
-                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y'),
+                'updated_at' => $course->updated_at
                
               );
               array_push($courseDetails, $courseData);
@@ -168,6 +167,7 @@ class CourseController extends Controller
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
+        $course->instructor_id = $instructorName;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
@@ -345,6 +345,7 @@ class CourseController extends Controller
                 $course->course_duration = $courseDuration;
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
+                $course->instructor_id = $instructor;
 
                 if($request->file()) {
                     if($request->course_image != null) {
