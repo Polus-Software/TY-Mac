@@ -663,7 +663,7 @@ aside .video-wrap .bottom-left-info .username {
     } */
 
 /*  */
-  </style>
+</style>
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
@@ -759,9 +759,197 @@ aside .video-wrap .bottom-left-info .username {
   </div>
 
 @endif
+
+<button class="trigger">Click here to trigger the modal!</button>
+<div class="feedback-modal">
+    <div class="feedback-modal-content">
+        <span class="feedback-modal-close-button">&times;</span>
+        <div class="feedback-container">
+          <h1 class="feedback-title">It's Feedback Time!</h1>
+          <h4 class="feedback-sub-title">Tell us about your live cohort experience</h4>
+          <h2 class="feedback-session-name">Session 1 - Intro to G Suite & Google Drive</h2>
+          <h2 class="feedback-question-1 questions">How do you like the session?</h2>
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <img class="disappointed first-emojis" src="/storage/icons/Disappointed.svg" alt="error">
+              <p>Disappointed</p>
+            </div>
+            <div class="single-emoji">
+              <img class="confused first-emojis" src="/storage/icons/Confused_greyscale.svg" alt="error">
+              <p>Confused</p>
+            </div>
+            <div class="single-emoji">
+              <img class="satisfied first-emojis" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
+              <p>Satisfied</p>
+            </div>
+            <div class="single-emoji">
+              <img class="awesome first-emojis" src="/storage/icons/Awesome_greyscale.svg" alt="error">
+              <p>Awesome</p>
+            </div>
+          </div>
+          <h2 class="feedback-question-2 questions">How do you like the learning format?</h2>
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <img class="disappointed" src="/storage/icons/Disappointed_greyscale.svg" alt="error">
+              <p>Disappointed</p>
+            </div>
+            <div class="single-emoji">
+              <img class="confused" src="/storage/icons/Confused_greyscale.svg" alt="error">
+              <p>Confused</p>
+            </div>
+            <div class="single-emoji">
+              <img class="satisfied" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
+              <p>Satisfied</p>
+            </div>
+            <div class="single-emoji">
+              <img class="awesome" src="/storage/icons/Awesome_greyscale.svg" alt="error">
+              <p>Awesome</p>
+            </div>
+          </div>
+          <h2 class="feedback-question-3 questions">How do you like the learning format?</h2>
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <img class="disappointed" src="/storage/icons/Disappointed_greyscale.svg" alt="error">
+              <p>Disappointed</p>
+            </div>
+            <div class="single-emoji">
+              <img class="confused" src="/storage/icons/Confused_greyscale.svg" alt="error">
+              <p>Confused</p>
+            </div>
+            <div class="single-emoji">
+              <img class="satisfied" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
+              <p>Satisfied</p>
+            </div>
+            <div class="single-emoji">
+              <img class="awesome" src="/storage/icons/Awesome_greyscale.svg" alt="error">
+              <p>Awesome</p>
+            </div>
+          </div>
+          <h2 class="other-feedbacks questions">Any other feedback?</h2>
+          <textarea class="feedback-text"></textarea><br>
+          <button type="button" class="feedback-submit" id="feedback-submit">Submit</button>
+        </div>
+    </div>
+</div>
+
+<style>
+  .emoji-container {
+    display: flex;
+    margin-top: 10px;
+  }
+  .single-emoji {
+    width: 25%;
+  }
+  .single-emoji img {
+    display: initial;
+  }
+  .feedback-container {
+    padding: 4rem 3.5rem;
+text-align: center;
+}
+h1.feedback-title {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.7px;
+    color: #39414f;
+    margin-bottom: 0px;
+}
+
+h4.feedback-sub-title {
+    color: #a3a9b0;
+}
+
+h2.feedback-session-name {
+    color: #39414f;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+h2.questions {
+    color: #39414f;
+    margin-top: 10px;
+    font-weight: 600;
+}
+button#feedback-submit {
+    background-color: #2c3443;
+    color: white;
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+  .feedback-modal {
+    z-index: 9;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.feedback-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 30rem;
+    border-radius: 0.5rem;
+}
+
+.feedback-modal-close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    font-size: 30px;
+    border-radius: 0.25rem;
+    color: #878f97;
+}
+
+.feedback-modal-close-button:hover {
+    background-color: darkgray;
+}
+
+.feedback-modal-show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+  </style>
 </div>
   <script type="text/javascript">
-        
+
+
+const modal = document.querySelector(".feedback-modal");
+const trigger = document.querySelector(".trigger");
+const closeButton = document.querySelector(".feedback-modal-close-button");
+
+function toggleModal() {
+    modal.classList.toggle("feedback-modal-show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+trigger.addEventListener("click", toggleModal);
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
+
+
         let session = document.getElementById('session_hidden_id').value;
         
         let path = "/generate-token/" + session;
@@ -800,7 +988,7 @@ aside .video-wrap .bottom-left-info .username {
         }
       }
     )
-
+    
         });
         
 let timer = 0;
@@ -1009,6 +1197,19 @@ buttonOpenClose.addEventListener('click', () => {
   }
   toggleFlag = !toggleFlag;
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   </script>
 </body>

@@ -1,0 +1,32 @@
+<svg id="Confused_greyscale" xmlns="http://www.w3.org/2000/svg" width="44.218" height="44.25" viewBox="0 0 44.218 44.25">
+  <g id="Confused">
+    <rect id="confused_bg" width="44" height="44" rx="22" transform="translate(0.166 0.25)" fill="#fff9e8"/>
+    <g id="confused_emoji" transform="translate(0 0)">
+      <g id="Group_1147" data-name="Group 1147" transform="translate(0 0)">
+        <g id="Group_1146" data-name="Group 1146" transform="translate(0 0)">
+          <g id="Group_1143" data-name="Group 1143">
+            <circle id="Ellipse_18" data-name="Ellipse 18" cx="15.633" cy="15.633" r="15.633" transform="translate(0 22.109) rotate(-45)" fill="#ffd053"/>
+          </g>
+          <g id="Group_1144" data-name="Group 1144" transform="translate(8.935 8.766)">
+            <path id="Path_598" data-name="Path 598" d="M50.312,25.88A15.635,15.635,0,0,1,28.96,47.625,15.634,15.634,0,1,0,50.312,25.88Z" transform="translate(-28.96 -25.88)" fill="#ffc448"/>
+          </g>
+          <g id="Group_1145" data-name="Group 1145" transform="translate(7.521 7.631)">
+            <path id="Path_599" data-name="Path 599" d="M22.33,35.817a14.514,14.514,0,0,1,26.02-8.847A14.515,14.515,0,1,0,24.26,43.052,14.432,14.432,0,0,1,22.33,35.817Z" transform="translate(-21.25 -19.69)" fill="#ffd77a"/>
+          </g>
+        </g>
+      </g>
+      <g id="Group_1150" data-name="Group 1150" transform="translate(10.978 14.187)">
+        <g id="Group_1148" data-name="Group 1148" transform="translate(0 0.956)">
+          <ellipse id="Ellipse_19" data-name="Ellipse 19" cx="3.584" cy="3.584" rx="3.584" ry="3.584" transform="translate(0 7.075) rotate(-80.782)" fill="#fff"/>
+          <path id="Path_600" data-name="Path 600" d="M56.091,64.561a3.569,3.569,0,0,0-4.323-.536.9.9,0,0,0-.194.464c-.07.748.9,1.449,2.155,1.568s2.338-.392,2.408-1.141A.841.841,0,0,0,56.091,64.561Z" transform="translate(-49.467 -63.002)" fill="#2c2c2c"/>
+        </g>
+        <g id="Group_1149" data-name="Group 1149" transform="translate(13.081 0)">
+          <circle id="Ellipse_20" data-name="Ellipse 20" cx="3.584" cy="3.584" r="3.584" transform="translate(0 5.068) rotate(-45)" fill="#fff"/>
+          <path id="Path_601" data-name="Path 601" d="M132.65,64.561a3.569,3.569,0,0,0-4.323-.536.88.88,0,0,0-.193.464c-.07.748.9,1.449,2.155,1.568s2.338-.392,2.408-1.141A.9.9,0,0,0,132.65,64.561Z" transform="translate(-125.067 -62.046)" fill="#2c2c2c"/>
+        </g>
+      </g>
+      <path id="Path_602" data-name="Path 602" d="M80.22,110.228a6.291,6.291,0,0,0-2.955-1.572,8,8,0,0,0-3.371-.062,8.464,8.464,0,0,0-3.1,1.284,7.321,7.321,0,0,0-2.274,2.392.366.366,0,0,0,.051.433.37.37,0,0,0,.268.116.36.36,0,0,0,.161-.039l.343-.169c.805-.4,1.564-.774,2.337-1.077a14.455,14.455,0,0,1,2.628-.779,12.974,12.974,0,0,1,2.707-.233,17.106,17.106,0,0,1,2.878.326.365.365,0,0,0,.323-.62Z" transform="translate(-52.293 -84.535)" fill="#654735"/>
+    </g>
+    <rect id="confused_bg-2" data-name="confused_bg" width="44" height="44" rx="22" transform="translate(0.166 0.25)" style="mix-blend-mode: color;isolation: isolate"/>
+  </g>
+</svg>
