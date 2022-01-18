@@ -7,19 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class StudentMailAfterEnrolling extends Mailable
+class ForgotPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $mailDetails;
+    public $details;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mailDetails)
+    public function __construct($details)
     {
-        $this->mailDetails = $mailDetails;
+        $this->details = $details;
     }
+
 
     /**
      * Build the message.
@@ -28,12 +30,8 @@ class StudentMailAfterEnrolling extends Mailable
      */
     public function build()
     {
-        return $this->markdown('Emails.studentConfirmationAfterEnrolling')
+        return $this->subject('Reset Password')
+                    ->markdown('Emails.forgotPassword')
                     ->from('ashishbabythoppil@gmail.com');
     }
-    
 }
-
-
-
-

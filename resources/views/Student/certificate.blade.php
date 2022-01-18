@@ -73,8 +73,10 @@
                     <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
                     <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :</small>
                     <small style="position: absolute; right: 45px; top:40px;">{{$courseDetail['date_of_issue']}}</small>
-                    <h1 class="card-title">ThinkLit</h1>
-                    <div style="background:#FFF9E8; padding-bottom:5px; margin-bottom:10px;">
+                    <!-- <h1 class="card-title">ThinkLit</h1> -->
+                    <img src="{{'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/storage/icons/ty_mac__transparent__1000.png')))}}" alt="" class="img-fluid" style="width:180px; height:180px; display: block;
+    margin: 0 auto;">
+                    <div style="background:#FFF9E8; padding-bottom:5px; margin-bottom:20px; margin-left:20px; margin-right:20px;">
                     <h3 class="card-title-1">Certificate of completion</h3>
                     <p class="card-text-2">{{$courseDetail['student_firstname']}} {{$courseDetail['student_lastname']}}</p>
                   <div class="row">
@@ -85,7 +87,7 @@
                   </div>
                   <div class="row">
                       <div class="col-lg-12">
-                        <img src="{{ 'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/storage/signatures/'.$courseDetail['instructor_signature'])))}}" alt="" class="signature-img signature">
+                        <img src="{{'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/storage/signatures/'.$courseDetail['instructor_signature'])))}}" alt="" class="signature-img signature">
                     </div>
                       <div class="col-lg-12">
                         <p class="card-text-1">{{$courseDetail['instructor_firstname']}} {{$courseDetail['instructor_lastname']}}, Instructor</p>

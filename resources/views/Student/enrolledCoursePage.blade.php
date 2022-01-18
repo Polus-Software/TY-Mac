@@ -733,15 +733,16 @@
                                                             </div>
                                                             <div class="tab-pane fade" id="pills-certificate" role="tabpanel" aria-labelledby="pills-back-certificate">
                                                                 <div class="col-lg-12 d-flex justify-content-center">
-                                                                    <div class="card text-center" style="margin: auto; width: 100%; border: 1px solid grey; margin-bottom:30px;">
+                                                                    <div class="card text-center" style="margin: auto; width: 100%;">
                                                                         <div class="card-body">
-                                                                        <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
+                                                                        <!-- <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;"> -->
                                                                             <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
                                                                             <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :  
                                                                             @foreach($singleCourseDetails as $course)
                                                                                 {{ $course['date_of_issue'] }} 
                                                                             @endforeach</small>
                                                                             <small style="position: absolute; right: 45px; top:40px;"></small>
+                                                                            <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
                                                                             <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                                             <div style="background:#FFF9E8;">
                                                                             <h3 class="card-title-1-certificate">Certificate of completion</h3>
@@ -750,22 +751,23 @@
                                                                                         @endforeach</p>
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
-                                                                                <p class="card-text-1">Has successfully completed the  <br>
+                                                                                <p class="card-text-1">Has successfully completed the {{$course['course_title']}}  <br>
                                                                                     online cohort on (course completion date)</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
                                                                             @foreach($singleCourseDetails as $course)
-                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
+                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid" 
+                                                                            style="border-bottom:1px solid #F5BC29;"> 
                                                                             @endforeach
                                                                             </div>
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-lg-12 mt-4">
                                                                                 <p class="card-text-1">@foreach($singleCourseDetails as $course)
                                                                                     {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
                                                                                         @endforeach
                                                                                 </p>
-                                                                                <p class="card-text-1">&<br> Team ThinkLit</p>
+                                                                                <p class="card-text-1">&<br>Team ThinkLit</p>
                                                                             </div>
                                                                         </div>
                                                                         </div>
@@ -773,7 +775,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row mt-4">
                                                                 @foreach($singleCourseDetails as $course)
                                                                         <a href="{{ route('generate-certificate', $course['id']) }}"  target="_blank" class="btn btn-dark">Download certificate</a>
                                                                 @endforeach

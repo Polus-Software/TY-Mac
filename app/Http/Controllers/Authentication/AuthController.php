@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\Gmail;
+use App\Mail\SignupMail;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\EnrolledCourse;
@@ -35,10 +35,11 @@ class AuthController extends Controller
      * Register a student user
      */
     public function signupProcess(Request $request) {
+   
 
         try {
         $userType = UserType::where('user_role', 'Student')->value('id');
-        
+       
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -47,6 +48,7 @@ class AuthController extends Controller
             'password_confirmation' =>'required',
             'privacy_policy' =>'accepted'
         ]);
+
         $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -56,13 +58,17 @@ class AuthController extends Controller
         $user->save();
         
         $user = Auth::user();
-
+    
         $email= $request->get('email');
+    
         $details =[
-            'title' => 'Thank you for registering',
-            'body' => 'You have successfully registered'
+           'firstname'=> $request->firstname,
+           'lastname'=> $request->lastname
+           
         ];
-        Mail::to($email)->send(new Gmail($details));
+
+        Mail::to($email)->send(new SignupMail($details));
+
         $credentials = ['email' => $request->email, 'password' => $request->password];
         $remember_me = TRUE;
         if (Auth::attempt($credentials)) {

@@ -434,7 +434,10 @@ class EnrolledCourseController extends Controller
                 );
                   
                 array_push($courseDetails, $singleCourseData);
-                $pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])->setOption('enable-local-file-access', true);
+                $pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])
+                            ->setOption('enable-local-file-access', true)
+                            ->setOrientation('landscape')
+                            ->setOption('margin-top', 20);
                 return $pdf->stream($course->course_title.'Certificate.pdf');
         }
 

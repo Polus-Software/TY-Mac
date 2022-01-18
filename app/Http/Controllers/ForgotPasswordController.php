@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Carbon\Carbon; 
 use Hash;
+use App\Mail\ForgotPasswordMail;
+use App\Mail\PersonalDetailsUpdated;
 
 class ForgotPasswordController extends Controller
 {
@@ -22,7 +24,7 @@ class ForgotPasswordController extends Controller
 
    public function submitForgetPasswordForm(Request $request)
    {
-        
+        try{
 
       $request->validate([
          'email' => 'required|email|exists:users',
@@ -36,12 +38,18 @@ class ForgotPasswordController extends Controller
          'created_at' => Carbon::now()
       ]);
 
-      Mail::send('Emails.forgetPassword', ['token' => $token], function($message) use($request){
-         $message->to($request->email);
-         $message->subject('Reset Password');
-      });
+      $details =[
+         'token' => $token,
+      ];
+        Mail::to($request->email)->send(new ForgotPasswordMail($details));
+
         return redirect("/")->with('message', 'We have e-mailed your password reset link!');
-       }
+      
+      }catch(Exception $exception)
+         {
+            return redirect("/")->with('message', 'We have e-mailed your password reset link!');
+         }
+   }
 
 
    public function showResetPasswordForm($token) 
@@ -52,7 +60,7 @@ class ForgotPasswordController extends Controller
 
    public function submitResetPasswordForm(Request $request)
    {
-        
+        try{
 
       $request->validate([
          'email' => 'required|email|exists:users',
@@ -66,6 +74,15 @@ class ForgotPasswordController extends Controller
          'token' => $request->token
       ])->first();
          
+      $user = User::where('email' , $request->email);
+      $firstname = $user->value('firstname');
+      $lastname = $user->value('lastname');
+
+      $data= [
+         'firstname' => $firstname,
+         'lastname' => $lastname
+      ];
+
        
 
       if(!$updatePassword)
@@ -77,7 +94,15 @@ class ForgotPasswordController extends Controller
 
       DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
+      Mail::to($request->email)
+      ->subject('Your password was changed successfully')
+      ->send(new PersonalDetailsUpdated($data));
+         
       return redirect('/')->withSuccess('Your password has been changed!');
-          
-   }    
+
+     
+   }catch (Exception $exception){
+      return redirect('/')->withSuccess('Your password has been changed!');
+   }
+}
 }
