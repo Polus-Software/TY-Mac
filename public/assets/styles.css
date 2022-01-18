@@ -257,7 +257,7 @@ a.navbar-brand {
 /*  */
 .far.fa-star.rateCourse,
 .fas.fa-star.rateCourse {
-    color: var(--color-primary);
+    color: var(--color-primary) !important;
 }
 .think-w-14_5 {
     width: 14.5px;
@@ -298,3 +298,19 @@ a.navbar-brand {
     
     
 .btn.dropdown-toggle-split.shadow-none > i { font-size: 16px;}
+
+
+
+.think-text-color-grey {
+    color: var(--color-grey);
+}
+
+.think-horizontal-card {
+	border-radius: 20px;
+	box-shadow: 0px 1px 8px #00000029;
+	background: #FFFFFF;
+}
+
+.think-tertiary-color {
+    color: var(--color-tertiary) !important; 
+ }

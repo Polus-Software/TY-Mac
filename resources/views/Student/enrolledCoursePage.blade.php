@@ -951,7 +951,7 @@
         }).then((response) => response.json()).then((data) => {
             if (data.status == 'success') {
                 closeModal('reviewModal');
-                window.location.reload();
+                // window.location.reload();
             }
         });
 

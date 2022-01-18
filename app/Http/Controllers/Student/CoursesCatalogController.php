@@ -240,7 +240,7 @@ class CoursesCatalogController extends Controller
         foreach($batches as $batch){
             $singleCourseData =  array (
             'batch_id' => $batch->id,
-            // 'batchname' => $batch->batchname,
+            'batchname' => $batch->batchname,
             'title' => $batch->title,
             'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
             'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),

@@ -9,6 +9,23 @@
   border-color: #000000 !important;
   color: #000000 !important;
 }
+
+/* section .card-2{
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 10px;
+    background:#fff;
+    outline: 1px solid #AF7E00;
+    cursor: pointer;
+}
+
+section .card-2:hover, .card-2:active, .card-2.active-batch{
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 10px;
+    background:#FFF9E8;
+    outline: 1px solid #AF7E00;
+    cursor: pointer;
+} */
+
   </style>
 <header class="d-flex align-items-center mb-3">
     <div class="container">
@@ -76,7 +93,7 @@
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>
-                        <!-- <p class="think-register-card-title think-tertiary-color">{{$singleCourseDetail['title']}}</p> -->
+                        <p class="think-register-card-title think-tertiary-color">{{$singleCourseDetail['batchname']}}</p>
                         <p class="card-text-1 mb-1">Cohort starts - {{$singleCourseDetail['start_date']}}</p>
                         <p class="card-text-1 mb-1 fs-14">{{$singleCourseDetail['title']}}</p>
                         <p class="card-text">
@@ -90,7 +107,7 @@
         @endforeach
     </div>
     <div class="row mt-4 mb-4">
-        <div class="form-group buttons d-flex justify-content-end">
+        <div class="buttons d-flex justify-content-end mt-2">
             @csrf
             <button type="submit" id="registerNowButton" class="btn btn-secondary think-btn-secondary">Register Now</button>
             <input type="hidden" id="course_id" value="{{$courseDetails['course_id']}}">
@@ -100,10 +117,12 @@
 </section>
 @endsection('content')
 @push('styles')
+<link rel="stylesheet" href="{{ asset('/assets/enrollcourse.css') }}">
 <link rel="stylesheet" href="{{ asset('/assets/enrolledCoursePage.css') }}">
 @endpush
 @push('child-scripts')
 <script>
+document.getElementsByClassName('card-2')[0].classList.add('active-batch');
     document.getElementById('search-btn').addEventListener('click', function(e) {
   e.preventDefault();
   let searchTerm = document.getElementById('search-box').value;
@@ -125,7 +144,7 @@
 }
 
 document.getElementById('registerNowButton').addEventListener('click', (event) => {
-
+    
      let courseId = document.getElementById('course_id').value;
      let activeBatch = document.getElementsByClassName('active-batch')[0].children[0];
      let batchId = activeBatch.value;

@@ -405,7 +405,7 @@ class RtmTokenGeneratorController extends Controller
             foreach($attendanceRec as $rec) {
                 $student = User::where('id', $rec->student);
                 $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
-                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/icons/placeholder-avatar.svg" alt="error">';
+                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/icons/placeholder-avatar.svg" alt="error">';
                 $html = $html . '<span class="think-online-status-light-container online-status-green"></span></span>';
                 $html = $html . '<span class="think-participant-name">'. $studentName .'</span></span></div>'; 
             }

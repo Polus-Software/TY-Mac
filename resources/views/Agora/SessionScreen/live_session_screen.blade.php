@@ -670,7 +670,7 @@ aside .video-wrap .bottom-left-info .username {
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
   <!-- agora sdk -->
   <div class="tab-container think-position-relative">
-  <span id="btnOpenClose" class="button-close-open"><img src="/icons/min_max__icon.svg" alt="error"></span>
+  <span id="btnOpenClose" class="button-close-open"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
     <div id="root1"></div>
   </div>
   <!-- chat UI -->
@@ -685,7 +685,7 @@ aside .video-wrap .bottom-left-info .username {
         <div class="think-participant-container">
           <span class="think-participant-wrapper">
             <span class="img-container">
-              <img src="/icons/placeholder-avatar.svg" alt="error">
+              <img src="/storage/icons/placeholder-avatar.svg" alt="error">
               <span class="think-online-status-light-container online-status-green"></span>
             </span>
             <span class="think-participant-name">{{ $participant }}</span>
@@ -699,6 +699,7 @@ aside .video-wrap .bottom-left-info .username {
       </div>
     </div>
     <!-- Course action -->
+    @if($userType == 'student')
     <div class="think-cohort-actions-container">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
     <div class="feedback-btn-container">
@@ -711,11 +712,12 @@ aside .video-wrap .bottom-left-info .username {
       </button> 
       <button class="think-btn-secondary-outline-live dislike-button" id="negative" data-id="">
         <i style="margin-right:10px;" class="fas fa-thumbs-down">
-      </i>No<span id="negative_count">
-      </span>
-    </button>
+        </i>No<span id="negative_count">
+        </span>
+      </button>
     </div>
   </div>
+  @endif
     <!-- Course details -->
 <div id="feedback-container" class="nodisplay">
   @if($userType == 'student')

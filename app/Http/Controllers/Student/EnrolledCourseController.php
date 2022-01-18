@@ -169,6 +169,7 @@ class EnrolledCourseController extends Controller
                 $startDate = "";
                 $startTime = "";
                 $endTime = "";
+                $time_zone = "";
                 $liveId = null;
                 foreach($liveSessions as $liveSession) {
                     $batch = CohortBatch::where('id', $liveSession->batch_id);
@@ -331,11 +332,11 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback->rating = $rating;
         $generalCourseFeedback->save();
 
-        // return response()->json([
-        //     'status' => 'success', 
-        //     'message' => 'submitted successfully'
-        //  ]);
-        return redirect('/enrolled-course')->with('message', 'Your review added successfully!');
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
+        // return redirect('/enrolled-course' . '/' .$courseId)->with('message', 'Your review added successfully!');
     }
    
     public function showassignment($id){
