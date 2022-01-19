@@ -1,0 +1,28 @@
+<svg id="Satisfied_greyscale" xmlns="http://www.w3.org/2000/svg" width="44.701" height="44.25" viewBox="0 0 44.701 44.25">
+  <g id="Happy">
+    <rect id="satisfied_bg" width="44" height="44" rx="22" transform="translate(0 0.25)" fill="#fff9e8"/>
+    <g id="satisfied_emoji" transform="translate(0.483 0)">
+      <g id="Group_1160" data-name="Group 1160" transform="translate(0 0)">
+        <g id="Group_1157" data-name="Group 1157" transform="translate(0 0)">
+          <circle id="Ellipse_22" data-name="Ellipse 22" cx="15.633" cy="15.633" r="15.633" transform="translate(0 22.109) rotate(-45)" fill="#ffd053"/>
+        </g>
+        <g id="Group_1158" data-name="Group 1158" transform="translate(8.935 8.766)">
+          <path id="Path_608" data-name="Path 608" d="M50.312,25.88A15.635,15.635,0,0,1,28.96,47.625,15.634,15.634,0,1,0,50.312,25.88Z" transform="translate(-28.96 -25.88)" fill="#ffc448"/>
+        </g>
+        <g id="Group_1159" data-name="Group 1159" transform="translate(7.521 7.631)">
+          <path id="Path_609" data-name="Path 609" d="M22.33,35.817a14.514,14.514,0,0,1,26.02-8.847A14.515,14.515,0,1,0,24.26,43.052,14.427,14.427,0,0,1,22.33,35.817Z" transform="translate(-21.25 -19.69)" fill="#ffd77a"/>
+        </g>
+      </g>
+      <path id="Path_610" data-name="Path 610" d="M61.931,106.749a.516.516,0,0,0-.84.563,7.836,7.836,0,0,0,14.491.143.515.515,0,0,0-.833-.569C72.463,109.1,67.606,112.26,61.931,106.749Z" transform="translate(-46.23 -83.028)" fill="#654735"/>
+      <g id="Group_1161" data-name="Group 1161" transform="translate(12.68 18.046)">
+        <path id="Path_611" data-name="Path 611" d="M122.638,77.122a2.9,2.9,0,0,0,5.355.053.466.466,0,0,0-.754-.515,2.478,2.478,0,0,1-3.846-.046.464.464,0,0,0-.325-.134.459.459,0,0,0-.26.081A.467.467,0,0,0,122.638,77.122Z" transform="translate(-109.174 -76.48)" fill="#2c2c2c"/>
+        <path id="Path_612" data-name="Path 612" d="M49.409,77.13a2.9,2.9,0,0,0,5.355.055.465.465,0,0,0-.752-.515,2.478,2.478,0,0,1-3.846-.046.465.465,0,0,0-.325-.134.468.468,0,0,0-.433.64Z" transform="translate(-49.375 -76.488)" fill="#2c2c2c"/>
+      </g>
+      <g id="Group_1162" data-name="Group 1162" transform="translate(7.886 21.557)">
+        <ellipse id="Ellipse_23" data-name="Ellipse 23" cx="2.729" cy="2.729" rx="2.729" ry="2.729" transform="translate(0 0)" fill="#ffa7ad"/>
+        <ellipse id="Ellipse_24" data-name="Ellipse 24" cx="2.729" cy="2.729" rx="2.729" ry="2.729" transform="translate(22.988 0)" fill="#ffa7ad"/>
+      </g>
+    </g>
+    <rect id="satisfied_bg-2" data-name="satisfied_bg" width="44" height="44" rx="22" transform="translate(0 0.25)" style="mix-blend-mode: color;isolation: isolate"/>
+  </g>
+</svg>

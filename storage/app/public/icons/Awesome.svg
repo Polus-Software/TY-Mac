@@ -1,0 +1,26 @@
+<svg id="Awesome" xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">
+  <g id="Awesome-2" data-name="Awesome" transform="translate(-892 -269)">
+    <rect id="awesome_bg" width="44" height="44" rx="22" transform="translate(892 269)" fill="#fff9e8"/>
+    <g id="awesome_emoji_1" transform="translate(893.065 272.673)">
+      <g id="Group_1166" data-name="Group 1166" transform="translate(3.253 0.25)">
+        <g id="Group_1163" data-name="Group 1163" transform="translate(0 0)">
+          <circle id="Ellipse_25" data-name="Ellipse 25" cx="15.632" cy="15.632" r="15.632" transform="translate(0 30.861) rotate(-80.782)" fill="#ffd053"/>
+        </g>
+        <g id="Group_1164" data-name="Group 1164" transform="translate(4.761 4.596)">
+          <path id="Path_613" data-name="Path 613" d="M50.557,25.3A15.635,15.635,0,0,1,29.2,47.042,15.634,15.634,0,1,0,50.557,25.3Z" transform="translate(-29.2 -25.3)" fill="#ffc448"/>
+        </g>
+        <g id="Group_1165" data-name="Group 1165" transform="translate(3.33 3.458)">
+          <path id="Path_614" data-name="Path 614" d="M22.483,35.228A14.511,14.511,0,0,1,48.5,26.384a14.514,14.514,0,0,0-27.1,7.229,14.378,14.378,0,0,0,3.009,8.844A14.564,14.564,0,0,1,22.483,35.228Z" transform="translate(-21.4 -19.1)" fill="#ffd77a"/>
+        </g>
+      </g>
+      <g id="Group_1167" data-name="Group 1167" transform="translate(14.546 21.378)">
+        <path id="Path_615" data-name="Path 615" d="M64.8,115.4a6.685,6.685,0,0,0,13.284,0Z" transform="translate(-64.8 -115.4)" fill="#71523f"/>
+        <path id="Path_616" data-name="Path 616" d="M76,133.5a6.621,6.621,0,0,0,4.587,1.835,6.7,6.7,0,0,0,4.44-1.688l-.055-.147A11.144,11.144,0,0,0,76,133.5Z" transform="translate(-73.945 -129.39)" fill="#ff6669"/>
+      </g>
+      <g id="Group_1168" data-name="Group 1168" transform="translate(9.353 10.846)">
+        <path id="XMLID_555_" d="M46.169,60.789v-.018A2.652,2.652,0,0,0,43.564,58a2.313,2.313,0,0,0-2.22,1.743h0A2.3,2.3,0,0,0,39.124,58,2.667,2.667,0,0,0,36.5,60.771v.018c0,.312,0,3.5,4.825,6.11h0C46.169,64.312,46.188,61.1,46.169,60.789Z" transform="translate(-36.5 -58)" fill="#ff2223"/>
+        <path id="XMLID_554_" d="M122.288,60.789v-.018A2.667,2.667,0,0,0,119.664,58a2.313,2.313,0,0,0-2.22,1.743h0A2.3,2.3,0,0,0,115.224,58a2.667,2.667,0,0,0-2.624,2.771v.018c0,.312,0,3.5,4.825,6.11h0C122.288,64.312,122.306,61.1,122.288,60.789Z" transform="translate(-98.637 -58)" fill="#ff2223"/>
+      </g>
+    </g>
+  </g>
+</svg>
