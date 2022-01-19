@@ -276,7 +276,7 @@ svg.svg-img.prefix-more.can-hover {
 }
 
 .nodisplay {
-  display : none;
+  display : none !important;
 }
 
 .course_contents_div {
@@ -627,10 +627,33 @@ aside .video-wrap .bottom-left-info .username {
   border-radius: 50%;
   padding: 2px;
 }
+
 .button-close-open:hover {
   background-color: #f0f0f7;
 }
 .button-close-open > img {
+  width: 22px;
+}
+svg.svg-img.prefix-exit.can-hover {
+    display: none;
+}
+.exit-button {
+	display: inline-block;
+	width: max-content;
+	height: max-content;
+	background-color: #fff;
+	display: inline-block;
+	position: absolute;
+	top: 9px;
+	right: 70px;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2px;
+}
+.exit-button:hover {
+  background-color: #f0f0f7;
+}
+.exit-button > img {
   width: 22px;
 }
 .width--100 {
@@ -669,8 +692,10 @@ aside .video-wrap .bottom-left-info .username {
   <input id="user_type" type="hidden" value="{{ $userType }}" />
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
   <!-- agora sdk -->
+  
   <div class="tab-container think-position-relative">
-  <span id="btnOpenClose" class="button-close-open"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
+  <span id="exit_session" class="exit-button nodisplay"><img src="/storage/icons/exit.svg" alt="error"></span>
+  <span id="btnOpenClose" class="button-close-open nodisplay"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
     <div id="root1"></div>
   </div>
   <!-- chat UI -->
@@ -700,7 +725,7 @@ aside .video-wrap .bottom-left-info .username {
     </div>
     <!-- Course action -->
     @if($userType == 'student')
-    <div class="think-cohort-actions-container">
+    <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
     <div class="feedback-btn-container">
       <p class="notif-text think-mr--15 think-color-light-dark think-fs--14">Did you understand this topic?</p> 
@@ -760,79 +785,141 @@ aside .video-wrap .bottom-left-info .username {
 
 @endif
 
-<button class="trigger">Click here to trigger the modal!</button>
+<!-- <button class="trigger">Click here to trigger the modal!</button> -->
 <div class="feedback-modal">
     <div class="feedback-modal-content">
         <span class="feedback-modal-close-button">&times;</span>
         <div class="feedback-container">
           <h1 class="feedback-title">It's Feedback Time!</h1>
           <h4 class="feedback-sub-title">Tell us about your live cohort experience</h4>
-          <h2 class="feedback-session-name">Session 1 - Intro to G Suite & Google Drive</h2>
-          <h2 class="feedback-question-1 questions">How do you like the session?</h2>
+          <h2 class="feedback-session-name">Live Session - {{ $topic_title }}</h2>
+          <h2 class="feedback-question-1 questions">{{  $feedbackQ1 }}</h2>
+          <form action="{{ route('submit-feedback') }}" method="POST">
+          @csrf
+          <input type="hidden" name="live_session_id" id="live_session_id" value="{{ $session }}"/>
+          <input type="hidden" name="student_id" id="student_id" value="{{ $userId }}"/>
+          <input type="hidden" name="course_id" id="course_id" value="{{ $courseId }}"/>
+          <input id="timer" name="timer" type="hidden" value="" />
           <div class="emoji-container">
             <div class="single-emoji">
-              <img class="disappointed first-emojis" src="/storage/icons/Disappointed.svg" alt="error">
-              <p>Disappointed</p>
+              <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="confused first-emojis" src="/storage/icons/Confused_greyscale.svg" alt="error">
-              <p>Confused</p>
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="satisfied first-emojis" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
-              <p>Satisfied</p>
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="awesome first-emojis" src="/storage/icons/Awesome_greyscale.svg" alt="error">
-              <p>Awesome</p>
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
             </div>
           </div>
-          <h2 class="feedback-question-2 questions">How do you like the learning format?</h2>
+          <h2 class="feedback-question-2 questions">{{  $feedbackQ2 }}</h2>
           <div class="emoji-container">
             <div class="single-emoji">
-              <img class="disappointed" src="/storage/icons/Disappointed_greyscale.svg" alt="error">
-              <p>Disappointed</p>
+              <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="confused" src="/storage/icons/Confused_greyscale.svg" alt="error">
-              <p>Confused</p>
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="satisfied" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
-              <p>Satisfied</p>
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="awesome" src="/storage/icons/Awesome_greyscale.svg" alt="error">
-              <p>Awesome</p>
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
             </div>
           </div>
-          <h2 class="feedback-question-3 questions">How do you like the learning format?</h2>
+          <h2 class="feedback-question-3 questions">{{  $feedbackQ3 }}</h2>
           <div class="emoji-container">
             <div class="single-emoji">
-              <img class="disappointed" src="/storage/icons/Disappointed_greyscale.svg" alt="error">
-              <p>Disappointed</p>
+              <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="confused" src="/storage/icons/Confused_greyscale.svg" alt="error">
-              <p>Confused</p>
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="satisfied" src="/storage/icons/Satisfied_greyscale.svg" alt="error">
-              <p>Satisfied</p>
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
             </div>
             <div class="single-emoji">
-              <img class="awesome" src="/storage/icons/Awesome_greyscale.svg" alt="error">
-              <p>Awesome</p>
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
             </div>
           </div>
           <h2 class="other-feedbacks questions">Any other feedback?</h2>
-          <textarea class="feedback-text"></textarea><br>
-          <button type="button" class="feedback-submit" id="feedback-submit">Submit</button>
+          <textarea name="other_feedbacks" class="feedback-text"></textarea><br>
+          <button type="submit" class="feedback-submit" id="feedback-submit">Submit</button>
+        </form>
         </div>
     </div>
 </div>
 
 <style>
+
+textarea.feedback-text {
+    width: 100%;
+    border: 1px solid #a3a9b0 !important;
+    height: 80px;
+    border-radius: 4px;
+}
+
+.emoji-radio { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+.emoji-radio + img {
+  cursor: pointer;
+  filter: grayscale(1);
+}
+
+.emoji-radio + img:hover {
+  filter: none;
+}
+
+/* CHECKED STYLES */
+.emoji-radio:checked + img {
+  filter: none;
+}
+
+
   .emoji-container {
     display: flex;
     margin-top: 10px;
@@ -844,7 +931,7 @@ aside .video-wrap .bottom-left-info .username {
     display: initial;
   }
   .feedback-container {
-    padding: 4rem 3.5rem;
+    padding: 1.5rem 2.5rem;
 text-align: center;
 }
 h1.feedback-title {
@@ -870,6 +957,7 @@ h2.questions {
     color: #39414f;
     margin-top: 10px;
     font-weight: 600;
+    padding-top: 20px;
 }
 button#feedback-submit {
     background-color: #2c3443;
@@ -878,6 +966,7 @@ button#feedback-submit {
     padding: 5px;
     border-radius: 5px;
     font-size: 13px;
+    font-weight: 500;
 }
 
   .feedback-modal {
@@ -900,7 +989,7 @@ button#feedback-submit {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1rem;
     width: 30rem;
     border-radius: 0.5rem;
 }
@@ -926,28 +1015,14 @@ button#feedback-submit {
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
+
+
   </style>
 </div>
   <script type="text/javascript">
 
 
-const modal = document.querySelector(".feedback-modal");
-const trigger = document.querySelector(".trigger");
-const closeButton = document.querySelector(".feedback-modal-close-button");
 
-function toggleModal() {
-    modal.classList.toggle("feedback-modal-show-modal");
-}
-
-function windowOnClick(event) {
-    if (event.target === modal) {
-        toggleModal();
-    }
-}
-
-trigger.addEventListener("click", toggleModal);
-closeButton.addEventListener("click", toggleModal);
-window.addEventListener("click", windowOnClick);
 
 
         let session = document.getElementById('session_hidden_id').value;
@@ -998,6 +1073,7 @@ $(document).ready(function(){
   let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
+      document.getElementById('timer').value = timer;
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
       fetch(path, {
         method: 'POST',
@@ -1015,51 +1091,46 @@ $(document).ready(function(){
 $(document).on('click', '.btn:contains("Finish")', function() {
     $('.tab-contents').removeClass('nodisplay');
     $('#feedback-container').removeClass('nodisplay');
+    $('#back_to_course_div').removeClass('nodisplay');
+    $('#btnOpenClose').removeClass('nodisplay');
+    $('#exit_session').removeClass('nodisplay');
 });
-$(document).on('click', '.btn:contains("Confirm")', function() {
+
+
+document.getElementById('exit_session').addEventListener('click', function(e) {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
   let course_id = document.getElementById('course_id').value;
-
+  
   if(userType == "student") {
-    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-    }).then((response) => response.json()).then((data) => {
-      location.replace("/enrolled-course/" + course_id);
-    });
+    
+  const modal = document.querySelector(".feedback-modal");
+const closeButton = document.querySelector(".feedback-modal-close-button");
+
+function toggleModal() {
+    modal.classList.toggle("feedback-modal-show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
+toggleModal();
+    
   } else {
     location.replace("/enrolled-course/" + course_id);
   }
 });
+  
 
 
-window.addEventListener("beforeunload", function (e) {
-  var confirmationMessage = "Are you sure you want to exit?";
-  let sessionId = document.getElementById('session_hidden_id').value;
-  let userType = document.getElementById('user_type').value;
 
-  if(userType == "student") {
-    let path = "{{ route('student-exit') }}?sessionId=" + sessionId + "&timer=" + timer;
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-    }).then((response) => response.json()).then((data) => {
 
-    });
-  }
-  (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-  return confirmationMessage;                            //Webkit, Safari, Chrome
-});
+
 
 
 

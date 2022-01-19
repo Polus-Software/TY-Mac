@@ -1,8 +1,5 @@
 @component('mail::message')
 
-
-<p>
-</p>
 <h1>Hello, {{$details['firstname']}} {{$details['lastname']}}</h1>
 <p>Welcome to ThinkLit!  Let's get started</p>
 

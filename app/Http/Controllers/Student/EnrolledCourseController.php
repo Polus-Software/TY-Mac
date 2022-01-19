@@ -181,8 +181,8 @@ class EnrolledCourseController extends Controller
                     $time_zone = $batch->value('time_zone');
                     $occurrenceArr = explode(',', $occurrence);
                     $checkDay = in_array(date("l"), $occurrenceArr);
-                    
                     if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
+                        
                         $liveId = $liveSession->live_session_id;
                     }else if(date("Y-m-d") < $startDate && $checkDay == true) {
                         $liveId = Null;

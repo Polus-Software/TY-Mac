@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\GeneralSetting;
 use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
+use App\Models\GeneralLiveSessionFeedback;
 
 require_once "AccessToken.php";
 
@@ -49,8 +50,14 @@ class RtmTokenGeneratorController extends Controller
 
         $participants = [];
         $contents = TopicContent::where('topic_id', $topicId)->get();
+
+        $feedbackQ1 = GeneralSetting::where('setting', 'feedback_question_1')->value('value');
+        $feedbackQ2 = GeneralSetting::where('setting', 'feedback_question_2')->value('value');
+        $feedbackQ3 = GeneralSetting::where('setting', 'feedback_question_3')->value('value');
         
         if($userObj) {
+
+            $userId = $userObj->id;
             $userTypeLoggedIn =  UserType::find($userObj->role_id)->user_role;
             $attendanceRec = AttendanceTracker::where('live_session_id', $session)->get();
             
@@ -66,7 +73,11 @@ class RtmTokenGeneratorController extends Controller
                 'topic_title' => $topic,
                 'contents' => $contents,
                 'userType' => $userTypeLoggedIn,
-                'courseId' => $courseId
+                'courseId' => $courseId,
+                'userId' => $userId,
+                'feedbackQ1' => $feedbackQ1,
+                'feedbackQ2' => $feedbackQ2,
+                'feedbackQ3' => $feedbackQ3
             ]);
         } else {
             return redirect('/403');
@@ -116,7 +127,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '9163', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '139', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -331,10 +342,10 @@ class RtmTokenGeneratorController extends Controller
         return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
     }
 
-    public function studentExit(Request $request) {
+    public function studentExit($session, $timer) {
         $attendedSessions = 0;
-        $sessionId = $request->sessionId;
-        $newTime = $request->timer;
+        $sessionId = $session;
+        $newTime = $timer;
         $user = Auth::user();
         if($user) {
 
@@ -410,5 +421,30 @@ class RtmTokenGeneratorController extends Controller
                 $html = $html . '<span class="think-participant-name">'. $studentName .'</span></span></div>'; 
             }
             return response()->json(['status' => 'success', 'html' => $html]);
+    }
+
+    public function submitSessionFeedback(Request $request) {
+        $question1 = $request->input('question1');
+        $question2 = $request->input('question2');
+        $question3 = $request->input('question3');
+        $otherFeedback = $request->input('other_feedbacks');
+        $studentId = $request->input('student_id');
+        $session = $request->input('live_session_id');
+        $timer = $request->input('timer');
+        $courseId = $request->input('course_id');
+
+        $generalLiveSessionFeedBack = new GeneralLiveSessionFeedback;
+        $generalLiveSessionFeedBack->question_1 = $question1;
+        $generalLiveSessionFeedBack->question_2 = $question2;
+        $generalLiveSessionFeedBack->question_3 = $question3;
+        $generalLiveSessionFeedBack->other_feedback = $otherFeedback;
+        $generalLiveSessionFeedBack->live_session = $session;
+        $generalLiveSessionFeedBack->student = $studentId;
+
+        $generalLiveSessionFeedBack->save();
+
+        $this->studentExit($session, $timer);
+
+        return redirect('/enrolled-course' . '/' . $courseId);
     }
 }

@@ -116,7 +116,7 @@
               </div>
 
               <div class="col-md-6">
-                <label for="youtube-link">Youtube Link</label>
+                <label for="youtube-link">YouTube Link</label>
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_youtube_social']}}" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
                 @else
@@ -138,9 +138,21 @@
                 @endif
               </div>
               <div class="col-md-12">
+                
+                @if(!!$isEdit)
+                <label for="password">Password</label>
+                <input type="password" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                @if ($errors->has('password'))
+                <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
+                @endif
+                @endif
+               
+              </div>
+              <div class="col-md-12">
                 <label for="about">Signature</label>
                 @if(!!$isEdit)
-                <input class="form-control" type="file" value="" name="signature" id="signature" placeholder="Enter signature">
+                <input class="form-control" type="file" value="{{$instructorDetails['instructor_signature']}}" name="signature" id="signature" placeholder="Enter signature">
+                <p>{{$instructorDetails['instructor_signature']}}</p>
                 @else
                 <input class="form-control" type="file" name="signature" id="signature" placeholder="Enter signature">
                 @endif

@@ -48,7 +48,7 @@
             </ul>
           </div>
           <div class="col-12">
-            <label>Who this course is for?</label>
+            <label>Who is this course is for?</label>
             <ul>
             @foreach($course_details['whothis'] as $whothis)
             @if($whothis != '')
