@@ -21,6 +21,7 @@ use App\Models\CourseCategory;
 use App\Models\CohortBatch;
 use App\Models\LiveSession;
 use App\Models\AttendanceTracker;
+use Hash;
 
 
 class AdminController extends Controller
@@ -133,18 +134,26 @@ class AdminController extends Controller
 
     public function updateStudent(Request $request)
     {
+        if($request->password != ''){
+        
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|'
+            'email' => 'required|email|',
+            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+
         ]);
+       
         $studentId = $request->input('student_id');
         $student = User::findOrFail($studentId);
         $student->firstname = $request['firstname'];
         $student->lastname = $request['lastname'];
         $student->email = $request['email'];
+        $student->password = Hash::make($request->password);
         $student->save();
+        
         return redirect()->route('view-student', ['student_id' => $studentId]);
+    }
     }
 
 

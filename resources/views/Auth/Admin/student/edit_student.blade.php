@@ -40,6 +40,14 @@
                 <span class="text-danger">{{ $errors->first('email') }}</span>
             @endif
           </div>
+          <div class="col-12 mb-3">
+            <label>Password</label>
+            <input type="password" class="form-control" value="" name="password" id="student_password" placeholder="Enter Password">
+            <small class="small">Error message</small>  
+            @if ($errors->has('password'))
+                <span class="text-danger">{{ $errors->first('password') }}</span>
+            @endif
+          </div>
           <div class="col-12">
             <label>Enrolled courses</label>
             <ul>

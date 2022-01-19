@@ -474,7 +474,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
                 $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><i class="far fa-user pe-1"></i>'. $course->course_difficulty .'</p></div></div></li></ul>';
                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
-                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Join now</a>'; 
+                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Go to details</a>'; 
                 $html = $html . '</div></div></div></div></div>';        
             }
         } else {

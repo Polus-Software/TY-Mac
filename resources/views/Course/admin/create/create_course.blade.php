@@ -133,7 +133,7 @@
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add more answer</button>
           </div>
           <div class="col-12">
-            <label for="who-course">Who this course is for?</label><br>
+            <label for="who-course">Who is this course is for?</label><br>
             
             <!-- <label for="who-course-description">Description</label>            
             @if(isset($course_details['short_description']))
