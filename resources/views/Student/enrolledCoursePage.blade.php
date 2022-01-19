@@ -324,8 +324,7 @@
                         </div>
 
                         <div class="row mt-3 mb-3">
-                            @if(!empty($recommendations))
-                            @foreach($recommendations as $recommendation)
+                            @forelse($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3" style="height: 560px;">
                                     <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
@@ -355,10 +354,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
-                            @else
+                            @empty
                              <x-nodatafound message="No recommendations for you yet!" />
-                            @endif
+                            @endforelse
                         </div>
                         @endif
 

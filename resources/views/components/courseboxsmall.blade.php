@@ -34,7 +34,7 @@
                       </ul>
                       <div class="row py-2">
                         <div class="text-center border-top">
-                          <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn d-inline-block w-100 px-0">Goto details</a>
+                          <a href="{{ route('student.course.show', $course['id'])}}" class="card-link btn d-inline-block w-100 px-0">Go to details</a>
                         </div>
                       </div>
 

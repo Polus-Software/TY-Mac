@@ -616,12 +616,12 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function saveAssignment(Request $request) {
-
+        $externalLink = $request->input('external-link');
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
         $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
         $instructorId = DB::table('assigned_courses')->where('course_id', $course_id)->value('user_id');
-
+        
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
@@ -630,6 +630,7 @@ class CourseController extends Controller
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
+        $topicAssignment->external_link = $externalLink;
 
         if($request->file()){
             $filename = $request->document->getClientOriginalName();
