@@ -49,11 +49,6 @@ class InstructorController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
-            'institute' => 'required',
-            'designation' => 'required',
-            'twitter_social' => 'required',
-            'linkedin_social' => 'required',
-            'youtube_social' => 'required',
             'description' => 'required',
             'signature' => 'required'
         ]);
@@ -139,8 +134,10 @@ class InstructorController extends Controller
                     'instructor_linkedin_social' => $instructor->value('linkedin_social'),
                     'instructor_youtube_social' => $instructor->value('youtube_social'),
                     'instructor_description' => $instructor->value('description'),
+                    'instructor_signature' => $instructor->value('signature'),
                     'instructor_id' => $instructor->value('id')
                     ];
+                  
                     return view('Auth.Admin.instructor.create_instructor', [
                     'instructorDetails' => $data,
                     'userType' => $userType,
@@ -154,17 +151,13 @@ class InstructorController extends Controller
     }
 
     public function updateInstructor(Request $request) {
+
         try {
             $instructor_id = $request->input('instructor_id');
             $validatedData = $request->validate([
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
-                'institute' => 'required',
-                'designation' => 'required',
-                'twitter_social' => 'required',
-                'linkedin_social' => 'required',
-                'youtube_social' => 'required',
                 'description' => 'required',
                 'signature' => 'required'
             ]);
@@ -186,8 +179,10 @@ class InstructorController extends Controller
                     $instructor->linkedin_social = $request->input('linkedin_social');
                     $instructor->youtube_social = $request->input('youtube_social');
                     $instructor->description = $request->input('description');
+                    $instructor->password = Hash::make($request->input('password'));
                     $instructor->signature = $signatureFile;
                     $instructor->save();
+                    
                     return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
                 }
             }

@@ -257,7 +257,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Session name</th>
-                                        <th scope="col">Subtopic</th>
+                                        <th scope="col">Topic</th>
                                         <th scope="col">Likes</th>
                                         <th scope="col">Dislikes</th>
                                     </tr>
@@ -316,7 +316,7 @@
                                 @endforeach
                             </div>
                         </div>
-
+                        @if($userType == 'student')
                         <div class="row border-bottom">
                             <div class="col-lg-12">
                                 <h5 class="recommendation">Recommended Topics to Review</h5>
@@ -360,6 +360,7 @@
                              <x-nodatafound message="No recommendations for you yet!" />
                             @endif
                         </div>
+                        @endif
 
                     </div>
                     <!-- schedule tab -->
@@ -655,7 +656,7 @@
                                                 @if($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
                                                 @else
-                                                <span style="position:absolute;left:45rem;background-color:#faffb0 !important;color:#be5a21 !important;width:6rem;" class="badge pill text-dark">Pending</span>
+                                                <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; !important;width:6rem;" class="badge pill text-dark">Pending</span>
                                                 @endif
                                                 </button>
                                                 </h2>
@@ -676,7 +677,7 @@
 
                                                             <div class="col-lg-10">
                                                                 <p style="color:#6E7687;" class="mt-4">External Link</p>
-                                                                <a target="_blank" href="/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
+                                                                <a target="_blank" href="/storage/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
                                                             <p></p>
                                                             </div>
                                                             </div>
@@ -706,6 +707,7 @@
                         <div class="col-lg-3">Attach File:</div>
                             <div class="col-lg-5 col-12"><label>Upload from device</label>
                                 <input class="form-control" type="file" name="assignment_upload">
+                                <small>Supported File Formats are:  pdf, doc, docx,</small>
                             </div>
                         <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                         
