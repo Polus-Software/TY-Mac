@@ -78,8 +78,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
-        @else
-        <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>        
+        @else                
         <li class="nav-item">
         <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal"><span class="me-2"><img src="/storage/icons/signup__icon.svg" alt="error"></span>Sign Up</a>
         </li>
