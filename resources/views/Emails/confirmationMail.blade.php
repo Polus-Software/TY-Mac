@@ -1,16 +1,18 @@
+@component('mail::message')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-</head>
-<body>
-<h1>{{ $details['title'] }}</h1>
-    <p>{{ $details['body'] }}</p>
+<h1>Hello, {{$details['firstname']}} {{$details['lastname']}}</h1>
+<p>Welcome to ThinkLit!  Let's get started</p>
 
-    <p>Thank you</p>
-</body>
-</html>
+<p>We are excited to have you learn new skills in a personalized way!</p>
+
+<p>At ThinkLit, we make learning fun, interactive, & simple.</p>
+
+<p>Get started by exploring our courses </p>
+
+<p>If you have any questions, please email us at supportinfo@ThinkLitthinklit.com</p>
+
+Regards,<br>
+Thinklit Team
+@endcomponent
+
+

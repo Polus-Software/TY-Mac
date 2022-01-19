@@ -51,8 +51,7 @@
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         <div class="row">
-                                            @if(!empty(@$liveSessionDetails))
-                                            @foreach($liveSessionDetails as $liveSessionDetail)
+                                            @forelse($liveSessionDetails as $liveSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
@@ -86,13 +85,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @endforeach
-                                            @else
-                                                <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                                                    <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                                                    <h4 class="fw-bold">No live classes at the moment!</h4>
-                                                </div>
-                                            @endif
+                                            @empty
+                                                <x-nodatafound message="No live classes at the moment!" />
+                                            @endforelse
                                         </div>
                                     </div>
                                 </div>
@@ -122,8 +117,7 @@
                                     <div class="carousel-item active">
                                         <div class="row">
                                             
-                                           @if(!empty($upComingSessionDetails))
-                                            @foreach($upComingSessionDetails as $upComingSessionDetail)
+                                          @forelse($upComingSessionDetails as $upComingSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
                                                     <img src="courselist/Illustration/Mask Group 2.jpg"
@@ -157,14 +151,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @endforeach
-                                            @else
-                                                <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                                                    <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                                                    <h4 class="fw-bold">No upcoming classes at the moment!</h4>
-                                                </div>
-                                            @endif
-                                            
+                                            @empty
+                                                <x-nodatafound message="No upcoming classes at the moment!" />
+                                            @endforelse                                            
                                         </div>
                                     </div>
 

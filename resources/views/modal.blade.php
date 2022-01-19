@@ -159,7 +159,7 @@
               </div>
               <div class="form-group mx-0">
               <label for="message" class="message-label">Message</label>
-                <textarea name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <textarea name="message" class="form-control autosize" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0 d-grid">
@@ -189,7 +189,7 @@
               @csrf
               <div class="form-group mx-sm-5 mx-0">
                 <label for="studentQuestion" class="question-label">Question</label>
-                <textarea name="message" class="form-control mt-2" id="studentQuestion" placeholder="Type your question here" required></textarea>
+                <textarea name="message" class="form-control mt-2 autosize" id="studentQuestion" placeholder="Type your question here" required></textarea>
                 <small id="question_error" style="color:red;"></small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
@@ -230,7 +230,7 @@
                 </div>
               </div>
               <div class="form-group mx-0">
-                <textarea class="form-control" id="comment" placeholder="Add your review..." rows="4" maxlength="60"></textarea>
+                <textarea class="form-control autosize" id="comment" placeholder="Add your review..." rows="4" maxlength="60"></textarea>
               </div>
               <div class="form-group mx-0">
               @csrf
@@ -274,7 +274,7 @@
               </div>
               <div class="form-group mx-0">
                 <label for="message" class="message-label">Message</label>
-                <textarea type="tel" name="message" class="form-control" id="contactMessage" placeholder="Type your message here"></textarea>
+                <textarea type="tel" name="message" class="form-control autosize" id="contactMessage" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">

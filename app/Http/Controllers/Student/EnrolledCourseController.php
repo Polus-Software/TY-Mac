@@ -169,6 +169,7 @@ class EnrolledCourseController extends Controller
                 $startDate = "";
                 $startTime = "";
                 $endTime = "";
+                $time_zone = "";
                 $liveId = null;
                 foreach($liveSessions as $liveSession) {
                     $batch = CohortBatch::where('id', $liveSession->batch_id);
@@ -180,8 +181,8 @@ class EnrolledCourseController extends Controller
                     $time_zone = $batch->value('time_zone');
                     $occurrenceArr = explode(',', $occurrence);
                     $checkDay = in_array(date("l"), $occurrenceArr);
-                    
                     if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
+                        
                         $liveId = $liveSession->live_session_id;
                     }else if(date("Y-m-d") < $startDate && $checkDay == true) {
                         $liveId = Null;
@@ -331,11 +332,11 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback->rating = $rating;
         $generalCourseFeedback->save();
 
-        // return response()->json([
-        //     'status' => 'success', 
-        //     'message' => 'submitted successfully'
-        //  ]);
-        return redirect('/enrolled-course')->with('message', 'Your review added successfully!');
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
+        // return redirect('/enrolled-course' . '/' .$courseId)->with('message', 'Your review added successfully!');
     }
    
     public function showassignment($id){
@@ -444,7 +445,10 @@ class EnrolledCourseController extends Controller
                 );
                   
                 array_push($courseDetails, $singleCourseData);
-                $pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])->setOption('enable-local-file-access', true);
+                $pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])
+                            ->setOption('enable-local-file-access', true)
+                            ->setOrientation('landscape')
+                            ->setOption('margin-top', 20);
                 return $pdf->stream($course->course_title.'Certificate.pdf');
         }
 

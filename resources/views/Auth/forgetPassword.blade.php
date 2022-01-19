@@ -1,7 +1,7 @@
 @extends('Layouts.app')
 @section('content')
 <body class="bg-secondary">
-    <div class="container-overlay">
+    <div class="container-overlay pt-5">
         <div class="custom-container mx-auto p-3 border rounded">
             <div class="wrapper row flex-column my-5" >  
                 <div class="form-group mx-sm-5 mx-0 custom-form-header mb-4">Reset Password</div>

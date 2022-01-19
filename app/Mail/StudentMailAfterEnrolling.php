@@ -21,7 +21,6 @@ class StudentMailAfterEnrolling extends Mailable
         $this->mailDetails = $mailDetails;
     }
 
-
     /**
      * Build the message.
      *
@@ -29,8 +28,12 @@ class StudentMailAfterEnrolling extends Mailable
      */
     public function build()
     {
-        return $this->subject('Confirmation mail')
-                    ->view('Emails.studentConfirmationAfterEnrolling')
+        return $this->markdown('Emails.studentConfirmationAfterEnrolling')
                     ->from('ashishbabythoppil@gmail.com');
     }
+    
 }
+
+
+
+

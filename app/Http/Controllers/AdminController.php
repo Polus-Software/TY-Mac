@@ -21,6 +21,7 @@ use App\Models\CourseCategory;
 use App\Models\CohortBatch;
 use App\Models\LiveSession;
 use App\Models\AttendanceTracker;
+use Hash;
 
 
 class AdminController extends Controller
@@ -133,18 +134,26 @@ class AdminController extends Controller
 
     public function updateStudent(Request $request)
     {
+        if($request->password != ''){
+        
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|'
+            'email' => 'required|email|',
+            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+
         ]);
+       
         $studentId = $request->input('student_id');
         $student = User::findOrFail($studentId);
         $student->firstname = $request['firstname'];
         $student->lastname = $request['lastname'];
         $student->email = $request['email'];
+        $student->password = Hash::make($request->password);
         $student->save();
+        
         return redirect()->route('view-student', ['student_id' => $studentId]);
+    }
     }
 
 
@@ -168,6 +177,7 @@ class AdminController extends Controller
             $recSettings = GeneralSetting::where('setting', 'recommendation_threshold')->value('value');
             $f1Settings = GeneralSetting::where('setting', 'feedback_question_1')->value('value');
             $f2Settings = GeneralSetting::where('setting', 'feedback_question_2')->value('value');
+            $f3Settings = GeneralSetting::where('setting', 'feedback_question_3')->value('value');
             $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
 
             return view('Auth.Admin.AdminSettings', [
@@ -176,6 +186,7 @@ class AdminController extends Controller
                 'rec' => $recSettings,
                 'f1Question' => $f1Settings,
                 'f2Question' => $f2Settings,
+                'f3Question' => $f3Settings,
                 'attendanceSetting' => $attendanceSettings
             ]);
         } else {
@@ -202,10 +213,12 @@ class AdminController extends Controller
         $threshold = $request->threshold;
         $feedback1 = $request->feedback1;
         $feedback2 = $request->feedback2;
+        $feedback3 = $request->feedback3;
         $attendance = $request->attendance;
         $settingRec = GeneralSetting::where('setting', 'recommendation_threshold')->get();
         $settingFQ1 = GeneralSetting::where('setting', 'feedback_question_1')->get();
         $settingFQ2 = GeneralSetting::where('setting', 'feedback_question_2')->get();
+        $settingFQ3 = GeneralSetting::where('setting', 'feedback_question_3')->get();
         $settingAttendance = GeneralSetting::where('setting', 'attendance_timer')->get();
 
         if(count($settingRec)) {
@@ -241,6 +254,18 @@ class AdminController extends Controller
             $newSettings = new GeneralSetting;
             $newSettings->setting = 'feedback_question_2';
             $newSettings->value = $feedback2;
+            $newSettings->save();
+        }
+
+        if(count($settingFQ3)) {
+            $settingId = GeneralSetting::where('setting','feedback_question_3')->value('id');
+            $setting = GeneralSetting::find($settingId);
+            $setting->value = $feedback3;
+            $setting->save();
+        } else {
+            $newSettings = new GeneralSetting;
+            $newSettings->setting = 'feedback_question_3';
+            $newSettings->value = $feedback3;
             $newSettings->save();
         }
 

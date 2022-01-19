@@ -1,6 +1,7 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+
 <!-- container -->
 <div class="container llp-container">
   <div class="row">
@@ -36,6 +37,13 @@
             <div class="form-group">
               <label for="threshold">Threshold (In %) :</label>
               <input id="threshold" type="text" class="form-control mt-3" value="{{ $rec }}"/>
+              <div class="info-text mt-2">
+                  <small><i class="fa fa-info-circle"></i> Threshold percentage is used to determine which contents under a subtopic
+                are to be recommended to a student. If the percentage of the number of dislikes given by a student to contents within a subtopic out of 
+              all the contents in the subtopic, exceeds the threshold value, then all the contents are recommended to the student. If the percentage is less than 
+            the threshold, then only the contents that received the negative feedbacks are recommended to that particular student.</thead> </small>
+              </div>
+              
             </div>
           </div>
         </div>
@@ -52,6 +60,8 @@
               <textarea id="question_1" type="text" class="form-control mt-3">{{ $f1Question }}</textarea>
               <label for="question_2">Question 2</label>
               <textarea id="question_2" type="text" class="form-control mt-3">{{ $f2Question }}</textarea>
+              <label for="question_3">Question 3</label>
+              <textarea id="question_3" type="text" class="form-control mt-3">{{ $f3Question }}</textarea>
               <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
               <label style="color:green;" id="survey-success-msg"></label> -->
             </div>
@@ -64,6 +74,10 @@
             <div class="form-group">
               <label for="attendance">Minimum time required for attendance to be tracked (in %)</label>
               <input id="attendance" type="text" class="form-control mt-3" value="{{ $attendanceSetting }}"/>
+              <div class="info-text mt-2">
+                  <small><i class="fa fa-info-circle"></i> If a scheduled live session has a duration of 1 hour and this setting is set to 50%, then if a student
+                that attends the live session decides to drop off before the 30 minute mark, then that student is marked as absent, since 30 minutes is 50% of an hour.</small>
+              </div>
               <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
               <label style="color:green;" id="survey-success-msg"></label> -->
             </div>
@@ -115,8 +129,9 @@
       let threshold = document.getElementById('threshold').value;
       let feedbackQues1 = document.getElementById('question_1').value;
       let feedbackQues2 = document.getElementById('question_2').value;
+      let feedbackQues3 = document.getElementById('question_3').value;
       let attendance = document.getElementById('attendance').value;
-      let path = "{{ route('save-threshold')}}?threshold=" + threshold + "&feedback1=" + feedbackQues1 + "&feedback2=" + feedbackQues2 + "&attendance=" + attendance;
+      let path = "{{ route('save-threshold')}}?threshold=" + threshold + "&feedback1=" + feedbackQues1 + "&feedback2=" + feedbackQues2 + "&feedback3=" + feedbackQues3 + "&attendance=" + attendance;
         fetch(path, {
         method: 'POST',
         headers: {

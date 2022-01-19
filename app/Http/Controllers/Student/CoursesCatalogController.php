@@ -240,7 +240,7 @@ class CoursesCatalogController extends Controller
         foreach($batches as $batch){
             $singleCourseData =  array (
             'batch_id' => $batch->id,
-            // 'batchname' => $batch->batchname,
+            'batchname' => $batch->batchname,
             'title' => $batch->title,
             'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
             'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
@@ -273,13 +273,17 @@ class CoursesCatalogController extends Controller
       
     try {
        $courseId = $request->course_id;
-       
+       $course_title = Course::where('id',  $courseId)->value('course_title');
        $batchId = $request->batch_id;
        $user = Auth::user();
        $userId = $user->id;
+       $userType = UserType::all();
        $studentEmail= $user->email;
        $assigned = DB::table('assigned_courses')->where('course_id',  $courseId)->value('user_id');
-       $instructorEmail = User::where('id', $assigned)->value('email');
+       $instructor = User::where('id', $assigned);
+       $instructorEmail =  $instructor->value('email');
+       $instructorName =  $instructor->value('firstname') .' '.$instructor->value('lastname');
+       
        
        $enrolledCourse = new EnrolledCourse;
        $enrolledCourse->user_id = $userId;
@@ -297,24 +301,31 @@ class CoursesCatalogController extends Controller
        $student_achievement->save();
 
        $mailDetails =[
-        'title' => 'Thank you for enrolling the course',
-        'body' => 'You have successfully enrolled the course... Happy learning!!!'
-    ];
-    Mail::to($studentEmail)->send(new StudentMailAfterEnrolling($mailDetails));
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'instructor_name' => $instructorName
+        ];
+        Mail::to($studentEmail)->subject('Welcome to the course ' .$course_title.'!')
+                ->send(new StudentMailAfterEnrolling($mailDetails));
 
-    $data =[
-        'title' => 'student enrolled  your course',
-        'body' => 'student enrolled  your course'
-    ];
-    Mail::to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
-  
-       return response()->json([
-           'status' => 'success', 
-           'message' => 'Enrolled successfully'
-        ]);
-    } catch (Exception $exception) {
-        return redirect('/')->withSuccess('Successfully registered!');
-    }
+        $data =[
+            'instructor_name' => $instructorName,
+            'course_title' => $course_title
+        ];
+        Mail::to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
+    
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'Enrolled successfully'
+            ]);
+            
+       }catch (Exception $exception){
+
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'Enrolled successfully'
+         ]);
+        }
     }
 
 
@@ -463,7 +474,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
                 $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><i class="far fa-user pe-1"></i>'. $course->course_difficulty .'</p></div></div></li></ul>';
                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
-                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Join now</a>'; 
+                $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Go to details</a>'; 
                 $html = $html . '</div></div></div></div></div>';        
             }
         } else {

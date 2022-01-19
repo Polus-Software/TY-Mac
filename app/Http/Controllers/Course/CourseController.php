@@ -38,7 +38,6 @@ class CourseController extends Controller
         $courseCategories = CourseCategory::all();
         $courses = Course::all();
         foreach ($courses as $course) {
-            // $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
             $courseStatus = DB::table('courses')->where('id', $course->id)->value('is_published');
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -49,7 +48,7 @@ class CourseController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
-                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s ', $course->updated_at)->format('m/d/Y'),
+                'updated_at' => $course->updated_at
                
               );
               array_push($courseDetails, $courseData);
@@ -617,12 +616,12 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function saveAssignment(Request $request) {
-
+        $externalLink = $request->input('external-link');
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
         $courseId = DB::table('topics')->where('topic_id', $topicId)->value('course_id');
         $instructorId = DB::table('assigned_courses')->where('course_id', $course_id)->value('user_id');
-
+        
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
@@ -631,6 +630,7 @@ class CourseController extends Controller
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
+        $topicAssignment->external_link = $externalLink;
 
         if($request->file()){
             $filename = $request->document->getClientOriginalName();

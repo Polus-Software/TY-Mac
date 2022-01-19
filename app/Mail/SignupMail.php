@@ -7,11 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Gmail extends Mailable
+
+class SignupMail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    
     public $details;
+
     /**
      * Create a new message instance.
      *
@@ -29,8 +31,11 @@ class Gmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Confirmation mail')
-                    ->view('Emails.confirmationMail')
+       
+        return $this->subject('Welcome to ThinkLitThinklit! Let us get started')
+                    ->markdown('Emails.confirmationMail')
+                    ->with('details', $this->details)
                     ->from('ashishbabythoppil@gmail.com');
+        
     }
 }

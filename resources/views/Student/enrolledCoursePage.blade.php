@@ -257,7 +257,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Session name</th>
-                                        <th scope="col">Subtopic</th>
+                                        <th scope="col">Topic</th>
                                         <th scope="col">Likes</th>
                                         <th scope="col">Dislikes</th>
                                     </tr>
@@ -316,7 +316,7 @@
                                 @endforeach
                             </div>
                         </div>
-
+                        @if($userType == 'student')
                         <div class="row border-bottom">
                             <div class="col-lg-12">
                                 <h5 class="recommendation">Recommended Topics to Review</h5>
@@ -324,8 +324,7 @@
                         </div>
 
                         <div class="row mt-3 mb-3">
-                            @if(!empty($recommendations))
-                            @foreach($recommendations as $recommendation)
+                            @forelse($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3" style="height: 560px;">
                                     <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
@@ -355,14 +354,11 @@
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
-                            @else
-                             <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                                <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                                <h4 class="fw-bold">No recommendations for you yet!</h4>    
-                            </div>
-                            @endif
+                            @empty
+                             <x-nodatafound message="No recommendations for you yet!" />
+                            @endforelse
                         </div>
+                        @endif
 
                     </div>
                     <!-- schedule tab -->
@@ -658,7 +654,7 @@
                                                 @if($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
                                                 @else
-                                                <span style="position:absolute;left:45rem;background-color:#faffb0 !important;color:#be5a21 !important;width:6rem;" class="badge pill text-dark">Pending</span>
+                                                <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; !important;width:6rem;" class="badge pill text-dark">Pending</span>
                                                 @endif
                                                 </button>
                                                 </h2>
@@ -679,7 +675,7 @@
 
                                                             <div class="col-lg-10">
                                                                 <p style="color:#6E7687;" class="mt-4">External Link</p>
-                                                                <a target="_blank" href="/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
+                                                                <a target="_blank" href="/storage/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
                                                             <p></p>
                                                             </div>
                                                             </div>
@@ -709,6 +705,7 @@
                         <div class="col-lg-3">Attach File:</div>
                             <div class="col-lg-5 col-12"><label>Upload from device</label>
                                 <input class="form-control" type="file" name="assignment_upload">
+                                <small>Supported File Formats are:  pdf, doc, docx,</small>
                             </div>
                         <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                         
@@ -823,15 +820,16 @@
                                                             </div>
                                                             <div class="tab-pane fade" id="pills-certificate" role="tabpanel" aria-labelledby="pills-back-certificate">
                                                                 <div class="col-lg-12 d-flex justify-content-center">
-                                                                    <div class="card text-center" style="margin: auto; width: 100%; border: 1px solid grey; margin-bottom:30px;">
+                                                                    <div class="card text-center" style="margin: auto; width: 100%;">
                                                                         <div class="card-body">
-                                                                        <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
+                                                                        <!-- <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;"> -->
                                                                             <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
                                                                             <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :  
                                                                             @foreach($singleCourseDetails as $course)
                                                                                 {{ $course['date_of_issue'] }} 
                                                                             @endforeach</small>
                                                                             <small style="position: absolute; right: 45px; top:40px;"></small>
+                                                                            <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
                                                                             <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                                             <div style="background:#FFF9E8;">
                                                                             <h3 class="card-title-1-certificate">Certificate of completion</h3>
@@ -840,22 +838,23 @@
                                                                                         @endforeach</p>
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
-                                                                                <p class="card-text-1">Has successfully completed the  <br>
+                                                                                <p class="card-text-1">Has successfully completed the {{$course['course_title']}}  <br>
                                                                                     online cohort on (course completion date)</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
                                                                             @foreach($singleCourseDetails as $course)
-                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid"> 
+                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid" 
+                                                                            style="border-bottom:1px solid #F5BC29;"> 
                                                                             @endforeach
                                                                             </div>
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-lg-12 mt-4">
                                                                                 <p class="card-text-1">@foreach($singleCourseDetails as $course)
                                                                                     {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
                                                                                         @endforeach
                                                                                 </p>
-                                                                                <p class="card-text-1">&<br> Team ThinkLit</p>
+                                                                                <p class="card-text-1">&<br>Team ThinkLit</p>
                                                                             </div>
                                                                         </div>
                                                                         </div>
@@ -863,7 +862,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row mt-4">
                                                                 @foreach($singleCourseDetails as $course)
                                                                         <a href="{{ route('generate-certificate', $course['id']) }}"  target="_blank" class="btn btn-dark">Download certificate</a>
                                                                 @endforeach
@@ -903,6 +902,7 @@
             let card = this.getAttribute('card-id');
 
             document.getElementById('card_' + card).style.display = "block";
+            this.style.display = "none";
         });
     }
     let finalRating = 0;
@@ -951,7 +951,7 @@
         }).then((response) => response.json()).then((data) => {
             if (data.status == 'success') {
                 closeModal('reviewModal');
-                window.location.reload();
+                // window.location.reload();
             }
         });
 

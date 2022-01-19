@@ -157,11 +157,11 @@
           </div>
         </div>
         <!-- course content end-->
-        <!-- Who this course is for -->
+        <!-- Who is this course is for -->
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body p-4">
-              <h5 class="card-title">Who this course is for</h5>
+              <h5 class="card-title">Who is this course for?</h5>
               <p class="card-text-1">@foreach($singleCourseDetails as $singleCourseDetail)
                 {{$singleCourseDetail['course_details']}}
               </p>

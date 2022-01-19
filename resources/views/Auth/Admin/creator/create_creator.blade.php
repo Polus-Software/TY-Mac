@@ -68,18 +68,21 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-            <label for="creator_password" class="col-form-label">Password</label>
-            <input type="text" class="form-control has-validation" id="creator_password" name="password"></input>
-            
-            @if ($errors->has('password'))
-                <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
+                <label for="creator_password" class="col-form-label">Password</label>
+                <input type="text" class="form-control has-validation" id="creator_password" name="password"></input>
+                <button type="button" class="btn btn-link" id="generate_password">Generate password</button>
+                @else
+                <label>Password</label>
+                <input type="password" class="form-control" value="" name="password" id="password" placeholder=" Enter password">
                 @endif
-            <button type="button" class="btn btn-link" id="generate_password">Generate password</button>
-          </div>
-          @endif
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+                  @if ($errors->has('password'))
+                  <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
+                  @endif
+              </div>
+          
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
                 <a class="btn btn-outline-secondary" href="{{route('manage-creators')}}">Cancel</a>                
-                  @if(Route::current()->getName() == 'edit-instructor')
+                  @if(Route::current()->getName() == 'edit-creator')
                   <button type="submit" class="btn btn-primary">Update</button>
                   @else
                   <button type="submit" class="btn btn-primary">Save</button>
