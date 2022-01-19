@@ -900,6 +900,7 @@
             let card = this.getAttribute('card-id');
 
             document.getElementById('card_' + card).style.display = "block";
+            this.style.display = "none";
         });
     }
     let finalRating = 0;
