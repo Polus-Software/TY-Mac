@@ -29,7 +29,7 @@
     box-shadow: 0px 1px 8px #00000029;
     border-radius: 20px;
 }
-.card-1 img{
+.card-1 .course-image{
     border-radius:20px;
 }
 .card-1 h5{
@@ -97,13 +97,19 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 }
-.card-2 h6 , .card-5 h6 {
+.card-2 h6 , .card-5 h6{
     color: #2C3443;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 }
+.card-title-4{
+    color: #2C3443;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 
+}
 .card-2 li , .card-5 li{
     color: #6E7687;
     font-size: 16px;
@@ -276,4 +282,22 @@
 background-color: #FFF9E8;
 border-color: #FFF9E8;
 border-radius: 10px;
+}
+
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.accordion-button::after{
+    margin-left:20px;
+}
+.plus::after{
+    margin-left:auto;
+
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.plus:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
 }
