@@ -23,8 +23,7 @@
         <div class="row mt-4">
             <div class="col-lg-6 col-6 mb-4">
             <form>
-                  <label for="session_title">Session title</label>
-                  <input class="form-control" id="session_title"/>
+                  
                   <label for="session_course">Course</label>
                   <select class="form-control" id="session_course">
                       <option value="" disabled selected>Please select a course</option>
@@ -32,13 +31,14 @@
                         <option value="{{$course->id}}">{{$course->course_title}}</option> 
                       @endforeach
                   </select>
-                  <label for="session_topic">Topic</label>
-                  <select class="form-control" id="session_topic"></select>
+                 
                   <label for="session_batch">Batch</label>
                   <select class="form-control" id="session_batch"></select>
                   <label for="session_instructor">Select instructor</label>
                   <select class="form-control" id="session_instructor">
-                  <option value="" disabled selected>Please select an instructor</option>
+                   
+                  <option value="" selected></option>
+                 
                       @foreach($instructors as $instructor)
                         <option value="{{$instructor->id}}">{{$instructor->firstname}} {{$instructor->lastname}}</option> 
                       @endforeach
@@ -51,11 +51,9 @@
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
-                <th scope="col">Session Title</th>
                 <th scope="col">Course</th>
                 <th scope="col">Session Instructor</th>
                 <th scope="col">Batch</th>
-                <th scope="col">Topic</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -63,11 +61,10 @@
               @foreach($sessions as $session)
               <tr>
                 <td scope="col">{{ $session['slNo'] }}</td>
-                <td scope="col">{{ $session['sessionTitle'] }}</td>
                 <td scope="col">{{ $session['sessionCourse'] }}</td>
                 <td scope="col">{{ $session['instructor'] }}</td>
                 <td scope="col">{{ $session['batch'] }}</td>
-                <td scope="col">{{ $session['topic'] }}</td>
+              
               </tr>
               @endforeach
               @else
@@ -260,12 +257,11 @@
   });
 
   document.getElementById('save-session-btn').addEventListener('click', (event) => {
-    let sessionTitle = document.getElementById('session_title').value;
+   
     let sessionCourse = document.getElementById('session_course').value;
-    let sessionTopic = document.getElementById('session_topic').value;
     let sessionBatch = document.getElementById('session_batch').value;
     let sessionInstructor = document.getElementById('session_instructor').value;
-    let path = "{{ route('save-session-details') }}?sessionTitle=" + sessionTitle + '&sessionCourse=' + sessionCourse + '&sessionTopic=' + sessionTopic + '&sessionBatch=' + sessionBatch + '&sessionInstructor=' + sessionInstructor;
+    let path = "{{ route('save-session-details') }}?sessionCourse=" + sessionCourse + '&sessionBatch=' + sessionBatch + '&sessionInstructor=' + sessionInstructor;
     fetch(path, {
       method: 'POST',
       headers: {
@@ -388,9 +384,8 @@
     }).then((response) => response.json()).then((data) => {
         document.getElementById('session_batch').innerHTML = '';
         document.getElementById('session_batch').innerHTML = data.batches;
-        document.getElementById('session_topic').innerHTML = '';
-        document.getElementById('session_topic').innerHTML = data.topics;
-      
+        document.getElementById('session_instructor').innerHTML = '';
+        document.getElementById('session_instructor').innerHTML = data.instructor;
     });
   });
 

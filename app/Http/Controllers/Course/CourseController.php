@@ -48,7 +48,7 @@ class CourseController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
-                'updated_at' => $course->updated_at
+                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y'),
                
               );
               array_push($courseDetails, $courseData);
@@ -697,8 +697,8 @@ class CourseController extends Controller
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->batchname = $request->input('batchname');
         $cohortbatch->course_id = $request->input('course_id');  
-        $cohortbatch->start_date = $request->input('cohortbatch_startdate');
-        $cohortbatch->end_date = $request->input('cohortbatch_enddate');
+        $cohortbatch->start_date = Carbon::parse($request->input('cohortbatch_startdate'))->format('Y-m-d');
+        $cohortbatch->end_date = Carbon::parse($request->input('cohortbatch_enddate'))->format('Y-m-d');
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $request->input('cohortbatch_starttime');
         $cohortbatch->end_time = $request->input('cohortbatch_endtime');

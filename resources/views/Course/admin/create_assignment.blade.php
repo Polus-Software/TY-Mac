@@ -59,7 +59,7 @@
           <div class="col-md-6">
             <label for="due-date">Assignment due date</label>
             <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="due-date" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
+            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
             <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
           </div>
           </div>

@@ -16,7 +16,7 @@
           <hr class="my-4">
         </div>
       <div class="py-4">
-        <ul class="nav nav-tabs llp-tabs">
+        <ul class="nav nav-tabs llp-tabs border-0">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="{{ route('view_cohortbatches', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Cohort List</a>
           </li>
@@ -47,14 +47,14 @@
           </div>
           <div class="col-md-6">
             <label for="level">Start date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly>
+            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" placeholder="Ex: 12/25/2021" readonly >
             @if ($errors->has('cohortbatch_startdate'))
               <span class="text-danger">The batch start date is required</span>
             @endif
           </div>
           <div class="col-md-6">
           <label for="level">End date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" readonly>
+            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" placeholder="Ex: 12/25/2021" readonly>
             @if ($errors->has('cohortbatch_enddate'))
               <span class="text-danger">The batch end date is required</span>
             @endif
@@ -130,7 +130,7 @@
           
           <div class="col-md-3">
             <label for="duration">Start time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly>
+            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime"  placeholder="Ex: 09" readonly>
             @if ($errors->has('cohortbatch_starttime'))
               <span class="text-danger">The batch start time is required</span>
             @endif
@@ -143,7 +143,7 @@
           </div>
           <div class="col-md-3">
             <label for="duration">End time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly>
+            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime"placeholder="Ex: 11" readonly>
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
@@ -157,6 +157,7 @@
           <div class="col-md-4">
             <label for="duration">Timezone</label>
             <select name="cohortbatch_timezone" class="form-control">
+              <option value="">Select Timezone</option>
     <!-- include timezones here -->
               @include('Course.admin.timezones')
             </select>

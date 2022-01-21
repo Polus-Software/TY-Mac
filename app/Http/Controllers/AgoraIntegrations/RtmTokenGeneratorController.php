@@ -154,19 +154,17 @@ class RtmTokenGeneratorController extends Controller
         $sessionsArray = [];
         $slNo = 1;
         foreach($sessions as $session) {
-            $sessionTitle = $session->session_title;
-          
+            
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
-            $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
             $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
+            
+
             array_push($sessionsArray, array(
                 'slNo' => $slNo,
                 'sessionCourse' => $sessionCourse,
-                'sessionTitle' => $sessionTitle,
                 'instructor' =>$instructor,
                 'batch' => $batch,
-                'topic'=> $topic
             ));
 
             $slNo++;
@@ -175,6 +173,7 @@ class RtmTokenGeneratorController extends Controller
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
+
         return view('Agora.ScheduleScreens.schedule_session', [
             'courses' => $courses,
             'instructors' => $instructors,
@@ -187,33 +186,38 @@ class RtmTokenGeneratorController extends Controller
         $course = $request->courseId;
        
         $batchHtml = '';
-        $topicHtml = '';
+        $instructorHtml = '';
+        $assigned = DB::table('assigned_courses')->where('course_id', $course )->value('user_id');
+        $user = User::where('id', $assigned);
+        $instructorId = $user->value('id');
+        $instructorfirstname = $user->value('firstname');
+        $instructorlastname = $user->value('lastname');
+        $instructor = $instructorfirstname. ' '.$instructorlastname;
 
         $batches = CohortBatch::where('course_id', $course)->get();
-        $topics = Topic::where('course_id', $course)->get();
 
         foreach($batches as $batch) {
             $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->title . "</option>";
         }
-        foreach($topics as $topic) {
-            $topicHtml = $topicHtml . "<option value=" . $topic->topic_id . ">" . $topic->topic_title . "</option>";
-        }
+    
+        $instructorHtml = $instructorHtml . "<option value=" .$instructorId . ">" . $instructor . "</option>";
 
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'batches' => $batchHtml, 'topics' => $topicHtml]);
+        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'batches' => $batchHtml, 'instructor' => $instructorHtml]);
     }
 
     public function saveSessionDetails(Request $request) {
-        $sessionTitle = $request->sessionTitle;
+       
+        // $sessionTitle = $request->sessionTitle;
         $sessionCourse = $request->sessionCourse;
-        $sessionTopic = $request->sessionTopic;
+        // $sessionTopic = $request->sessionTopic;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
 
         $liveSession = new LiveSession;
 
-        $liveSession->session_title = $sessionTitle;
+        // $liveSession->session_title = $sessionTitle;
         $liveSession->course_id = $sessionCourse;
-        $liveSession->topic_id = $sessionTopic;
+        // $liveSession->topic_id = $sessionTopic;
         $liveSession->batch_id = $sessionBatch;
         $liveSession->instructor = $sessionInstructor;
 
