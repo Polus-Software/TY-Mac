@@ -2,17 +2,17 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Courses</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Courses</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
             <a href="{{ route('add-course') }}" id="add_new_course" class="btn btn-primary add_new_course_btn" title="Add New Course">
              <i class="fas fa-plus-square me-1"></i>
@@ -20,6 +20,7 @@
           </div>
         </div>
         <div class="row mt-4">
+			<div class="d-flex justify-content-end">
           @if (count($courseDatas) > 0 )
           <table class="table llp-table">
             <thead>
@@ -64,7 +65,7 @@
                  </tr>
               @endif
             </tbody>
-          </table>
+          </table></div>
           <div class="d-flex justify-content-end">
           {!! $courseDatas->links() !!}
           </div>
@@ -78,6 +79,7 @@
       </main>
       <!-- main ends -->
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

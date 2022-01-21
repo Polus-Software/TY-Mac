@@ -7,7 +7,7 @@
     <div class="left_sidebar">
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto right_card_block">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @if($userType == "admin")
@@ -50,7 +50,7 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
             <h3 class="titles">Upcoming cohorts</h3>
           </div>
-        
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
               <table class="table llp-table">
                 <thead>
                   <tr>
@@ -85,12 +85,13 @@
                 </tbody>
               </table>
               
-         
+			</div>
         </div>
         <div class="row mt-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
             <h3 class="titles">Recent cohorts</h3>
           </div>
+		  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
           <table class="table llp-table">
             <thead>
               <tr>
@@ -121,12 +122,14 @@
                  @endif
             </tbody>
           </table>
+		  </div>
         </div>
         @endif
       </main>
       <!-- main ends -->
 
     </div>
+	<div class="col-md-1"></div>
   </div>
 </div>
 @endsection
