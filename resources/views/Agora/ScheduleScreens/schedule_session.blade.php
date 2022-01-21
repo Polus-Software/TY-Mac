@@ -2,17 +2,17 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Add Sessions</h3>
+          <h3 class="titles">Add Sessions</h3>
           
               
 
@@ -79,6 +79,7 @@
       <!-- main ends -->
 
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
