@@ -198,6 +198,7 @@ body {
 }
 .left_sidebar .nav-item i{
 	margin-right:8px;
+	align-self: center;
 }
 .right_card_block {
 	margin-top:15px;
@@ -213,6 +214,7 @@ body {
 }
 .left_sidebar .llp-sidebar .nav-item a.nav-link{
 	padding:12px 40px;
+	display:flex;
 }
 .left_sidebar .mt-5{
 	margin-top:4rem!important;
