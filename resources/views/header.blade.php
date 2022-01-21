@@ -90,7 +90,7 @@
     </div>
     </div>
   </nav>
-
+  @if(Auth::check()) 
   <script>
     
 document.getElementById('search-btn').addEventListener('click', function(e) {
@@ -110,4 +110,5 @@ document.getElementById("search-box").addEventListener("keyup", function(e) {
 });
 
     </script>
+    @endif
   <!-- navbar new ends -->

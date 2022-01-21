@@ -28,6 +28,7 @@ use App\Models\TopicContent;
 use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
 use App\Models\AssignedCourse;
+use Config;
 
 
 class CoursesCatalogController extends Controller
@@ -38,7 +39,7 @@ class CoursesCatalogController extends Controller
         $courses = Course::where('is_published', true)->get();
 
         $filters = Filter::all();
-        $userType =  UserType::where('user_role', 'instructor')->value('id');
+        $userType =  UserType::where('user_role', Config::get('common.ROLE_NAME_INSTRUCTOR'))->value('id');
 
         $instructors = User::where('role_id', $userType)->get();
 

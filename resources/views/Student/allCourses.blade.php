@@ -1,22 +1,6 @@
 @extends('Layouts.app')
 @section('content')
-<style>
-  .btn-outline-success {
-    border-color: #000000 !important;
-}
-.btn-outline-success:hover {
-  background-color: #fff !important;
-  border-color: #000000 !important;
-  color: #000000 !important;
-}
 
-.no_courses{
-  height: 20rem;
-    position: relative;
-    text-align: center;
-    top: 10rem;
-}
-  </style>
 @if(!$searchTerm)
 <header class="think-banner-allcourses ty-mac-header-bg d-flex align-items-center mt-5">
     <div class="container">
@@ -47,7 +31,7 @@
           <h6>Filter</h6>
           <div class="accordion" id="accordionPanelsStayOpenExample">
           @foreach($filters as $filter)
-          @if($filter->filter_name == "Category" && $filter->is_enabled == true)
+          @if($filter->filter_name == Config::get('common.FILTER_NAME_CATEGORY') && $filter->is_enabled == true)
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingOne">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -72,7 +56,7 @@
           @endforeach
 
           @foreach($filters as $filter)
-          @if($filter->filter_name == "Difficulty" && $filter->is_enabled == true)        
+          @if($filter->filter_name == Config::get('common.FILTER_NAME_DIFFICULTY') && $filter->is_enabled == true)        
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -106,7 +90,7 @@
           @endif
           @endforeach
           @foreach($filters as $filter)
-          @if($filter->filter_name == "Ratings" && $filter->is_enabled == true)
+          @if($filter->filter_name == Config::get('common.FILTER_NAME_RATINGS') && $filter->is_enabled == true)
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                 <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
@@ -181,7 +165,7 @@
           @endforeach
 
           @foreach($filters as $filter)
-          @if($filter->filter_name == "Duration" && $filter->is_enabled == true)        
+          @if($filter->filter_name == Config::get('common.FILTER_NAME_DURATION') && $filter->is_enabled == true)        
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
@@ -221,7 +205,7 @@
           @endforeach
 
           @foreach($filters as $filter)
-          @if($filter->filter_name == "Instructor" && $filter->is_enabled == true)        
+          @if($filter->filter_name == Config::get('common.FILTER_NAME_INSTRUCTOR') && $filter->is_enabled == true)        
           <div class="accordion-item filter-item">
             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
               <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
@@ -288,9 +272,6 @@
 <script>
 
 window.onload = function(event) {
-
-  
-
   let filterOption = document.getElementsByClassName('filter_option');
   for(var index = 0; index < filterOption.length; index++) {
     filterOption[index].addEventListener('change', function(event) {
@@ -330,7 +311,6 @@ window.onload = function(event) {
       });
    });
   }
-
 }
 </script>
 @endpush
