@@ -135,13 +135,11 @@ class AdminController extends Controller
 
     public function updateStudent(Request $request)
     {
-        if($request->password != ''){
-        
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|',
-            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'password' => 'required'
 
         ]);
        
@@ -155,7 +153,7 @@ class AdminController extends Controller
 
         return redirect()->route('view-student', ['student_id' => $studentId]);
     }
-    }
+    
 
 
     public function destroyStudent(Request $request)
