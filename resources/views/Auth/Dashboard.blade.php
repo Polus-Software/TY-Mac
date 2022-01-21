@@ -2,12 +2,12 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-9 ms-auto right_card_block">
       <!-- main -->
       <main>
         @if($userType == "admin")
@@ -48,7 +48,7 @@
         
         <div class="row mt-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h3>Upcoming cohorts</h3>
+            <h3 class="titles">Upcoming cohorts</h3>
           </div>
         
               <table class="table llp-table">
@@ -89,7 +89,7 @@
         </div>
         <div class="row mt-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h3>Recent cohorts</h3>
+            <h3 class="titles">Recent cohorts</h3>
           </div>
           <table class="table llp-table">
             <thead>

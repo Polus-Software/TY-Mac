@@ -190,3 +190,16 @@ body {
     color:red;
     visibility: visible;
 }
+/* style by jibi starts */
+.left_sidebar{
+	width:300px;
+	padding-left:0;
+}
+.left_sidebar .nav-item i{
+	margin-right:8px;
+}
+.right_card_block {
+	margin-top:15px;
+	margin-left:15px;
+}
+/* style by jibi ends */
