@@ -26,17 +26,18 @@
           </ul>
       </div> 
         <div class="col-12">
-            <label for="title">Title</label>
+            <label for="title" class="mb-2">Title</label>
             <input type="text" class="form-control" id="title" name="assignment_title">
           </div>
           <div class="col-12">
-            <label for="description">Assignment</label>
-            <textarea type="text" class="form-control" id="description" name="assignment_description"></textarea>
+            <label for="description" class="mb-2">Assignment</label>
+            <textarea type="text" class="form-control autosize" id="description" name="assignment_description"></textarea>
           </div>
-          <div class="row bd-highlight p-3">
+          <div class="row bd-highlight pt-3">
           <div class="col-11">
-          <label>Attach file</label>  
+          <label class="mb-2">Attach file</label>  
           <input type="file" class="form-control" id="document" name="document" placeholder="Upload from device">
+          <small class="fst-italic">Supported File Formats are:  pdf, doc, docx</small><br>
           <!-- <input type="file" class="form-control" id="document" name="document"> -->
           <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
           <!-- <div class="vr me-2 ms-2"></div> -->
@@ -48,7 +49,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <label for="choose-sub-topic">Choose sub topic</label>
+          <label for="choose-sub-topic" class="mb-2">Choose Topic</label>
           <select type="text" class="form-select" id="choose-sub-topic" name="assignment_topic_id">
           <!-- <option selected>Select...</option> -->
           @foreach ($subTopics as $subTopic)
@@ -57,9 +58,9 @@
           </select>
         </div>
           <div class="col-md-6">
-            <label for="due-date">Assignment due date</label>
+            <label for="due-date" class="mb-2">Assignment due date</label>
             <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="due-date" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
+            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
             <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
           </div>
           </div>
@@ -91,5 +92,6 @@
       document.getElementById("external-link-div").style.display = "none";
   });
   };
+
   
 </script>

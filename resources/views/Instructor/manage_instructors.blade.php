@@ -2,30 +2,30 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Instructors</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Instructors</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
             <a id="add_new_category" class="btn btn-primary add_new_instructor_btn" title="Add new instructor" href="{{ route('add-instructor') }}">
               <i class="fas fa-plus-square me-1"></i>
               Add new Instructor</a>
           </div>
         </div>
-        <div class="row mt-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
           <table class="table llp-table">
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
                 <th scope="col" colspan="2">Name</th>
-                <th scope="col">Email</th>
+                <th scope="col">E-mail ID</th>
                 <th scope="col">Instructor Added On</th>
                 <th scope="col" colspan="3" class="text-center">Actions</th>
               </tr>
@@ -39,7 +39,7 @@
                 <th class="align-middle" scope="row">{{ ($instructors->currentpage() -1) * $instructors->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$instructor->firstname}} {{$instructor->lastname}}</td>
                 <td class="align-middle">{{$instructor->email}} </td>
-                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $instructor->created_at)->format('F d, Y')}}</td>
+                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $instructor->created_at)->format('m-d-Y')}}</td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-instructor', ['instructor_id' => $instructor->id]) }}" title="View instructor">
                     <i class="fas fa-eye"></i>
@@ -71,6 +71,7 @@
       <!-- main ends -->
 
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

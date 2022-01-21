@@ -28,22 +28,22 @@
           <hr class="my-4">
         </div>
           <div class="col-12">
-            <label for="title">Title</label>
+            <label for="title">Course Title</label>
             @if(isset($course_details['title']))
             <input type="text" class="form-control" id="title" name="course_title" value="{{ $course_details['title'] }}">
             @else
-            <input type="text" class="form-control" id="title" name="course_title">
+            <input type="text" class="form-control" id="title" name="course_title" placeholder="Ex: Fundamentals of Product Management">
             @endif
             @if ($errors->has('course_title'))
               <span class="text-danger">{{ $errors->first('course_title') }}</span>
             @endif
           </div>
           <div class="col-12">
-            <label for="description">Description</label>
+            <label for="description">Course Description</label>
             @if(isset($course_details['description']))
-            <textarea type="text" class="form-control" id="description" name="description">{{ $course_details['description'] }}</textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description">{{ $course_details['description'] }}</textarea>
             @else
-            <textarea type="text" class="form-control" id="description" name="description"></textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description" placeholder="Product Management is the profession of building products. By taking this course, you will learn the fundamentals of Product Management"></textarea>
             @endif
             @if ($errors->has('description'))
               <span class="text-danger">{{ $errors->first('description') }}</span>
@@ -104,7 +104,7 @@
             @endif
           </div>
           <div class="col-md-6">
-            <label for="duration">Duration</label>            
+            <label for="duration">Class Duration in hours</label>            
             @if(isset($course_details['duration']))
             <input type="number" class="form-control" id="duration" name="course_duration" value="{{ $course_details['duration'] }}">
             @else
@@ -130,7 +130,7 @@
               <span class="text-danger">This field is required</span>
             @endif
             <div id="add-more-points"></div>
-            <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add more answer</button>
+            <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add section</button>
           </div>
           <div class="col-12">
             <label for="who-course">Who is this course is for?</label><br>
@@ -170,9 +170,9 @@
               @else
               <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>
-                <p>Lorem ipsum dolor sit amet,</p>
+                <p>Important guidelines: <b>604x287</b> pixels</p>
+                <p>Image must be less than <b>500kb</b> </p>
+                <p> supported file formats: jpg, jpeg, png, .svg.</p>
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
@@ -182,7 +182,7 @@
               <label class="input-group-text col-12" for="course-image">Upload</label>
             </div>
             @if ($errors->has('course_image'))
-              <span class="text-danger">This course image field is required</span>
+              <span class="text-danger">{{ $errors->first('course_image') }}</span>
             @endif   
             </div>
           </div>
@@ -194,9 +194,9 @@
             @else
               <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
               <div class="col">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed </p>
-                <p>Lorem ipsum dolor sit amet,</p>
+                <p>Important guidelines: <b>395x186 pixels</b></p>
+                <p>Image must be less than <b>100kb</b> </p>
+                <p> supported file formats: jpg, jpeg, png, .svg.</p>
               </div>
               @endif
             <div class="input-group mt-3 mb-3">

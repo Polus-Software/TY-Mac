@@ -16,7 +16,7 @@
           <hr class="my-4">
         </div>
       <div class="py-4">
-        <ul class="nav nav-tabs llp-tabs">
+        <ul class="nav nav-tabs llp-tabs border-0">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="{{ route('view_cohortbatches', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Cohort List</a>
           </li>
@@ -39,7 +39,7 @@
             @endif
           </div>
           <div class="col-12">
-            <label for="batchname">Batchname</label>
+            <label for="batchname">Batch Name</label>
             <input type="text" class="form-control" id="batchname" name="batchname" value="">
             @if ($errors->has('batchname'))
               <span class="text-danger">The batch name is required</span>
@@ -47,14 +47,14 @@
           </div>
           <div class="col-md-6">
             <label for="level">Start date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly>
+            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" placeholder="Ex: 12/25/2021" readonly >
             @if ($errors->has('cohortbatch_startdate'))
               <span class="text-danger">The batch start date is required</span>
             @endif
           </div>
           <div class="col-md-6">
           <label for="level">End date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" readonly>
+            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" placeholder="Ex: 12/25/2021" readonly>
             @if ($errors->has('cohortbatch_enddate'))
               <span class="text-danger">The batch end date is required</span>
             @endif
@@ -79,49 +79,49 @@
           </div>
           <div class="col-12" id="cohortbatchdaycontainer" style="display:none;">
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Sunday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Sunday">
               <label class="form-check-label" for="flexCheckDefault">
-              Sunday
+              Sunday 
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Monday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value="  Monday">
               <label class="form-check-label" for="flexCheckDefault">
-              Monday
+            Monday
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Tuesday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Tuesday">
               <label class="form-check-label" for="flexCheckDefault">
-              Tuesday
+              Tuesday 
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Wednesday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Wednesday">
               <label class="form-check-label" for="flexCheckDefault">
-              Wednesday
+              Wednesday 
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Thursday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Thursday">
               <label class="form-check-label" for="flexCheckDefault">
               Thursday
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Friday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Friday">
               <label class="form-check-label" for="flexCheckDefault">
               Friday
               </label>
             </div>
           
             <div class="form-check">
-              <input class="form-check-input cohortbatchday" type="checkbox" value="Saturday">
+              <input class="form-check-input cohortbatchday" type="checkbox" value=" Saturday">
               <label class="form-check-label" for="flexCheckDefault">
               Saturday
               </label>
@@ -130,7 +130,7 @@
           
           <div class="col-md-3">
             <label for="duration">Start time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly>
+            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime"  placeholder="Ex: 09" readonly>
             @if ($errors->has('cohortbatch_starttime'))
               <span class="text-danger">The batch start time is required</span>
             @endif
@@ -143,7 +143,7 @@
           </div>
           <div class="col-md-3">
             <label for="duration">End time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly>
+            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime"placeholder="Ex: 11" readonly>
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
@@ -157,6 +157,7 @@
           <div class="col-md-4">
             <label for="duration">Timezone</label>
             <select name="cohortbatch_timezone" class="form-control">
+              <option value="">Select Timezone</option>
     <!-- include timezones here -->
               @include('Course.admin.timezones')
             </select>
@@ -164,19 +165,19 @@
               <span class="text-danger">The time zone is required</span>
             @endif
           </div>
-          <div class="col-md-3">
-            <label for="students_count">No. of students</label>
+          <div class="col-md-6">
+            <label for="students_count">Number of students allowed to enroll in a Cohort</label>
             <input type="text" class="form-control" id="students_count" name="students_count">
             @if ($errors->has('students_count'))
               <span class="text-danger">Number of students in the batch is required</span>
             @endif
           </div>
           <div class="col-12">
-            <label for="description">Notification</label>
+            <label for="description" class="col-12 border-bottom mb-3 pb-3">Send an email reminder to students</label>
             @foreach($notifications as $notification)
-            <div class="form-check">
+            <div class="form-check ps-0">
                 <input type="checkbox" value="{{$notification->id}}" name="cohortbatch_notification" checked>
-                <label for="">{{ $notification->description }}</label>
+                <label for="" class="ms-2">{{ $notification->description }}</label>
             </div>
             @endforeach
             

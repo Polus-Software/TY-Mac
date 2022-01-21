@@ -14,29 +14,29 @@
       @php
       $pagename = Route::current()->getName();
       $isEdit = false;
-      if($pagename === 'edit-creator') {
+      if($pagename === 'edit-admin') {
         $isEdit = true;
       } else {
        $isEdit = false;
       }
       @endphp
         @if(!!$isEdit)
-        <form class="form" id="editCreatorForm" action="{{ route('update-creator', ['creator_id' => $creatorDetails['creator_id']])}}" method="POST">
-          <input type="hidden" id="creator_id" name="creator_id" value="{{ $creatorDetails['creator_id'] }}">
+        <form class="form" id="editAdminForm" action="{{ route('update-admin', ['admin_id' => $adminDetails['admin_id']])}}" method="POST">
+          <input type="hidden" id="admin_id" name="admin_id" value="{{ $adminDetails['admin_id'] }}">
           @else
-          <form class="form" id="createCreatorDetailsForm" action="{{ route('save-creator')}}" method="POST">
+          <form class="form" id="createAdminDetailsForm" action="{{ route('save-admin')}}" method="POST">
             @endif
             @csrf
 
             <section class="row g-3 llp-view">
               <div class="py-4">
-                <h3>{{ (!!$isEdit) ? 'Edit profile' : 'Add Creator' }}</h3>
+                <h3>{{ (!!$isEdit) ? 'Edit profile' : 'Add Admin' }}</h3>
                 <hr class="my-4">
               </div>
               <div class="col-md-6">
                 <label>First Name</label>
                 @if(!!$isEdit)
-                <input type="text" class="form-control" value="{{$creatorDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
+                <input type="text" class="form-control" value="{{$adminDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @else
                 <input type="text" class="form-control" value="" name="firstname" id="firstname" placeholder="Enter First Name">
                 @endif
@@ -47,7 +47,7 @@
               <div class="col-md-6">
                 <label>Last Name</label>
                 @if(!!$isEdit)
-                <input type="text" class="form-control" value="{{$creatorDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
+                <input type="text" class="form-control" value="{{$adminDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @else
                 <input type="text" class="form-control" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @endif
@@ -58,7 +58,7 @@
               <div class="col-12">
                 <label>Email id</label>
                 @if(!!$isEdit)
-                <input type="email" class="form-control" value="{{$creatorDetails['email']}}" name="email" id="email" placeholder=" Enter email">
+                <input type="email" class="form-control" value="{{$adminDetails['email']}}" name="email" id="email" placeholder=" Enter email">
                 @else
                 <input type="email" class="form-control" value="" name="email" id="email" placeholder=" Enter email">
                 @endif
@@ -68,15 +68,17 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-                <label for="creator_password" class="col-form-label">Password</label>
-                <input type="text" class="form-control has-validation" id="creator_password" name="password"></input>
-                <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
+                <label for="admin_password" class="col-form-label">Password</label>
+                <input type="password" class="form-control has-validation" id="admin_password" name="password"></input>
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
+                <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
                 @else
                 <div class="col-12"> 
                 <label>Password</label>
-                <input type="text" class="form-control" value="" name="password" id="creator_password" placeholder=" Enter password">
-                <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
-              </div>
+                <input type="password" class="form-control has-validation"  name="password" id="admin_password" placeholder="Enter password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
+                <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
+            </div>
                 @endif
                   @if ($errors->has('password'))
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
@@ -84,8 +86,8 @@
               </div>
           
               <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
-                <a class="btn btn-outline-secondary" href="{{route('manage-creators')}}">Cancel</a>                
-                  @if(Route::current()->getName() == 'edit-creator')
+                <a class="btn btn-outline-secondary" href="{{route('manage-admin')}}">Cancel</a>                
+                  @if(Route::current()->getName() == 'edit-admin')
                   <button type="submit" class="btn btn-primary btn-dark">Update</button>
                   @else
                   <button type="submit" class="btn btn-primary">Save</button>
@@ -110,7 +112,21 @@
   }
 
   document.getElementById('generate_password').addEventListener('click', function(event) {
-    document.getElementById('creator_password').value = makeid(12);
+    document.getElementById('admin_password').value = makeid(12);
+    
   });
+  function adminViewPassword()
+  {
+    let passwordInput = document.getElementById('admin_password');
+    if (passwordInput.type == 'password'){
+      passwordInput.type='text';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye';
+    }
+    else{
+      passwordInput.type='password';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye-slash';
+    }
+
+  }
 </script>
 @endsection('content')

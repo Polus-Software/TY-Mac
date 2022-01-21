@@ -22,6 +22,7 @@ use App\Models\CohortBatch;
 use App\Models\LiveSession;
 use App\Models\AttendanceTracker;
 use Hash;
+use Illuminate\Validation\Rule;
 
 
 class AdminController extends Controller
@@ -134,13 +135,11 @@ class AdminController extends Controller
 
     public function updateStudent(Request $request)
     {
-        if($request->password != ''){
-        
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|',
-            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'password' => 'required'
 
         ]);
        
@@ -151,10 +150,10 @@ class AdminController extends Controller
         $student->email = $request['email'];
         $student->password = Hash::make($request->password);
         $student->save();
-        
+
         return redirect()->route('view-student', ['student_id' => $studentId]);
     }
-    }
+    
 
 
     public function destroyStudent(Request $request)
@@ -404,13 +403,168 @@ class AdminController extends Controller
             
             $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
             $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';
-            $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>'; 
-                
-                
-              
+            $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>';           
         }
         
         return response()->json(['status' => 'success', 'msg' => 'Batches retrieved', 'html' => $html]);
     }
     
+
+    public function viewAllAdmin(){
+
+        $userType = UserType::where('user_role', 'admin')->value('id');
+        $user = Auth::user();
+
+        if($user){
+        $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
+        $admins = DB::table('users')
+                ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
+                ->paginate(10);
+        
+        return view('Auth.Admin.manage_admin', [
+            'admins' => $admins,
+            'userType' => $userTypeLoggedIn
+        ]);
+        }else{
+            return redirect('/403');
+        }
+        
+        
+    }
+
+    public function viewAdmin(Request $request){
+
+        $adminId = $request->input('admin_id');
+        if ($adminId) {
+            $admin = User::where('id', $adminId);
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
+            if ($admin) {
+                $data = [
+                    'admin_id' => $admin->value('id') ,
+                    'firstname' => $admin->value('firstname') ,
+                    'lastname' => $admin->value('lastname'),
+                    'email' => $admin->value('email')];
+
+                return view('Auth.Admin.view_admin', [
+                    'adminDetails' => $data,
+                    'userType' => $userType
+                ]);
+            }
+        }
+
+    }
+
+
+    public function addAdmin() {
+        $userType = 'admin';
+        return view('Auth.Admin.create_admin', [
+            'userType' => $userType
+        ]);
+
+    }
+
+
+    public function saveAdmin(Request $request) {
+
+        $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+        ]);
+        $userType = UserType::where('user_role', 'admin')->value('id');
+        $admin = new User;
+        $admin->firstname = $request->input('firstname');
+        $admin->lastname = $request->input('lastname');
+        $admin->email = $request->input('email');
+        $admin->password = Hash::make($request->input('password'));
+        $admin->role_id = $userType;
+        $admin->save();
+        return redirect()->route('manage-admin');
+    }
+
+
+    public function editAdmin(Request $request) {
+        $adminId = $request->input('admin_id');
+        if ($adminId) {
+            $admin = User::where('id', $adminId);
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
+            if ($admin) {
+                $data = [
+                    'admin_id' => $admin->value('id') ,
+                    'firstname' => $admin->value('firstname') ,
+                    'lastname' => $admin->value('lastname'),
+                    'email' => $admin->value('email')];
+                return view('Auth.Admin.create_admin', [
+                    'adminDetails' => $data,
+                    'userType' => $userType
+                ]);
+            }
+        }
+    }
+
+
+    public function updateAdmin(Request $request) {
+        $adminId = $request->input('admin_id');
+        $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => ['required', Rule::unique('users')->ignore($adminId)],
+        ]);
+
+        $userType = UserType::where('user_role', 'admin')->value('id');        
+        $firstName = $request->input('firstname');
+        $lastName = $request->input('lastname');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        
+            if ($adminId) {
+            $admin = User::find($adminId);
+            if ($admin) {
+                $admin->firstname = $firstName;
+                $admin->lastname = $lastName;
+                $admin->email = $email;
+                $admin->password = Hash::make($request->input('password'));
+                $admin->save();
+                return redirect()->route('view-admin', ['admin_id' => $adminId]);
+            }
+        }
+    }
+
+
+    public function deleteAdmin(Request $request) {
+        $html = '';
+        $slNo = 1;
+        $userId = $request->input('user_id');
+        $userType = UserType::where('user_role', 'admin')->value('id');
+        if ($userId) {
+            $admin = User::find($userId);
+            if ($admin) {
+                $admin->delete();
+
+                $admins = DB::table('users')
+                ->where('role_id', '=', $userType)
+                ->where('deleted_at', '=', NULL)
+                ->get();
+
+                foreach($admins as $admin) {
+                    $html = $html . '<tr id="' . $admin->id .'">';
+                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
+                    $html = $html . '<td class="align-middle" colspan="2">' . $admin->firstname . ' ' . $admin->lastname . '</td>';
+                    $html = $html . '<td class="align-middle">' . $admin->email . '</th>';
+                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $admin->created_at)->format("F d, Y") . '</td>';
+                    $html = $html . '<td class="text-center align-middle"><a href="" title="View admin"><i class="fas fa-eye"></i></a>';
+                    $html = $html . '<a  href="" title="Edit admin"><i class="fas fa-pen"></i></a>';
+                    $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_admin_modal" data-bs-id="' . $admin->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
+                    $slNo = $slNo + 1;
+                }
+                return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
+            }
+        }
+        return response()->json(['status' => 'failed', 'message' => 'Some error', 'html' => '']);
+    }
+
 }

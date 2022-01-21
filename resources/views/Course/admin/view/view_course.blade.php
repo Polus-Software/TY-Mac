@@ -16,11 +16,11 @@
         <section class="row g-3 llp-view">
         <div class="py-4"><h3>Course Overview</h3><hr class="my-4"></div>
           <div class="col-12">
-            <label>Title</label>
+            <label>Course Title</label>
             <p>{{$course_details['title']}}</p>
           </div>
           <div class="col-12">
-            <label>Description</label>
+            <label>Course Description</label>
             <p>{{$course_details['description']}}</p>
           </div>
           <div class="col-md-6">
@@ -36,7 +36,7 @@
             <p>{{$course_details['instructor']}}</p>
           </div>
           <div class="col-md-6">
-            <label>Duration</label>
+            <label>Class Duration in hours</label>
             <p>{{$course_details['duration']}} h</p>
           </div>
           <div class="col-12">

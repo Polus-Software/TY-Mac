@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\CourseCategory;
 use App\Models\UserType;
 use Auth;
+use Carbon\Carbon;
 
 class CourseCategoryController extends Controller
 {
@@ -49,7 +50,8 @@ class CourseCategoryController extends Controller
         if ($courseCategoryId) {
             $courseCategory = CourseCategory::where('id', $courseCategoryId);
             if ($courseCategory) {
-                $data = ['category_name' => $courseCategory->value('category_name'), 'category_added_on' => $courseCategory->value('created_at')->format('d-M-Y H:i A')];
+                $data = ['category_name' => $courseCategory->value('category_name'), 'category_added_on' =>  Carbon::createFromFormat('Y-m-d H:i:s', $courseCategory->value('created_at'))->format('m-d-Y')];
+               
                 return response()->json(['status' => 'success', 'message' => '', 'categoryDetails' => $data]);
             }
         }

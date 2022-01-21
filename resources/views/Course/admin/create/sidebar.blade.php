@@ -37,7 +37,7 @@
     @else
     <a class="nav-link link-dark disabled" role="button" aria-disabled="true" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}">
     @endif
-    <i class="fas fa-book-reader"></i>Sub topics</a>
+    <i class="fas fa-book-reader"></i>Topics</a>
     </li>
     <li class="nav-item">
     @if(Route::current()->getName() == 'edit-course')
@@ -63,7 +63,7 @@
   <div class="position-relative btn-bottom-container">
     @csrf
     @if(Route::current()->getName() == 'edit-course')
-    <!-- @if($courseStatus == 0)
+    @if($courseStatus == 0)
       <a class="btn btn-primary d-block" id="publish">Publish</a>
       @else
       <a class="btn btn-primary d-block" id="publish">Unpublish</a>
@@ -71,7 +71,7 @@
     @else
     
       <a class="btn btn-primary d-block" id="publish">Publish</a>
-    @endif -->
+    @endif
     
     <a class="btn btn-outline-secondary d-block mt-2" href="{{ route('manage-courses') }}">Back to course list</a>
   </div>

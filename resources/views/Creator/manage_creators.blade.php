@@ -2,17 +2,17 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Content creators</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Content creators</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
             <a class="btn btn-primary" href="{{ route('add-creator') }}" title="add creator">
             <i class="fas fa-plus-square me-1"></i>
@@ -20,13 +20,13 @@
                   </a>
           </div>
         </div>
-        <div class="row mt-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
           <table class="table llp-table">
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
                 <th scope="col" colspan="2">Name</th>
-                <th scope="col">Email</th>
+                <th scope="col">E-mail ID</th>
                 <th scope="col">Content Creator Added On</th>
                 <th scope="col" colspan="3" class="text-center">Actions</th>
               </tr>
@@ -40,7 +40,7 @@
                 <th class="align-middle" scope="row">{{  ($creators->currentpage() -1) * $creators->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
                 <td class="align-middle">{{$creator->email}} </td>
-                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $creator->created_at)->format('F d, Y')}}</td>
+                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $creator->created_at)->format('m-d-Y')}}</td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-creator', ['creator_id' => $creator->id]) }}" title="View creator">
                   <i class="fas fa-eye"></i>
@@ -69,6 +69,7 @@
       <!-- main ends -->
 
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

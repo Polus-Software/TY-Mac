@@ -22,7 +22,7 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('create-subtopic') }}">
       <i class="fas fa-book-reader"></i>
-        Sub topics</a>
+    Topics</a>
     </li>
     <li class="nav-item">
       <a id="assignment-link" class="nav-link link-dark" href="{{ route('create-assignment') }}">

@@ -180,7 +180,7 @@
               <span class="visually-hidden">Next</span>
             </button>
             @else
-            <h2 style="text-align:center;">No courses to be shown! Please add courses.</h2>
+            <x-nodatafound message="No courses to be shown!" />
           </div>
 
         </div>
@@ -323,7 +323,7 @@
   }
   window.onload = (event)=> {
   var toastLiveExample = document.getElementById('liveToast');
-  if(toastLiveExample) {debugger
+  if(toastLiveExample) {
     var toast = new bootstrap.Toast(toastLiveExample);
     toast.show();
   }

@@ -90,7 +90,7 @@ Route::get('/', function () {
     Route::post('/save-instructor', [InstructorController::class, 'saveInstructor'])->name('save-instructor');
 
     Route::get('/manage-creators', [CreatorController::class, 'index'])->name('manage-creators');
-    Route::get('/add-creator', [CreatorController::class, 'addInstructor'])->name('add-creator');
+    Route::get('/add-creator', [CreatorController::class, 'addCreator'])->name('add-creator');
     Route::post('/save-creator', [CreatorController::class, 'saveCreator'])->name('save-creator');
     Route::get('/view-creator', [CreatorController::class, 'viewCreator'])->name('view-creator');
     Route::get('/edit-creator', [CreatorController::class, 'editCreator'])->name('edit-creator');
@@ -117,7 +117,13 @@ Route::get('/', function () {
     Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     Route::get('/course-search', [AdminController::class, 'courseSearch'])->name('course-search');
-    
+    Route::get('/manage-admin', [AdminController::class, 'viewAllAdmin'])->name('manage-admin');
+    Route::get('/view-admin', [AdminController::class, 'viewAdmin'])->name('view-admin');
+    Route::get('/add-admin', [AdminController::class, 'addAdmin'])->name('add-admin');
+    Route::post('/save-admin', [AdminController::class, 'saveAdmin'])->name('save-admin');
+    Route::post('/update-admin', [AdminController::class, 'updateAdmin'])->name('update-admin');
+    Route::get('/edit-admin', [AdminController::class, 'editAdmin'])->name('edit-admin');
+    Route::post('/delete-admin', [AdminController::class, 'deleteAdmin'])->name('delete-admin');
 
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
@@ -154,6 +160,8 @@ Route::get('/', function () {
     Route::post('student-exit/{session}/{timer}', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
     Route::post('get-attendance-list', [RtmTokenGeneratorController::class, 'getAttendanceList'])->name('get-attendance-list');
     Route::post('submit-feedback', [RtmTokenGeneratorController::class, 'submitSessionFeedback'])->name('submit-feedback');
+    Route::post('save-session-chat', [RtmTokenGeneratorController::class, 'saveSessionChat'])->name('save-session-chat');
+    Route::post('get-session-chat', [RtmTokenGeneratorController::class, 'getSessionChat'])->name('get-session-chat');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    

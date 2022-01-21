@@ -55,7 +55,7 @@
         /** @type {Config} */
         var defaultConfig = {
             defaultView: BODYTYPES[0],
-            dateFormat: "yyyy-mm-dd",
+            dateFormat: "mm/dd/yyyy",
             timeFormat: "HH:MM:SS",
             showDate: true,
             showTime: false,

@@ -190,3 +190,70 @@ body {
     color:red;
     visibility: visible;
 }
+/* style by jibi starts */
+.left_sidebar{
+	width:300px;
+	padding-left:0;
+	position:fixed;
+}
+.left_sidebar .nav-item i{
+	margin-right:8px;
+	align-self: center;
+}
+.right_card_block {
+	margin-top:15px;
+	margin-left:15px;
+	padding-right:0;
+	margin-inline-start: auto;
+}
+.left_sidebar .llp-sidebar a.active{
+	font-weight:bold;
+}
+.left_sidebar .llp-sidebar .nav-pills .nav-link{
+	font-size:16px;
+}
+.left_sidebar .llp-sidebar .nav-item a.nav-link{
+	padding:12px 40px;
+	display:flex;
+}
+.left_sidebar .mt-5{
+	margin-top:4rem!important;
+}
+.right_card_block .card{
+	border:0;
+}
+.right_card_block .titles{
+	font-size: 18px;
+    color: #000;
+    width: 100%;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 15px;
+	margin-bottom:0;
+}
+.titles_outer{
+	border-bottom: 1px solid #dee2e6;
+}
+.right_card_block .titles_outer .titles{
+	border:0;
+	width:auto;
+} 
+.students_table .rounded-pill{
+	color: #008000d1!important;
+    background-color: #0aeb5a30!important;
+    padding: 6px 18px;
+}
+@media (max-width:900px){
+	.left_sidebar{
+		width:210px;
+	}
+}
+/* style by jibi ends */
+
+#adminTogglePass {
+    float: right;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+    margin-right: 20px;
+    cursor: pointer;
+ }

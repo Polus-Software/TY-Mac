@@ -89,11 +89,11 @@
                             </div>
 
                             <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="carousel-control-prev-icon bg-yellow" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#liveCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+                                <span class="carousel-control-next-icon bg-yellow" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
@@ -149,11 +149,11 @@
                                 </div>
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#upcomingCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="carousel-control-prev-icon bg-yellow" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#upcomingCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+                                <span class="carousel-control-next-icon bg-yellow" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
@@ -230,8 +230,8 @@
 
                                         <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
                                             <small> {{ $singleEnrolledCourse['start_date'] }} -
-                                                {{ $singleEnrolledCourse['start_time'] }} -
-                                                {{ $singleEnrolledCourse['end_time'] }}
+                                                {{ $singleEnrolledCourse['start_time'] }} {{ $singleEnrolledCourse['time_zone'] }} -
+                                                {{ $singleEnrolledCourse['end_time'] }} {{ $singleEnrolledCourse['time_zone'] }}
                                             </small>
                                         </p>
 

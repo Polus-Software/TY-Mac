@@ -12,7 +12,7 @@
 <!-- navbar new  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
-      <a class="navbar-brand" href="#">TY-Mac</a>
+      <a class="navbar-brand" href="#"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -78,8 +78,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
-        @else
-        <li class="nav-item"><a class="nav-link" href="#testimonials">Apply to be an instructor</a></li>        
+        @else                
         <li class="nav-item">
         <a id="signup_navlink" class="nav-link" href="#signup" data-bs-toggle="modal" data-bs-target="#signupModal"><span class="me-2"><img src="/storage/icons/signup__icon.svg" alt="error"></span>Sign Up</a>
         </li>
@@ -91,7 +90,7 @@
     </div>
     </div>
   </nav>
-
+  @if(Auth::check()) 
   <script>
     
 document.getElementById('search-btn').addEventListener('click', function(e) {
@@ -111,4 +110,5 @@ document.getElementById("search-box").addEventListener("keyup", function(e) {
 });
 
     </script>
+    @endif
   <!-- navbar new ends -->

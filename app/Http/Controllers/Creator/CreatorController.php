@@ -32,7 +32,7 @@ class CreatorController extends Controller
         }
     }
 
-    public function addInstructor() {
+    public function addCreator() {
         $userType = UserType::where('user_role', 'content_creator')->value('id');
         return view('Auth.Admin.creator.create_creator', [
             'userType' => $userType
