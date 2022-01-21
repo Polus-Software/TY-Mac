@@ -167,7 +167,7 @@
                             <i class="far fa-clock pe-3"></i>Cohort Schedule
                         </button>
                         <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
-                        <i class="fas fa-tv pe-3"></i>Personalized recommendations
+                        <i class="fas fa-tv pe-3"></i>Personalized Recommendations
                         </button>
                         <button class="nav-link mb-2 ps-5 text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
                         <i class="fas fa-comments pe-3"></i>Cohort Q&A

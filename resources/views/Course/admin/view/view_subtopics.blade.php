@@ -15,10 +15,10 @@
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Subtopic list</a>
+    <a class="nav-link active" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Topics List</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Subtopic</a>
+    <a class="nav-link" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Topic</a>
   </li>
 </ul>
         </div>
@@ -28,7 +28,7 @@
           <div class="col-12 mb-3">
             <div class="card">
               <h5 class="card-title ms-3 mt-3 pb-2 border-bottom">
-             <strong>Subtopics</strong>
+             <strong>Topics</strong>
               </h5>
               <div class="card-body">
               @php ($slno = 0)
@@ -36,7 +36,7 @@
                 @php ($slno = $slno + 1)
                 <ul class="list-group list-group-flush border-bottom pb-3">
                 
-                <h6 class="card-subtitle mb-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
+                <h6 class="card-subtitle mb-3 mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
                 
                     @foreach($courseContent['contentsData'] as $content)
                         <li class="ms-4 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>

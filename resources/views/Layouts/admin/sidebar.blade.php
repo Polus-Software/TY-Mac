@@ -45,7 +45,7 @@
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-admin') }}">
       <i class="fas fa-users-cog"></i>
-        Admin users</a>
+        Admin Users</a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-course-categories') }}">

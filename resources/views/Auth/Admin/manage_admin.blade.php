@@ -40,7 +40,7 @@
                 <th class="align-middle" scope="row">{{  ($admins->currentpage() -1) * $admins->perpage() + $slno }}</th>
                 <td class="align-middle" colspan="2">{{$admin->firstname}} {{$admin->lastname}}</td>
                 <td class="align-middle">{{$admin->email}} </td>
-                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $admin->created_at)->format('m/d/Y')}}</td>
+                <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $admin->created_at)->format('m-d-Y')}}</td>
                 <td class="align-middle text-center">
                   <a href="{{ route('view-admin', ['admin_id' => $admin->id]) }}" title="View Admin">
                     <i class="fas fa-eye"></i>

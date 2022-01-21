@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-12">
             <div id="add-sub-topic" class="mt-3"></div>
-              <a class="btn btn-sm btn-outline-secondary" id="add_sub_topic_btn">Add a subtopic</a>
+              <a class="btn btn-sm btn-outline-secondary" id="add_sub_topic_btn">Add a topic</a>
              
             </div>
       </div>
@@ -87,7 +87,7 @@ window.onload = function(event) {
   const generateSubTopicHTML = () => {
     const cardEl = createNewElement('div', ['card', 'mb-3']);
     const cardbodyEl = createNewElement('div', ['card-body']);
-    const cardtitleEl = createNewElement('h5', ['card-title'], [], 'Enter subtopic title');
+    const cardtitleEl = createNewElement('h5', ['card-title'], [], 'Topic title');
     const topictitleEl = createNewElement('input', ['form-control'], [
       {"type": "text"}, {'name': `topic_title${sub_topic_count}`}, {'placeholder': 'Ex: Session 1 - Intro to G Suite & Google Drive'}
     ]);
@@ -100,7 +100,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for sub-topic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -147,6 +147,8 @@ generateSubTopicHTMLInitial();
       {'type': 'file'},
       {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  pdf, doc, docx');
+
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [
       {'type': 'hidden'}, {'id': `externalLink_count_topic_${topicNum}_content_${contentCount}`},
@@ -170,6 +172,7 @@ generateSubTopicHTMLInitial();
     contentLinkContainerEl.appendChild(contentLinkEl);
     uploadContainerEl.appendChild(uploadTextEl);
     uploadContainerEl.appendChild(uploadFileEl);
+    uploadContainerEl.appendChild(uploadTypeEl);
     contentEl.appendChild(studyMaterialEl);
     contentEl.appendChild(uploadContainerEl);
     contentEl.appendChild(contentLinkContainerEl);

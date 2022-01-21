@@ -48,7 +48,7 @@ class CourseController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
-                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y'),
+                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m-d-Y'),
                
               );
               array_push($courseDetails, $courseData);
@@ -70,7 +70,7 @@ class CourseController extends Controller
     }
 
 
-    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    public function paginate($items, $perPage = 10, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
@@ -110,8 +110,8 @@ class CourseController extends Controller
             'instructor' =>'required',
             'course_duration' =>'required',
             'what_learn_1' =>'required',
-            'course_image' =>'required',
-            'course_thumbnail_image' =>'required',
+            'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+            'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
         ]);
 
         $courseTitle = $request->input('course_title');
@@ -293,6 +293,8 @@ class CourseController extends Controller
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
                 'who_learn_points_1'=>'required',
+                'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+                'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
             
             if($request->isMethod('post')){
@@ -692,6 +694,7 @@ class CourseController extends Controller
     }
 
     public function saveCohortBatch(Request $request) {
+        
        
         $cohortbatch = new CohortBatch();
         $cohortbatch->title = $request->input('cohortbatch_title');
@@ -753,7 +756,7 @@ class CourseController extends Controller
         $cohortbatches = DB::table('cohort_batches')
                             ->where('id', $request->cohort_batch_id)
                             ->get();
-                            
+                          
         $course_id = $cohortbatches[0]->course_id;
         $notifications = CohortNotification::all();
         $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');

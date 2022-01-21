@@ -159,7 +159,8 @@ class InstructorController extends Controller
                 'lastname' => 'required',
                 'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
                 'description' => 'required',
-                'signature' => 'required'
+                'signature' => 'required',
+                'password' => 'required'
             ]);
             
             $firstName = $request->input('firstname');

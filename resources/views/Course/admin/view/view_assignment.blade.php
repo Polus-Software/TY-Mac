@@ -36,7 +36,7 @@
               <!-- <a href="#" class="">Go somewhere</a> -->
               <div class="row">
               <div class="col-md-6">
-              <label for=""><strong>Subtopic:</strong></label>
+              <label for=""><strong>Topic:</strong></label>
               <p>{{$assignment->topic_title}}</p>
 
               </div>

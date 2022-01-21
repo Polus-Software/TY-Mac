@@ -323,7 +323,7 @@
   }
   window.onload = (event)=> {
   var toastLiveExample = document.getElementById('liveToast');
-  if(toastLiveExample) {debugger
+  if(toastLiveExample) {
     var toast = new bootstrap.Toast(toastLiveExample);
     toast.show();
   }
