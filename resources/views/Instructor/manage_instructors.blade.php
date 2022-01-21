@@ -2,24 +2,24 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Instructors</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Instructors</h3>
           <div class="btn-toolbar mb-2 mb-md-0">
             <a id="add_new_category" class="btn btn-primary add_new_instructor_btn" title="Add new instructor" href="{{ route('add-instructor') }}">
               <i class="fas fa-plus-square me-1"></i>
               Add new Instructor</a>
           </div>
         </div>
-        <div class="row mt-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
           <table class="table llp-table">
             <thead>
               <tr>
@@ -71,6 +71,7 @@
       <!-- main ends -->
 
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

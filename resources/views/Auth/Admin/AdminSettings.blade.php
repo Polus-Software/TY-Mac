@@ -3,13 +3,13 @@
 @include('Layouts.admin.header')
 
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         
@@ -17,8 +17,8 @@
         
 
         <div class="col-6 col-sm-6 col-md-6 p-3">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                <h3>Live session attendance settings</h3>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+                <h3 class="titles">Live session attendance settings</h3>
             </div>
             <div class="form-group">
               <label for="attendance">Minimum time required for attendance to be tracked (in %)</label>
@@ -36,8 +36,8 @@
         
         <!-- <div class="row mt-4"> -->
           <div class="col-6 col-sm-6 col-md-6 p-3">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Recommendation engine settings</h3>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Recommendation engine settings</h3>
         </div>
             <div class="form-group">
               <label for="threshold">Threshold (In %) :</label>
@@ -57,8 +57,8 @@
 
         <div class="row mt-4">
           <div class="col-6 col-sm-6 col-md-6 p-3">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                <h3>Feedback survey questions</h3>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+                <h3 class="titles">Feedback survey questions</h3>
             </div>
             <div class="form-group">
               <label for="question_1">Question 1</label>
@@ -73,8 +73,8 @@
           </div>
 
           <div class="col-6 col-sm-6 col-md-6 p-3">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Filter settings</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 titles_outer">
+          <h3 class="titles">Filter settings</h3>
         </div>
           @csrf
           @foreach($filters as $filter)
@@ -100,6 +100,7 @@
       <!-- main ends -->
 
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
