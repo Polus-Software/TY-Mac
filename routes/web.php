@@ -154,6 +154,8 @@ Route::get('/', function () {
     Route::post('student-exit/{session}/{timer}', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
     Route::post('get-attendance-list', [RtmTokenGeneratorController::class, 'getAttendanceList'])->name('get-attendance-list');
     Route::post('submit-feedback', [RtmTokenGeneratorController::class, 'submitSessionFeedback'])->name('submit-feedback');
+    Route::post('save-session-chat', [RtmTokenGeneratorController::class, 'saveSessionChat'])->name('save-session-chat');
+    Route::post('get-session-chat', [RtmTokenGeneratorController::class, 'getSessionChat'])->name('get-session-chat');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
