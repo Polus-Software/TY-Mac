@@ -372,7 +372,6 @@
 
   document.getElementById('session_course').addEventListener('change', function(event) {
     let courseId = this.value;
-    console.log(courseId);
     let path = "{{ route('get-course-attributes') }}?courseId=" + courseId;
     fetch(path, {
       method: 'POST',
@@ -384,7 +383,7 @@
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
         document.getElementById('session_batch').innerHTML = '';
-        document.getElementById('session_batch').innerHTML = data.batches;
+        document.getElementById('session_batch').innerHTML = '<option value disabled>Please choose a Batch</option>' + data.batches;
         document.getElementById('session_instructor').innerHTML = '';
         document.getElementById('session_instructor').innerHTML = data.instructor;
     });

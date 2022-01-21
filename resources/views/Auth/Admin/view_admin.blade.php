@@ -28,7 +28,7 @@
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
           <a class="btn btn-outline-secondary" href="{{route('manage-admin')}}">Cancel</a>
-            <a class="btn btn-primary" href="{{ route('edit-admin', ['admin_id' => $adminDetails['admin_id']]) }}">Edit creator</a>
+            <a class="btn btn-primary" href="{{ route('edit-admin', ['admin_id' => $adminDetails['admin_id']]) }}">Edit admin</a>
           </div>
           </section>
       </main>
