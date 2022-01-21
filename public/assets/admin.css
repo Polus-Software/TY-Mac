@@ -194,6 +194,7 @@ body {
 .left_sidebar{
 	width:300px;
 	padding-left:0;
+	position:fixed;
 }
 .left_sidebar .nav-item i{
 	margin-right:8px;
@@ -202,6 +203,7 @@ body {
 	margin-top:15px;
 	margin-left:15px;
 	padding-right:0;
+	margin-inline-start: auto;
 }
 .left_sidebar .llp-sidebar a.active{
 	font-weight:bold;

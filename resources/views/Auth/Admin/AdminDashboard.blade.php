@@ -14,8 +14,8 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3 class="titles">Students</h3>
         </div>
-		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
-          <table class="table llp-table table-responsive students_table">
+		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 table-responsive">
+          <table class="table llp-table students_table">
             <thead>
               <tr>
                 <th scope="col">#</th>
