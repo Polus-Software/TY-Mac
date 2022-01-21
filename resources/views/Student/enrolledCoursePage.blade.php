@@ -67,7 +67,7 @@
                     <div class="row g-0">
                         <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                             @foreach($singleCourseDetails as $course)
-                            <img src="{{asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100" alt="coursepicture">
+                            <img src="{{asset('/storage/courseThumbnailImages/'.$course['course_thumbnail_image'])}}" class="img-fluid col-md-12 col-sm-12 col-12 h-100 course-image" alt="coursepicture">
                             @endforeach
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12 col-12">
@@ -153,7 +153,7 @@
 
 <section>
     <div class="container flex-column">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
                 <div class="row sidebar pt-4">
                     <h3 class="text-center">Cohort Details</h3>
@@ -206,7 +206,9 @@
                     <!-- overview tab -->
                     @if($userType == 'instructor')
                     <div class="tab-pane fade show {{($userType == 'instructor') ? 'active' : ''}}" id="cohort-overview" role="tabpanel" aria-labelledby="cohort-overview">
-                        <div class="row mb-5">
+                       <div class="card card-2 mb-3">
+                           <div class="card-body">
+                    <div class="row mb-5">
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
@@ -246,12 +248,12 @@
                             </div>
                         </div>
 
-                        <div class="row border-bottom">
+                        <div class="row border-bottom mb-3">
                             <div class="col-lg-12">
-                                <h5 class="recommendation">Recommended Topics to Review</h5>
+                                <h5 class="recommendation ms-2">Recommended Topics to Review</h5>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row border m-2">
                             <table class="table llp-table">
                                 <thead>
                                     <tr>
@@ -276,6 +278,8 @@
                             </table>
                         </div>
 
+                    </div>
+                    </div>
                     </div>
                     @endif
                     <!-- overview tab -->
@@ -310,7 +314,7 @@
                                 <ul class="list-group list-group-flush border-bottom pb-3">
                                 @endif
                                     @foreach($topicDetail['topic_content'] as $content)
-                                    <li class="ms-4 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
+                                    <li class="ms-3 border-0 pb-2" style="list-style:circle;">{{ $content->topic_title }}</li>
                                     @endforeach
                                 </ul>
                                 @endforeach
@@ -347,7 +351,7 @@
                                             <div class="col-lg-12">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
-                                                    <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                    <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -364,10 +368,18 @@
                     <!-- schedule tab -->
                     <!-- Recommendations tab -->
                     <div class="tab-pane fade" id="v-pills-personalizedRecommendations" role="tabpanel" aria-labelledby="v-pills-personalizedRecommendations-tab">
-
+                        <div class="card card-2">
+                            <div class="card-body">
                         <div class="row border-bottom">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <h5 class="heading-1">{{($userType == 'student') ? 'Recommended Topics to Review' : 'Personalized Recommendations'}}</h5>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mb-2">
+                            <form class="mb-2 mb-lg-0 mt-lg-0 d-flex mt-3 col-md-9 col-sm-9 col-6">
+                                @csrf
+                                <input class="form-control me-2" type="search" placeholder="Search a name" aria-label="Search" id="search-box">
+                                <button class="btn btn-outline-dark" type="button" id="search-btn">Search</button>
+                            </form>
                             </div>
                         </div>
                         @if($userType == 'student')
@@ -395,7 +407,7 @@
                                             <div class="col-lg-12">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
-                                                    <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                    <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -410,16 +422,19 @@
                         @if($userType == 'instructor')
 
                         <div class="row mt-3 mb-3">
+                            
                             <div class="accordion" id="accordionExample">
                                 @foreach($studentsEnrolled as $student)
-                                <div class="accordion-item">
+                                <div class="accordion-item border-0 bg-light">
                                     <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
-                                        <i class="fas fa-user-circle pe-3"></i>{{ $student->firstname .' '. $student->lastname }}
-                                        </button>
+                                        <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
+                                        <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
+                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Messsge</a>
+                                    </button>
+                                       
                                     </h2>
                                     <div id="collapseOne_{{ $student->id }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
+                                        <div class="accordion-body bg-white ps-5 pe-5">
                                             <div class="row mt-3 mb-3">
                                                 @foreach($recommendations as $recommendation)
                                                 @if($recommendation['student_id'] == $student->user_id)
@@ -428,9 +443,12 @@
                                                         <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">
                                                         <div class="card-body">
                                                             <div class="row">
-                                                                <div class="col-lg-12">
+                                                                <div class="col-lg-6">
                                                                     <a href="#" class="btn btn-primary w-100">1-on-1 Session</a>
                                                                 </div>
+                                                                <div class="col-lg-6">
+                                                                    <a href="#" class="btn btn-outline-secondary text-dark w-100">Chart</a>
+                                                                </div> 
                                                             </div>
                                                             <div class="row mt-3">
                                                                 <div class="col-lg-12">
@@ -446,8 +464,8 @@
                                                                     <div class="card card-5">
                                                                         <div class="card-body">
                                                                             <h6 class="card-title">Session 1 - {{ $recommendation['topic_title'] }}</h6>
-                                                                            <ul class="list-group list-group-flush pb-3">
-                                                                                <li class=" ms-4 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
+                                                                            <ul class="list-group list-group-flush pb-3 mt-3">
+                                                                                <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -465,6 +483,8 @@
                             </div>
                         </div>
                         @endif
+                        </div>
+                        </div>
                     </div>
                     <!-- Recommendations tab -->
 
@@ -649,7 +669,7 @@
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingThree">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree_{{$slno}}" aria-expanded="false" aria-controls="collapseThree">
+                                                <button class="accordion-button collapsed plus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree_{{$slno}}" aria-expanded="false" aria-controls="collapseThree">
                                                 Session {{$slno}} - {{$topicDetail['topic_title']}}
                                                 @if($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
@@ -689,36 +709,35 @@
                                                         </div>
                                                     
                                                     <div class="d-flex justify-content-center col-lg-12">
-
-                                                    <div class="card mb-3" style="border: 2px dashed rgba(0,0,0,.125);border-radius: 1rem;">
-    <div class="card-body">
-        
-        <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
-        <h5 class="card-title">Type your comment here</h5>
-        <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
-        @csrf
-        <input type="hidden" name="assignment_id" value="{{ $assignment['id'] }}" />
-        <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
-                <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;">
-                    
-                    <div class="row p-2 flex-fill bd-highlight">
-                        <div class="col-lg-3">Attach File:</div>
-                            <div class="col-lg-5 col-12"><label>Upload from device</label>
-                                <input class="form-control" type="file" name="assignment_upload">
-                                <small>Supported File Formats are:  pdf, doc, docx,</small>
-                            </div>
-                        <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
-                        
-                    </div>
-                    <div class="col-12 text-end mt-4"><a class="btn btn-sm btn-outline-secondary me-3">Cancel</a><button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
-                        </div>
-</form>
-                </div>
-                    </div>
-                    
-                </div>
-            <!-- </div> -->
-        </div>
+                                                        <div class="card mb-3" style="border: 2px dashed rgba(0,0,0,.125);border-radius: 1rem;">
+                                                            <div class="card-body">
+                                                            
+                                                            <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
+                                                            <h5 class="card-title">Type your comment here</h5>
+                                                            <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+                                                            @csrf
+                                                            <input type="hidden" name="assignment_id" value="{{ $assignment['id'] }}" />
+                                                            <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                    <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;"> 
+                                                                        <div class="row p-2 flex-fill bd-highlight">
+                                                                            <div class="col-lg-3">Attach File:</div>
+                                                                                <div class="col-lg-5 col-12"><label>Upload from device</label>
+                                                                                    <input class="form-control" type="file" name="assignment_upload">
+                                                                                    <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                </div>
+                                                                            <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
+                                                                        </div>
+                                                                        <div class="col-12 text-end mt-4">
+                                                                            <a class="btn btn-sm btn-outline-secondary me-3">Cancel</a>
+                                                                            <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
+                                                                        </div>
+                                                            </form>
+                                                                    </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                <!-- </div> -->
+                                                            </div>
                                                     
 
 
@@ -728,9 +747,15 @@
                                                     </div>
                                                     </div>
                                                 </div>
+                                                @if($topicDetail['isAssignmentSubmitted'] != true)
                                                 <div class="col-4 m-auto text-center">
                                                 <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
                                                 </div>
+                                                @else<div class="col-12 m-auto text-center">
+                                                <h3>Assignment Submitted</h3>
+                                                </div>
+
+                                                @endif
                                                 
                                             @endforeach
                                                 </div>

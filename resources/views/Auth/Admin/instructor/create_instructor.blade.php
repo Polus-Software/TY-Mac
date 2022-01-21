@@ -141,11 +141,16 @@
                 
                 @if(!!$isEdit)
                 <label for="password">Password</label>
-                <input type="password" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <input type="text" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
+                @else
+                <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
+                <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondarye" id="generate_password">Generate password</button>
+                @endif
                 @if ($errors->has('password'))
                 <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                 @endif
-                @endif
+                
                
               </div>
               <div class="col-md-12">
@@ -160,17 +165,19 @@
                 <div class="invalid-feedback d-block">Please upload signature</div>
                 @endif
               </div>
-              @if(!$isEdit)
+              <!-- @if(!$isEdit)
                 <div class="col-12">
                   <label for="instructor_password" class="col-form-label">Password</label>
                   <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
-              
+                  <button type="button" class="btn btn-link shadow-none" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
+                  @else
+                  
                   @if ($errors->has('password'))
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                   @endif
-                  <button type="button" class="btn btn-link" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
+                  
                 </div>
-              @endif
+              @endif -->
               @if(!!$isEdit)
               <div class="col-12">
                 <label>Assigned courses</label>

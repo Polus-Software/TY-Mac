@@ -43,6 +43,11 @@
         Content Creators</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('manage-admin') }}">
+      <i class="fas fa-users-cog"></i>
+        Admin users</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link link-dark" href="{{ route('manage-course-categories') }}">
       <i class="fas fa-clipboard-list"></i>
         Course Categories</a>

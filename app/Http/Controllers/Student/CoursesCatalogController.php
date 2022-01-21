@@ -28,6 +28,7 @@ use App\Models\TopicContent;
 use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
 use App\Models\AssignedCourse;
+use Config;
 
 
 class CoursesCatalogController extends Controller
@@ -38,7 +39,7 @@ class CoursesCatalogController extends Controller
         $courses = Course::where('is_published', true)->get();
 
         $filters = Filter::all();
-        $userType =  UserType::where('user_role', 'instructor')->value('id');
+        $userType =  UserType::where('user_role', Config::get('common.ROLE_NAME_INSTRUCTOR'))->value('id');
 
         $instructors = User::where('role_id', $userType)->get();
 
@@ -472,7 +473,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
                 $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
-                $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><i class="far fa-user pe-1"></i>'. $course->course_difficulty .'</p></div></div></li></ul>';
+                $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1">'. $course->course_difficulty .'</p></div></div></li></ul>';
                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
                 $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Go to details</a>'; 
                 $html = $html . '</div></div></div></div></div>';        

@@ -42,7 +42,8 @@
           </div>
           <div class="col-12 mb-3">
             <label>Password</label>
-            <input type="password" class="form-control" value="" name="password" id="student_password" placeholder="Enter Password">
+            <input type="text" class="form-control" value="" name="password" id="student_password" placeholder="Enter Password">
+            <button type="button" class="btn btn-link shadow-none" id="generate_password" style="text-decoration:none; color:inherit;">Generate password</button>
             <small class="small">Error message</small>  
             @if ($errors->has('password'))
                 <span class="text-danger">{{ $errors->first('password') }}</span>
@@ -66,6 +67,24 @@
     </div>
   </div>
 </div>
+
+
+  <script>
+  function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-?';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+  document.getElementById('generate_password').addEventListener('click', function(event) {
+    document.getElementById('student_password').value = makeid(12);
+  });
+
+</script>
 <!-- container ends -->
 
 
