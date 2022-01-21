@@ -230,8 +230,8 @@
 
                                         <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
                                             <small> {{ $singleEnrolledCourse['start_date'] }} -
-                                                {{ $singleEnrolledCourse['start_time'] }} -
-                                                {{ $singleEnrolledCourse['end_time'] }}
+                                                {{ $singleEnrolledCourse['start_time'] }} {{ $singleEnrolledCourse['time_zone'] }} -
+                                                {{ $singleEnrolledCourse['end_time'] }} {{ $singleEnrolledCourse['time_zone'] }}
                                             </small>
                                         </p>
 

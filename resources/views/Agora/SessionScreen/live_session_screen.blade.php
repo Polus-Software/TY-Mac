@@ -245,7 +245,7 @@ ul.nav.nav-tabs li {
   position: relative;
     /* right: 0px; */
     width: 300px;
-    /* height: 90vh; */
+    /* height: 100%; */
     /* margin: 125px 10px 0px 10px; */
     border: 1px solid #e5e7eb;
     border-radius: 0 0 10px 10px;
@@ -665,6 +665,29 @@ svg.svg-img.prefix-exit.can-hover {
 .think-position-relative {
   position: relative;
 }
+#chat {
+  height: 100%;
+}
+.tab-content{
+  height:100%;
+}
+.chat_text_box {
+  border: 2px solid #d2dae2 !important;
+    width: 100%;
+    border-radius: 2px;
+    bottom: 85.5px;
+    position: absolute;
+    padding: 10px 10px;
+    height: 120px;
+}
+.chat_messages{
+  height: 65%;
+    padding: 10px 5px;
+}
+
+.chat-message-body {
+  color: #6E7687;
+}
 /* Animation */
 
 /* body:hover .button-anim {
@@ -686,209 +709,11 @@ svg.svg-img.prefix-exit.can-hover {
     } */
 
 /*  */
-</style>
 
-  <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
-  <input id="user_type" type="hidden" value="{{ $userType }}" />
-  <input id="course_id" type="hidden" value="{{ $courseId }}" />
-  <!-- agora sdk -->
-  
-  <div class="tab-container think-position-relative">
-  <span id="exit_session" class="exit-button nodisplay"><img src="/storage/icons/exit.svg" alt="error"></span>
-  <span id="btnOpenClose" class="button-close-open nodisplay"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
-    <div id="root1"></div>
-  </div>
-  <!-- chat UI -->
-  <div class="tab-contents nodisplay">
-      <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
-        <li><a data-toggle="tab" href="#chat">Chat</a></li>
-      </ul>
-      <div class="tab-content">
-        <div id="participants" class="tab-pane fade in active">
-        @foreach($participants as $participant)
-        <div class="think-participant-container">
-          <span class="think-participant-wrapper">
-            <span class="img-container">
-              <img src="/storage/icons/placeholder-avatar.svg" alt="error">
-              <span class="think-online-status-light-container online-status-green"></span>
-            </span>
-            <span class="think-participant-name">{{ $participant }}</span>
-          </span>
-        </div>
-        @endforeach
-        </div>
-        <div id="chat" class="tab-pane fade">
-        <p> Chat screen </p>
-        </div>
-      </div>
-    </div>
-    <!-- Course action -->
-    @if($userType == 'student')
-    <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
-      <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
-    <div class="feedback-btn-container">
-      <p class="notif-text think-mr--15 think-color-light-dark think-fs--14">Did you understand this topic?</p> 
-      <button data-id="" class="think-btn-secondary-outline-live like-button think-mr--15 button-anim" id="positive">
-        <i style="margin-right:10px;" class="fas fa-thumbs-up"></i>
-        Yes 
-        <span id="positive_count"> 
-        </span>
-      </button> 
-      <button class="think-btn-secondary-outline-live dislike-button" id="negative" data-id="">
-        <i style="margin-right:10px;" class="fas fa-thumbs-down">
-        </i>No<span id="negative_count">
-        </span>
-      </button>
-    </div>
-  </div>
-  @endif
-    <!-- Course details -->
-<div id="feedback-container" class="nodisplay">
-  @if($userType == 'student')
-  <div class="row"></div>
- 
+div#chat_messages {
+    padding: 10px;
+}
 
-  <div class="think-cohort-subtopics-container think-subtopics-wrapper" style="margin-bottom:20px;">
-    <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
-    <hr>
-    @csrf
-    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
-    @foreach($contents as $content)
-    <div class="think-content-styles"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i>{{ $content->topic_title }}</div>
-    @endforeach
-  </div>
-
-  @elseif($userType == 'instructor')
-  <div class="row">
-      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
-  </div>
-  <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
-    <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
-    <hr>
-    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
-    @csrf
-    <table>
-    @foreach($contents as $content)
-    <tr>
-    <div class="course_contents_div" data-id="1" style="margin-top:5px;">
-      <td><i style="margin-right:10px;" class="thumbs fas fa-circle"></i>
-        <span>{{ $content->topic_title }}</span>></td>
-          <td><button class="course_contents" href="{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
-            Start
-          </button></td>
-    </div>
-  </tr>
-    @endforeach
-  </table>
-  </div>
-
-@endif
-
-<!-- <button class="trigger">Click here to trigger the modal!</button> -->
-<div class="feedback-modal">
-    <div class="feedback-modal-content">
-        <span class="feedback-modal-close-button">&times;</span>
-        <div class="feedback-container">
-          <h1 class="feedback-title">It's Feedback Time!</h1>
-          <h4 class="feedback-sub-title">Tell us about your live cohort experience</h4>
-          <h2 class="feedback-session-name">Live Session - {{ $topic_title }}</h2>
-          <h2 class="feedback-question-1 questions">{{  $feedbackQ1 }}</h2>
-          <form action="{{ route('submit-feedback') }}" method="POST">
-          @csrf
-          <input type="hidden" name="live_session_id" id="live_session_id" value="{{ $session }}"/>
-          <input type="hidden" name="student_id" id="student_id" value="{{ $userId }}"/>
-          <input type="hidden" name="course_id" id="course_id" value="{{ $courseId }}"/>
-          <input id="timer" name="timer" type="hidden" value="" />
-          <div class="emoji-container">
-            <div class="single-emoji">
-              <label>
-              <input name="question1" class="emoji-radio" type="radio" name="test" value="0">
-              <img src="/storage/icons/Disappointed.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question1" class="emoji-radio" type="radio" name="test" value="1">
-              <img src="/storage/icons/Confused.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question1" class="emoji-radio" type="radio" name="test" value="2">
-              <img src="/storage/icons/Satisfied.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question1" class="emoji-radio" type="radio" name="test" value="3">
-              <img src="/storage/icons/Awesome.svg">
-            </label>
-            </div>
-          </div>
-          <h2 class="feedback-question-2 questions">{{  $feedbackQ2 }}</h2>
-          <div class="emoji-container">
-            <div class="single-emoji">
-              <label>
-              <input name="question2" class="emoji-radio" type="radio" name="test" value="0">
-              <img src="/storage/icons/Disappointed.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question2" class="emoji-radio" type="radio" name="test" value="1">
-              <img src="/storage/icons/Confused.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question2" class="emoji-radio" type="radio" name="test" value="2">
-              <img src="/storage/icons/Satisfied.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question2" class="emoji-radio" type="radio" name="test" value="3">
-              <img src="/storage/icons/Awesome.svg">
-            </label>
-            </div>
-          </div>
-          <h2 class="feedback-question-3 questions">{{  $feedbackQ3 }}</h2>
-          <div class="emoji-container">
-            <div class="single-emoji">
-              <label>
-              <input name="question3" class="emoji-radio" type="radio" name="test" value="0">
-              <img src="/storage/icons/Disappointed.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question3" class="emoji-radio" type="radio" name="test" value="1">
-              <img src="/storage/icons/Confused.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question3" class="emoji-radio" type="radio" name="test" value="2">
-              <img src="/storage/icons/Satisfied.svg">
-            </label>
-            </div>
-            <div class="single-emoji">
-            <label>
-              <input name="question3" class="emoji-radio" type="radio" name="test" value="3">
-              <img src="/storage/icons/Awesome.svg">
-            </label>
-            </div>
-          </div>
-          <h2 class="other-feedbacks questions">Any other feedback?</h2>
-          <textarea name="other_feedbacks" class="feedback-text"></textarea><br>
-          <button type="submit" class="feedback-submit" id="feedback-submit">Submit</button>
-        </form>
-        </div>
-    </div>
-</div>
-
-<style>
 
 textarea.feedback-text {
     width: 100%;
@@ -1015,16 +840,217 @@ button#feedback-submit {
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
+.cabinet-item:nth-child(2) {
+  display:none;
+}
+</style>
 
+  <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
+  <input id="user_type" type="hidden" value="{{ $userType }}" />
+  <input id="course_id" type="hidden" value="{{ $courseId }}" />
+  <!-- agora sdk -->
+  
+  <div class="tab-container think-position-relative">
+  <span id="exit_session" class="exit-button nodisplay"><img src="/storage/icons/exit.svg" alt="error"></span>
+  <span id="btnOpenClose" class="button-close-open nodisplay"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
+    <div id="root1"></div>
+  </div>
+  <!-- chat UI -->
+  <div class="tab-contents nodisplay">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
+        <li><a data-toggle="tab" href="#chat">Chat</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="participants" class="tab-pane fade in active">
+        @foreach($participants as $participant)
+        <div class="think-participant-container">
+          <span class="think-participant-wrapper">
+            <span class="img-container">
+              <img src="/storage/icons/placeholder-avatar.svg" alt="error">
+              <span class="think-online-status-light-container online-status-green"></span>
+            </span>
+            <span class="think-participant-name">{{ $participant }}</span>
+          </span>
+        </div>
+        @endforeach
+        </div>
+        <div id="chat" class="tab-pane fade">
+          <div id="chat_messages"></div>
+        <textarea id="chat_box" class="chat_text_box" placeholder="Hit enter to send.."></textarea>
+        </div>
+      </div>
+    </div>
+    <!-- Course action -->
+    
+    <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
+      <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
+      <button id="stop_sharing" class="think-btn-secondary-outline-live nodisplay">Stop sharing</button>
+      @if($userType == 'student')
+      <div class="feedback-btn-container">
+      <p class="notif-text think-mr--15 think-color-light-dark think-fs--14">Did you understand this topic?</p> 
+      <button data-id="" class="think-btn-secondary-outline-live like-button think-mr--15 button-anim" id="positive">
+        <i style="margin-right:10px;" class="fas fa-thumbs-up"></i>
+        Yes 
+        <span id="positive_count"> 
+        </span>
+      </button> 
+      <button class="think-btn-secondary-outline-live dislike-button" id="negative" data-id="">
+        <i style="margin-right:10px;" class="fas fa-thumbs-down">
+        </i>No<span id="negative_count">
+        </span>
+      </button>
+    </div>
+    @endif
+  </div>
+  
+    <!-- Course details -->
+<div id="feedback-container" class="nodisplay">
+  @if($userType == 'student')
+  <div class="row"></div>
+ 
 
-  </style>
+  <div class="think-cohort-subtopics-container think-subtopics-wrapper" style="margin-bottom:20px;">
+    <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
+    <hr>
+    @csrf
+    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
+    @foreach($contents as $content)
+    <div class="think-content-styles"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i>{{ $content->topic_title }}</div>
+    @endforeach
+  </div>
+
+  @elseif($userType == 'instructor')
+  <div class="row">
+      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+  </div>
+  <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
+    <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
+    <hr>
+    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
+    @csrf
+    <table>
+    @foreach($contents as $content)
+    <tr>
+    <div class="course_contents_div" data-id="1" style="margin-top:5px;">
+      <td><i style="margin-right:10px;" class="thumbs fas fa-circle"></i>
+        <span>{{ $content->topic_title }}</span></td>
+          <td><button class="course_contents" href="{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            Start
+          </button></td>
+    </div>
+  </tr>
+    @endforeach
+  </table>
+  </div>
+
+@endif
+
+<!-- <button class="trigger">Click here to trigger the modal!</button> -->
+<div class="feedback-modal">
+    <div class="feedback-modal-content">
+        <span class="feedback-modal-close-button">&times;</span>
+        <div class="feedback-container">
+          <h1 class="feedback-title">It's Feedback Time!</h1>
+          <h4 class="feedback-sub-title">Tell us about your live cohort experience</h4>
+          <h2 class="feedback-session-name">Live Session - {{ $topic_title }}</h2>
+          <h2 class="feedback-question-1 questions">{{  $feedbackQ1 }}</h2>
+          <form action="{{ route('submit-feedback') }}" method="POST">
+          @csrf
+          <input type="hidden" name="live_session_id" id="live_session_id" value="{{ $session }}"/>
+          <input type="hidden" name="student_id" id="student_id" value="{{ $userId }}"/>
+          <input type="hidden" name="course_id" id="course_id" value="{{ $courseId }}"/>
+          <input id="timer" name="timer" type="hidden" value="" />
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question1" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
+            </div>
+          </div>
+          <h2 class="feedback-question-2 questions">{{  $feedbackQ2 }}</h2>
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question2" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
+            </div>
+          </div>
+          <h2 class="feedback-question-3 questions">{{  $feedbackQ3 }}</h2>
+          <div class="emoji-container">
+            <div class="single-emoji">
+              <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="0">
+              <img src="/storage/icons/Disappointed.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="1">
+              <img src="/storage/icons/Confused.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="2">
+              <img src="/storage/icons/Satisfied.svg">
+            </label>
+            </div>
+            <div class="single-emoji">
+            <label>
+              <input name="question3" class="emoji-radio" type="radio" name="test" value="3">
+              <img src="/storage/icons/Awesome.svg">
+            </label>
+            </div>
+          </div>
+          <h2 class="other-feedbacks questions">Any other feedback?</h2>
+          <textarea name="other_feedbacks" class="feedback-text"></textarea><br>
+          <button type="submit" class="feedback-submit" id="feedback-submit">Submit</button>
+        </form>
+        </div>
+    </div>
+</div>
 </div>
   <script type="text/javascript">
-
-
-
-
-
+// var video = document.getElementsByClassName('rtc-screen-share')[0].getElementsByTagName('VIDEO')[0];
         let session = document.getElementById('session_hidden_id').value;
         
         let path = "/generate-token/" + session;
@@ -1065,6 +1091,32 @@ button#feedback-submit {
     )
     
         });
+
+document.getElementById('chat_box').addEventListener('keyup', function(e) {
+  let message = document.getElementById('chat_box').value;
+  message = message.trim();
+    if(e.which == 13 && message != "") {
+      let message = document.getElementById('chat_box').value;
+      let sessionId = document.getElementById('session_hidden_id').value;
+      let path = "{{ route('save-session-chat') }}?session=" + sessionId + "&message=" + message;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+
+      });
+    }
+});
+
+// const evtSource = new EventSource("{{ route('get-session-chat', ["+ document.getElementById('session_hidden_id').value +"]) }}");
+
+// evtSource.onmessage = function(event) {
+//   alert('works');
+// }
         
 let timer = 0;
 
@@ -1085,8 +1137,27 @@ $(document).ready(function(){
       }).then((response) => response.json()).then((data) => {
         document.getElementById("participants").innerHTML = data.html;
       });
+
+      let chatPath = "{{ route('get-session-chat') }}?sessionId=" + sessionId;
+      fetch(chatPath, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById('chat_messages').innerHTML = data.html;
+      });
+
   }, 1000);
 });
+
+$(document).on('click', '.cabinet-item', function(e) {
+    $('.screen-share-player-container').appendTo('.big-class-teacher');
+    $('#stop_sharing').removeClass('nodisplay');
+});
+
 
 $(document).on('click', '.btn:contains("Finish")', function() {
     $('.tab-contents').removeClass('nodisplay');

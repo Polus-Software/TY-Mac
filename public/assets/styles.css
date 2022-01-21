@@ -12,7 +12,11 @@
     --color-grey: #6e7687;
     --color-primary-light: #fffdf7;
 }
-
+[type=button], [type=reset], [type=submit], button {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
 /* overriding boostrap btn class */
 .btn {
     border-radius: 0.31rem;
@@ -175,7 +179,8 @@ body {
 }
 
 a.navbar-brand {
-    font-weight: 700;
+    top: -5px;
+    position: relative;
 }
 .think-navbar .navbar-nav .nav-link {
     color: var(--text-tertiary);
@@ -196,9 +201,12 @@ a.navbar-brand {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -18px;
+    bottom: -23px;
     height: 3px;
     background-color: var(--color-primary);
+}
+.navbar-brand > img {
+    height: 40px;
 }
 .think-personalized-way-text {
     position: relative;

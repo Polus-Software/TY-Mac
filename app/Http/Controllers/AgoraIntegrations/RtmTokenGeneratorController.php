@@ -27,6 +27,7 @@ use App\Models\GeneralSetting;
 use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\GeneralLiveSessionFeedback;
+use App\Models\LiveSessionChat;
 
 require_once "AccessToken.php";
 
@@ -127,7 +128,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '2139', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -153,19 +154,17 @@ class RtmTokenGeneratorController extends Controller
         $sessionsArray = [];
         $slNo = 1;
         foreach($sessions as $session) {
-            $sessionTitle = $session->session_title;
-          
+            
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
-            $topic = Topic::where('topic_id', $session->topic_id)->value('topic_title');
             $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
+            
+
             array_push($sessionsArray, array(
                 'slNo' => $slNo,
                 'sessionCourse' => $sessionCourse,
-                'sessionTitle' => $sessionTitle,
                 'instructor' =>$instructor,
                 'batch' => $batch,
-                'topic'=> $topic
             ));
 
             $slNo++;
@@ -174,6 +173,7 @@ class RtmTokenGeneratorController extends Controller
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
+
         return view('Agora.ScheduleScreens.schedule_session', [
             'courses' => $courses,
             'instructors' => $instructors,
@@ -186,33 +186,38 @@ class RtmTokenGeneratorController extends Controller
         $course = $request->courseId;
        
         $batchHtml = '';
-        $topicHtml = '';
+        $instructorHtml = '';
+        $assigned = DB::table('assigned_courses')->where('course_id', $course )->value('user_id');
+        $user = User::where('id', $assigned);
+        $instructorId = $user->value('id');
+        $instructorfirstname = $user->value('firstname');
+        $instructorlastname = $user->value('lastname');
+        $instructor = $instructorfirstname. ' '.$instructorlastname;
 
         $batches = CohortBatch::where('course_id', $course)->get();
-        $topics = Topic::where('course_id', $course)->get();
 
         foreach($batches as $batch) {
             $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->title . "</option>";
         }
-        foreach($topics as $topic) {
-            $topicHtml = $topicHtml . "<option value=" . $topic->topic_id . ">" . $topic->topic_title . "</option>";
-        }
+    
+        $instructorHtml = $instructorHtml . "<option value=" .$instructorId . ">" . $instructor . "</option>";
 
-        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'batches' => $batchHtml, 'topics' => $topicHtml]);
+        return response()->json(['status' => 'success', 'message' => 'Added successfully', 'batches' => $batchHtml, 'instructor' => $instructorHtml]);
     }
 
     public function saveSessionDetails(Request $request) {
-        $sessionTitle = $request->sessionTitle;
+       
+        // $sessionTitle = $request->sessionTitle;
         $sessionCourse = $request->sessionCourse;
-        $sessionTopic = $request->sessionTopic;
+        // $sessionTopic = $request->sessionTopic;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
 
         $liveSession = new LiveSession;
 
-        $liveSession->session_title = $sessionTitle;
+        // $liveSession->session_title = $sessionTitle;
         $liveSession->course_id = $sessionCourse;
-        $liveSession->topic_id = $sessionTopic;
+        // $liveSession->topic_id = $sessionTopic;
         $liveSession->batch_id = $sessionBatch;
         $liveSession->instructor = $sessionInstructor;
 
@@ -446,5 +451,50 @@ class RtmTokenGeneratorController extends Controller
         $this->studentExit($session, $timer);
 
         return redirect('/enrolled-course' . '/' . $courseId);
+    }
+
+    public function saveSessionChat(Request $request) {
+
+        $html = "";
+
+        $message = $request->message;
+        $session = $request->session;
+
+        $user = Auth::user();
+
+        if($user) {
+            $userId = $user->id;
+            $userName = $user->firstname . ' ' . $user->lastname;
+
+            $liveSessionChat = new LiveSessionChat;
+
+            $liveSessionChat->live_session = $session;
+            $liveSessionChat->student = $userId;
+            $liveSessionChat->user_name = $userName;
+            $liveSessionChat->message = $message;
+
+            $liveSessionChat->save();
+        }
+
+        $chats = LiveSessionChat::where('live_session', $session)->get();
+
+        foreach($chats as $chat) {
+            $html = $html . "<p class='chat-message-body'><b>". $chat->student ."</b><span>" . $chat->message . "</span></p>";
+        }
+
+        return $html;
+    }
+
+    public function getSessionChat(Request $request) {
+        
+        $html = "";
+
+        $session = $request->sessionId;
+        $chats = LiveSessionChat::where('live_session', $session)->get();
+
+        foreach($chats as $chat) {
+            $html = $html . "<p class='chat-message-body'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
+        }
+        return response()->json(['html' => $html]);
     }
 }
