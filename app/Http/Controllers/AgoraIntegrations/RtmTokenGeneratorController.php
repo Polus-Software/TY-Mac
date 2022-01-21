@@ -27,6 +27,7 @@ use App\Models\GeneralSetting;
 use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\GeneralLiveSessionFeedback;
+use App\Models\LiveSessionChat;
 
 require_once "AccessToken.php";
 
@@ -127,7 +128,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '2139', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -450,5 +451,50 @@ class RtmTokenGeneratorController extends Controller
         $this->studentExit($session, $timer);
 
         return redirect('/enrolled-course' . '/' . $courseId);
+    }
+
+    public function saveSessionChat(Request $request) {
+
+        $html = "";
+
+        $message = $request->message;
+        $session = $request->session;
+
+        $user = Auth::user();
+
+        if($user) {
+            $userId = $user->id;
+            $userName = $user->firstname . ' ' . $user->lastname;
+
+            $liveSessionChat = new LiveSessionChat;
+
+            $liveSessionChat->live_session = $session;
+            $liveSessionChat->student = $userId;
+            $liveSessionChat->user_name = $userName;
+            $liveSessionChat->message = $message;
+
+            $liveSessionChat->save();
+        }
+
+        $chats = LiveSessionChat::where('live_session', $session)->get();
+
+        foreach($chats as $chat) {
+            $html = $html . "<p class='chat-message-body'><b>". $chat->student ."</b><span>" . $chat->message . "</span></p>";
+        }
+
+        return $html;
+    }
+
+    public function getSessionChat(Request $request) {
+        
+        $html = "";
+
+        $session = $request->sessionId;
+        $chats = LiveSessionChat::where('live_session', $session)->get();
+
+        foreach($chats as $chat) {
+            $html = $html . "<p class='chat-message-body'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
+        }
+        return response()->json(['html' => $html]);
     }
 }

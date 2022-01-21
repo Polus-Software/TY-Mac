@@ -14,17 +14,22 @@
       <main>
         
         <div class="row mt-4">
+        
+
         <div class="col-6 col-sm-6 col-md-6 p-3">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-          <h3>Filter settings</h3>
-        </div>
-          @csrf
-          @foreach($filters as $filter)
-            <div class="form-check form-switch">
-                <input class="form-check-input filter_switch" filter_id="{{$filter->id}}" type="checkbox" @if($filter->is_enabled == true) checked=checked @endif>
-                <label class="form-check-label" for="flexSwitchCheckDefault">{{$filter->filter_name}}</label>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h3>Live session attendance settings</h3>
             </div>
-          @endforeach
+            <div class="form-group">
+              <label for="attendance">Minimum time required for attendance to be tracked (in %)</label>
+              <input id="attendance" type="text" class="form-control mt-3" value="{{ $attendanceSetting }}"/>
+              <div class="info-text mt-2">
+                  <small><i class="fa fa-info-circle"></i> If a scheduled live session has a duration of 1 hour and this setting is set to 50%, then if a student
+                that attends the live session decides to drop off before the 30 minute mark, then that student is marked as absent, since 30 minutes is 50% of an hour.</small>
+              </div>
+              <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
+              <label style="color:green;" id="survey-success-msg"></label> -->
+            </div>
           </div>
         <!-- </div> -->
 
@@ -68,20 +73,17 @@
           </div>
 
           <div class="col-6 col-sm-6 col-md-6 p-3">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                <h3>Live session attendance settings</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+          <h3>Filter settings</h3>
+        </div>
+          @csrf
+          @foreach($filters as $filter)
+            <div class="form-check form-switch">
+                <input class="form-check-input filter_switch" filter_id="{{$filter->id}}" type="checkbox" @if($filter->is_enabled == true) checked=checked @endif>
+                <label class="form-check-label" for="flexSwitchCheckDefault">{{$filter->filter_name}}</label>
             </div>
-            <div class="form-group">
-              <label for="attendance">Minimum time required for attendance to be tracked (in %)</label>
-              <input id="attendance" type="text" class="form-control mt-3" value="{{ $attendanceSetting }}"/>
-              <div class="info-text mt-2">
-                  <small><i class="fa fa-info-circle"></i> If a scheduled live session has a duration of 1 hour and this setting is set to 50%, then if a student
-                that attends the live session decides to drop off before the 30 minute mark, then that student is marked as absent, since 30 minutes is 50% of an hour.</small>
-              </div>
-              <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
-              <label style="color:green;" id="survey-success-msg"></label> -->
-            </div>
-          </div>
+          @endforeach
+        </div>
 
         </div>
 

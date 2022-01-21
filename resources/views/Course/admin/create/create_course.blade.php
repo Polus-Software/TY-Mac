@@ -41,9 +41,9 @@
           <div class="col-12">
             <label for="description">Description</label>
             @if(isset($course_details['description']))
-            <textarea type="text" class="form-control" id="description" name="description">{{ $course_details['description'] }}</textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description">{{ $course_details['description'] }}</textarea>
             @else
-            <textarea type="text" class="form-control" id="description" name="description"></textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description"></textarea>
             @endif
             @if ($errors->has('description'))
               <span class="text-danger">{{ $errors->first('description') }}</span>
