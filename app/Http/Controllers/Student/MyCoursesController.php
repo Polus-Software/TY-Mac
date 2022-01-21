@@ -27,15 +27,19 @@ class MyCoursesController extends Controller
         foreach($enrolledCourses as $enrolledCourse){
 
           $courseId = $enrolledCourse->course_id;
-          $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
-          $description = Course::where('id', $enrolledCourse->course_id)->value('description');
-          $category_id = Course::where('id', $enrolledCourse->course_id)->value('category');
-          $course_image = Course::where('id', $enrolledCourse->course_id)->value('course_image');
-          $course_difficulty = Course::where('id', $enrolledCourse->course_id)->value('course_difficulty');
+          $course = Course::where('id', $enrolledCourse->course_id);
+          $course_title = $course->value('course_title');
+          $description = $course->value('description');
+          $category_id = $course->value('category');
+          $course_image = $course->value('course_image');
+          $course_difficulty = $course->value('course_difficulty');
           $courseCategory = CourseCategory::where('id', $category_id)->value('category_name');
-          $start_date = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_date');
-          $start_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_time');
-          $end_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('end_time');
+
+          $cohort_batches = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id);
+          $start_date =  $cohort_batches->value('start_date');
+          $start_time =  $cohort_batches->value('start_time');
+          $end_time =  $cohort_batches->value('end_time');
+          $time_zone = $cohort_batches->value('time_zone');
           $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
           $instructorfirstname = User::where('id', $assigned)->value('firstname');
           $instructorlastname = User::where('id', $assigned)->value('lastname');
@@ -50,6 +54,7 @@ class MyCoursesController extends Controller
             'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
             'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
             'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
+            'time_zone' => $time_zone,
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'progress' => (!is_null($progress)) ? $progress : 0

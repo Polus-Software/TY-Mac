@@ -56,7 +56,7 @@
               </div>
               <div class="form-group mx-0">
               <label class="form-check-label checkbox-text">
-                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creationg an account , you agree to the
+                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creating an account , you agree to the
                   <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
                 @if ($errors->has('privacy_policy'))
                 <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>

@@ -175,8 +175,8 @@
                         <button class="nav-link mb-2 ps-5 text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
                         <i class="fas fa-info-circle pe-3"></i>Cohort Info
                         </button>
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-assignments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-assignments" type="button" role="tab" aria-controls="v-pills-assignments" aria-selected="false">
-                        <i class="fas fa-newspaper pe-3"></i>Assignments
+                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedActivity-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedActivity" type="button" role="tab" aria-controls="v-pills-personalizedActivity" aria-selected="false">
+                        <i class="fas fa-newspaper pe-3"></i>Personalized Activity
                         </button>
                         @if($userType == 'student')
                         <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
@@ -374,6 +374,7 @@
                             <div class="col-lg-6">
                                 <h5 class="heading-1">{{($userType == 'student') ? 'Recommended Topics to Review' : 'Personalized Recommendations'}}</h5>
                             </div>
+                            @if($userType == 'instructor')
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mb-2">
                             <form class="mb-2 mb-lg-0 mt-lg-0 d-flex mt-3 col-md-9 col-sm-9 col-6">
                                 @csrf
@@ -381,6 +382,7 @@
                                 <button class="btn btn-outline-dark" type="button" id="search-btn">Search</button>
                             </form>
                             </div>
+                            @endif
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
@@ -655,12 +657,12 @@
                         @endif
                     </div>
 
-                    <div class="tab-pane fade" id="v-pills-assignments" role="tabpanel" aria-labelledby="v-pills-assignments-tab">
+                    <div class="tab-pane fade" id="v-pills-personalizedActivity" role="tabpanel" aria-labelledby="v-pills-personalizedActivity-tab">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card card-2">
                                     <div class="card-body p-4">
-                                        <h5 class="card-title border-bottom pt-2 pb-2">Assignment info</h5>
+                                        <h5 class="card-title border-bottom pt-2 pb-2">Personalized Activity Info</h5>
 
                                         @php ($slno = 0)
                                         @foreach($topicDetails as $topicDetail)

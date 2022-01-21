@@ -44,7 +44,7 @@
                       </div>
 
                       <div class="col-lg-10">
-                        <p>{{ \Carbon\Carbon::parse($cohortbatch->start_date)->format('d-m-Y')}} - {{ \Carbon\Carbon::parse($cohortbatch->end_date)->format('d-m-Y')}}</p>
+                        <p>{{ \Carbon\Carbon::parse($cohortbatch->start_date)->format('m/d/Y')}} - {{ \Carbon\Carbon::parse($cohortbatch->end_date)->format('m/d/Y')}}</p>
                         <p>Maximum <b>{{ $cohortbatch->students_count }}</b> students in this batch<p>
                       </div>
                     </div>
@@ -59,7 +59,7 @@
 
                       <div class="col-lg-10">
                         <p>{{$cohortbatch->occurrence}}</p>
-                        <p>{{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->start_time)->format('h : i A')}} - {{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->end_time)->format('h : i A')}} | {{$cohortbatch->time_zone}}</p>
+                        <p>{{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->start_time)->format('h:i A')}} - {{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->end_time)->format('h:i A')}} | {{$cohortbatch->time_zone}}</p>
 
                       </div>
                     </div>
