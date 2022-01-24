@@ -196,6 +196,10 @@ body {
 	padding-left:0;
 	position:fixed;
 }
+.left_sidebar .d-flex{
+	height: calc(100vh - 56px);
+    overflow-y: auto;
+}
 .left_sidebar .nav-item i{
 	margin-right:8px;
 	align-self: center;
@@ -237,9 +241,15 @@ body {
 	border:0;
 	width:auto;
 } 
-.students_table .rounded-pill{
+.students_table .rounded-pill,
+.students_table .rounded-pill.bg-success{
 	color: #008000d1!important;
     background-color: #0aeb5a30!important;
+    padding: 6px 18px;
+}
+.students_table .rounded-pill.bg-warning{
+	color: #212529!important;
+    background-color: #ffc107!important;
     padding: 6px 18px;
 }
 @media (max-width:900px){
