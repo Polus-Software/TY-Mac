@@ -242,15 +242,25 @@ body {
 	width:auto;
 } 
 .students_table .rounded-pill,
-.students_table .rounded-pill.bg-success{
+.students_table .rounded-pill.bg-success,
+.right_card_block .badge.bg-success{
 	color: #008000d1!important;
     background-color: #0aeb5a30!important;
     padding: 6px 18px;
+	border-radius: 50rem!important;
 }
 .students_table .rounded-pill.bg-warning{
 	color: #212529!important;
     background-color: #ffc107!important;
     padding: 6px 18px;
+	border-radius: 50rem!important;
+}
+#get_table:hover,#save-session-btn:hover{
+	background-color: #000000b3;
+	border-color:#000000b3;
+}
+#session_instructor,#session_batch,#session_course{
+	margin:6px 0;
 }
 @media (max-width:900px){
 	.left_sidebar{
