@@ -69,12 +69,14 @@
               @if(!$isEdit)
               <div class="col-12">
                 <label for="admin_password" class="col-form-label">Password</label>
-                <input type="text" class="form-control has-validation" id="admin_password" name="password"></input>
+                <input type="password" class="form-control has-validation" id="admin_password" name="password"></input>
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
                 @else
                 <div class="col-12"> 
                 <label>Password</label>
-                <input type="text" class="form-control has-validation"  name="password" id="admin_password" placeholder="Enter password">
+                <input type="password" class="form-control has-validation"  name="password" id="admin_password" placeholder="Enter password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
             </div>
                 @endif
@@ -113,6 +115,18 @@
     document.getElementById('admin_password').value = makeid(12);
     
   });
+  function adminViewPassword()
+  {
+    let passwordInput = document.getElementById('admin_password');
+    if (passwordInput.type == 'password'){
+      passwordInput.type='text';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye';
+    }
+    else{
+      passwordInput.type='password';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye-slash';
+    }
 
+  }
 </script>
 @endsection('content')

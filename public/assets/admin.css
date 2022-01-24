@@ -258,3 +258,12 @@ body {
 	}
 }
 /* style by jibi ends */
+
+#adminTogglePass {
+    float: right;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+    margin-right: 20px;
+    cursor: pointer;
+ }

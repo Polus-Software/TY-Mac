@@ -459,7 +459,7 @@ class AdminController extends Controller
 
 
     public function addAdmin() {
-        $userType = UserType::where('user_role', 'admin')->value('id');
+        $userType = 'admin';
         return view('Auth.Admin.create_admin', [
             'userType' => $userType
         ]);
