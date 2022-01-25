@@ -725,7 +725,7 @@
                                                                             <div class="col-lg-3">Attach File:</div>
                                                                                 <div class="col-lg-5 col-12"><label>Upload from device</label>
                                                                                     <input class="form-control" type="file" name="assignment_upload">
-                                                                                    <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                    <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx,</small>
                                                                                 </div>
                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                         </div>

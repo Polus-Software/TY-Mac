@@ -100,7 +100,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for topic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -147,7 +147,7 @@ window.onload = function(event) {
       {'type': 'file'},
       {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [

@@ -632,6 +632,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Models\\GeneralSetting' => __DIR__ . '/../..' . '/app/Models/GeneralSetting.php',
         'App\\Models\\LiveFeedbacksPushRecord' => __DIR__ . '/../..' . '/app/Models/LiveFeedbacksPushRecord.php',
         'App\\Models\\LiveSession' => __DIR__ . '/../..' . '/app/Models/LiveSession.php',
+        'App\\Models\\LiveSessionChat' => __DIR__ . '/../..' . '/app/Models/LiveSessionChat.php',
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
         'App\\Models\\StudentAchievement' => __DIR__ . '/../..' . '/app/Models/StudentAchievement.php',
         'App\\Models\\StudentFeedbackCount' => __DIR__ . '/../..' . '/app/Models/StudentFeedbackCount.php',

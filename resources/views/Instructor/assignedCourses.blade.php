@@ -283,7 +283,7 @@ document.getElementById('search-btn').addEventListener('click', function(e) {
         console.log(elements[index]);
         elements[index].addEventListener('click', function(event) {
             let courseId = this.getAttribute('data-id');
-            window.location.replace('/enrolled-course/' + courseId);
+            window.location.href = "/choose-cohort?id=" + courseId;
         });
     }
 

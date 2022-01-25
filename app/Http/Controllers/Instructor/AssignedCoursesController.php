@@ -218,4 +218,47 @@ class AssignedCoursesController extends Controller
         return redirect('/404');
         
         }
+
+
+        public function chooseCohort(Request $request){
+
+            $singleCourseDetails =[];
+            $course = Course::findOrFail($request->id);
+            $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+            $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+            $instructorfirstname = User::where('id', $assigned)->value('firstname');
+            $instructorlastname = User::where('id', $assigned)->value('lastname');
+           
+            $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+            foreach($batches as $batch){
+                $singleCourseData =  array (
+                'batch_id' => $batch->id,
+                'batchname' => $batch->batchname,
+                'title' => $batch->title,
+                'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
+                'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
+                'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
+                'time_zone' => $batch->time_zone,
+            );
+            
+            array_push($singleCourseDetails, $singleCourseData);
+          }
+          $courseDetails = array (
+            'course_id' => $course->id,
+            'course_title' => $course->course_title,
+            'course_category' => $courseCategory,
+            'description' => $course->description,
+            'course_difficulty' => $course->course_difficulty,
+            'instructor_firstname' => $instructorfirstname,
+            'instructor_lastname' => $instructorlastname,
+            'course_thumbnail_image' => $course->course_thumbnail_image,
+            'duration' => $course->course_duration
+          );
+         
+            return view('Instructor.cohortSelection', [
+                'singleCourseDetails' => $singleCourseDetails,
+                'courseDetails' => $courseDetails
+            ]);
+    
+        }
 }

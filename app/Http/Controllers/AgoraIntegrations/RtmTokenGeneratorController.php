@@ -33,6 +33,7 @@ require_once "AccessToken.php";
 
 class RtmTokenGeneratorController extends Controller
 {
+    
     const RoleAttendee = 0;
     const RolePublisher = 1;
     const RoleSubscriber = 2;
@@ -42,6 +43,7 @@ class RtmTokenGeneratorController extends Controller
 
 
     public function index(Request $request, $session) {
+        
         $userObj = Auth::user();
 
         $sessionObj = LiveSession::where('live_session_id', $session);
@@ -114,6 +116,7 @@ class RtmTokenGeneratorController extends Controller
                 $attendance->live_session_id = $session;
                 $attendance->student = $userObj->id;
                 $attendance->start_time = (new DateTime("now", new DateTimeZone('UTC')));
+                $attendance->attendance_Status = true;
                 $attendance->save();
             }
         } else {
@@ -128,7 +131,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '2139', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -261,22 +264,31 @@ class RtmTokenGeneratorController extends Controller
     public function pushLiveRecord(Request $request) {
 
         $contentId = $request->content_id;
-
+    
         $content = TopicContent::where('topic_content_id', $contentId);
         $topic = Topic::where('topic_id', $content->value('topic_id'));
         $previousPushes = LiveFeedbacksPushRecord::where('topic_id', $topic->value('topic_id'))->update(['is_expired' => true]);
+        $alreadyExists = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->count();
         
-        $pushRecord = new LiveFeedbacksPushRecord;
-        $pushRecord->topic_content_id = $contentId;
-        $pushRecord->topic_id = $content->value('topic_id');
-        $pushRecord->course_id = $topic->value('course_id');
-        $user = Auth::user();
-        $instructor =  $user->id;
-        $pushRecord->instructor = $instructor;
-        $pushRecord->is_pushed = true;
-        $pushRecord->is_expired = false;
-        $pushRecord->save();
+        if(!$alreadyExists) {
+            $pushRecord = new LiveFeedbacksPushRecord;
+            $pushRecord->topic_content_id = $contentId;
+            $pushRecord->topic_id = $content->value('topic_id');
+            $pushRecord->course_id = $topic->value('course_id');
+            $user = Auth::user();
+            $instructor =  $user->id;
+            $pushRecord->instructor = $instructor;
+            $pushRecord->is_pushed = true;
+            $pushRecord->is_expired = false;
+            $pushRecord->presenting = true;
+            $pushRecord->save();
+        }
+        return;
+    }
 
+    public function stopPresenting(Request $request) {
+        $contentId = $request->content_id;
+        $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->update(['presenting' => false]);
         return;
     }
 
@@ -287,11 +299,11 @@ class RtmTokenGeneratorController extends Controller
 
         $topicId = $session->value('topic_id');
         $push = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('is_expired', false);
-
         $topicContentId = $push->value('topic_content_id');
 
         $user = Auth::user();
         $student =  $user->id;
+        
         $feedbackRecord = StudentFeedbackCount::where('content_id', $topicContentId)->where('student', $student)->get();
 
         if(count($feedbackRecord) != 0) {
@@ -300,7 +312,11 @@ class RtmTokenGeneratorController extends Controller
         $content = TopicContent::where('topic_content_id', $topicContentId);
         
         $contentTitle = $content->value('topic_title');
-        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag]);
+
+        $presentingContent = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('presenting', true);
+        $presentingContentId = $presentingContent->value('topic_content_id');
+        
+        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag, 'presentingContentId' => $presentingContentId]);
     }
 
     public function pushFeedbacks(Request $request) {
@@ -347,11 +363,13 @@ class RtmTokenGeneratorController extends Controller
         return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
     }
 
-    public function studentExit($session, $timer) {
+    public function studentExit(Request $request) {
         $attendedSessions = 0;
-        $sessionId = $session;
-        $newTime = $timer;
+        $sessionId = $request->session;
+        $newTime = $request->timer;
+        
         $user = Auth::user();
+        
         if($user) {
 
             $courseId = LiveSession::where('live_session_id', $sessionId)->value('course_id');
@@ -496,5 +514,67 @@ class RtmTokenGeneratorController extends Controller
             $html = $html . "<p class='chat-message-body'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
         }
         return response()->json(['html' => $html]);
+    }
+
+    public function getSessionChart(Request $request) {
+
+        $html = "";
+        $slNo = 0;
+        $session = $request->session;
+        $graphData = [];
+
+        $topicId = LiveSession::where('live_session_id', $session)->value('topic_id');
+
+        $topicContentsCount = TopicContent::where('topic_id', $topicId)->count();
+
+        $attendanceTracker = AttendanceTracker::where('live_session_id', $session)->where('attendance_Status', true)->get();
+
+        foreach($attendanceTracker as $data) {
+            $likes = 0;
+            $dislikes = 0;
+            $slNo++;
+            $student = User::where('id', $data->student);
+            $studentFN = $student->value('firstname');
+            $studentLN = $student->value('lastname');
+
+            $studentFeedbackCounts = StudentFeedbackCount::where('student', $data->student)->where('topic_id', $topicId)->get();
+
+            foreach($studentFeedbackCounts as $count) {
+                if($count->positive == 1) {
+                    $likes++;
+                } elseif($count->negative == 1) {
+                    $dislikes++;
+                }
+            }
+
+            $understood = round(($likes * 100) / $topicContentsCount, 1);
+
+            $html = $html . '<tr><td scope="col">' . $slNo . '</td>';
+            $html = $html . '<td scope="col" colspan="2">' . $studentFN . '</td>';
+            $html = $html . '<td scope="col">' . $studentLN . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $likes . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $dislikes . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $understood . '</td>';
+        }
+
+        $topicContents = TopicContent::where('topic_id', $topicId)->get();
+
+        foreach($topicContents as $topicContent) {
+            $totalLikes = 0;
+            $totalDislikes = 0;
+            $contentName = $topicContent->topic_title;
+            $feedbacks = StudentFeedbackCount::where('content_id', $topicContent->topic_content_id)->get();
+            foreach($feedbacks as $feedback) {
+                if($feedback->positive == 1) {
+                    $totalLikes++;
+                } elseif($feedback->negative == 1) {
+                    $totalDislikes++;
+                }
+            }
+            
+            array_push($graphData, [$contentName, $totalLikes, $totalDislikes]);
+        } 
+        
+        return response()->json(['status' => 'success', 'msg' => '', 'html' => $html, 'graphData' => $graphData]);
     }
 }

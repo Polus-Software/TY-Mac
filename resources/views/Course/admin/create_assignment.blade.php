@@ -6,7 +6,7 @@
   <div class="row">
   <div class="col-2 position-fixed">
       <!-- include sidebar here -->
-      @include('Course.admin.sidebar')
+      @include('Course.admin.create.sidebar')
     </div>
     <div class="col-9 ms-auto">
       <!-- main -->
@@ -37,7 +37,7 @@
           <div class="col-11">
           <label class="mb-2">Attach file</label>  
           <input type="file" class="form-control" id="document" name="document" placeholder="Upload from device">
-          <small class="fst-italic">Supported File Formats are:  pdf, doc, docx</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
           <!-- <input type="file" class="form-control" id="document" name="document"> -->
           <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
           <!-- <div class="vr me-2 ms-2"></div> -->

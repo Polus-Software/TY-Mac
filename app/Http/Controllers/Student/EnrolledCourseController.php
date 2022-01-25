@@ -35,7 +35,8 @@ class EnrolledCourseController extends Controller
 {
     public function afterEnrollView(Request $request, $courseId) {
         
-       
+        $selectedBatch = $request->batchId;
+        
         $courseDetails =[];
         $topicDetails = [];
         $liveIdArr = [];
@@ -91,18 +92,90 @@ class EnrolledCourseController extends Controller
         $instructorSignature = $instructor->value('signature');
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
-       
-       $batches = CohortBatch::where('course_id', $courseId)->where('start_date', '>=', $current_date)->orderBy('start_date')->get();
-       $next_live_cohort = "No sessions scheduled";
+        $next_live_cohort = "No sessions scheduled";
+        if($userType === 'instructor') {
+             $selectedBatchObj = CohortBatch::where('id', $selectedBatch);
 
-       if(count($batches)) {
-        $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-        $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h:m A');
-        $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->end_time)->format('h:m A');
+             $occurrences = $selectedBatchObj->value('occurrence');
+             $occArr = explode(',', $occurrences);
  
-        $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
+             $startDate = $selectedBatchObj->value('start_date');
+             $endDate = $selectedBatchObj->value('end_date');
+             $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
+         
+             if($startDate < $current_date && $current_date < $endDate) {
+                 while($startDate < $endDate) {
+                     $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
+                     if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
+                         $latestDate = $startDate;
+                         break;
+                     }   
+                 }
+                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                 $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                 $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                 $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+             } else if($startDate >= $current_date) {
+                 $latestDate = $startDate;
+                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+             $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+             $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+             $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+             } else {
+                $next_live_cohort = "This batch has ended";
+             }
+             
+            
+             
+             
+        } else if($userType === 'student') {
+            $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id);
+            $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
+            $occurrences = $selectedBatchObj->value('occurrence');
+            $occArr = explode(',', $occurrences);
+
+            $startDate = $selectedBatchObj->value('start_date');
+            $endDate = $selectedBatchObj->value('end_date');
+            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
+        
+            if($startDate < $current_date && $endDate > $current_date) {
+                while($startDate < $endDate) {
+                    $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
+                    if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
+                        $latestDate = $startDate;
+                        break;
+                    }   
+                }
+                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+            } else if($startDate >= $current_date) {
+                $latestDate = $startDate;
+                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+            } else {
+                $next_live_cohort = "This batch has ended";
+            }
+        } else {
+            return false;
+        }
+           
+            
+        
        
-       } 
+       
+
+    //    if(count($batches)) {
+    //     $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
+    //     $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h:m A');
+    //     $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->end_time)->format('h:m A');
+ 
+    //     $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
+       
+    //    } 
 
         $achievements = StudentAchievement::where('student_id', $user->id)->get();
         
@@ -298,14 +371,14 @@ class EnrolledCourseController extends Controller
         }
         
         if($userType === 'instructor') {
-            $recommendations = $this->instructorRecommendations($courseId);
+            $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
             $graph = $this->instructorGraph($courseId);
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
                 'topicDetails' =>  $topicDetails,
                 'recommendations' => $recommendations,
                 'userType' => $userType,
-                'studentsEnrolled' => $this->studentsEnrolled($courseId),
+                'studentsEnrolled' => $this->studentsEnrolled($courseId, $selectedBatch),
                 'next_live_cohort' =>  $next_live_cohort,
                 'qas' => $qaArray,
                 'progress' => $progress,
@@ -455,18 +528,19 @@ class EnrolledCourseController extends Controller
     }
 
 
-    private function studentsEnrolled($courseId) {
+    private function studentsEnrolled($courseId, $batchId) {
         $studentsEnrolled = DB::table('enrolled_courses as a')
                             ->join('users as b', 'a.user_id', '=', 'b.id')
                             ->where('a.course_id', $courseId)
+                            ->where('a.batch_id', $batchId)
                             ->get();
         return $studentsEnrolled;
     }
 
-    private function instructorRecommendations($courseId) {
+    private function instructorRecommendations($courseId, $batchId) {
         $singleRecommendation = [];
         $finalRecommendation = [];
-        $studentsEnrolled = $this->studentsEnrolled($courseId);
+        $studentsEnrolled = $this->studentsEnrolled($courseId, $batchId);
         foreach($studentsEnrolled as $student) {
             $student_name = User::where('id', $student->user_id)->get();
             $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();

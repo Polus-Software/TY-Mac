@@ -18,10 +18,10 @@
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Subtopic list</a>
+            <a class="nav-link" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Topics list</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Subtopic</a>
+            <a class="nav-link active" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Topics</a>
           </li>
 </ul>
         </div>
@@ -100,7 +100,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for topic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -139,7 +139,7 @@ generateSubTopicHTMLInitial();
     ]);
     const addExternalLinkEl = createNewElement('div', ['add_external_link', 'mb-3']);
     const contentEl = createNewElement('div', ['row', 'p-2', 'flex-fill', 'bd-highlight']);
-    const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Study material:');
+    const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Course material:');
 
     const uploadContainerEl = createNewElement('div', ['col-lg-5', 'col-12']);
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
@@ -147,7 +147,7 @@ generateSubTopicHTMLInitial();
       {'type': 'file'},
       {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [
