@@ -68,13 +68,15 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-                <label for="creator_password" class="col-form-label">Password</label>
-                <input type="text" class="form-control has-validation" id="creator_password" name="password"></input>
+                <label for="creator_password" class="col-form-label">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating a new password."></i></label>
+                <input type="password" class="form-control has-validation" id="creator_password" name="password"></input>
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @else
                 <div class="col-12"> 
-                <label>Password</label>
-                <input type="text" class="form-control" value="" name="password" id="creator_password" placeholder=" Enter password">
+                <label>Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
+                <input type="password" class="form-control" value="" name="password" id="creator_password" placeholder=" Enter password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
               </div>
                 @endif
@@ -98,6 +100,8 @@
   </div>
 </div>
 <!-- container ends -->
+@endsection('content')
+@push('child-scripts')
 <script>
   function makeid(length) {
     var result = '';
@@ -112,5 +116,24 @@
   document.getElementById('generate_password').addEventListener('click', function(event) {
     document.getElementById('creator_password').value = makeid(12);
   });
+  function adminViewPassword()
+  {
+    let passwordInput = document.getElementById('creator_password');
+    if (passwordInput.type == 'password'){
+      passwordInput.type='text';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye';
+    }
+    else{
+      passwordInput.type='password';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye-slash';
+    }
+
+  }
 </script>
-@endsection('content')
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+@endpush
