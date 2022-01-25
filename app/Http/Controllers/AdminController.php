@@ -577,7 +577,19 @@ class AdminController extends Controller
 									->get();
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
+		$totalCount = $generalCourseFeedbacks->count();
 		foreach ($generalCourseFeedbacks as $feedback) {
+			$comments = strip_tags($feedback->comment);
+			if (strlen($comments) > 30) {
+				// truncate string
+				$firstpart = substr($comments, 0, 30);
+				$firstpart = $firstpart;
+				$secondpart = substr($comments, 30);
+			}
+			else{
+				$firstpart = $feedback->comment;
+				$secondpart = '';
+			}
             $userfeedback = array(
                 'id' => $feedback->id,
                 'course_id'=> $feedback->course_id,
@@ -587,6 +599,8 @@ class AdminController extends Controller
 				'rating'=> $feedback->rating,
 				'comment'=> $feedback->comment,
 				'is_moderated'=>$feedback->is_moderated,
+				'firstpart' => $firstpart,
+				'secondpart' => $secondpart,
             );
             array_push($userfeedbacks, $userfeedback);
         }
@@ -596,7 +610,68 @@ class AdminController extends Controller
 		//var_dump($userfeedbacks);
 		return view('Auth.Admin.view_reviews', [
             'userfeedbacks' => $userfeedbacks,
-			'userType' => $userType
+			'userType' => $userType,
+			'course' => '',
+			'comment' => '',
+			'rating' => '',
+			'totalCount' => $totalCount
+        ]);
+	}
+	public function getUserReviewsFilter(Request $request){
+		$comment = $request->input('comment');
+		$rating = $request->input('rating');
+		$course = $request->input('course');
+		$userfeedbacks = [];
+		$matchThese = '';
+		if(!empty($comment) && !empty($rating) && !empty($course)){
+			$matchThese = ['rating' => $rating];
+		}
+		$generalCourseFeedbacks = DB::table('general_course_feedback')
+									->select('general_course_feedback.id', 'general_course_feedback.course_id','courses.course_title','general_course_feedback.user_id','users.firstname','users.lastname','general_course_feedback.rating','general_course_feedback.comment','general_course_feedback.is_moderated')
+									->join('courses', 'general_course_feedback.course_id', '=', 'courses.id')
+									->join('users', 'general_course_feedback.user_id', '=', 'users.id')
+									->where([['courses.course_title', 'like', '%' . $course . '%'],['general_course_feedback.comment', 'like', '%' . $comment . '%'],['general_course_feedback.rating', 'like', '%' . $rating . '%']])
+									->get();
+		$user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+		$totalCount = $generalCourseFeedbacks->count();
+		foreach ($generalCourseFeedbacks as $feedback) {
+			$comments = strip_tags($feedback->comment);
+			if (strlen($comments) > 30) {
+				// truncate string
+				$firstpart = substr($comments, 0, 30);
+				$firstpart = $firstpart;
+				$secondpart = substr($comments, 30);
+			}
+			else{
+				$firstpart = $feedback->comment;
+				$secondpart = '';
+			}
+            $userfeedback = array(
+                'id' => $feedback->id,
+                'course_id'=> $feedback->course_id,
+				'course_name'=> $feedback->course_title,
+				'user_id'=> $feedback->user_id,
+				'user_name'=> $feedback->firstname.' '.$feedback->lastname,
+				'rating'=> $feedback->rating,
+				'comment'=> $feedback->comment,
+				'is_moderated'=>$feedback->is_moderated,
+				'firstpart' => $firstpart,
+				'secondpart' => $secondpart,
+            );
+            array_push($userfeedbacks, $userfeedback);
+        }
+        $feedbackObj = collect($userfeedbacks);
+        $userfeedbacks = $this->paginate($feedbackObj, 10);
+		$userfeedbacks->withPath('');
+		//var_dump($userfeedbacks);
+		return view('Auth.Admin.view_reviews', [
+            'userfeedbacks' => $userfeedbacks,
+			'course' => $course,
+			'comment' => $comment,
+			'rating' => $rating,
+			'userType' => $userType,
+			'totalCount' => $totalCount
         ]);
 	}
 	public function publishReview(Request $request){

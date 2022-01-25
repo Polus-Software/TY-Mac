@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       @php
@@ -30,8 +30,7 @@
 
             <section class="row g-3 llp-view">
               <div class="py-4">
-                <h3>{{ (!!$isEdit) ? 'Edit profile' : 'Add Creator' }}</h3>
-                <hr class="my-4">
+                <h3 class="titles">{{ (!!$isEdit) ? 'Edit profile' : 'Add Creator' }}</h3>
               </div>
               <div class="col-md-6">
                 <label>First Name</label>
@@ -82,8 +81,8 @@
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                   @endif
               </div>
-          
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
+				<div class="col-1"></div>
+              <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
                 <a class="btn btn-outline-secondary" href="{{route('manage-creators')}}">Cancel</a>                
                   @if(Route::current()->getName() == 'edit-creator')
                   <button type="submit" class="btn btn-primary btn-dark">Update</button>
@@ -94,7 +93,6 @@
             </section>
           </form>
       </main>
-    </div>
   </div>
 </div>
 <!-- container ends -->

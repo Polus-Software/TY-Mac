@@ -262,6 +262,54 @@ body {
 #session_instructor,#session_batch,#session_course{
 	margin:6px 0;
 }
+#add-more-what-learn,#add-more-who-learn{
+	padding-left:15px;
+	padding-right:15px;
+}
+.no-image-border{
+	border:0;
+}
+.left_right_padding{
+	padding-left:30px;
+	padding-right:30px;
+}
+.dots{
+	font-size: 14px;
+    color: #af7e00;
+    font-weight: bold;
+    cursor: pointer;
+}
+.more_content.closed{
+	display:none;
+}
+.more_content.open{
+	display:inline;
+}
+.more_content{
+	 /* other styles */
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+#modal_user{
+	color:#AF7E00;
+}
+.filter_table{
+	width:100%;
+	background-color: #cccccc7a;
+    padding: 10px;
+}
+.filter_table .search{
+	background-color:#000;
+	border: 0;
+    color: #fff;
+	padding-left:25px;
+	padding-right:25px;
+	width: auto;
+}
+.reviews_table a[data-bs-toggle] {
+  background-color: transparent;
+  color: #000;
+}
 @media (max-width:900px){
 	.left_sidebar{
 		width:210px;
