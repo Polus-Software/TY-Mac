@@ -93,6 +93,7 @@ class EnrolledCourseController extends Controller
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
         $next_live_cohort = "No sessions scheduled";
+        
         if($userType === 'instructor') {
              $selectedBatchObj = CohortBatch::where('id', $selectedBatch);
 
@@ -125,7 +126,6 @@ class EnrolledCourseController extends Controller
                 $next_live_cohort = "This batch has ended";
              }
              
-            
              
              
         } else if($userType === 'student') {
@@ -164,7 +164,6 @@ class EnrolledCourseController extends Controller
         }
            
             
-        
        
        
 
@@ -382,7 +381,8 @@ class EnrolledCourseController extends Controller
                 'next_live_cohort' =>  $next_live_cohort,
                 'qas' => $qaArray,
                 'progress' => $progress,
-                'graph' => $graph
+                'graph' => $graph,
+                'selectedBatch' => $selectedBatch
             ]);
         }      
 

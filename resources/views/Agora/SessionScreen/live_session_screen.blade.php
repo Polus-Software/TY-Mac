@@ -855,6 +855,7 @@ iframe#course_content_iframe {
   <input id="user_type" type="hidden" value="{{ $userType }}" />
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
   <input id="graph_box" type="hidden" value="" />
+  <input id="batchId" type="hidden" value="{{$batchId}}" />
   <!-- agora sdk -->
   
   <div class="tab-container think-position-relative">
@@ -1406,6 +1407,7 @@ document.getElementById('exit_session').addEventListener('click', function(e) {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
   let course_id = document.getElementById('course_id').value;
+  let batchId = document.getElementById('batchId').value;
   
   if(userType == "student") {
     
@@ -1427,7 +1429,7 @@ window.addEventListener("click", windowOnClick);
 toggleModal();
     
   } else {
-    location.replace("/enrolled-course/" + course_id);
+    location.replace("/enrolled-course/" + course_id + "?batchId=" + batchId);
   }
 });
 
