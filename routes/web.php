@@ -64,7 +64,7 @@ Route::get('/', function () {
     Route::get('/delete-cohort', [CourseController::class, 'deleteCohortbatch'])->name('delete-cohortbatch');
     Route::get('/edit-cohort', [CourseController::class, 'editCohortbatch'])->name('edit-cohortbatch');
     Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
-
+	Route::post('/publish-review', [AdminController::class, 'publishReview'])->name('publish-review');
 
 
     Route::get('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
@@ -105,7 +105,8 @@ Route::get('/', function () {
     Route::post('/get-attendance-table', [AdminController::class, 'getAttendanceTable'])->name('get.attendance.table');
     Route::post('/get-attendance-batches', [AdminController::class, 'getAttendanceBatches'])->name('get.attendance.batches');
     Route::post('/get-attendance-sessions', [AdminController::class, 'getAttendanceSessions'])->name('get.attendance.sessions');
-
+	Route::get('/manage-reviews', [AdminController::class, 'getUserReviews'])->name('admin.managereviews');
+	
     Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
@@ -186,6 +187,9 @@ Route::get('/', function () {
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
     Route::get('/choose-cohort', [AssignedCoursesController::class, 'chooseCohort'])->name('choose.cohort');
+    Route::get('/thinklitway', function () {
+        return view('thinklitway');
+    })->name('thinklitway');
     
 });
 Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

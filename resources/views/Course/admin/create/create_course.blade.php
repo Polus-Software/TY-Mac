@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.create.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @if(Route::current()->getName() == 'edit-course')
@@ -24,8 +24,7 @@
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
         @endif
         @csrf
-          <div class="py-4"><h3>Course Overview</h3>
-          <hr class="my-4">
+          <div class="py-4"><h3 class="titles">Course Overview</h3>
         </div>
           <div class="col-12">
             <label for="title">Course Title</label>
@@ -219,6 +218,7 @@
         </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

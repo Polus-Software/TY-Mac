@@ -67,6 +67,11 @@
       <i class="fas fa-cogs"></i>
         App Settings</a>
     </li>
+	<li class="nav-item">
+      <a class="nav-link link-dark" href="{{ route('admin.managereviews') }}">
+      <i class="fas fa-cogs"></i>
+        Manage Reviews</a>
+    </li>
     @elseif($userType == 'instructor')
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'sessions-view' ? 'active' : ''}}" href="{{route('sessions-view')}}">
