@@ -141,7 +141,7 @@ class EnrolledCourseController extends Controller
             if($startDate < $current_date && $endDate > $current_date) {
                 while($startDate < $endDate) {
                     $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
-                    if($startDate >= $current_date && $batchStartTime > $date_of_issue && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
+                    if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
                         $latestDate = $startDate;
                         break;
                     }   

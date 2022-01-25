@@ -54,6 +54,7 @@ return array(
     'App\\Models\\GeneralSetting' => $baseDir . '/app/Models/GeneralSetting.php',
     'App\\Models\\LiveFeedbacksPushRecord' => $baseDir . '/app/Models/LiveFeedbacksPushRecord.php',
     'App\\Models\\LiveSession' => $baseDir . '/app/Models/LiveSession.php',
+    'App\\Models\\LiveSessionChat' => $baseDir . '/app/Models/LiveSessionChat.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\StudentAchievement' => $baseDir . '/app/Models/StudentAchievement.php',
     'App\\Models\\StudentFeedbackCount' => $baseDir . '/app/Models/StudentFeedbackCount.php',

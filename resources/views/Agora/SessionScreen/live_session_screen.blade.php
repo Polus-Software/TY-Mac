@@ -276,7 +276,7 @@ svg.svg-img.prefix-more.can-hover {
 }
 
 .nodisplay {
-  display : none !important;
+  visibility : hidden !important;
 }
 
 .course_contents_div {
@@ -892,21 +892,61 @@ iframe#course_content_iframe {
     
     <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
+      @if($userType == 'instructor')
+      <button style="margin-left:-29em;" id="close_content" content-id="" class="think-btn-secondary-outline-live nodisplay">Close content</button>
       <button id="offcanvasButton" class="think-btn-secondary-outline-live" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">View live feedbacks</button>
+      @endif
+      
       @if($userType == 'student')
       <div class="feedback-btn-container">
       <p class="notif-text think-mr--15 think-color-light-dark think-fs--14">Did you understand this topic?</p> 
       <button data-id="" class="think-btn-secondary-outline-live like-button think-mr--15 button-anim" id="positive">
         <i style="margin-right:10px;" class="fas fa-thumbs-up"></i>
         Yes 
-        <span id="positive_count"> 
-        </span>
       </button> 
+      <script>
+        document.getElementById('positive').addEventListener('click', function(event) {
+  let content = this.getAttribute('data-id');
+  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=positive";
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+      document.getElementById('negative').classList.remove('pulsate');
+      document.getElementById('positive').classList.remove('pulsate');
+
+    });
+});
+        </script>
       <button class="think-btn-secondary-outline-live dislike-button" id="negative" data-id="">
         <i style="margin-right:10px;" class="fas fa-thumbs-down">
-        </i>No<span id="negative_count">
-        </span>
+        </i>No
       </button>
+      <script>
+        document.getElementById('negative').addEventListener('click', function(event) {
+  
+  let content = this.getAttribute('data-id');
+  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negative";
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+      body: JSON.stringify({})
+    }).then((response) => response.json()).then((data) => {
+        document.getElementById('negative').classList.remove('pulsate');
+        document.getElementById('positive').classList.remove('pulsate');
+        
+    });
+  });
+  </script>
     </div>
     @endif
   </div>
@@ -923,14 +963,19 @@ iframe#course_content_iframe {
     @csrf
     <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
     @foreach($contents as $content)
-    <div class="think-content-styles"><i style="margin-right:10px;" class="thumbs fas fa-thumbs-up"></i>{{ $content->topic_title }}</div>
+    <div href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
     @endforeach
   </div>
 
+  
+  <div class="row" id="iframe_div">
+
+      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+  </div>
   @elseif($userType == 'instructor')
   <div class="row" id="iframe_div">
 
-      <iframe onLoad="iframeChange();" class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
   <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
@@ -942,8 +987,8 @@ iframe#course_content_iframe {
     <tr>
     <div class="course_contents_div" data-id="1" style="margin-top:5px;">
       <td><i style="margin-right:10px;" class="thumbs fas fa-circle"></i>
-        <span>{{ $content->topic_title }}</span></td>
-          <td><button class="course_contents" href="{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+        <span id="content_title_{{ $content->topic_content_id }}">{{ $content->topic_title }}</span></td>
+          <td><button class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
             Start
           </button></td>
     </div>
@@ -1205,7 +1250,7 @@ div#graph {
 }
 </style>
   <script type="text/javascript">
-    
+    let presentingFlag = 0;
     $('#offcanvasClose').click(function(){
       $('#offcanvasBottom').removeClass('show');
       $('#offcanvasBottom').css('visibility', 'hidden');
@@ -1276,7 +1321,10 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
     }
 });
 
-
+document.getElementById('back_to_course').addEventListener('click', function(){
+  let course_id = document.getElementById('course_id').value;
+  location.replace("/enrolled-course/" + course_id);
+});
   
       
 let timer = 0;
@@ -1314,6 +1362,30 @@ $(document).ready(function(){
   }, 1000);
 });
 
+window.addEventListener("beforeunload", function (e) {
+  var confirmationMessage = "Are you sure you want to exit?";
+  let sessionId = document.getElementById('session_hidden_id').value;
+  let userType = document.getElementById('user_type').value;
+  let timer = document.getElementById('timer').value;
+
+  if(userType == "student") {
+    
+    let path = "{{ route('student-exit') }}?session=" + sessionId + "&timer=" + timer;
+    fetch(path, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+      },
+    }).then((response) => response.json()).then((data) => {
+
+    });
+  }
+  (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+  return confirmationMessage;                            //Webkit, Safari, Chrome
+});
+
 $(document).on('click', '.cabinet-item', function(e) {
     $('.screen-share-player-container').appendTo('.big-class-teacher');
     $('#stop_sharing').removeClass('nodisplay');
@@ -1328,9 +1400,6 @@ $(document).on('click', '.btn:contains("Finish")', function() {
     $('#exit_session').removeClass('nodisplay');
 });
 
-$(document).on('click', '.prt_FastFwd_14x14x32', function() {
-  alert('works!!!');
-});
 
 
 document.getElementById('exit_session').addEventListener('click', function(e) {
@@ -1375,6 +1444,7 @@ jQuery(".nav-tabs li").click(function(e) {
 setInterval(function () {
     let session = document.getElementById('session_hidden_id').value;
     let path = "{{ route('get-push-record') }}?session=" + session;
+    let userType = document.getElementById('user_type').value;
     fetch(path, {
       method: 'POST',
       headers: {
@@ -1383,6 +1453,21 @@ setInterval(function () {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
+      if(userType == 'student') {
+        if(data.presentingContentId) {
+        if(presentingFlag != data.presentingContentId) {
+          presentingFlag = data.presentingContentId;
+        $('#course_content_iframe').appendTo('.big-class-teacher');
+        document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
+        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+        }
+        
+      } else {
+        document.getElementById('course_content_iframe').classList.add('nodisplay');
+      }
+      }
+      
       if(data.content_id != null && data.flag == 0) {
       document.getElementById('positive').setAttribute('data-id', data.content_id);
       document.getElementById('positive').classList.add('pulsate');
@@ -1413,17 +1498,20 @@ for(index = 0; index < length;index++) {
       if(extension == "pdf") {
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
-        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
+        let docUrl = this.getAttribute('href');
+        document.getElementById('course_content_iframe').setAttribute('src', docUrl);
         
       } else if (extension == "pptx") {
+        $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
-        document.getElementById('show_video').classList.remove('nodisplay');
-        
-        
-        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
+        document.getElementById('close_content').classList.remove('nodisplay');
+        let docUrl = this.getAttribute('href');
+        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
       }
       let topicContentId = this.getAttribute('data-id');
       let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
+      document.getElementById('close_content').classList.remove('nodisplay');
+      document.getElementById('close_content').setAttribute('content-id', topicContentId);
       fetch(path, {
         method: 'POST',
         headers: {
@@ -1440,42 +1528,31 @@ for(index = 0; index < length;index++) {
     });
 }
 
-
-
-
-document.getElementById('positive').addEventListener('click', function(event) {
-  let content = this.getAttribute('data-id');
-  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=positive";
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      document.getElementById('negative').classList.remove('pulsate');
-      document.getElementById('positive').classList.remove('pulsate');
-    });
+document.getElementById('close_content').addEventListener('click', function(e){
+    document.getElementById('close_content').classList.add('nodisplay');
+    document.getElementById('course_content_iframe').classList.add('nodisplay');
+    let topicContentId = document.getElementById('close_content').getAttribute('content-id');
+    document.getElementById('course_contents_' + topicContentId).classList.add('nodisplay');
+    document.getElementById('content_title_' + topicContentId).style.color = "#bdbebe";
+      let path = "{{ route('stop-presenting') }}?content_id=" + topicContentId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+        body: JSON.stringify({})
+      }).then((response) => response.json()).then((data) => {
+        
+      });
 });
-document.getElementById('negative').addEventListener('click', function(event) {
 
-let content = this.getAttribute('data-id');
-let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negative";
-  fetch(path, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      "X-CSRF-Token": document.querySelector('input[name=_token]').value
-    },
-    body: JSON.stringify({})
-  }).then((response) => response.json()).then((data) => {
-      document.getElementById('negative').classList.remove('pulsate');
-      document.getElementById('positive').classList.remove('pulsate');
-  });
-});
+
+
+
+  
+
 
 function get_url_extension(url){
     return url.split(/[#?]/)[0].split('.').pop().trim();
