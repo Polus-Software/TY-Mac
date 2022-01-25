@@ -68,7 +68,7 @@
         App Settings</a>
     </li>
 	<li class="nav-item">
-      <a class="nav-link link-dark" href="{{ route('admin.managereviews') }}">
+      <a class="nav-link link-dark {{ Route::currentRouteName() == 'admin.manager_reviews' ? 'active' : ''}} {{ Route::currentRouteName() == 'admin.manager_reviews_filter' ? 'active' : ''}}" href="{{ route('admin.manager_reviews') }}">
       <i class="fas fa-cogs"></i>
         Manage Reviews</a>
     </li>
