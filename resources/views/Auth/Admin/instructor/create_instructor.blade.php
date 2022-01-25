@@ -139,12 +139,15 @@
               <div class="col-md-12">
                 
                 @if(!!$isEdit)
-                <label for="password">Password</label>
-                <input type="text" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <label for="password">Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
+                <input type="password" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @else
-                <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
-                <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondarye" id="generate_password">Generate password</button>
+                <label for="password">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating password."></i></label>
+                <input type="password" class="form-control has-validation" id="instructor_password" name="password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
+                <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @endif
                 @if ($errors->has('password'))
                 <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
@@ -203,6 +206,8 @@
   </div>
 </div>
 <!-- container ends -->
+@endsection('content')
+@push('child-scripts')
 <script>
   function makeid(length) {
     var result = '';
@@ -217,5 +222,24 @@
   document.getElementById('generate_password').addEventListener('click', function(event) {
     document.getElementById('instructor_password').value = makeid(12);
   });
+  function adminViewPassword()
+  {
+    let passwordInput = document.getElementById('instructor_password');
+    if (passwordInput.type == 'password'){
+      passwordInput.type='text';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye';
+    }
+    else{
+      passwordInput.type='password';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye-slash';
+    }
+
+  }
 </script>
-@endsection('content')
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+@endpush
