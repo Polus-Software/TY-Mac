@@ -45,7 +45,7 @@ class RtmTokenGeneratorController extends Controller
     public function index(Request $request, $session) {
         
         $userObj = Auth::user();
-
+        $batchId = $request->batchId;
         $sessionObj = LiveSession::where('live_session_id', $session);
         $courseId = $sessionObj->value('course_id');
         $topicId = $sessionObj->value('topic_id');
@@ -80,7 +80,8 @@ class RtmTokenGeneratorController extends Controller
                 'userId' => $userId,
                 'feedbackQ1' => $feedbackQ1,
                 'feedbackQ2' => $feedbackQ2,
-                'feedbackQ3' => $feedbackQ3
+                'feedbackQ3' => $feedbackQ3,
+                'batchId' => $batchId
             ]);
         } else {
             return redirect('/403');
@@ -126,7 +127,7 @@ class RtmTokenGeneratorController extends Controller
         
         $expireTimeInSeconds = $totalSeconds;
         $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
-        $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
+        $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds + 1800;
         $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
