@@ -33,6 +33,7 @@ require_once "AccessToken.php";
 
 class RtmTokenGeneratorController extends Controller
 {
+    
     const RoleAttendee = 0;
     const RolePublisher = 1;
     const RoleSubscriber = 2;
@@ -42,6 +43,7 @@ class RtmTokenGeneratorController extends Controller
 
 
     public function index(Request $request, $session) {
+        
         $userObj = Auth::user();
 
         $sessionObj = LiveSession::where('live_session_id', $session);
@@ -128,7 +130,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '2139', 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -496,5 +498,67 @@ class RtmTokenGeneratorController extends Controller
             $html = $html . "<p class='chat-message-body'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
         }
         return response()->json(['html' => $html]);
+    }
+
+    public function getSessionChart(Request $request) {
+
+        $html = "";
+        $slNo = 0;
+        $session = $request->session;
+        $graphData = [];
+
+        $topicId = LiveSession::where('live_session_id', $session)->value('topic_id');
+
+        $topicContentsCount = TopicContent::where('topic_id', $topicId)->count();
+
+        $attendanceTracker = AttendanceTracker::where('live_session_id', $session)->where('attendance_Status', true)->get();
+
+        foreach($attendanceTracker as $data) {
+            $likes = 0;
+            $dislikes = 0;
+            $slNo++;
+            $student = User::where('id', $data->student);
+            $studentFN = $student->value('firstname');
+            $studentLN = $student->value('lastname');
+
+            $studentFeedbackCounts = StudentFeedbackCount::where('student', $data->student)->where('topic_id', $topicId)->get();
+
+            foreach($studentFeedbackCounts as $count) {
+                if($count->positive == 1) {
+                    $likes++;
+                } elseif($count->negative == 1) {
+                    $dislikes++;
+                }
+            }
+
+            $understood = round(($likes * 100) / $topicContentsCount, 1);
+
+            $html = $html . '<tr><td scope="col">' . $slNo . '</td>';
+            $html = $html . '<td scope="col" colspan="2">' . $studentFN . '</td>';
+            $html = $html . '<td scope="col">' . $studentLN . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $likes . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $dislikes . '</td>';
+            $html = $html . '<td scope="col" style="text-align:center;">' . $understood . '</td>';
+        }
+
+        $topicContents = TopicContent::where('topic_id', $topicId)->get();
+
+        foreach($topicContents as $topicContent) {
+            $totalLikes = 0;
+            $totalDislikes = 0;
+            $contentName = $topicContent->topic_title;
+            $feedbacks = StudentFeedbackCount::where('content_id', $topicContent->topic_content_id)->get();
+            foreach($feedbacks as $feedback) {
+                if($feedback->positive == 1) {
+                    $totalLikes++;
+                } elseif($feedback->negative == 1) {
+                    $totalDislikes++;
+                }
+            }
+            
+            array_push($graphData, [$contentName, $totalLikes, $totalDislikes]);
+        } 
+        
+        return response()->json(['status' => 'success', 'msg' => '', 'html' => $html, 'graphData' => $graphData]);
     }
 }

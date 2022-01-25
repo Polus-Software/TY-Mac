@@ -162,6 +162,7 @@ Route::get('/', function () {
     Route::post('submit-feedback', [RtmTokenGeneratorController::class, 'submitSessionFeedback'])->name('submit-feedback');
     Route::post('save-session-chat', [RtmTokenGeneratorController::class, 'saveSessionChat'])->name('save-session-chat');
     Route::post('get-session-chat', [RtmTokenGeneratorController::class, 'getSessionChat'])->name('get-session-chat');
+    Route::post('get-session-chart', [RtmTokenGeneratorController::class, 'getSessionChart'])->name('get-session-chart');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -184,6 +185,7 @@ Route::get('/', function () {
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
+    Route::get('/choose-cohort', [AssignedCoursesController::class, 'chooseCohort'])->name('choose.cohort');
     
 });
 Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

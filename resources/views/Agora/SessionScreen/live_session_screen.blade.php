@@ -843,11 +843,18 @@ button#feedback-submit {
 .cabinet-item:nth-child(2) {
   display:none;
 }
+
+iframe#course_content_iframe {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+}
 </style>
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
+  <input id="graph_box" type="hidden" value="" />
   <!-- agora sdk -->
   
   <div class="tab-container think-position-relative">
@@ -885,7 +892,7 @@ button#feedback-submit {
     
     <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
-      <button id="stop_sharing" class="think-btn-secondary-outline-live nodisplay">Stop sharing</button>
+      <button id="offcanvasButton" class="think-btn-secondary-outline-live" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">View live feedbacks</button>
       @if($userType == 'student')
       <div class="feedback-btn-container">
       <p class="notif-text think-mr--15 think-color-light-dark think-fs--14">Did you understand this topic?</p> 
@@ -921,8 +928,9 @@ button#feedback-submit {
   </div>
 
   @elseif($userType == 'instructor')
-  <div class="row">
-      <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+  <div class="row" id="iframe_div">
+
+      <iframe onLoad="iframeChange();" class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
   <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
@@ -1049,8 +1057,159 @@ button#feedback-submit {
     </div>
 </div>
 </div>
+
+
+
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="visibility:hidden;">
+  <div class="offcanvas-header">
+    <button id="offcanvasClose" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">x</button>
+  </div>
+  <div class="offcanvas-container">
+     <div class="students-list">
+     <table class="table llp-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col" colspan="2">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col" style="text-align:center;">Likes</th>
+                <th scope="col" style="text-align:center;">Dislikes</th>
+                <th scope="col" style="text-align:center;">Understood</th>
+              </tr>
+            </thead>
+            <tbody id="live_chart_table_body">
+              <tr>
+                <td colspan="6"><h5>No records yet</h5></td>
+              </tr>
+            </tbody>
+          </table>
+     </div>
+     <div id="graph">
+     </div>
+  </div>
+</div>
+<style>
+.llp-table {
+    border: 1px solid #ddd;
+}
+
+.llp-table i {
+    color: var(--main-title-color);
+    margin-right: .5rem;
+}
+
+.llp-table a {
+    text-decoration: none;
+}
+
+.llp-table th {
+  padding: 10px 10px;
+  width: 110px;
+}
+.llp-table tr {
+border: 1px solid #ddd;
+}
+.llp-table td {
+    padding: 10px 10px;
+    width: 110px;
+    color: #868E96;
+}
+.table>:not(:first-child) {
+    border-top: none;
+}
+.students-list {
+    width: 50%;
+    text-align: -webkit-center;
+    padding: 20px 20px;
+}
+div#graph {
+  width: 50%;
+    text-align: -webkit-center;
+    padding: 20px 20px;
+}
+.offcanvas-bottom {
+    right: 0;
+    left: 0;
+    height: 75vh;
+    max-height: 100%;
+    border-top: 1px solid rgba(0,0,0,.2);
+    transform: translateY(100%);
+    width: 100%;
+    display: flex;
+}
+.offcanvas {
+    position: fixed;
+    bottom: 0;
+    z-index: 1045;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    visibility: hidden;
+    background-color: #fff;
+    background-clip: padding-box;
+    outline: 0;
+    transition: transform .3s ease-in-out;
+}
+
+.offcanvas-header {
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+}
+
+.offcanvas-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.offcanvas-body {
+    flex-grow: 1;
+    padding: 1rem 1rem;
+    overflow-y: auto;
+}
+
+.offcanvas.show {
+    transform: none;
+}
+
+.offcanvas-header .btn-close {
+    padding: 0.5rem 0.5rem;
+    margin-top: -0.5rem;
+    margin-right: -0.5rem;
+    margin-bottom: -0.5rem;
+    font-size: 30px;
+    float: right;
+}
+
+.offcanvas-container {
+    display: flex;
+    height: 100%;
+}
+
+.text-reset {
+    --bs-text-opacity: 1;
+    color: inherit!important;
+}
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em 0.25em;
+    color: #000;
+    background: transparent url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e) center/1em auto no-repeat;
+    border: 0;
+    border-radius: 0.25rem;
+    opacity: .5;
+    cursor: pointer;
+    appearance: none !important;
+}
+</style>
   <script type="text/javascript">
-// var video = document.getElementsByClassName('rtc-screen-share')[0].getElementsByTagName('VIDEO')[0];
+    
+    $('#offcanvasClose').click(function(){
+      $('#offcanvasBottom').removeClass('show');
+      $('#offcanvasBottom').css('visibility', 'hidden');
+    });
         let session = document.getElementById('session_hidden_id').value;
         
         let path = "/generate-token/" + session;
@@ -1092,6 +1251,11 @@ button#feedback-submit {
     
         });
 
+
+
+
+
+
 document.getElementById('chat_box').addEventListener('keyup', function(e) {
   let message = document.getElementById('chat_box').value;
   message = message.trim();
@@ -1107,17 +1271,14 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
           "X-CSRF-Token": document.querySelector('input[name=_token]').value
         },
       }).then((response) => response.json()).then((data) => {
-
+        document.getElementById('chat_box').value = "";
       });
     }
 });
 
-// const evtSource = new EventSource("{{ route('get-session-chat', ["+ document.getElementById('session_hidden_id').value +"]) }}");
 
-// evtSource.onmessage = function(event) {
-//   alert('works');
-// }
-        
+  
+      
 let timer = 0;
 
 $(document).ready(function(){
@@ -1167,6 +1328,10 @@ $(document).on('click', '.btn:contains("Finish")', function() {
     $('#exit_session').removeClass('nodisplay');
 });
 
+$(document).on('click', '.prt_FastFwd_14x14x32', function() {
+  alert('works!!!');
+});
+
 
 document.getElementById('exit_session').addEventListener('click', function(e) {
   let sessionId = document.getElementById('session_hidden_id').value;
@@ -1196,16 +1361,8 @@ toggleModal();
     location.replace("/enrolled-course/" + course_id);
   }
 });
-  
 
-
-
-
-
-
-
-
-jQuery(".nav-tabs li").click(function(e){
+jQuery(".nav-tabs li").click(function(e) {
       e.preventDefault();
       jQuery(".nav-tabs li").removeClass('active');
       jQuery(this).addClass('active');
@@ -1249,35 +1406,37 @@ length = contentEle.length;
 for(index = 0; index < length;index++) {
   
     contentEle[index].addEventListener('click', function(event) {
-    let extension = get_url_extension(this.getAttribute('href'));
-    console.log(document.getElementById('user_type').value == "Instructor");
-    if(document.getElementById('user_type').value == "Instructor") {
-      document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
-    }
-    if(extension == "pdf") {
-      document.getElementById('course_content_iframe').classList.remove('nodisplay');
-      document.getElementById('show_video').classList.remove('nodisplay');
-      document.getElementById('course_content_iframe').setAttribute('src', this.getAttribute('href'));
-    } else if (extension == "pptx") {
-      document.getElementById('course_content_iframe').classList.remove('nodisplay');
-      document.getElementById('show_video').classList.remove('nodisplay');
+      let extension = get_url_extension(this.getAttribute('href'));
+      if(document.getElementById('user_type').value == "Instructor") {
+        document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
+      }
+      if(extension == "pdf") {
+        $('#course_content_iframe').appendTo('.big-class-teacher');
+        document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
+        
+      } else if (extension == "pptx") {
+        document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        document.getElementById('show_video').classList.remove('nodisplay');
+        
+        
+        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
+      }
+      let topicContentId = this.getAttribute('data-id');
+      let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+        body: JSON.stringify({})
+      }).then((response) => response.json()).then((data) => {
+        
+      });
+       
       
-      
-      document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
-    }
-    let topicContentId = this.getAttribute('data-id');
-    let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      
-    });
     });
 }
 
@@ -1340,18 +1499,107 @@ buttonOpenClose.addEventListener('click', () => {
   toggleFlag = !toggleFlag;
 });
 
+</script>
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    
 
+    $('#offcanvasButton').click(function(){
+        $('#offcanvasBottom').addClass('show');
+        $('#offcanvasBottom').css('visibility', 'visible');
 
+        let sessionId = document.getElementById('session_hidden_id').value;
+        let path = "{{ route('get-session-chart') }}?session=" + sessionId;
+        fetch(path, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+        }).then((response) => response.json()).then((data) => {
+          
+            document.getElementById('live_chart_table_body').innerHTML = data.html;
 
+            google.charts.load('current', {
+              'packages': ['bar']
+            });
+            google.charts.setOnLoadCallback(function() {
+              drawChart(data.graphData);
+            });
 
+            function drawChart(graph) {
+              if(graph.length == 1) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0]
+              ]);
 
+              } else if(graph.length == 2) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1]
+              ]);
+                
+              } else if(graph.length == 3) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2]
+              ]);
 
+              } else if(graph.length == 4) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3]
+              ]);
 
+              } else if(graph.length == 5) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4]
+              ]);
 
+              } else if(graph.length == 6) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4], graph[5]
+              ]);
 
+              } else if(graph.length == 7) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4], graph[5], graph[6]
+              ]);
 
+              } else if(graph.length == 8) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4], graph[5], graph[6], graph[7]
+              ]);
 
+              } else if(graph.length == 9) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4], graph[5], graph[6], graph[7], graph[8]
+              ]);
+
+              } else if(graph.length == 10) {
+                var gdata = google.visualization.arrayToDataTable([
+                    ['Sub content', 'Likes', 'Dislikes'], graph[0], graph[1], graph[2], graph[3], graph[4], graph[5], graph[6], graph[7], graph[8], graph[9]
+              ]);
+
+              }
+                
+
+                var options = {
+                    chart: {
+                        title: 'Participant Activities',
+                        subtitle: '',
+                        width: 600,
+                        height: 400
+                    },
+                    colors: ['#A26B05','#F5BC29']
+                };
+
+                var chart = new google.charts.Bar(document.getElementById('graph'));
+
+                chart.draw(gdata, google.charts.Bar.convertOptions(options));
+              }
+        });
+
+    });
 
   </script>
 </body>
