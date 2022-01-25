@@ -105,7 +105,7 @@ Route::get('/', function () {
     Route::post('/get-attendance-batches', [AdminController::class, 'getAttendanceBatches'])->name('get.attendance.batches');
     Route::post('/get-attendance-sessions', [AdminController::class, 'getAttendanceSessions'])->name('get.attendance.sessions');
 	Route::get('/manage-reviews', [AdminController::class, 'getUserReviews'])->name('admin.manager_reviews');
-	Route::post('/manager-reviews-filter', [AdminController::class, 'getUserReviewsFilter'])->name('admin.manager_reviews_filter');
+	Route::get('/manager-reviews-filter', [AdminController::class, 'getUserReviewsFilter'])->name('admin.manager_reviews_filter');
 	Route::post('/publish-review', [AdminController::class, 'publishReview'])->name('publish-review');
 	
     Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');

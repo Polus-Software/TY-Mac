@@ -16,7 +16,7 @@
         <div class="py-4"><h3 class="titles">Reviews</h3></div>
 		<div class="row">
 			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
-				<form action="{{ route('admin.manager_reviews_filter') }}" enctype="multipart/form-data" method="POST" class="d-flex filter_table">
+				<form action="{{ route('admin.manager_reviews_filter') }}" enctype="multipart/form-data" method="GET" class="d-flex filter_table">
 					@csrf
 					<div class="col-md-4 m-lg-1">
 						<input type="text" name="course" class="form-control" placeholder="Course Name" value="{{$course}}">
