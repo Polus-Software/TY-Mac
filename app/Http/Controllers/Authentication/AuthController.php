@@ -67,7 +67,7 @@ class AuthController extends Controller
            'lastname'=> $request->lastname
            
         ];
-        Mail::to($email)->send(new Gmail($details));
+        // Mail::to($email)->send(new Gmail($details));
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -236,12 +236,11 @@ class AuthController extends Controller
                 'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
             ];
     
-            Mail::to('support@thinklit.com')->send(new Gmail($details));
+            // Mail::to('support@thinklit.com')->send(new Gmail($details));
     
-            // return back()->withSuccess('Sent successfully!');
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
-            return back();
+            return redirect('/')->with('message', 'Registration failed');
         }
         
     }

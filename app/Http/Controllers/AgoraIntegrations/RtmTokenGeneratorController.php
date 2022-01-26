@@ -364,6 +364,70 @@ class RtmTokenGeneratorController extends Controller
         return response()->json(['positive' => $positiveCount, 'negative' => $negativeCount]);
     }
 
+    public function studentExitAfterFeedback($sessionId, $newTime) {
+        $attendedSessions = 0;
+        
+        $user = Auth::user();
+        
+        if($user) {
+
+            $courseId = LiveSession::where('live_session_id', $sessionId)->value('course_id');
+
+            $student =  $user->id;
+
+            
+
+            $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
+            if($attendance) {
+                $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
+            }
+            
+            $attendance->update(['attendance_time' => $timer]);
+
+            $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
+
+            $batchId = LiveSession::where('live_session_id', $sessionId)->value('batch_id');
+            $batch = CohortBatch::where('id', $batchId);
+            $startTime = $batch->value('start_time');
+            $endTime = $batch->value('end_time');
+            $startHour = intval($startTime[0] . $startTime[1]);
+            $startMinutes = intval($startTime[3] . $startTime[4]);
+
+            $endHour = intval($endTime[0] . $endTime[1]);
+            $endMinutes = intval($endTime[3] . $endTime[4]);
+            $totalSeconds = ((60 - $startMinutes) + $endMinutes) + ($endHour - ($startHour + 1)) * 3600;
+            
+            if($attendance->value('attendance_time') * 100 / $totalSeconds >= $attendanceSettings) {
+                $badgeId = AchievementBadge::where('title', 'Starter')->value('id');
+
+                $student_achievement = new StudentAchievement;
+                $student_achievement->student_id = $student;
+                $student_achievement->badge_id =  $badgeId;
+                $student_achievement->is_achieved = true;
+                $student_achievement->save();
+
+                $topicsCount = Topic::where('course_id', $courseId)->count();
+            $trackers = AttendanceTracker::where('student', $student)->get();
+            foreach($trackers as $tracker) {
+                $session = LiveSession::where('live_session_id', $tracker->live_session_id);
+                if($session->value('course_id') == $courseId) {
+                    $attendedSessions = $attendedSessions + 1;
+                }
+            }
+
+            $percent = $attendedSessions * 100 / $topicsCount;
+
+            $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
+
+                $attendance->update(['attendance_Status' => true ]);
+            } else {
+                $attendance->update(['attendance_Status' => false ]);
+            }
+
+            return response()->json(['status' => 'success', 'msg' => 'Student closed window', 'course_id' => $courseId]);
+        }
+    }
+
     public function studentExit(Request $request) {
         $attendedSessions = 0;
         $sessionId = $request->session;
@@ -448,6 +512,7 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function submitSessionFeedback(Request $request) {
+        
         $question1 = $request->input('question1');
         $question2 = $request->input('question2');
         $question3 = $request->input('question3');
@@ -456,7 +521,6 @@ class RtmTokenGeneratorController extends Controller
         $session = $request->input('live_session_id');
         $timer = $request->input('timer');
         $courseId = $request->input('course_id');
-
         $generalLiveSessionFeedBack = new GeneralLiveSessionFeedback;
         $generalLiveSessionFeedBack->question_1 = $question1;
         $generalLiveSessionFeedBack->question_2 = $question2;
@@ -467,8 +531,9 @@ class RtmTokenGeneratorController extends Controller
 
         $generalLiveSessionFeedBack->save();
 
-        $this->studentExit($session, $timer);
-
+        
+        $this->studentExitAfterFeedback($session, $timer);
+        
         return redirect('/enrolled-course' . '/' . $courseId);
     }
 
