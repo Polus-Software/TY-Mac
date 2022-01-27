@@ -721,6 +721,9 @@ svg.svg-img.prefix-exit.can-hover {
 .tab-content{
   /* height:100%; */
 }
+div#chat_messages {
+padding: 10px 15px 120px 15px;
+}
 .chat_text_box {
   border: 2px solid #d2dae2 !important;
     width: 100%;
@@ -1011,9 +1014,9 @@ font-size: 14px;
 /* Layout alignments starts*/
 /*base*/
 body {
-	  grid-template-rows: 82px auto 72px auto;
-    row-gap: .5rem;
-    column-gap: 1rem;
+  grid-template-rows: 82px max-content 72px max-content;
+  row-gap: .5rem;
+  column-gap: 1rem;
 }
 /*header*/
 .header-layout-grid {
@@ -1506,6 +1509,10 @@ div#graph {
 .think-participant-wrapper img {
   width: 100%;
 }
+
+.feedback-modal {
+z-index: 100;
+}
 </style>
   <script type="text/javascript">
     
@@ -1580,8 +1587,7 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
     }
 });
 
-  
-let flag = 0;   
+    
 let timer = 0;
 $(document).ready(function(){
   var start = new Date;
@@ -1590,8 +1596,6 @@ $(document).ready(function(){
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
-      if(flag == 0) {
-        flag = 1;
         fetch(path, {
         method: 'POST',
         headers: {
@@ -1614,9 +1618,6 @@ $(document).ready(function(){
       }).then((response) => response.json()).then((data) => {
         document.getElementById('chat_messages').innerHTML = data.html;
       });
-      }
-      
-
   }, 1000);
 });
 

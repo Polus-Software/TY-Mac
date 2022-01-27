@@ -111,14 +111,16 @@ class RtmTokenGeneratorController extends Controller
             $role = self::RoleSubscriber;
             $roleName = $userObj->firstname;
 
-            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('student', $userObj->id)->get();
-            if(!count($attendanceRec)) {
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('student', $userObj->id);
+            if(!$attendanceRec->count()) {
                 $attendance = New AttendanceTracker;
                 $attendance->live_session_id = $session;
                 $attendance->student = $userObj->id;
                 $attendance->start_time = (new DateTime("now", new DateTimeZone('UTC')));
                 $attendance->attendance_Status = true;
                 $attendance->save();
+            } else {
+                $attendanceRec->update(['attendance_Status' => true]);
             }
         } else {
             $role = self::RolePublisher;
@@ -132,7 +134,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '00' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
