@@ -137,7 +137,7 @@ window.onload = function(event) {
   sub_topic_count++;
   });
 
-  /*const generateSubTopicHTML = () => {
+  const generateSubTopicHTML = () => {
     const cardEl = createNewElement('div', ['card', 'mb-3']);
     const cardbodyEl = createNewElement('div', ['card-body']);
     const cardtitleEl = createNewElement('h5', ['card-title'], [], 'Topic title');
@@ -173,7 +173,7 @@ window.onload = function(event) {
     cardbodyEl.appendChild(innercardEl);
     cardEl.appendChild(cardbodyEl);
     return cardEl;
-  }*/
+  }
 
 const generateSubTopicHTMLInitial = () => {
   const subTopicContainerEl = document.querySelector('.sub-topic-container');
@@ -181,7 +181,7 @@ const generateSubTopicHTMLInitial = () => {
   document.getElementById('topic_count').value = 1;
   sub_topic_count++;
 }
-generateSubTopicHTMLInitial();
+//generateSubTopicHTMLInitial();
 
   const generateContentHTML = (topicNum, contentCount) => {
     const contentContainerEl = createNewElement('div', ['card', 'card-body', 'mb-3']);
