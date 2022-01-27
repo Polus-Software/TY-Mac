@@ -955,6 +955,59 @@ font-size: 14px;
   display: none;
 }
 
+/* board-box */
+.board-box {
+  position: absolute;
+  height: 48px;
+  top: 0;
+}
+.board-box .whiteboard {
+  position: relative;
+}
+.board-box .whiteboard .tabs.tabs-top.tabs-editable {
+  display: none;
+}
+.board-box .whiteboard .board-section {
+  display: none;
+}
+.board-box .whiteboard .toolbar-position {
+  left: 15px;
+  top: 0px;
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz{
+  height: 100%;
+  transition: height .3s ease
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz:hover{
+  height: 78px;
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz .tools{
+  height: 50px;
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz .tools > .tool{
+  display: none;
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz:hover .tools .tool:nth-last-child(-n + 2) {
+  display: flex;
+}
+.board-box .whiteboard .toolbar-position .toolbar.opened.toolbar-biz:hover .tools .tool:last-of-type {
+  display: none;
+}
+.board-box .whiteboard .toolbar-position svg.svg-img.prefix-tools {
+    position: absolute;
+    top: 0;
+}
+.popover.expand-tools-popover.popover-placement-right {
+    top: 102px !important;
+}
+.layout.layout-row.horizontal > .layout-content.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between !important;
+}
+
+/* board-box ends */
+
 /* Layout alignments starts*/
 /*base*/
 body {
