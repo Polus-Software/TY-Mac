@@ -2,18 +2,18 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @csrf
         <section class="row g-3 llp-view">
-        <div class="py-4"><h3>Admin details</h3><hr class="my-4"></div>
+        <div class="py-4"><h3 class="titles">Admin details</h3></div>
         <div class="col-md-6">
             <label>First Name</label>
             <p>{{$adminDetails['firstname']}}</p>
@@ -33,6 +33,7 @@
           </section>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

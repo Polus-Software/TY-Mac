@@ -2,26 +2,25 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.sidebar')
+      @include('Course.admin.create.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
     <div class="py-4">
-            <h5>Course Title:<span> {{$course_title}}</span></h5>
-            <hr class="my-4">
+            <h5 class="titles">Course Title:<span> {{$course_title}}</span></h5>
           </div>
       <!-- main -->
       <main>
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Subtopic list</a>
+            <a class="nav-link" aria-current="page" href="{{ route('view-subtopics', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Topics list</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Subtopic</a>
+            <a class="nav-link active" href="{{ route('create-subtopic', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Topics</a>
           </li>
 </ul>
         </div>
@@ -31,6 +30,59 @@
           
           <div class="row sub-topic-container">
             <input id="topic_count" name="topic_count" type="hidden" value="0">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h5 class="card-title">Topic title</h5>
+					<input class="form-control" type="text" name="topic_title1" placeholder="Ex: Session 1 - Intro to G Suite &amp; Google Drive" value="{{$topic_title}}">
+					<div class="llpcard-inner bg-light mt-3 mb-3 p-3">
+						<input class="content_count" type="hidden" id="content_count_topic_1" name="content_count_topic_1" value="{{$totalCount}}" rel="1">
+						@if(!empty($courseContents))
+						<div class="row content-container" id="topic-1">	
+						@foreach ($courseContents as $key => $courseContent)
+							<div class="card card-body mb-3">
+								<input class="form-control mb-3" type="text" name="content_title_1_{{$key}}" placeholder="Ex: What is Google Suite?" value="{{$courseContent['topic_title']}}">
+								<div class="add_external_link mb-3">
+									<input class="externalLink_count" type="hidden" id="externalLink_count_topic_1_content_{{$key}}" name="externalLink_count_topic_1_content_{{$key}}" value="{{$totalCount}}">
+									@if($courseContent['content_type'] == 'link')
+									@foreach($courseContent['document'] as $key => $document)
+										@if($document!='')
+										<div class="row external-container mb-3">
+											<div class="col-lg-4"><label>Add External Link</label></div>
+											<div class="col-lg-8">
+												<input class="form-control" type="link" name="external_topic1_content_1_link_{{$key}}" value="{{$document}}">
+											</div>
+										</div>
+										@endif
+									@endforeach
+									@endif
+								</div>
+								<div class="row p-2 flex-fill bd-highlight">
+									<div class="col-lg-3">Course material:</div>
+									<div class="col-lg-5 col-12">
+										<label>Upload from device</label>
+										<input class="form-control" type="file" name="content_upload_1_{{$key}}">
+										<small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small>
+									</div>
+									<div class="col-lg-3 pt-4">
+										<a class="btn btn-sm btn-outline-secondary">Add external link</a>
+									</div>
+									<div class="col-lg-1 text-end">
+										<a><i class="fas fa-trash-alt"></i></a>
+									</div>
+								</div>
+							</div>
+						@endforeach
+						</div>
+						@endif	
+						<div class="row">
+							<div class="col-12">
+								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content">Add content for topic</a>
+								<a class="btn btn-sm btn-outline-secondary">Upload audio/video</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
           </div>
         <div class="row">
             <div class="col-12">
@@ -46,6 +98,7 @@
         </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
@@ -84,7 +137,7 @@ window.onload = function(event) {
   sub_topic_count++;
   });
 
-  const generateSubTopicHTML = () => {
+  /*const generateSubTopicHTML = () => {
     const cardEl = createNewElement('div', ['card', 'mb-3']);
     const cardbodyEl = createNewElement('div', ['card-body']);
     const cardtitleEl = createNewElement('h5', ['card-title'], [], 'Topic title');
@@ -100,7 +153,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for topic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -120,7 +173,7 @@ window.onload = function(event) {
     cardbodyEl.appendChild(innercardEl);
     cardEl.appendChild(cardbodyEl);
     return cardEl;
-  }
+  }*/
 
 const generateSubTopicHTMLInitial = () => {
   const subTopicContainerEl = document.querySelector('.sub-topic-container');
@@ -139,7 +192,7 @@ generateSubTopicHTMLInitial();
     ]);
     const addExternalLinkEl = createNewElement('div', ['add_external_link', 'mb-3']);
     const contentEl = createNewElement('div', ['row', 'p-2', 'flex-fill', 'bd-highlight']);
-    const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Study material:');
+    const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Course material:');
 
     const uploadContainerEl = createNewElement('div', ['col-lg-5', 'col-12']);
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
@@ -147,7 +200,7 @@ generateSubTopicHTMLInitial();
       {'type': 'file'},
       {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [

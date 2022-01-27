@@ -50,6 +50,7 @@ class AdminController extends Controller
             array_push($studentDetails, $studentData);
         }
         $studentDetailsObj = collect($studentDetails);
+        $studentDetailsObj = collect($studentDetails);
         $studentDatas = $this->paginate($studentDetailsObj, 10);
         $studentDatas->withPath('');
 
@@ -566,5 +567,127 @@ class AdminController extends Controller
         }
         return response()->json(['status' => 'failed', 'message' => 'Some error', 'html' => '']);
     }
+	/* by jibi for getting user reviews starts */
+	public function getUserReviews(){
+		$userfeedbacks = [];
+        $generalCourseFeedbacks = DB::table('general_course_feedback')
+									->select('general_course_feedback.id', 'general_course_feedback.course_id','courses.course_title','general_course_feedback.user_id','users.firstname','users.lastname','general_course_feedback.rating','general_course_feedback.comment','general_course_feedback.is_moderated')
+									->join('courses', 'general_course_feedback.course_id', '=', 'courses.id')
+									->join('users', 'general_course_feedback.user_id', '=', 'users.id')
+									->get();
+        $user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+		$totalCount = $generalCourseFeedbacks->count();
+		foreach ($generalCourseFeedbacks as $feedback) {
+			$comments = strip_tags($feedback->comment);
+			if (strlen($comments) > 30) {
+				// truncate string
+				$firstpart = substr($comments, 0, 30);
+				$firstpart = $firstpart;
+				$secondpart = substr($comments, 30);
+			}
+			else{
+				$firstpart = $feedback->comment;
+				$secondpart = '';
+			}
+            $userfeedback = array(
+                'id' => $feedback->id,
+                'course_id'=> $feedback->course_id,
+				'course_name'=> $feedback->course_title,
+				'user_id'=> $feedback->user_id,
+				'user_name'=> $feedback->firstname.' '.$feedback->lastname,
+				'rating'=> $feedback->rating,
+				'comment'=> $feedback->comment,
+				'is_moderated'=>$feedback->is_moderated,
+				'firstpart' => $firstpart,
+				'secondpart' => $secondpart,
+            );
+            array_push($userfeedbacks, $userfeedback);
+        }
+        $feedbackObj = collect($userfeedbacks);
+        $userfeedbacks = $this->paginate($feedbackObj, 10);
+		$userfeedbacks->withPath('');
+		//var_dump($userfeedbacks);
+		return view('Auth.Admin.view_reviews', [
+            'userfeedbacks' => $userfeedbacks,
+			'userType' => $userType,
+			'course' => '',
+			'comment' => '',
+			'rating' => '',
+			'totalCount' => $totalCount
+        ]);
+	}
+	public function getUserReviewsFilter(Request $request){
+		$comment = $request->input('comment');
+		$rating = $request->input('rating');
+		$course = $request->input('course');
+		$userfeedbacks = [];
+		$matchThese = '';
+		if(!empty($comment) && !empty($rating) && !empty($course)){
+			$matchThese = ['rating' => $rating];
+		}
+		$generalCourseFeedbacks = DB::table('general_course_feedback')
+									->select('general_course_feedback.id', 'general_course_feedback.course_id','courses.course_title','general_course_feedback.user_id','users.firstname','users.lastname','general_course_feedback.rating','general_course_feedback.comment','general_course_feedback.is_moderated')
+									->join('courses', 'general_course_feedback.course_id', '=', 'courses.id')
+									->join('users', 'general_course_feedback.user_id', '=', 'users.id')
+									->where([['courses.course_title', 'like', '%' . $course . '%'],['general_course_feedback.comment', 'like', '%' . $comment . '%'],['general_course_feedback.rating', 'like', '%' . $rating . '%']])
+									->get();
+		$user = Auth::user();
+        $userType =  UserType::find($user->role_id)->user_role;
+		$totalCount = $generalCourseFeedbacks->count();
+		foreach ($generalCourseFeedbacks as $feedback) {
+			$comments = strip_tags($feedback->comment);
+			if (strlen($comments) > 30) {
+				// truncate string
+				$firstpart = substr($comments, 0, 30);
+				$firstpart = $firstpart;
+				$secondpart = substr($comments, 30);
+			}
+			else{
+				$firstpart = $feedback->comment;
+				$secondpart = '';
+			}
+            $userfeedback = array(
+                'id' => $feedback->id,
+                'course_id'=> $feedback->course_id,
+				'course_name'=> $feedback->course_title,
+				'user_id'=> $feedback->user_id,
+				'user_name'=> $feedback->firstname.' '.$feedback->lastname,
+				'rating'=> $feedback->rating,
+				'comment'=> $feedback->comment,
+				'is_moderated'=>$feedback->is_moderated,
+				'firstpart' => $firstpart,
+				'secondpart' => $secondpart,
+            );
+            array_push($userfeedbacks, $userfeedback);
+        }
+        $feedbackObj = collect($userfeedbacks);
+        $userfeedbacks = $this->paginate($feedbackObj, 10);
+		$userfeedbacks->withPath('');
+		//var_dump($userfeedbacks);
+		return view('Auth.Admin.view_reviews', [
+            'userfeedbacks' => $userfeedbacks,
+			'course' => $course,
+			'comment' => $comment,
+			'rating' => $rating,
+			'userType' => $userType,
+			'totalCount' => $totalCount
+        ]);
+	}
+	public function publishReview(Request $request){
+		$reviewId = $request->review_id;
+		$review = DB::table('general_course_feedback')->where('id', $reviewId)->first();
+		if($review->is_moderated) {
+            $is_moderated = false;
+			DB::table('general_course_feedback')->where('id', $reviewId)->update(['is_moderated' => $is_moderated]);
+            //$review->save();
+            return response()->json(['status' => 'unpublished', 'message' => 'Unpublished successfully']);
+        } else {
+            $is_moderated = true;
+            DB::table('general_course_feedback')->where('id', $reviewId)->update(['is_moderated' => $is_moderated]);
+            return response()->json(['status' => 'published', 'message' => 'Published successfully']);
+        }
+	}
+	/* by jibi for getting user reviews ends */
 
 }

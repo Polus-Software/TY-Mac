@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       @php
@@ -30,8 +30,7 @@
 
             <section class="row g-3 llp-view">
               <div class="py-4">
-                <h3>{{ (!!$isEdit) ? 'Edit profile' : 'Add Admin' }}</h3>
-                <hr class="my-4">
+                <h3 class="titles">{{ (!!$isEdit) ? 'Edit profile' : 'Add Admin' }}</h3>
               </div>
               <div class="col-md-6">
                 <label>First Name</label>
@@ -68,13 +67,13 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-                <label for="admin_password" class="col-form-label">Password</label>
+                <label for="admin_password" class="col-form-label">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating a new password."></i></label>
                 <input type="password" class="form-control has-validation" id="admin_password" name="password"></input>
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
                 @else
                 <div class="col-12"> 
-                <label>Password</label>
+                <label>Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
                 <input type="password" class="form-control has-validation"  name="password" id="admin_password" placeholder="Enter password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
@@ -84,8 +83,8 @@
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                   @endif
               </div>
-          
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
+				<div class="col-1"></div>
+              <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
                 <a class="btn btn-outline-secondary" href="{{route('manage-admin')}}">Cancel</a>                
                   @if(Route::current()->getName() == 'edit-admin')
                   <button type="submit" class="btn btn-primary btn-dark">Update</button>
@@ -100,6 +99,8 @@
   </div>
 </div>
 <!-- container ends -->
+@endsection('content')
+@push('child-scripts')
 <script>
   function makeid(length) {
     var result = '';
@@ -129,4 +130,10 @@
 
   }
 </script>
-@endsection('content')
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+@endpush

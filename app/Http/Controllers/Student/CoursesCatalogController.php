@@ -144,7 +144,7 @@ class CoursesCatalogController extends Controller
             }
         }
 
-        $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
+        $generalCourseFeedbacks = DB::table('general_course_feedback')->where([['course_id',$course->id],['is_moderated',1]])->get();
         foreach($generalCourseFeedbacks as $generalCourseFeedback){
             $studentFirstname = User::where('id', $generalCourseFeedback->user_id )->value('firstname');
             $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');

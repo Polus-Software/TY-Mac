@@ -66,7 +66,6 @@ Route::get('/', function () {
     Route::post('/publish-course', [CourseController::class, 'publishCourse'])->name('publish-course');
 
 
-
     Route::get('/view-course', [CourseController::class, 'viewCourse'])->name('view-course');
     Route::get('/edit-course', [CourseController::class, 'editCourse'])->name('edit-course');
 
@@ -105,7 +104,10 @@ Route::get('/', function () {
     Route::post('/get-attendance-table', [AdminController::class, 'getAttendanceTable'])->name('get.attendance.table');
     Route::post('/get-attendance-batches', [AdminController::class, 'getAttendanceBatches'])->name('get.attendance.batches');
     Route::post('/get-attendance-sessions', [AdminController::class, 'getAttendanceSessions'])->name('get.attendance.sessions');
-
+	Route::get('/manage-reviews', [AdminController::class, 'getUserReviews'])->name('admin.manager_reviews');
+	Route::get('/manager-reviews-filter', [AdminController::class, 'getUserReviewsFilter'])->name('admin.manager_reviews_filter');
+	Route::post('/publish-review', [AdminController::class, 'publishReview'])->name('publish-review');
+	
     Route::get('/students/{student}', [AdminController::class, 'showStudent'])->name('admin.showstudent');
     Route::get('/students/edit/{student}', [AdminController::class, 'editStudent'])->name('admin.editstudent');
     Route::put('/students/update/{students}', [AdminController::class, 'updateStudent'])->name('admin.updatestudent');
@@ -155,13 +157,15 @@ Route::get('/', function () {
     Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
     Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
     Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
+    Route::post('stop-presenting', [RtmTokenGeneratorController::class, 'stopPresenting'])->name('stop-presenting');
     Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
     Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
-    Route::post('student-exit/{session}/{timer}', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
+    Route::post('student-exit', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
     Route::post('get-attendance-list', [RtmTokenGeneratorController::class, 'getAttendanceList'])->name('get-attendance-list');
     Route::post('submit-feedback', [RtmTokenGeneratorController::class, 'submitSessionFeedback'])->name('submit-feedback');
     Route::post('save-session-chat', [RtmTokenGeneratorController::class, 'saveSessionChat'])->name('save-session-chat');
     Route::post('get-session-chat', [RtmTokenGeneratorController::class, 'getSessionChat'])->name('get-session-chat');
+    Route::post('get-session-chart', [RtmTokenGeneratorController::class, 'getSessionChart'])->name('get-session-chart');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -177,6 +181,7 @@ Route::get('/', function () {
     Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
     Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');
     Route::post('/ask-question', [EnrolledCourseController::class, 'askQuestion'])->name('ask.question');
+    Route::get('/study-materials', [EnrolledCourseController::class, 'studyMaterials'])->name('study.materials');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
@@ -184,6 +189,10 @@ Route::get('/', function () {
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');
     Route::get('/view-course-content/{course}', [AssignedCoursesController::class, 'ViewCourseContent'])->name('view-course-content');
     Route::get('/download/{topic}', [AssignedCoursesController::class, 'downloadStudyMaterial'])->name('download-study-material');
+    Route::get('/choose-cohort', [AssignedCoursesController::class, 'chooseCohort'])->name('choose.cohort');
+    Route::get('/thinklitway', function () {
+        return view('thinklitway');
+    })->name('thinklitway');
     
 });
 Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.create.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @if(Route::current()->getName() == 'edit-course')
@@ -24,8 +24,7 @@
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
         @endif
         @csrf
-          <div class="py-4"><h3>Course Overview</h3>
-          <hr class="my-4">
+          <div class="py-4"><h3 class="titles">Course Overview</h3>
         </div>
           <div class="col-12">
             <label for="title">Course Title</label>
@@ -166,11 +165,11 @@
             <label for="course-image">Course image</label>
             <div class="row">
               @if(isset($course_details['image']))
-              <div class="col"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="..."></div>
               @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
               <div class="col">
-                <p>Important guidelines: <b>604x287</b> pixels</p>
+                <p>Important guidelines: <b>600x285</b> pixels</p>
                 <p>Image must be less than <b>500kb</b> </p>
                 <p> supported file formats: jpg, jpeg, png, .svg.</p>
               </div>
@@ -179,7 +178,7 @@
              
               <input type="file" class="form-control mb-2" id="course-image" name="course_image">
 
-              <label class="input-group-text col-12" for="course-image">Upload</label>
+              <label class="input-group-text mb-2 left_right_padding" for="course-image">Upload Image</label>
             </div>
             @if ($errors->has('course_image'))
               <span class="text-danger">{{ $errors->first('course_image') }}</span>
@@ -192,7 +191,7 @@
             @if(isset($course_details['thumbnail']))
             <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
             @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
               <div class="col">
                 <p>Important guidelines: <b>395x186 pixels</b></p>
                 <p>Image must be less than <b>100kb</b> </p>
@@ -201,7 +200,7 @@
               @endif
             <div class="input-group mt-3 mb-3">
               <input type="file" class="form-control mb-2" id="course-thumbnail-image" name="course_thumbnail_image">
-              <label class="input-group-text col-12" for="course-thumbnail-image">Upload</label>
+              <label class="input-group-text mb-2 left_right_padding" for="course-thumbnail-image">Upload Image</label>
             </div>
             @if ($errors->has('course_thumbnail_image'))
               <span class="text-danger">This course thumbnail image field is required</span>
@@ -219,6 +218,7 @@
         </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

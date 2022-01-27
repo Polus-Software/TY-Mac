@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Layouts.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       @php
@@ -30,8 +30,7 @@
 
             <section class="row g-3 llp-view">
               <div class="py-4">
-                <h3>{{ (!!$isEdit) ? 'Edit profile' : 'Add Instructor' }}</h3>
-                <hr class="my-4">
+                <h3 class="titles">{{ (!!$isEdit) ? 'Edit profile' : 'Add Instructor' }}</h3>
               </div>
               <div class="col-md-6">
                 <label>First Name</label>
@@ -140,12 +139,15 @@
               <div class="col-md-12">
                 
                 @if(!!$isEdit)
-                <label for="password">Password</label>
-                <input type="text" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <label for="password">Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
+                <input type="password" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @else
-                <input type="text" class="form-control has-validation" id="instructor_password" name="password"></input>
-                <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondarye" id="generate_password">Generate password</button>
+                <label for="password">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating password."></i></label>
+                <input type="password" class="form-control has-validation" id="instructor_password" name="password">
+                <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
+                <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @endif
                 @if ($errors->has('password'))
                 <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
@@ -200,9 +202,12 @@
           </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
+@endsection('content')
+@push('child-scripts')
 <script>
   function makeid(length) {
     var result = '';
@@ -217,5 +222,24 @@
   document.getElementById('generate_password').addEventListener('click', function(event) {
     document.getElementById('instructor_password').value = makeid(12);
   });
+  function adminViewPassword()
+  {
+    let passwordInput = document.getElementById('instructor_password');
+    if (passwordInput.type == 'password'){
+      passwordInput.type='text';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye';
+    }
+    else{
+      passwordInput.type='password';
+      document.getElementById('adminTogglePass').className = 'fas fa-eye-slash';
+    }
+
+  }
 </script>
-@endsection('content')
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+@endpush

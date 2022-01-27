@@ -21,6 +21,7 @@ use App\Models\Notification;
 use Session;
 use Hash;
 use Carbon\Carbon;
+use Config;
 
 class AuthController extends Controller
 {
@@ -66,7 +67,7 @@ class AuthController extends Controller
            'lastname'=> $request->lastname
            
         ];
-        Mail::to($email)->send(new Gmail($details));
+        // Mail::to($email)->send(new Gmail($details));
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -93,31 +94,42 @@ class AuthController extends Controller
     /**
      * Student login action
      */
-    public function loginProcess(Request $request) {
+    public function loginProcess(Request $request)
+    {
         $request->validate([
             'email' => 'required',
-            'password' => 'required', 
+            'password' => 'required',
         ]);
-        
+
         $credentials = $request->only('email', 'password');
 
-        $remember_me = ( !empty( $request->remember_me) ) ? TRUE :FALSE ;
+        $remember_me = (!empty($request->remember_me)) ? TRUE : FALSE;
+        $redirectTo = '';
         if (Auth::attempt($credentials)) {
-
-           $user = Auth::user();
-           $userType =  UserType::find($user->role_id)->user_role;
-           $token = $user->createToken('token')->plainTextToken;
-           Auth::login($user, $remember_me);
-           if($userType == 'student'){
-                return redirect('/');
-            } elseif($userType == 'instructor') {                
-                return redirect('assigned-courses');
-            } else{
-                return redirect('dashboard');
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
+            $token = $user->createToken('token')->plainTextToken;
+            Auth::login($user, $remember_me);
+            if ($userType == Config::get('common.ROLE_NAME_STUDENT')) {
+                $redirectTo = '/';
             }
-        } else {
-            return redirect('/')->with('message','Invalid username/password');
+            if ($userType == Config::get('common.ROLE_NAME_INSTRUCTOR')) {
+                $redirectTo = 'assigned-courses';
+            }
+            if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
+                $redirectTo = 'dashboard';
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login success',
+                'url' => $redirectTo
+            ]);
         }
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'Invalid username/password',
+            'url' => ''
+        ]);
     }
     
     
@@ -224,12 +236,11 @@ class AuthController extends Controller
                 'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
             ];
     
-            Mail::to('support@thinklit.com')->send(new Gmail($details));
+            // Mail::to('support@thinklit.com')->send(new Gmail($details));
     
-            // return back()->withSuccess('Sent successfully!');
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
-            return back();
+            return redirect('/')->with('message', 'Registration failed');
         }
         
     }

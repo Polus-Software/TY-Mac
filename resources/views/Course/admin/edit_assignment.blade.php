@@ -37,7 +37,7 @@
           <div class="col-11">
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">
-          <small class="fst-italic">Supported File Formats are:  pdf, doc, docx</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
           <!-- <input type="file" class="form-control" id="document" name="document"> -->
           <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
           <!-- <div class="vr me-2 ms-2"></div> -->

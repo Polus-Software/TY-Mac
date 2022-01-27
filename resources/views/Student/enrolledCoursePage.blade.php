@@ -287,7 +287,18 @@
                     <div class="tab-pane fade show {{($userType == 'student') ? 'active' : ''}}" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
                         <div class="card card-2 mb-3">
                             <div class="card-body">
-                                <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-12">
+                                        <h5 class="card-title pt-2">Session info</h5>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                    @if($userType == 'student')
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}">Go to study materials</a>
+                                    @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                
                                 @foreach($topicDetails as $topicDetail)
                                 
                                 <div class="row">
@@ -304,7 +315,7 @@
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @else
-                                        <a style="background-color: #74648C;color: white;" type="button" target="_blank" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        <a style="background-color: #74648C;color: white;" type="button" target="_blank" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
                                     </div>
                                 </div>
@@ -725,7 +736,7 @@
                                                                             <div class="col-lg-3">Attach File:</div>
                                                                                 <div class="col-lg-5 col-12"><label>Upload from device</label>
                                                                                     <input class="form-control" type="file" name="assignment_upload">
-                                                                                    <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                    <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx,</small>
                                                                                 </div>
                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                         </div>

@@ -30,24 +30,30 @@
     
     <ul class="navbar-nav mx-0 think-custom-nav-1">
     @if (Auth::check())
-      @if(Auth::user()->role_id !== 3)      
+      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR'))      
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
+        <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
+        </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
         @else
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
+        <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">Thinklit Way</a>
+        </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
       @if (Auth::check())
-        @if(Auth::user()->role_id == 3)
+        @if(Auth::user()->role_id == Config::get('common.ROLE_ID_INSTRUCTOR'))
         <li class="nav-item {{ (request()->is('assigned-courses')) ? 'active': '' }}">
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
