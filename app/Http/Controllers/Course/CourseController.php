@@ -426,6 +426,7 @@ class CourseController extends Controller
             $topic->save();
             $content_count = $request->input('content_count_topic_'.$i);            
             for($j = 1; $j<=$content_count; $j++) {
+				$external_links = '';
                 if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
                     continue;
                 }
@@ -518,34 +519,53 @@ class CourseController extends Controller
     // }
 
     public function editSubTopics(Request $request, $topicId) {
-
-        $courseContents = [];
-        
+		$courseContents = [];
         if($topicId) {
-            
-        $subtopics = Topic::where('topic_id', $topicId)->get();
-        foreach($subtopics as $topics){
-
-            $topicId = $topics->topic_id;
-            $topic_title =  $topics->topic_title;
-            $course_id = $topics->course_id;
-            $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
-            $topicContentArray= TopicContent::where('topic_id', array($topicId))->get();
-            $contentsData = $topicContentArray->toArray();
-            $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
-            array_push($courseContents, array(
-                'topic_id' => $topicId,
-                'topic_title' =>$topic_title,
-                'contentsData' => $contentsData
-            ));
-            }
-
-            return view('Course.admin.edit_subtopic', [
-                'courseContents' => $courseContents,
-                'course_id' => $course_id,
-                'course_title' => $course_title,
-                'courseStatus' => $courseStatus
-            ]);
+			$subtopics = Topic::where('topic_id', $topicId)->first();
+			$topicContentArray= TopicContent::where('topic_id', array($topicId))->get();
+			$totalCount = $topicContentArray->count();
+			$contentsData = $topicContentArray->toArray();
+			if($contentsData){
+				foreach($contentsData as $data){
+					$linksArray = array();
+					if($data['content_type'] != 'link'){
+						$uploaded_file = $data['document'];
+					}
+					else if($data['content_type'] == 'link'){
+						$uploaded_file = '';
+						$linksArray = explode(';', $data['document']);
+					}
+					else{
+						$uploaded_file = '';
+						$linksArray = array();
+					}
+					array_push($courseContents, array(
+						'topic_content_id' => $data['topic_content_id'],
+						'topic_id' =>$data['topic_id'],
+						'topic_title' => $data['topic_title'],
+						'topic_content_id' => $data['topic_content_id'],
+						'description' =>$data['description'],
+						'content_type' => $data['content_type'],
+						'document' => $linksArray,
+						'uploaded_file' => $uploaded_file,
+						'created_at' =>$data['created_at'],
+						'updated_at' => $data['updated_at']
+					));
+				}
+			}
+			$course_id = $subtopics['course_id'];
+			$course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+			$courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
+			//var_dump($courseContents);exit;
+			return view('Course.admin.edit_subtopic', [
+				'courseContents' => $courseContents,
+				'course_id' => $course_id,
+				'course_title' => $course_title,
+				'courseStatus' => $courseStatus,
+				'topic_title' =>$subtopics['topic_title'],
+				'topic_id' => $topicId,
+				'totalCount'=>$totalCount
+			]);
         }
     }
 
