@@ -359,7 +359,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 mt-3">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
                                                     <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
@@ -417,7 +417,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 mt-3">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
                                                     <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
