@@ -505,8 +505,8 @@ class RtmTokenGeneratorController extends Controller
                 $student = User::where('id', $rec->student);
                 $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
                 $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/icons/placeholder-avatar.svg" alt="error">';
-                $html = $html . '<span class="think-online-status-light-container online-status-green"></span></span>';
-                $html = $html . '<span class="think-participant-name">'. $studentName .'</span></span></div>'; 
+                $html = $html . '</span>';
+                $html = $html . '<span class="think-participant-name">'. $studentName .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
             }
             return response()->json(['status' => 'success', 'html' => $html]);
     }

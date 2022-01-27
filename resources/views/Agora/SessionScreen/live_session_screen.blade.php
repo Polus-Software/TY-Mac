@@ -14,6 +14,9 @@
 
 <body>
   <style>
+    :root {
+    --video-session-h: 450px;
+}
     #root1 {
       width: 100%;
       height: 100% !important;
@@ -95,12 +98,6 @@ aside.layout-aside.big-class-aside {
 .layout-aside {
     width: 54rem !important;
 }
-
-.video-player.big-class-teacher {
-  width: 80% !important;
-  height: 30rem !important;
-}
-
 .video-marquee-pin.big-class {
   position: relative;
     left: 65.3rem;
@@ -244,15 +241,17 @@ ul.nav.nav-tabs li {
 .tab-contents {
   position: relative;
     /* right: 0px; */
-    width: 300px;
+    width: 100%;
     /* height: 100%; */
     /* margin: 125px 10px 0px 10px; */
     border: 1px solid #e5e7eb;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
     padding: 0;
-    grid-row: span 2;
+    grid-row: span 3;
 }
-
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
 /* #positive {
   background-color: #F5F3FF !important;
   color: #74648C !important;
@@ -310,6 +309,12 @@ svg.svg-img.prefix-more.can-hover {
   font-family: 'Roboto', sans-serif;
 }
 /* Utilities */
+.margin-0 {
+  margin: 0 !important;
+}
+.margin-top-18 {
+  margin-top: 18px !important;
+}
 .font-lato {
   font-family: 'Lato', sans-serif !important;
 }
@@ -332,9 +337,10 @@ font-size: 14px;
   color: #6E7687;
 }
 .think-btn-secondary-outline-live.like-button {
-	background-color: #F5F3FF !important;
-	color: #74648C !important;
-	border: 1px solid #E7D6FF !important;
+  background-color: #fff !important;
+	color: #868E96 !important;
+	border: 1px solid #E0E0E0 !important;
+  border-radius: 10px;
 }
 .think-btn-secondary-outline-live.like-button:hover {
 	background-color: #74648C !important;
@@ -342,14 +348,15 @@ font-size: 14px;
 	border: 1px solid #74648C !important;
 }
 .think-btn-secondary-outline-live.dislike-button {
+  background-color: #fff !important;
+	color: #868E96 !important;
+	border: 1px solid #E0E0E0 !important;
+  border-radius: 10px;
+}
+.think-btn-secondary-outline-live.dislike-button:hover {
 	background-color: #ffefef !important;
 	color: #a00 !important;
 	border: 1px solid #ffefef !important;
-}
-.think-btn-secondary-outline-live.dislike-button:hover {
-	background-color: #a00 !important;
-	color: #fff !important;
-	border: 1px solid #a00 !important;
 }
 .think-btn-secondary-outline-live {
     text-decoration: none !important;
@@ -359,7 +366,7 @@ font-size: 14px;
     font-size: 1rem !important;
     background-color: transparent !important;
     font-family: 'Lato', sans-serif !important;
-    border-radius: 10px;
+    border-radius: 5px;
     display: inline-block;
     font-weight: 400;
     line-height: 1.5;
@@ -382,11 +389,11 @@ font-size: 14px;
 /*  */
 body {
 	display: grid;
-  background-color: #F1F2F6;
+  background-color: #FFF;
 	width: min(95%, 1360px);
 	margin-inline: auto;
 	grid-gap: 1rem;
-	grid-template-columns: 1fr 300px;
+	grid-template-columns: 1fr 344px;
 	grid-template-rows: auto 72px auto;
 }
 .think-cohort-actions-container {
@@ -394,7 +401,7 @@ body {
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  padding: 15px 20px;
+  padding: 9px 0;
   border-radius: 10px;
   grid-column: 1;
   height: max-content;
@@ -414,26 +421,37 @@ aside.layout-aside.big-class-aside {
 }
 .layout.layout-row.horizontal {
   background-color: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+}
+.camera-placeholder {
+	border: none;
+	background-color: #fff;
+}
+.video-wrap {
+	height: var(--video-session-h);
 }
 .video-player.big-class-teacher {
 	width: 100% !important;
-	height: 38rem !important;
+	height: var(--video-session-h) !important;
 }
-.video-wrap {
-	height: 600px;
-}
-
 .video-marquee-pin.big-class {
 	position: relative;
 	left: 0;
 	top: 0;
 }
 /*  */
+.layout.layout-col.edu-room {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
 .layout.layout-row.horizontal 
 .layout-content.column {
-  height: 600px;
+  height:  var(--video-session-h);
   overflow: hidden auto;
   order: 2;
+  border-left: 1px solid #e5e7eb;
 }
 div#animation-group {
   display: flex;
@@ -475,12 +493,18 @@ aside .video-wrap .bottom-left-info .username {
   overflow-y: auto;
   background-color: #fff;
 }
+.participants-container-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2C3443;
+  padding: 9px 15px;
+}
 .tab-contents ul.nav {
   position: sticky;
   z-index: 2;
   top: 0;
   display: flex;
-  background-color: #F5F3FF;
+  background-color: #F8F7FC;
   padding: 0;
 }
 .tab-contents ul.nav li {
@@ -502,7 +526,7 @@ aside .video-wrap .bottom-left-info .username {
   font-weight: 600;
 }
 .think-participant-container {
-  padding: 5px 15px;
+  padding: 5px 25px 5px 15px;
 }
 .think-participant-wrapper {
 	display: flex;
@@ -511,6 +535,12 @@ aside .video-wrap .bottom-left-info .username {
 .think-participant-container span.think-participant-wrapper span.img-container{
   display: inline-block;
   position: relative;
+}
+.status-container-outer {
+  display: inline-block;
+  margin-left: auto;
+  font-size: 14px;
+  color: #2C3443;
 }
 .think-participant-name {
   margin-bottom: 3px;
@@ -526,10 +556,11 @@ aside .video-wrap .bottom-left-info .username {
 	height: 10px;
 	background-color: #e1e1e1;
 	border-radius: 50%;
-	position: absolute;
+  margin-right: 8px
+	/* position: absolute;
 	right: -6px;
 	bottom: 3px;
-	outline: 2px solid #fff;
+	outline: 2px solid #fff; */
 }
 .online-status-green {
   background-color: #5CE300
@@ -548,19 +579,20 @@ aside .video-wrap .bottom-left-info .username {
   color: #6E7687;
   font-size: 16px;
   font-weight: 400px;
+  margin-top: 8px
 }
 
 /*  */
 #feedback-container {
-  grid-column: span 2 !important;
+  grid-column: span 1 !important;
 }
 /* Pin UI improvements */
 .pin-right {
-	right: 10px;
 	bottom: 12px;
 	position: sticky;
 	display: block;
 	margin-inline-start: auto;
+  margin-inline-end: 10px;
 }
 .sender-can-hover:hover {
 	background-color: #74648c;
@@ -669,7 +701,7 @@ svg.svg-img.prefix-exit.can-hover {
   height: 100%;
 }
 .tab-content{
-  height:100%;
+  /* height:100%; */
 }
 .chat_text_box {
   border: 2px solid #d2dae2 !important;
@@ -849,6 +881,95 @@ iframe#course_content_iframe {
     position: absolute;
     height: 100%;
 }
+
+.header-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 99;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+  background-color: #fff;
+}
+.custom-navbar {
+  display: block;
+  width: 100%;
+}
+.header-wrapper {
+  width: min(95%, 1360px);
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.custom-menubar-container {
+  width: 100%;
+}
+.custom-menubar-container > ul {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+.custom-menubar-container > ul > li {
+  margin-left: 30px;
+  position: relative;
+display: inline-block;
+margin-left: 30px;
+font-size: 14px;
+}
+.custom-menubar-container > ul > li > a {
+  color: rgba(0,0,0,.7);
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px
+}
+/*  */
+.far.fa-circle {
+  font-size: 12px;
+  color: #E0E0E0;
+}
+.layout.layout-col.edu-room > header {
+  display: none;
+}
+
+/* Layout alignments starts*/
+/*base*/
+body {
+	  grid-template-rows: 82px auto 72px auto;
+    row-gap: .5rem;
+    column-gap: 1rem;
+}
+/*header*/
+.header-layout-grid {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 1
+}
+/*video player*/
+.tab-container {
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1
+}
+/*participants*/
+.tab-contents {
+  	grid-column: 2 / span 1;
+    grid-row: 2 / span 3
+}
+/*action button*/
+.think-cohort-actions-container {
+  	grid-column: 1 / span 1;
+    grid-row: 3 / span 1;
+}
+/*session info*/
+#feedback-container {
+  	grid-column: 1 / span 1;
+    grid-row: 4 / span 1;
+}
+/* Layout alignments ends */
+
 </style>
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
@@ -856,18 +977,39 @@ iframe#course_content_iframe {
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
   <input id="graph_box" type="hidden" value="" />
   <input id="batchId" type="hidden" value="{{$batchId}}" />
-  <!-- agora sdk -->
   
+
+  
+  <!-- agora sdk -->
+  <!-- header -->
+  <header class="header-layout-grid header-container">
+    <nav class="custom-navbar">
+      <div class="header-wrapper">
+        <a href="#"><img src="/storage/logo/ty_mac__vector.svg"></a>
+        <div class="custom-menubar-container">
+          <ul>
+            <li class="custom-nav-item"><a class="custom-nav-link">Home</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link">The Thinklit Way</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link">Courses</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link">My Courses</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
   <div class="tab-container think-position-relative">
   <span id="exit_session" class="exit-button nodisplay"><img src="/storage/icons/exit.svg" alt="error"></span>
   <span id="btnOpenClose" class="button-close-open nodisplay"><img src="/storage/icons/min_max__icon.svg" alt="error"></span>
     <div id="root1"></div>
   </div>
   <!-- chat UI -->
-  <div class="tab-contents nodisplay">
+  <div class="tab-contents margin-bottom-20 nodisplay">
+    <h3 class="participants-container-title font-lato margin-0">Chats</h3>
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#participants">Participants</a></li>
-        <li><a data-toggle="tab" href="#chat">Chat</a></li>
+        <li><a data-toggle="tab" href="#chat">Chat Messages</a></li>
       </ul>
       <div class="tab-content">
         <div id="participants" class="tab-pane fade in active">
@@ -876,9 +1018,9 @@ iframe#course_content_iframe {
           <span class="think-participant-wrapper">
             <span class="img-container">
               <img src="/storage/icons/placeholder-avatar.svg" alt="error">
-              <span class="think-online-status-light-container online-status-green"></span>
             </span>
             <span class="think-participant-name">{{ $participant }}</span>
+            <span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span>
           </span>
         </div>
         @endforeach
@@ -888,7 +1030,7 @@ iframe#course_content_iframe {
         <textarea id="chat_box" class="chat_text_box" placeholder="Hit enter to send.."></textarea>
         </div>
       </div>
-    </div>
+</div>
     <!-- Course action -->
     
     <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
@@ -962,7 +1104,7 @@ iframe#course_content_iframe {
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
     <hr>
     @csrf
-    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
+    <p class="notif-text think-color-dark margin-top-18 think-fs--16 ">{{ $topic_title }}</p>
     @foreach($contents as $content)
     <div href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
     @endforeach
@@ -981,7 +1123,7 @@ iframe#course_content_iframe {
   <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
     <hr>
-    <p class="notif-text think-color-dark think-fs--16">{{ $topic_title }}</p>
+    <p class="notif-text think-color-dark margin-top-18 think-fs--16">{{ $topic_title }}</p>
     @csrf
     <table>
     @foreach($contents as $content)
@@ -1329,7 +1471,6 @@ document.getElementById('back_to_course').addEventListener('click', function(){
   
       
 let timer = 0;
-
 $(document).ready(function(){
   var start = new Date;
   let sessionId = document.getElementById('session_hidden_id').value;
