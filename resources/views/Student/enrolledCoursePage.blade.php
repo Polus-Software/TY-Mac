@@ -287,7 +287,18 @@
                     <div class="tab-pane fade show {{($userType == 'student') ? 'active' : ''}}" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
                         <div class="card card-2 mb-3">
                             <div class="card-body">
-                                <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-12">
+                                        <h5 class="card-title pt-2">Session info</h5>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                    @if($userType == 'student')
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}">Go to study materials</a>
+                                    @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                
                                 @foreach($topicDetails as $topicDetail)
                                 
                                 <div class="row">

@@ -329,8 +329,8 @@ class EnrolledCourseController extends Controller
             }
         }
         
-        $qas = CourseQA::where('course_id', $courseId)->get();
-
+        $qas = CourseQA::where('course_id', $courseId)->orderBy('created_at', 'desc')->get();
+        
         foreach($qas as $qa) {
             $student = User::where('id', $qa->student);
             $instructor = User::where('id', $qa->instructor);
@@ -646,6 +646,49 @@ class EnrolledCourseController extends Controller
 
         return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
 
+    }
+
+    public function studyMaterials(Request $request) {
+        $courseId = $request->course;
+        $contentsArray = [];
+        $topicsArray = [];
+        
+
+        $topics = Topic::where('course_id', $courseId)->get();
+
+        foreach($topics as $topic) {
+            $attendanceStatus = 0;
+            $topicContents = TopicContent::where('topic_id', $topic->topic_id)->get();
+            $liveSession = LiveSession::where('topic_id', $topic->topic_id);
+            
+            $attendanceTracker = AttendanceTracker::where('live_session_id', $liveSession->value('live_session_id'))->where('student', Auth::user() ? Auth::user()->id : "");
+            
+            if($attendanceTracker->count()) {
+                $attendanceStatus = $attendanceTracker->value('attendance_Status');
+            }
+            
+            $topicTitle = $topic->topic_title;
+            foreach($topicContents as $topicContent) {
+                $topicContentId = $topicContent->topic_content_id;
+                $topicContentTitle = $topicContent->topic_title;
+                $topicContentDoc = $topicContent->document;
+                array_push($contentsArray, array(
+                    'topicContentId'=> $topicContentId,
+                    'topicContentTitle' =>  $topicContentTitle,
+                    'topicContentDoc' => $topicContentDoc,
+                ));
+            }
+            array_push($topicsArray, array(
+                'topicTitle'=> $topicTitle,
+                'contents' =>  $contentsArray,
+                'attendanceStatus' => $attendanceStatus
+            ));
+        }
+        
+        return view('Student.studymaterials',[
+            'courseId' => $courseId,
+            'topics' => $topicsArray
+        ]);
     }
 
 }

@@ -1530,7 +1530,7 @@ for(index = 0; index < length;index++) {
     });
 }
 
-document.getElementById('close_content').addEventListener('click', function(e){
+document.getElementById('close_content').addEventListener('click', function(e) {
     document.getElementById('close_content').classList.add('nodisplay');
     document.getElementById('course_content_iframe').classList.add('nodisplay');
     let topicContentId = document.getElementById('close_content').getAttribute('content-id');
