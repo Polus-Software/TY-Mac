@@ -284,18 +284,18 @@ class RtmTokenGeneratorController extends Controller
             $pushRecord->presenting = true;
             $pushRecord->save();
         }
-        return;
+        return response()->json(['status' => 'success']);
     }
 
     public function stopPresenting(Request $request) {
         $contentId = $request->content_id;
         $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->update(['presenting' => false]);
-        return;
+        return response()->json(['status' => 'success']);
     }
 
     public function getLiveRecord(Request $request) {
         $flag = 0;
-
+        
         $session = LiveSession::where('live_session_id', $request->session);
 
         $topicId = $session->value('topic_id');
@@ -310,13 +310,13 @@ class RtmTokenGeneratorController extends Controller
         if(count($feedbackRecord) != 0) {
             $flag = 1;
         }
+
         $content = TopicContent::where('topic_content_id', $topicContentId);
         
         $contentTitle = $content->value('topic_title');
 
         $presentingContent = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('presenting', true);
         $presentingContentId = $presentingContent->value('topic_content_id');
-        
         return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag, 'presentingContentId' => $presentingContentId]);
     }
 
@@ -508,7 +508,7 @@ class RtmTokenGeneratorController extends Controller
             foreach($attendanceRec as $rec) {
                 $student = User::where('id', $rec->student);
                 $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
-                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/icons/placeholder-avatar.svg" alt="error">';
+                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $student->value('image') .'" alt="error">';
                 $html = $html . '</span>';
                 $html = $html . '<span class="think-participant-name">'. $studentName .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
             }

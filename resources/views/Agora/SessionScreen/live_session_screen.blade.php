@@ -274,11 +274,12 @@ svg.svg-img.prefix-more.can-hover {
   -webkit-animation: pulse 1.5s infinite;
 }
 
+
 .nodisplay {
   visibility : hidden !important;
 }
 
-.course_contents_div {
+.course_contents_tr {
   margin-bottom : 20px;
 }
 
@@ -289,10 +290,27 @@ svg.svg-img.prefix-more.can-hover {
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    background-color: #74648c !important;
+    background-color: #74648c;
     color: white !important;
     position: relative;
     right: -31.5rem;
+}
+.course_contents.in_progress {
+  color: #6E7687 !important;
+    background-color: transparent !important;
+    border: none;
+    padding-left: 0px;
+    outline: none;
+}
+.course_contents.not_started {
+  color: #6E7687 !important;
+    background-color: transparent !important;
+    border: none;
+    padding-left: 0px;
+    outline: none;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 13px;
 }
 .course_contents:hover {    
     color: #414855 !important;
@@ -706,11 +724,12 @@ svg.svg-img.prefix-exit.can-hover {
 .chat_text_box {
   border: 2px solid #d2dae2 !important;
     width: 100%;
-    border-radius: 2px;
-    bottom: 85.5px;
+    border-radius: 0px 1px 10px 10px;
+    bottom: -0.5px;
     position: absolute;
     padding: 10px 10px;
     height: 120px;
+    color: #6E7687 !important;
 }
 .chat_messages{
   height: 65%;
@@ -743,7 +762,7 @@ svg.svg-img.prefix-exit.can-hover {
 /*  */
 
 div#chat_messages {
-    padding: 10px;
+    padding: 10px 15px;
 }
 
 
@@ -969,8 +988,23 @@ body {
     grid-row: 4 / span 1;
 }
 /* Layout alignments ends */
-
+.content_title_td {
+  color: #b8b7b7;
+    font-weight: 400;
+}
+.content_title_td.active {
+  color: #494949 !important;
+  font-weight: 500;
+}
 </style>
+
+@if($userType == 'student')
+<style>
+.toolbar.toolbar-biz {
+    display: none;
+}
+</style>
+@endif
 
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
@@ -988,11 +1022,15 @@ body {
         <a href="#"><img src="/storage/logo/ty_mac__vector.svg"></a>
         <div class="custom-menubar-container">
           <ul>
-            <li class="custom-nav-item"><a class="custom-nav-link">Home</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link">The Thinklit Way</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link">Courses</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link">My Courses</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link">Logout</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="/">Home</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The Thinklit Way</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('student.courses.get') }}">Courses</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('my-courses') }}">My Courses</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('edituser') }}" style="display: flex;">
+                <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;margin-right:10px;border-radius:50%;">{{Auth::user()->firstname}}</a>
+            </li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('logout') }}">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -1120,22 +1158,35 @@ body {
 
       <iframe class="nodisplay" id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
   </div>
-  <div class="row2" style="margin-bottom:20px;background-color:white;padding:15px;">
+  <div class="row2 think-cohort-subtopics-container think-subtopics-wrapper" style="margin-bottom:20px;background-color:white;padding:15px;">
     <h6 class="notif-text think-color-dark think-fs--18">Session Info</h6>
     <hr>
     <p class="notif-text think-color-dark margin-top-18 think-fs--16">{{ $topic_title }}</p>
     @csrf
-    <table>
+    <table style="height:7rem;">
+    @php
+    $slNo = 0;
+    @endphp
     @foreach($contents as $content)
-    <tr>
-    <div class="course_contents_div" data-id="1" style="margin-top:5px;">
-      <td><i style="margin-right:10px;" class="thumbs fas fa-circle"></i>
-        <span id="content_title_{{ $content->topic_content_id }}">{{ $content->topic_title }}</span></td>
-          <td><button class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
-            Start
-          </button></td>
-    </div>
+    
+    <tr class="course_contents_tr">
+      <td class="content_title_td" id="content_title_td_{{ $content->topic_content_id }}"><i style="margin-right:10px;" class="thumbs far fa-circle"></i>
+        <span class="content_title_text" id="content_title_{{ $content->topic_content_id }}">{{ $content->topic_title }}</span></td>
+          <td>
+          @if ($loop->first)
+            <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+               Start
+            </button>
+          @else 
+            <button data-topic-number="{{ $slNo }}" class="course_contents not_started" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+               Not yet started
+            </button>
+          @endif
+        </td>
   </tr>
+  @php
+    $slNo += 1;
+    @endphp
     @endforeach
   </table>
   </div>
@@ -1391,9 +1442,19 @@ div#graph {
     cursor: pointer;
     appearance: none !important;
 }
+.think-participant-wrapper .img-container {
+  width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.think-participant-wrapper img {
+  width: 100%;
+}
 </style>
   <script type="text/javascript">
-    let presentingFlag = 0;
+    
     $('#offcanvasClose').click(function(){
       $('#offcanvasBottom').removeClass('show');
       $('#offcanvasBottom').css('visibility', 'hidden');
@@ -1449,6 +1510,7 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
   message = message.trim();
     if(e.which == 13 && message != "") {
       let message = document.getElementById('chat_box').value;
+      document.getElementById('chat_box').value = "";
       let sessionId = document.getElementById('session_hidden_id').value;
       let path = "{{ route('save-session-chat') }}?session=" + sessionId + "&message=" + message;
       fetch(path, {
@@ -1459,17 +1521,13 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
           "X-CSRF-Token": document.querySelector('input[name=_token]').value
         },
       }).then((response) => response.json()).then((data) => {
-        document.getElementById('chat_box').value = "";
+        
       });
     }
 });
 
-document.getElementById('back_to_course').addEventListener('click', function(){
-  let course_id = document.getElementById('course_id').value;
-  location.replace("/enrolled-course/" + course_id);
-});
   
-      
+let flag = 0;   
 let timer = 0;
 $(document).ready(function(){
   var start = new Date;
@@ -1478,7 +1536,9 @@ $(document).ready(function(){
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
-      fetch(path, {
+      if(flag == 0) {
+        flag = 1;
+        fetch(path, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -1500,6 +1560,8 @@ $(document).ready(function(){
       }).then((response) => response.json()).then((data) => {
         document.getElementById('chat_messages').innerHTML = data.html;
       });
+      }
+      
 
   }, 1000);
 });
@@ -1544,7 +1606,7 @@ $(document).on('click', '.btn:contains("Finish")', function() {
 
 
 
-document.getElementById('exit_session').addEventListener('click', function(e) {
+document.getElementById('back_to_course').addEventListener('click', function(e) {
   let sessionId = document.getElementById('session_hidden_id').value;
   let userType = document.getElementById('user_type').value;
   let course_id = document.getElementById('course_id').value;
@@ -1583,7 +1645,7 @@ jQuery(".nav-tabs li").click(function(e) {
       jQuery('.tab-pane').removeClass('active in');
       jQuery(tid).addClass('active in');
   });
-
+let presentingFlag = 0;
 setInterval(function () {
     let session = document.getElementById('session_hidden_id').value;
     let path = "{{ route('get-push-record') }}?session=" + session;
@@ -1599,6 +1661,7 @@ setInterval(function () {
       if(userType == 'student') {
         if(data.presentingContentId) {
         if(presentingFlag != data.presentingContentId) {
+          document.getElementById('thumbs_' + data.presentingContentId).style.color = "#000";
           presentingFlag = data.presentingContentId;
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
@@ -1634,6 +1697,8 @@ length = contentEle.length;
 for(index = 0; index < length;index++) {
   
     contentEle[index].addEventListener('click', function(event) {
+      let topicContentId = this.getAttribute('data-id');
+      if(!this.classList.contains('not_started')) {
       let extension = get_url_extension(this.getAttribute('href'));
       if(document.getElementById('user_type').value == "Instructor") {
         document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
@@ -1650,8 +1715,15 @@ for(index = 0; index < length;index++) {
         document.getElementById('close_content').classList.remove('nodisplay');
         let docUrl = this.getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+        this.classList.add('in_progress');
+        this.innerHTML = "In progress";
+        this.removeAttribute('href');
+        for(i=0; i<document.getElementsByClassName('content_title_td').length;i++) {
+          document.getElementsByClassName('content_title_td')[i].classList.remove('active');
+        }
+        document.getElementById('content_title_td_' + topicContentId).classList.add('active');
       }
-      let topicContentId = this.getAttribute('data-id');
+      
       let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
       document.getElementById('close_content').classList.remove('nodisplay');
       document.getElementById('close_content').setAttribute('content-id', topicContentId);
@@ -1667,7 +1739,7 @@ for(index = 0; index < length;index++) {
         
       });
        
-      
+    }
     });
 }
 
@@ -1675,8 +1747,13 @@ document.getElementById('close_content').addEventListener('click', function(e) {
     document.getElementById('close_content').classList.add('nodisplay');
     document.getElementById('course_content_iframe').classList.add('nodisplay');
     let topicContentId = document.getElementById('close_content').getAttribute('content-id');
-    document.getElementById('course_contents_' + topicContentId).classList.add('nodisplay');
     document.getElementById('content_title_' + topicContentId).style.color = "#bdbebe";
+    document.getElementById('course_contents_' + topicContentId).innerHTML = "Completed";
+    let currentTopicNo = parseInt(document.getElementById('course_contents_' + topicContentId).getAttribute('data-topic-number'));
+    let nextContent = currentTopicNo + 1;
+    
+    document.getElementsByClassName('course_contents')[nextContent].classList.remove('not_started');
+    document.getElementsByClassName('course_contents')[nextContent].innerHTML = "Start";
       let path = "{{ route('stop-presenting') }}?content_id=" + topicContentId;
       fetch(path, {
         method: 'POST',
