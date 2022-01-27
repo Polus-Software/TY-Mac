@@ -1388,6 +1388,7 @@ div#graph {
     background-clip: padding-box;
     outline: 0;
     transition: transform .3s ease-in-out;
+    box-shadow: -4px 3px 15px #00000030;
 }
 
 .offcanvas-header {
