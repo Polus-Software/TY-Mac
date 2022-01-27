@@ -226,6 +226,9 @@ body {
 .right_card_block .card{
 	border:0;
 }
+.right_card_block .sub-topic-container .card{
+	border:1px solid rgba(0,0,0,.125);
+}
 .right_card_block .titles{
 	font-size: 18px;
     color: #000;
@@ -249,11 +252,16 @@ body {
     padding: 6px 18px;
 	border-radius: 50rem!important;
 }
-.students_table .rounded-pill.bg-warning{
+.students_table .rounded-pill.bg-warning,
+td .badge.bg-warning{
 	color: #212529!important;
     background-color: #ffc107!important;
     padding: 6px 18px;
 	border-radius: 50rem!important;
+}
+.left_sidebar #publish-badge,
+.left_sidebar .badge.bg-warning{
+	margin-left:5px;
 }
 #get_table:hover,#save-session-btn:hover{
 	background-color: #000000b3;

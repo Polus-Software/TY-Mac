@@ -3,18 +3,18 @@
 @include('Layouts.admin.header')
 <!-- container -->
 <input type="hidden" id="course_id" value="{{ $course_id }}" />
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.view.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @csrf
         <section class="row g-3 llp-view">
-        <div class="py-4"><h3>Course Overview</h3><hr class="my-4"></div>
+        <div class="py-4"><h3 class="titles">Course Overview</h3></div>
           <div class="col-12">
             <label>Course Title</label>
             <p>{{$course_details['title']}}</p>
@@ -75,6 +75,7 @@
           </section>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
