@@ -400,20 +400,24 @@ class RtmTokenGeneratorController extends Controller
             if($attendance->value('attendance_time') * 100 / $totalSeconds >= $attendanceSettings) {
                 $badgeId = AchievementBadge::where('title', 'Starter')->value('id');
 
-                $student_achievement = new StudentAchievement;
-                $student_achievement->student_id = $student;
-                $student_achievement->badge_id =  $badgeId;
-                $student_achievement->is_achieved = true;
-                $student_achievement->save();
+                $existing = StudentAchievement::where('student_id', $student)->where('badge_id', $badgeId)->count();
+                if(!$existing) {
+                    $student_achievement = new StudentAchievement;
+                    $student_achievement->student_id = $student;
+                    $student_achievement->badge_id =  $badgeId;
+                    $student_achievement->is_achieved = true;
+                    $student_achievement->save();
+                }
+                
 
                 $topicsCount = Topic::where('course_id', $courseId)->count();
-            $trackers = AttendanceTracker::where('student', $student)->get();
-            foreach($trackers as $tracker) {
-                $session = LiveSession::where('live_session_id', $tracker->live_session_id);
-                if($session->value('course_id') == $courseId) {
-                    $attendedSessions = $attendedSessions + 1;
+                $trackers = AttendanceTracker::where('student', $student)->get();
+                foreach($trackers as $tracker) {
+                    $session = LiveSession::where('live_session_id', $tracker->live_session_id);
+                    if($session->value('course_id') == $courseId) {
+                        $attendedSessions = $attendedSessions + 1;
+                    }
                 }
-            }
 
             $percent = $attendedSessions * 100 / $topicsCount;
 
