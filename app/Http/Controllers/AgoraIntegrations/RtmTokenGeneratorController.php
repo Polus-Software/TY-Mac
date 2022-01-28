@@ -28,6 +28,7 @@ use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\GeneralLiveSessionFeedback;
 use App\Models\LiveSessionChat;
+use Carbon\Carbon;
 
 require_once "AccessToken.php";
 
@@ -111,14 +112,16 @@ class RtmTokenGeneratorController extends Controller
             $role = self::RoleSubscriber;
             $roleName = $userObj->firstname;
 
-            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('student', $userObj->id)->get();
-            if(!count($attendanceRec)) {
+            $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('student', $userObj->id);
+            if(!$attendanceRec->count()) {
                 $attendance = New AttendanceTracker;
                 $attendance->live_session_id = $session;
                 $attendance->student = $userObj->id;
                 $attendance->start_time = (new DateTime("now", new DateTimeZone('UTC')));
                 $attendance->attendance_Status = true;
                 $attendance->save();
+            } else {
+                $attendanceRec->update(['attendance_Status' => true]);
             }
         } else {
             $role = self::RolePublisher;
@@ -132,7 +135,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '00' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
         
     }
 
@@ -210,22 +213,44 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function saveSessionDetails(Request $request) {
-       
-        // $sessionTitle = $request->sessionTitle;
         $sessionCourse = $request->sessionCourse;
-        // $sessionTopic = $request->sessionTopic;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
+        $topicsCounter = 0;
 
-        $liveSession = new LiveSession;
+        $topics = Topic::where('course_id', $sessionCourse)->get();
 
-        // $liveSession->session_title = $sessionTitle;
-        $liveSession->course_id = $sessionCourse;
-        // $liveSession->topic_id = $sessionTopic;
-        $liveSession->batch_id = $sessionBatch;
-        $liveSession->instructor = $sessionInstructor;
+        $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
 
-        $liveSession->save();
+        $occurrences = $selectedBatchObj->value('occurrence');
+        $occArr = explode(',', $occurrences);
+
+        $startDate = $selectedBatchObj->value('start_date');
+        $endDate = $selectedBatchObj->value('end_date');
+        $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
+
+        $date = $startDate;
+
+        while($date <= $endDate) {
+            if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
+                // Save schedules here
+                $liveSession = new LiveSession;
+                $liveSession->course_id = $sessionCourse;
+                $liveSession->topic_id = $topics[$topicsCounter]->topic_id;
+                $liveSession->session_title = 'Session ' . ($topicsCounter + 1) . ": " . $topics[$topicsCounter]->topic_title;
+                $liveSession->batch_id = $sessionBatch;
+                $liveSession->instructor = $sessionInstructor;
+                $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
+                $liveSession->start_time = $selectedBatchObj->value('start_time');
+                $liveSession->end_time = $selectedBatchObj->value('end_time');
+                $liveSession->save();
+
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
+                $topicsCounter++;
+            } else {
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
+            }
+        }
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
@@ -284,18 +309,18 @@ class RtmTokenGeneratorController extends Controller
             $pushRecord->presenting = true;
             $pushRecord->save();
         }
-        return;
+        return response()->json(['status' => 'success']);
     }
 
     public function stopPresenting(Request $request) {
         $contentId = $request->content_id;
         $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->update(['presenting' => false]);
-        return;
+        return response()->json(['status' => 'success']);
     }
 
     public function getLiveRecord(Request $request) {
         $flag = 0;
-
+        
         $session = LiveSession::where('live_session_id', $request->session);
 
         $topicId = $session->value('topic_id');
@@ -310,13 +335,13 @@ class RtmTokenGeneratorController extends Controller
         if(count($feedbackRecord) != 0) {
             $flag = 1;
         }
+
         $content = TopicContent::where('topic_content_id', $topicContentId);
         
         $contentTitle = $content->value('topic_title');
 
         $presentingContent = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('presenting', true);
         $presentingContentId = $presentingContent->value('topic_content_id');
-        
         return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag, 'presentingContentId' => $presentingContentId]);
     }
 
@@ -508,7 +533,7 @@ class RtmTokenGeneratorController extends Controller
             foreach($attendanceRec as $rec) {
                 $student = User::where('id', $rec->student);
                 $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
-                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/icons/placeholder-avatar.svg" alt="error">';
+                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $student->value('image') .'" alt="error">';
                 $html = $html . '</span>';
                 $html = $html . '<span class="think-participant-name">'. $studentName .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
             }

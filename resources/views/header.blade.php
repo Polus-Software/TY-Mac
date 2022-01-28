@@ -35,10 +35,10 @@
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
-          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">Thinklit Way</a>
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
         </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
         @else
@@ -46,10 +46,10 @@
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
-          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">Thinklit Way</a>
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
         </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
       @if (Auth::check())
