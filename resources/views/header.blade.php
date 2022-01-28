@@ -12,7 +12,7 @@
 <!-- navbar new  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
-      <a class="navbar-brand" href="#"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
+      <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

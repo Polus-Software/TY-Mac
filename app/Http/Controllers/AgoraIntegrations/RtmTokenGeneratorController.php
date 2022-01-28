@@ -599,14 +599,14 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function getSessionChat(Request $request) {
-        
         $html = "";
-
+        $user = Auth::user();
         $session = $request->sessionId;
         $chats = LiveSessionChat::where('live_session', $session)->get();
 
         foreach($chats as $chat) {
-            $html = $html . "<p class='chat-message-body'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
+            $sameUser = $user->id == $chat->student ? 'same_user' :  '';
+            $html = $html . "<p class='chat-message-body ". $sameUser ."'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
         }
         return response()->json(['html' => $html]);
     }
