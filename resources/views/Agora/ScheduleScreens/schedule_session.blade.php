@@ -31,9 +31,10 @@
                         <option value="{{$course->id}}">{{$course->course_title}}</option> 
                       @endforeach
                   </select>
-                 
+                  <small class="text-danger" id="course-error" style="display:none;">Please select a course</small>
                   <label for="session_batch">Batch</label>
                   <select class="form-control" id="session_batch"></select>
+                  <small class="text-danger" id="batch-error" style="display:none;">Please select a batch</small>
                   <label for="session_instructor">Select instructor</label>
                   <select class="form-control" id="session_instructor">
                    
@@ -262,6 +263,19 @@
     let sessionCourse = document.getElementById('session_course').value;
     let sessionBatch = document.getElementById('session_batch').value;
     let sessionInstructor = document.getElementById('session_instructor').value;
+
+    if(sessionCourse == "") {
+        document.getElementById('course-error').style.display = "block";
+        return false;
+    } else {
+      document.getElementById('course-error').style.display = "none";
+    }
+    if(sessionBatch == "") {
+        document.getElementById('batch-error').style.display = "block";
+        return false;
+    } else {
+      document.getElementById('batch-error').style.display = "none";
+    }
     let path = "{{ route('save-session-details') }}?sessionCourse=" + sessionCourse + '&sessionBatch=' + sessionBatch + '&sessionInstructor=' + sessionInstructor;
     fetch(path, {
       method: 'POST',
@@ -272,6 +286,7 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
+      return false;
       window.location.reload();
     });
   });
@@ -383,7 +398,7 @@
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
         document.getElementById('session_batch').innerHTML = '';
-        document.getElementById('session_batch').innerHTML = '<option value disabled>Please choose a Batch</option>' + data.batches;
+        document.getElementById('session_batch').innerHTML = '<option value>Please choose a Batch</option>' + data.batches;
         document.getElementById('session_instructor').innerHTML = '';
         document.getElementById('session_instructor').innerHTML = data.instructor;
     });

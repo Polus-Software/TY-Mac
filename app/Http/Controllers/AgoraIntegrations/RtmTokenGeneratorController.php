@@ -28,6 +28,7 @@ use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\GeneralLiveSessionFeedback;
 use App\Models\LiveSessionChat;
+use Carbon\Carbon;
 
 require_once "AccessToken.php";
 
@@ -212,22 +213,44 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function saveSessionDetails(Request $request) {
-       
-        // $sessionTitle = $request->sessionTitle;
         $sessionCourse = $request->sessionCourse;
-        // $sessionTopic = $request->sessionTopic;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
+        $topicsCounter = 0;
 
-        $liveSession = new LiveSession;
+        $topics = Topic::where('course_id', $sessionCourse)->get();
 
-        // $liveSession->session_title = $sessionTitle;
-        $liveSession->course_id = $sessionCourse;
-        // $liveSession->topic_id = $sessionTopic;
-        $liveSession->batch_id = $sessionBatch;
-        $liveSession->instructor = $sessionInstructor;
+        $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
 
-        $liveSession->save();
+        $occurrences = $selectedBatchObj->value('occurrence');
+        $occArr = explode(',', $occurrences);
+
+        $startDate = $selectedBatchObj->value('start_date');
+        $endDate = $selectedBatchObj->value('end_date');
+        $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
+
+        $date = $startDate;
+
+        while($date <= $endDate) {
+            if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
+                // Save schedules here
+                $liveSession = new LiveSession;
+                $liveSession->course_id = $sessionCourse;
+                $liveSession->topic_id = $topics[$topicsCounter]->topic_id;
+                $liveSession->session_title = 'Session ' . ($topicsCounter + 1) . ": " . $topics[$topicsCounter]->topic_title;
+                $liveSession->batch_id = $sessionBatch;
+                $liveSession->instructor = $sessionInstructor;
+                $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
+                $liveSession->start_time = $selectedBatchObj->value('start_time');
+                $liveSession->end_time = $selectedBatchObj->value('end_time');
+                $liveSession->save();
+
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
+                $topicsCounter++;
+            } else {
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
+            }
+        }
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
