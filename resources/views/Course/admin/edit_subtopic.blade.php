@@ -56,7 +56,7 @@
 										<div class="row external-container mb-3">
 											<div class="col-lg-4"><label>Add External Link</label></div>
 											<div class="col-lg-8">
-												<input class="form-control" type="link" name="external_topic1_content_1_link_{{$key1}}" value="{{$document}}">
+												<input class="form-control" type="link" name="external_topic1_content_{{$key}}_link_{{$key1}}" value="{{$document}}">
 											</div>
 										</div>
 										@endif

@@ -447,7 +447,7 @@ class CourseController extends Controller
                         var_dump($external_link);
                         $external_links = $external_links . $external_link.';';
                     }
-                    var_dump($external_links);
+                    //var_dump($external_links);
                     if($request->input('content_topic_'.$i.'_'.$j) != ''){
                         $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
                         if($extension == '')
@@ -514,7 +514,7 @@ class CourseController extends Controller
                 }
             }
         }
-        exit;
+        //exit;
         return redirect()->route('view-subtopics', ['course_id' => $course_id]);
     }
 
