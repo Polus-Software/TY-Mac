@@ -606,7 +606,7 @@ class RtmTokenGeneratorController extends Controller
 
         foreach($chats as $chat) {
             $sameUser = $user->id == $chat->student ? 'same_user' :  '';
-            $html = $html . "<p class='chat-message-body ". $sameUser ."'><b>". $chat->user_name .": </b><span>" . $chat->message . "</span></p>";
+            $html = $html . "<p class='chat-message-body ". $sameUser ."'><b class='participant-name'>". $chat->user_name .": </b><span class='participant-msg'>" . $chat->message . "</span></p>";
         }
         return response()->json(['html' => $html]);
     }

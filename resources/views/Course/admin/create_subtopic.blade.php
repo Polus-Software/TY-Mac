@@ -24,7 +24,7 @@
           </li>
 </ul>
         </div>
-        <form action="{{ route('add-sub-topic') }}" class="row g-3 llp-form" method="POST">
+        <form action="{{ route('add-sub-topic') }}" class="row g-3 llp-form" method="POST" enctype="multipart/form-data">
           @csrf
           <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
           
@@ -145,7 +145,7 @@ window.onload = function(event) {
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
     const uploadFileEl = createNewElement('input', ['form-control'], [
       {'type': 'file'},
-      {'name': `content_upload_${topicNum}_${contentCount}`}
+      {'name': `content_upload[${topicNum}][${contentCount}]`}
     ]);
     const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
 
