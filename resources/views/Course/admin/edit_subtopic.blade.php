@@ -108,29 +108,33 @@
 <script>
 window.onload = function(event) {
   let sub_topic_count = 1;
-  let content_count = 1;
+  let content_count = 0;
   let externallink_count = 0;
   var elements = document.getElementsByClassName("add_external_link");
-  var myFunction = function(e) {
+  var add_external_links = function(e) {
     let c_topicNum = '1';
     //let c_contentCount = document.getElementById('content_count_topic_1').value;
     let c_contentCount = e.currentTarget.parentElement.parentElement.parentElement.querySelector('.content_index').value;
     let c_linkCount = e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count').value;
     e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateExternalLinkHTML(c_topicNum,c_contentCount,c_linkCount));
     //c_linkCount = parseInt(c_linkCount)+1;
-    externallink_count++;
-    e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count').value=externallink_count;
     //externallink_count++;
+    
+    //externallink_count++;
+    externallink_count = e.currentTarget.parentElement.parentElement.parentElement.getElementsByClassName('external-container').length;
+    e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count').value=externallink_count;
   };
   for (var i = 0; i < elements.length; i++) {
-    elements[i].addEventListener('click', myFunction, false);
+    elements[i].addEventListener('click', add_external_links, false);
   }
   document.querySelector('#add_content_for_topic').addEventListener('click', (e) => {
     const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
       const topicNum = contentCountHiddenEl.getAttribute('rel');
-      e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
-      content_count++;
+      content_count = e.currentTarget.parentElement.parentElement.parentElement.getElementsByClassName('card-body').length;
+      //alert(content_count);
+      e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, content_count));
+      //content_count++;
   });
 
 

@@ -438,16 +438,10 @@ class CourseController extends Controller
                         $subtopicFile->move($destinationPath,$TopicFileName);
                     }
                     $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
-                    //echo 'externalLink_count_topic_'.$i.'_content_'.$j;
-                   // var_dump($request->input('externalLink_count_topic_1_content_0'));
-                    //var_dump($external_link_count);
                     for($k =0; $k <= $external_link_count; $k++) {
                         $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
-                        echo 'external_topic'.$i.'_content_'.$j.'_link_'.$k;
-                        var_dump($external_link);
                         $external_links = $external_links . $external_link.';';
                     }
-                    //var_dump($external_links);
                     if($request->input('content_topic_'.$i.'_'.$j) != ''){
                         $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
                         if($extension == '')
@@ -466,6 +460,8 @@ class CourseController extends Controller
                     //->update($updateDetails);
                     }
                     else{
+                        //echo 'content_title_'.$i.'_'.$j;
+                        //var_dump($request->input('content_title_'.$i.'_'.$j));
                         $content = new TopicContent;
                         $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
                         $content->topic_id = $request->topic_id;
