@@ -418,33 +418,103 @@ class CourseController extends Controller
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
-        for($i = 1; $i<= $topic_count; $i++) {
-            $topic = new Topic;
-            $topic->topic_title = $request->input('topic_title'.$i);
-            $topic->course_id = $course_id;
-            $topic->description = "";
-            $topic->save();
-            $content_count = $request->input('content_count_topic_'.$i);            
-            for($j = 1; $j<=$content_count; $j++) {
-				$external_links = '';
-                if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
-                    continue;
+        if(isset($request->topic_id) && !empty($request->topic_id)){
+            for($i = 1; $i<= $topic_count; $i++) {
+                $updateDetails = [
+                    'topic_title' => $request->input('topic_title'.$i),
+                    'course_id' => $course_id,
+                    'description'=>''
+                ];
+                Topic::where('topic_id', $request->topic_id)
+                    ->update($updateDetails);
+                $content_count = $request->input('content_count_topic_'.$i);
+                for($j = 0; $j<$content_count; $j++) {//echo 'jibi';
+                    $TopicFileName = $extension = $external_links = '';
+                    if($request->file() && !empty($request->content_upload[$i][$j])){
+                        $subtopicFile = $request->content_upload[$i][$j];
+                        $extension = $subtopicFile->extension();
+                        $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $destinationPath = public_path().'/storage/study_material';
+                        $subtopicFile->move($destinationPath,$TopicFileName);
+                    }
+                    $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
+                    //echo 'externalLink_count_topic_'.$i.'_content_'.$j;
+                   // var_dump($request->input('externalLink_count_topic_1_content_0'));
+                    //var_dump($external_link_count);
+                    for($k =0; $k <= $external_link_count; $k++) {
+                        $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
+                        echo 'external_topic'.$i.'_content_'.$j.'_link_'.$k;
+                        var_dump($external_link);
+                        $external_links = $external_links . $external_link.';';
+                    }
+                    var_dump($external_links);
+                    if($request->input('content_topic_'.$i.'_'.$j) != ''){
+                        $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
+                        if($extension == '')
+                            $extension = $content['content_type'];
+                        if($TopicFileName == '')
+                            $TopicFileName = $content['document'];
+                        $updateDetails = [
+                            'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                            'content_type' => $extension,
+                            'external_link'=>$external_links,
+                            'document'=>$TopicFileName,
+                        ];
+                        TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
+                                        ->update($updateDetails);
+                        //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
+                    //->update($updateDetails);
+                    }
+                    else{
+                        $content = new TopicContent;
+                        $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                        $content->topic_id = $request->topic_id;
+                        $content->description = "";
+                        $content->content_type = $extension;
+                        $content->external_link = $external_links;
+                        $content->document = $TopicFileName;
+                        $content->save();
+                    }
                 }
-                $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
-                for($k =1; $k <= $external_link_count; $k++) {
-                    $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
-                    $external_links = $external_links . $external_link.';';
-                }
-                $content = new TopicContent;
-                $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
-                $content->topic_id = $topic->id;
-                $content->description = "";
-                $content->content_type = 'link';
-                $content->document = $external_links;
-                $content->save();
             }
         }
-       
+        else{
+            for($i = 1; $i<= $topic_count; $i++) {
+                $topic = new Topic;
+                $topic->topic_title = $request->input('topic_title'.$i);
+                $topic->course_id = $course_id;
+                $topic->description = "";
+                $topic->save();
+                $content_count = $request->input('content_count_topic_'.$i);            
+                for($j = 1; $j<=$content_count; $j++) {
+                    $external_links = $extension = $TopicFileName = '';
+                    if($request->file() && !empty($request->content_upload[$i][$j])){
+                        $subtopicFile = $request->content_upload[$i][$j];
+                        $extension = $subtopicFile->extension();
+                        $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $destinationPath = public_path().'/storage/study_material';
+                        $subtopicFile->move($destinationPath,$TopicFileName);
+                    }
+                    if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
+                        continue;
+                    }
+                    $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
+                    for($k =1; $k <= $external_link_count; $k++) {
+                        $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
+                        $external_links = $external_links . $external_link.';';
+                    }
+                    $content = new TopicContent;
+                    $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                    $content->topic_id = $topic->id;
+                    $content->description = "";
+                    $content->content_type = $extension;
+                    $content->external_link = $external_links;
+                    $content->document = $TopicFileName;
+                    $content->save();
+                }
+            }
+        }
+        exit;
         return redirect()->route('view-subtopics', ['course_id' => $course_id]);
     }
 
@@ -528,16 +598,8 @@ class CourseController extends Controller
 			if($contentsData){
 				foreach($contentsData as $data){
 					$linksArray = array();
-					if($data['content_type'] != 'link'){
-						$uploaded_file = $data['document'];
-					}
-					else if($data['content_type'] == 'link'){
-						$uploaded_file = '';
-						$linksArray = explode(';', $data['document']);
-					}
-					else{
-						$uploaded_file = '';
-						$linksArray = array();
+					if(!empty($data['external_link'])){
+						$linksArray = explode(';', $data['external_link']);
 					}
 					array_push($courseContents, array(
 						'topic_content_id' => $data['topic_content_id'],
@@ -547,7 +609,8 @@ class CourseController extends Controller
 						'description' =>$data['description'],
 						'content_type' => $data['content_type'],
 						'document' => $linksArray,
-						'uploaded_file' => $uploaded_file,
+                        'uploaded_file_path' => public_path().'/storage/study_material/'.$data['document'],
+						'uploaded_file' => $data['document'],
 						'created_at' =>$data['created_at'],
 						'updated_at' => $data['updated_at']
 					));
