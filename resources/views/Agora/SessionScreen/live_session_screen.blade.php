@@ -729,10 +729,11 @@ padding: 10px 15px 120px 15px;
     width: 100%;
     border-radius: 0px 1px 10px 10px;
     bottom: -0.5px;
-    position: absolute;
+    position: sticky;
     padding: 10px 10px;
     height: 120px;
     color: #6E7687 !important;
+    bottom: 0;
 }
 .chat_messages{
   height: 65%;
@@ -1010,11 +1011,37 @@ font-size: 14px;
 }
 
 /* board-box ends */
-
+/* Chat UI */
+.chat-message-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.participant-name {
+    display: inline-block;
+    font-size: 12px;
+}
+.participant-msg {
+    display: inline-block;
+    padding: 7px 15px;
+    background: #fff;
+    border-radius: 0 10px 10px 10px;
+    border: 1px solid #eeedf0;
+    max-width: 85%;
+    width: max-content;
+}
+.chat-message-body.same_user {
+	align-items: flex-end;
+}
+.chat-message-body.same_user .participant-msg {
+    border-radius: 10px 0 10px 10px;
+    background: #f8f7fc;
+}
+/* Chat UI Ends */
 /* Layout alignments starts*/
 /*base*/
 body {
-  grid-template-rows: 82px max-content 72px max-content;
+  grid-template-rows: 82px var(--video-session-h) 72px minmax(auto, max-content);
   row-gap: .5rem;
   column-gap: 1rem;
 }
@@ -1589,12 +1616,15 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
 
     
 let timer = 0;
+let flag = 0;
 $(document).ready(function(){
   var start = new Date;
   let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
+      if(flag == 0) {
+      flag = 1;
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
         fetch(path, {
         method: 'POST',
@@ -1618,6 +1648,7 @@ $(document).ready(function(){
       }).then((response) => response.json()).then((data) => {
         document.getElementById('chat_messages').innerHTML = data.html;
       });
+      }
   }, 1000);
 });
 
