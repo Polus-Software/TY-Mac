@@ -132,12 +132,12 @@ class CourseController extends Controller
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
-        $who_learn_points_count = $request->input('who_learn_points_count');
+        /*$who_learn_points_count = $request->input('who_learn_points_count');
    
         for($i =1;  $i <= $who_learn_points_count; $i++){
           $who_learn_temp = $request->input('who_learn_points_'. $i);
           $who_learn = $who_learn . $who_learn_temp . ";";
-        }
+        }*/
         $courseFile = "";
         $courseThumbnailFile = "";
         if($request->file()){
@@ -162,7 +162,7 @@ class CourseController extends Controller
         $course->course_duration = $courseDuration;
         $course->short_description = $what_learn ;
         $course->course_details = $whoLearnDescription;
-        $course->course_details_points = $who_learn;
+        $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
@@ -250,14 +250,15 @@ class CourseController extends Controller
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
-                    // 'whothis' => explode(';', $data->value('courses.course_details_points')),
+                     'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
                     'thumbnail' => $data->value('courses.course_thumbnail_image')
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
 
-                $whoThis = explode(';', $data->value('courses.course_details_points'));
+                //$whoThis = explode(';', $data->value('courses.course_details_points'));
+                $whoThis = $data->value('courses.course_details_points');
 
 
                 $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
@@ -292,7 +293,7 @@ class CourseController extends Controller
                 'instructor' =>'required',
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
-                'who_learn_points_1'=>'required',
+                'who_learn_points'=>'required',
                 'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
                 'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
@@ -320,20 +321,20 @@ class CourseController extends Controller
                     
                 }
                 $whoLearnDescription = $request->input('who_learn_description');
-                $who_learn ="";
-                $who_learn_points_count = $request->input('who_learn_points_count');
+                $who_learn = $request->input('who_learn_points');
+                //$who_learn_points_count = $request->input('who_learn_points_count');
 
-                for($i = 1;  $i <= $who_learn_points_count; $i++){
+                //for($i = 1;  $i <= $who_learn_points_count; $i++){
                     
-                    $who_learn_temp = $request->input('who_learn_points_'. $i);
-                    if($who_learn_temp != null) {
-                        if($i == $what_learn_points_count) {
-                            $who_learn = $who_learn . $who_learn_temp;
-                        } else {
-                            $who_learn = $who_learn . $who_learn_temp . ";";
-                        }
-                    }
-                }
+                    //$who_learn_temp = $request->input('who_learn_points_'. $i);
+                    //if($who_learn_temp != null) {
+                        //if($i == $what_learn_points_count) {
+                            //$who_learn = $who_learn . $who_learn_temp;
+                        //} else {
+                            //$who_learn = $who_learn . $who_learn_temp . ";";
+                        //}
+                    //}
+               // }
                 
                 
                 $user = Auth::user();
