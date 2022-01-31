@@ -370,6 +370,18 @@
     const modal = bootstrap.Modal.getInstance(truck_modal);
     modal.hide();
   }
+  window.onload = function(event) {
+    var currentURL = window.location.href;
+    var els=document.getElementsByClassName("redirect_page");
+    for (var i=0;i<els.length;i++) {
+      els[i].value = currentURL;
+    }
+    var toastLiveExample = document.getElementById('liveToast');
+  if(toastLiveExample) {
+    var toast = new bootstrap.Toast(toastLiveExample);
+    toast.show();
+  }
+  }
 </script>
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
 @endpush

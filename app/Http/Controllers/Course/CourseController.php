@@ -443,33 +443,38 @@ class CourseController extends Controller
                         $external_links = $external_links . $external_link.';';
                     }
                     if($request->input('content_topic_'.$i.'_'.$j) != ''){
-                        $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
-                        if($extension == '')
-                            $extension = $content['content_type'];
-                        if($TopicFileName == '')
-                            $TopicFileName = $content['document'];
-                        $updateDetails = [
-                            'topic_title' => $request->input('content_title_'.$i.'_'.$j),
-                            'content_type' => $extension,
-                            'external_link'=>$external_links,
-                            'document'=>$TopicFileName,
-                        ];
-                        TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
+                        if($request->input('content_status_'.$i.'_'.$j) == '0'){
+                            TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j))->delete();
+                        }
+                        else{
+                            $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
+                            if($extension == '')
+                                $extension = $content['content_type'];
+                            if($TopicFileName == '')
+                                $TopicFileName = $content['document'];
+                            $updateDetails = [
+                                'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                'content_type' => $extension,
+                                'external_link'=>$external_links,
+                                'document'=>$TopicFileName,
+                            ];
+                            TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
+                        }
                         //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
                     //->update($updateDetails);
                     }
                     else{
-                        //echo 'content_title_'.$i.'_'.$j;
-                        //var_dump($request->input('content_title_'.$i.'_'.$j));
-                        $content = new TopicContent;
-                        $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
-                        $content->topic_id = $request->topic_id;
-                        $content->description = "";
-                        $content->content_type = $extension;
-                        $content->external_link = $external_links;
-                        $content->document = $TopicFileName;
-                        $content->save();
+                        if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
+                            $content = new TopicContent;
+                            $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                            $content->topic_id = $request->topic_id;
+                            $content->description = "";
+                            $content->content_type = $extension;
+                            $content->external_link = $external_links;
+                            $content->document = $TopicFileName;
+                            $content->save();
+                        }
                     }
                 }
             }

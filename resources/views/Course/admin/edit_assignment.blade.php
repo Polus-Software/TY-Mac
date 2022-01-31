@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       <form class="row g-3 llp-form" action="{{ route('update-assignment') }}" enctype="multipart/form-data" method="POST">
@@ -82,6 +82,7 @@
       </main>
       <!-- main ends -->
     </div>
+    <div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

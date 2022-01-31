@@ -289,7 +289,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-9 col-md-9 col-sm-9 col-12">
-                                        <h5 class="card-title pt-2">Session info</h5>
+                                        <h5 class="card-title pt-2">Session Info</h5>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                     @if($userType == 'student')
@@ -298,12 +298,13 @@
                                     </div>
                                 </div>
                                 <hr>
-                                
+                                @php ($slno = 0)
                                 @foreach($topicDetails as $topicDetail)
                                 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
+                                        @php ($slno = $slno + 1)
+                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">Session {{$slno}} - {{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)

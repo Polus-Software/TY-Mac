@@ -44,6 +44,7 @@
 								<input class="form-control mb-3" type="text" name="content_title_1_{{$key}}" placeholder="Ex: What is Google Suite?" value="{{$courseContent['topic_title']}}">
                 <input class="form-control mb-3" type="hidden" name="content_topic_1_{{$key}}" value="{{$courseContent['topic_content_id']}}">
 								<input type="hidden" class="content_index" value="{{$key}}">
+                <input type="hidden" class="status" name="content_status_1_{{$key}}" value="1">
                 @if(!empty($courseContent['uploaded_file']))
                 <span class="mb-3"><b>Uploaded File:</b> {{$courseContent['uploaded_file']}}</span>
                 @endif
@@ -85,7 +86,7 @@
 						<div class="row">
 							<div class="col-12">
 								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content" id="add_content_for_topic">Add content for topic</a>
-								<a class="btn btn-sm btn-outline-secondary">Upload audio/video</a>
+								<a class="btn btn-sm btn-outline-secondary upload_audio">Upload audio/video</a>
 							</div>
 						</div>
 					</div>
@@ -111,6 +112,7 @@ window.onload = function(event) {
   let content_count = 0;
   let externallink_count = 0;
   var elements = document.getElementsByClassName("add_external_link");
+  var trash_element = document.getElementsByClassName("fa-trash-alt");
   var add_external_links = function(e) {
     let c_topicNum = '1';
     //let c_contentCount = document.getElementById('content_count_topic_1').value;
@@ -124,9 +126,17 @@ window.onload = function(event) {
     externallink_count = e.currentTarget.parentElement.parentElement.parentElement.getElementsByClassName('external-container').length;
     e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count').value=externallink_count;
   };
+  var remove_subtopic_content = function(e) {
+    e.currentTarget.parentElement.parentElement.parentElement.parentElement.querySelector('.status').value=0;
+    e.currentTarget.parentElement.parentElement.parentElement.parentElement.style.display = 'none';
+  };
   for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', add_external_links, false);
   }
+  for (var j = 0; j < trash_element.length; j++) {
+    trash_element[j].addEventListener('click', remove_subtopic_content, false);
+  }
+
   document.querySelector('#add_content_for_topic').addEventListener('click', (e) => {
     const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -186,7 +196,7 @@ window.onload = function(event) {
       e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
       content_count++;
     });
-    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Upload audio/video');
+    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary upload_audio'],[],'Upload audio/video');
     colEl.appendChild(addContentbtnEl);
     colEl.appendChild(uploadContentbtnEl);
     rowEl.appendChild(colEl);
@@ -215,10 +225,16 @@ const generateSubTopicHTMLInitial = () => {
       {'name': `content_title_${topicNum}_${contentCount}`},
       {'placeholder': 'Ex: What is Google Suite?'}
     ]);
-    const contentTitleEl1 = createNewElement('input', ['form-control', 'mb-3'], [
+    const contenttopicidEl1 = createNewElement('input', ['form-control', 'mb-3'], [
       {'type': 'hidden'},
       {'name': `content_topic_${topicNum}_${contentCount}`},
       {'placeholder': 'Ex: What is Google Suite?'}
+    ]);
+    const contentTopicstatusEl1 = createNewElement('input', ['form-control', 'mb-3'], [
+      {'type': 'hidden'},
+      {'name': `content_status_${topicNum}_${contentCount}`},
+      {'class':'status'},
+      {'value':1}
     ]);
     const addExternalLinkEl = createNewElement('div', ['add_external_link', 'mb-3']);
     const contentEl = createNewElement('div', ['row', 'p-2', 'flex-fill', 'bd-highlight']);
@@ -261,6 +277,8 @@ const generateSubTopicHTMLInitial = () => {
     contentEl.appendChild(contentLinkContainerEl);
     contentEl.appendChild(removeContentContainerEl);
     contentContainerEl.appendChild(contentTitleEl);
+    contentContainerEl.appendChild(contenttopicidEl1);
+    contentContainerEl.appendChild(contentTopicstatusEl1);
     addExternalLinkEl.appendChild(externalLinkCountEl);
     contentContainerEl.appendChild(addExternalLinkEl);
     contentContainerEl.appendChild(contentEl);
