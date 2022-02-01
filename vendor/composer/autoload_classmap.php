@@ -58,6 +58,7 @@ return array(
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\StudentAchievement' => $baseDir . '/app/Models/StudentAchievement.php',
     'App\\Models\\StudentFeedbackCount' => $baseDir . '/app/Models/StudentFeedbackCount.php',
+    'App\\Models\\Timezone' => $baseDir . '/app/Models/Timezone.php',
     'App\\Models\\Topic' => $baseDir . '/app/Models/Topic.php',
     'App\\Models\\TopicAssignment' => $baseDir . '/app/Models/TopicAssignment.php',
     'App\\Models\\TopicContent' => $baseDir . '/app/Models/TopicContent.php',
