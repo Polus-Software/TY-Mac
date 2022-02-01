@@ -182,7 +182,8 @@ Route::get('/', function () {
     Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');
     Route::post('/ask-question', [EnrolledCourseController::class, 'askQuestion'])->name('ask.question');
     Route::get('/study-materials', [EnrolledCourseController::class, 'studyMaterials'])->name('study.materials');
-
+    Route::post('/get-individual-student-chart', [EnrolledCourseController::class, 'getIndividualStudentChart'])->name('get-individual-student-chart');
+    
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
     Route::get('/assigned-courses', [AssignedCoursesController::class, 'viewAssignedCourses'])->name('assigned-courses');

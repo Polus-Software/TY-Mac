@@ -58,7 +58,37 @@
     border-bottom:1px solid #F5BC29;
     padding-bottom:30px;
 }
+/* .modal-dialog {
+    max-width: 895px !important;
+} */
+.modal-body {
+    height: 31rem;
+}
+.modal-header {
+    padding: 1.5rem 1rem 1rem 4rem;
+    height: 4rem;
+    border-bottom: none;
+}
+/* Chart modal */
   </style>
+  <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="graph_div">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <header class="d-flex align-items-center mb-3 mt-4">
     <div class="container">
         <div class="row mt-5">
@@ -442,7 +472,7 @@
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Messsge</a>
+                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Message</a>
                                     </button>
                                        
                                     </h2>
@@ -460,7 +490,8 @@
                                                                     <a href="#" class="btn btn-primary w-100">1-on-1 Session</a>
                                                                 </div>
                                                                 <div class="col-lg-6">
-                                                                    <a href="#" class="btn btn-outline-secondary text-dark w-100">Chart</a>
+                                                                    @csrf
+                                                                    <button type="button" class="btn btn-outline-secondary text-dark w-100" data-bs-toggle="modal" data-bs-target="#chartModal" data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">Chart</button>
                                                                 </div> 
                                                             </div>
                                                             <div class="row mt-3">
@@ -1050,6 +1081,86 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
 });
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@if($userType == 'instructor')
+<script>
+    
+    
+
+            function drawChart(count, contents, student) {
+                console.log(contents[0]['likes']);
+                var gdata = new google.visualization.DataTable();
+
+                gdata.addColumn('string', 'Subtopics');
+                gdata.addColumn('number', 'Feedbacks');
+                for(i=0;i<count;i++){
+                    gdata.addRows([
+                        [contents[i]['content_title'],contents[i]['likes']]
+                    ]);
+                }
+                
+
+                var options = {
+                chart: {
+                    title: student + "'s Activities"
+                },
+                width: 900,
+                height: 470,
+                colors: ['#A26B05'],
+                vAxis: {
+                    format: '0'
+                    },
+                };
+
+                var chart = new google.charts.Line(document.getElementById('graph_div'));
+                chart.draw(gdata, google.charts.Line.convertOptions(options));
+            }
+      
+    let contentCount = 0;
+    let contentArr = [];
+
+    document.getElementById('chartModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var student = button.getAttribute('data-bs-student-id');
+        var topic = button.getAttribute('data-bs-topic-id');
+        var course = document.getElementById('course_id');
+        
+        let path = "{{ route('get-individual-student-chart') }}?student=" + student +"&topic=" + topic +"&course=" + course;
+        fetch(path, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+        }).then((response) => response.json()).then((jsondata) => {
+            google.charts.load('current', {'packages':['line']});
+            
+            google.charts.setOnLoadCallback(function(){ drawChart(jsondata.contentCount, jsondata.contents, jsondata.student) });
+        });
+
+        setTimeout(hideAxisLabels, 500);
+        function hideAxisLabels(){
+            let axisElements = document.getElementById('graph_div').getElementsByTagName('g')[4].getElementsByTagName('text');   
+            let axisElementsLength = axisElements.length;
+            axisElements[parseInt(axisElementsLength) - 2].style.display = 'none';
+            axisElements[parseInt(axisElementsLength) - 4].style.display = 'none';
+
+            let title = document.getElementById('graph_div').getElementsByTagName('g')[0].getElementsByTagName('text')[0];
+            title.setAttribute('fill', '#2C3443');
+            title.style.fontSize = "16px";
+            title.style.fontWeight = "600";
+
+            let lineElement = document.getElementById('graph_div').getElementsByTagName('g')[2]; 
+            let path = lineElement.getElementsByTagName('path')[0];
+            let circle = lineElement.getElementsByTagName('circle');
+            path.setAttribute('stroke-width', '4');
+            for(i=0;i<circle.length;i++){
+                circle[i].setAttribute('fill-opacity', 1);
+            }
+        }
+    });
+</script>
+@elseif($userType == 'student')
 <script>
     google.charts.load('current', {
         'packages': ['bar']
@@ -1085,4 +1196,5 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
+@endif
 @endpush

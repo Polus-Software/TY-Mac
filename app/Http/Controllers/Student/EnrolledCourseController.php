@@ -109,19 +109,20 @@ class EnrolledCourseController extends Controller
                      $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
                      if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
                          $latestDate = $startDate;
+                         $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                         $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                         $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                         $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
                          break;
                      }   
                  }
+                 
+             } else if($startDate >= $current_date) {
+                 $latestDate = $startDate;
                  $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
                  $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
                  $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
                  $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-             } else if($startDate >= $current_date) {
-                 $latestDate = $startDate;
-                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-             $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-             $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-             $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
              } else {
                 $next_live_cohort = "This batch has ended";
              }
@@ -143,13 +144,14 @@ class EnrolledCourseController extends Controller
                     $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
                     if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
                         $latestDate = $startDate;
+                        $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                        $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                        $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                        $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
                         break;
                     }   
                 }
-                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+                
             } else if($startDate >= $current_date) {
                 $latestDate = $startDate;
                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
@@ -689,6 +691,49 @@ class EnrolledCourseController extends Controller
             'courseId' => $courseId,
             'topics' => $topicsArray
         ]);
+    }
+
+    public function getIndividualStudentChart(Request $request) {
+        $student = $request->student;
+        $topic = $request->topic;
+        $course = $request->course;
+
+        $contentsArr = [];
+
+        $contentCount = TopicContent::where('topic_id', $topic)->count();
+
+        $contents = TopicContent::where('topic_id', $topic)->get();
+
+        $user = User::where('id', $student);
+
+        $userName = $user->value('firstname') . ' ' . $user->value('lastname');
+
+        foreach($contents as $content) {
+            $likes = 0;
+            $contentTitle = $content->topic_title;
+            $contentId = $content->topic_content_id;
+            $feedbacks = StudentFeedbackCount::where('content_id', $contentId)->where('student', $student)->get();
+            if(count($feedbacks)) {
+                foreach($feedbacks as $feedback) {
+                    if($feedback->positive == 1) {
+                        $likes = 1;
+                    } elseif($feedback->negative == 1) {
+                        $likes = -1;
+                    }
+                }
+            } else {
+                $likes = 0;
+            }
+
+            array_push($contentsArr, array(
+                'contentId' => $contentId,
+                'content_title'=> $contentTitle,
+                'likes' =>  $likes
+            ));
+        }
+        
+        return response()->json(['contents' => $contentsArr, 'contentCount' => $contentCount, 'student' => $userName]);
+
     }
 
 }
