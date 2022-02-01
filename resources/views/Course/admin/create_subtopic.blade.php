@@ -2,16 +2,15 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.create.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
     <div class="py-4">
-            <h5>Course Title:<span> {{$course_title}}</span></h5>
-            <hr class="my-4">
+            <h5 class="titles">Course Title:<span> {{$course_title}}</span></h5>
           </div>
       <!-- main -->
       <main>
@@ -25,7 +24,7 @@
           </li>
 </ul>
         </div>
-        <form action="{{ route('add-sub-topic') }}" class="row g-3 llp-form" method="POST">
+        <form action="{{ route('add-sub-topic') }}" class="row g-3 llp-form" method="POST" enctype="multipart/form-data">
           @csrf
           <input id="course_id" name="course_id" type="hidden" value="{{$course_id}}">
           
@@ -46,6 +45,7 @@
         </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->
@@ -100,7 +100,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for topic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -145,9 +145,9 @@ window.onload = function(event) {
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
     const uploadFileEl = createNewElement('input', ['form-control'], [
       {'type': 'file'},
-      {'name': `content_upload_${topicNum}_${contentCount}`}
+      {'name': `content_upload[${topicNum}][${contentCount}]`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [
@@ -185,7 +185,7 @@ window.onload = function(event) {
   }
 
   const generateExternalLinkHTML = (topicNum, contentCount, linkCount) => {
-    const externalContainerEl = createNewElement('div', ['row', 'external-container', 'mb-3']);
+	const externalContainerEl = createNewElement('div', ['row', 'external-container', 'mb-3']);
     const labelContainerEl = createNewElement('div',['col-lg-4']);
     const labelEl = createNewElement('label', [], [], 'Add External Link');
     const divContainerEl = createNewElement('div', ['col-lg-8']);

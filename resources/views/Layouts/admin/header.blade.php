@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light llp-header position-fixed w-100">
   <div class="container">
-    <a class="navbar-brand" href="#">Logo</a>
+  <a class="navbar-brand" href="{{ route('dashboard') }}"><img style="height: 40px;" src="/storage/logo/ty_mac__vector.svg"></img></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

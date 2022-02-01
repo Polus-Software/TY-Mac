@@ -12,7 +12,7 @@
 <!-- navbar new  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
-      <a class="navbar-brand" href="#"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
+      <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,24 +30,30 @@
     
     <ul class="navbar-nav mx-0 think-custom-nav-1">
     @if (Auth::check())
-      @if(Auth::user()->role_id !== 3)      
+      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR'))      
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
+        <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
+        </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
         @else
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
+        <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
+        </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('student.courses.get') }}">All Courses</a>
+          <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
         </li>
         @endif
       @if (Auth::check())
-        @if(Auth::user()->role_id == 3)
+        @if(Auth::user()->role_id == Config::get('common.ROLE_ID_INSTRUCTOR'))
         <li class="nav-item {{ (request()->is('assigned-courses')) ? 'active': '' }}">
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>

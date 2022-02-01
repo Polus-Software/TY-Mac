@@ -71,6 +71,7 @@
               <span class="login"><a href="" id="login_link">&nbsp;Login</a></span>
               </p>                
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -115,6 +116,7 @@
               </div>
               <div class="form-group mx-0 d-grid">
               <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Login</span></button>
+              <span class="login-error-message mt-2 text-center text-danger"></span>
               </div>
               <div class="form-group mx-0">
               <span>
@@ -122,6 +124,7 @@
                 </span>
                 <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -365,20 +368,57 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
     const loginform = document.getElementById('loginForm');
     const loginemail = document.getElementById('inputEmail');
     const loginpassword = document.getElementById('inputPassword');
-    document.querySelector('#loginForm').addEventListener('submit', (e) => {
-      if (loginemail.value === '') {
+    document.querySelector('#loginForm').addEventListener('submit', (e) => {debugger
+      e.preventDefault();
+      const email = loginemail.value.trim();
+      const password = loginpassword.value.trim();      
+      let validLogin = true;
+      let redirect_to = '';
+      if (email === '') {
         e.preventDefault();
         showError(loginemail, 'Email is required');
+        validLogin = false;
       } else {
         removeError(loginemail)
       }
-      if (loginpassword.value === '') {
+      if (password === '') {
         e.preventDefault();
         showError(loginpassword, 'Password is required');
+        validLogin = false;
       } else {
         removeError(loginpassword)
       }
+      if(!validLogin) return;
+      redirect_to = document.getElementById('redirect_page').value;
+      submitLogin(email, password,redirect_to);
     });
+
+    const submitLogin = (email, password,redirect) => {
+      const errorEl = document.querySelector('.login-error-message');
+      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}`;
+      fetch(path, {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+          body: JSON.stringify({})
+      }).then((response) => response.json()).then((data) => {debugger
+        console.log(data);
+        if(data.status ==='success') {
+          location.replace(data.url);
+        } else {
+          errorEl.textContent = data.message;
+          return;
+        }
+      });
+    }
+
+const myModalEl = document.getElementById('loginModal')
+myModalEl.addEventListener('show.bs.modal', function (event) {
+  document.querySelector('.login-error-message').textContent = '';
+})
 
     document.getElementById('signup_link').addEventListener('click', function(e) {
       e.preventDefault();

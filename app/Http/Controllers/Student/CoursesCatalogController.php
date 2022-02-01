@@ -97,7 +97,7 @@ class CoursesCatalogController extends Controller
         $duration = $course->course_duration . "h";
         $liveSessions = LiveSession::where('course_id', $id)->get();
         $short_description = explode(";",$course->short_description);
-        $course_details_points = explode(";",$course->course_details_points);
+        $course_details_points = $course->course_details_points;
 
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
@@ -144,7 +144,7 @@ class CoursesCatalogController extends Controller
             }
         }
 
-        $generalCourseFeedbacks = DB::table('general_course_feedback')->where('course_id',$course->id)->get();
+        $generalCourseFeedbacks = DB::table('general_course_feedback')->where([['course_id',$course->id],['is_moderated',1]])->get();
         foreach($generalCourseFeedbacks as $generalCourseFeedback){
             $studentFirstname = User::where('id', $generalCourseFeedback->user_id )->value('firstname');
             $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');

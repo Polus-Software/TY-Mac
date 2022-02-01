@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       <form class="row g-3 llp-form" action="{{ route('update-assignment') }}" enctype="multipart/form-data" method="POST">
@@ -37,7 +37,7 @@
           <div class="col-11">
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">
-          <small class="fst-italic">Supported File Formats are:  pdf, doc, docx</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
           <!-- <input type="file" class="form-control" id="document" name="document"> -->
           <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
           <!-- <div class="vr me-2 ms-2"></div> -->
@@ -82,6 +82,7 @@
       </main>
       <!-- main ends -->
     </div>
+    <div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

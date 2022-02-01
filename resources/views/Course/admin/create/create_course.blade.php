@@ -2,13 +2,13 @@
 @section('content')
 @include('Layouts.admin.header')
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-    <div class="col-2 position-fixed">
+    <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.create.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
         @if(Route::current()->getName() == 'edit-course')
@@ -16,7 +16,6 @@
         <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         <input type="hidden" id="course_id" name="course_id" value="{{ $course_id}}">
         <input type="hidden" id="what_learn_points_count" name="what_learn_points_count" value="{{ count($whatLearn) }}">
-        <input type="hidden" id="who_learn_points_count" name="who_learn_points_count"  value="{{ count($whoThis) }}">
         @else
         <input type="hidden" id="route_val" value="new" />
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
@@ -24,8 +23,7 @@
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
         @endif
         @csrf
-          <div class="py-4"><h3>Course Overview</h3>
-          <hr class="my-4">
+          <div class="py-4"><h3 class="titles">Course Overview</h3>
         </div>
           <div class="col-12">
             <label for="title">Course Title</label>
@@ -147,30 +145,24 @@
             @endif -->
             
             <label for="who-course-points mt-2">Points</label>
-            @if(isset($whoThis))
-            @php ($whoCount = 0)
-            @foreach($whoThis as $who)
-            @php ($whoCount = $whoCount + 1)
-            <input type="text" class="form-control mt-2" id="who_learn_points" name="who_learn_points_{{ $whoCount }}" value="{{ $who }}">
-            @endforeach
+            @if(isset($course_details['course_details_points']))
+            <textarea class="form-control mb-3" name="who_learn_points" rows="4">{{ $course_details['course_details_points'] }}</textarea>
             @else
-            <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1">
-            @endif 
-            @if ($errors->has('who_learn_points_1'))
-              <span class="text-danger">This field is required</span>
-            @endif           
-            <div id="add-points"></div>            
-            <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-who-learn">Add more answer</button>
+            <textarea class="form-control mb-3" name="who_learn_points" rows="4"></textarea>
+            @endif
+            @if ($errors->has('who_learn_points'))
+              <span class="text-danger mb-3">This field is required</span><br>
+            @endif
           </div>
           <div class="col-12">
             <label for="course-image">Course image</label>
             <div class="row">
               @if(isset($course_details['image']))
-              <div class="col"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="..."></div>
               @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
               <div class="col">
-                <p>Important guidelines: <b>604x287</b> pixels</p>
+                <p>Important guidelines: <b>600x285</b> pixels</p>
                 <p>Image must be less than <b>500kb</b> </p>
                 <p> supported file formats: jpg, jpeg, png, .svg.</p>
               </div>
@@ -179,7 +171,7 @@
              
               <input type="file" class="form-control mb-2" id="course-image" name="course_image">
 
-              <label class="input-group-text col-12" for="course-image">Upload</label>
+              <label class="input-group-text mb-2 left_right_padding" for="course-image">Upload Image</label>
             </div>
             @if ($errors->has('course_image'))
               <span class="text-danger">{{ $errors->first('course_image') }}</span>
@@ -192,7 +184,7 @@
             @if(isset($course_details['thumbnail']))
             <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
             @else
-              <div class="col"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail" alt="..."></div>
+              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
               <div class="col">
                 <p>Important guidelines: <b>395x186 pixels</b></p>
                 <p>Image must be less than <b>100kb</b> </p>
@@ -201,7 +193,7 @@
               @endif
             <div class="input-group mt-3 mb-3">
               <input type="file" class="form-control mb-2" id="course-thumbnail-image" name="course_thumbnail_image">
-              <label class="input-group-text col-12" for="course-thumbnail-image">Upload</label>
+              <label class="input-group-text mb-2 left_right_padding" for="course-thumbnail-image">Upload Image</label>
             </div>
             @if ($errors->has('course_thumbnail_image'))
               <span class="text-danger">This course thumbnail image field is required</span>
@@ -219,6 +211,7 @@
         </form>
       </main>
     </div>
+	<div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

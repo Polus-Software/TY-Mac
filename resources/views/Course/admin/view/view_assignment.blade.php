@@ -2,21 +2,21 @@
 @section('content')
 @include('Layouts.admin.header')
 
-<div class="container llp-container"> 
+<div class="container-fluid llp-container"> 
     <div class="row">
 
-    <div class="col-2 position-fixed"> 
+    <div class="left_sidebar"> 
       <!-- include sidebar here -->
       @include('Course.admin.view.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
       <div class="py-4"><h5>Course Title: {{$course_title}}</h5><hr class="my-4"></div>
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
    <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view_cohortbatches', ['course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
+    <a class="nav-link active" aria-current="page" href="{{ route('view-assignments', $course_id) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{{ route('create-assignment', [ 'course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Assignment</a>
@@ -53,6 +53,7 @@
         </div>
       </main>
     </div>
+    <div class="col-1"></div>
 </div>
 @endsection('content')
 

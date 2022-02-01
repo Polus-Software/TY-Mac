@@ -132,12 +132,12 @@ class CourseController extends Controller
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
-        $who_learn_points_count = $request->input('who_learn_points_count');
+        /*$who_learn_points_count = $request->input('who_learn_points_count');
    
         for($i =1;  $i <= $who_learn_points_count; $i++){
           $who_learn_temp = $request->input('who_learn_points_'. $i);
           $who_learn = $who_learn . $who_learn_temp . ";";
-        }
+        }*/
         $courseFile = "";
         $courseThumbnailFile = "";
         if($request->file()){
@@ -162,7 +162,7 @@ class CourseController extends Controller
         $course->course_duration = $courseDuration;
         $course->short_description = $what_learn ;
         $course->course_details = $whoLearnDescription;
-        $course->course_details_points = $who_learn;
+        $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
@@ -250,14 +250,15 @@ class CourseController extends Controller
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
-                    // 'whothis' => explode(';', $data->value('courses.course_details_points')),
+                     'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
                     'thumbnail' => $data->value('courses.course_thumbnail_image')
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
 
-                $whoThis = explode(';', $data->value('courses.course_details_points'));
+                //$whoThis = explode(';', $data->value('courses.course_details_points'));
+                $whoThis = $data->value('courses.course_details_points');
 
 
                 $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
@@ -292,7 +293,7 @@ class CourseController extends Controller
                 'instructor' =>'required',
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
-                'who_learn_points_1'=>'required',
+                'who_learn_points'=>'required',
                 'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
                 'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
@@ -320,20 +321,20 @@ class CourseController extends Controller
                     
                 }
                 $whoLearnDescription = $request->input('who_learn_description');
-                $who_learn ="";
-                $who_learn_points_count = $request->input('who_learn_points_count');
+                $who_learn = $request->input('who_learn_points');
+                //$who_learn_points_count = $request->input('who_learn_points_count');
 
-                for($i = 1;  $i <= $who_learn_points_count; $i++){
+                //for($i = 1;  $i <= $who_learn_points_count; $i++){
                     
-                    $who_learn_temp = $request->input('who_learn_points_'. $i);
-                    if($who_learn_temp != null) {
-                        if($i == $what_learn_points_count) {
-                            $who_learn = $who_learn . $who_learn_temp;
-                        } else {
-                            $who_learn = $who_learn . $who_learn_temp . ";";
-                        }
-                    }
-                }
+                    //$who_learn_temp = $request->input('who_learn_points_'. $i);
+                    //if($who_learn_temp != null) {
+                        //if($i == $what_learn_points_count) {
+                            //$who_learn = $who_learn . $who_learn_temp;
+                        //} else {
+                            //$who_learn = $who_learn . $who_learn_temp . ";";
+                        //}
+                    //}
+               // }
                 
                 
                 $user = Auth::user();
@@ -418,32 +419,104 @@ class CourseController extends Controller
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
-        for($i = 1; $i<= $topic_count; $i++) {
-            $topic = new Topic;
-            $topic->topic_title = $request->input('topic_title'.$i);
-            $topic->course_id = $course_id;
-            $topic->description = "";
-            $topic->save();
-            $content_count = $request->input('content_count_topic_'.$i);            
-            for($j = 1; $j<=$content_count; $j++) {
-                if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
-                    continue;
+        if(isset($request->topic_id) && !empty($request->topic_id)){
+            for($i = 1; $i<= $topic_count; $i++) {
+                $updateDetails = [
+                    'topic_title' => $request->input('topic_title'.$i),
+                    'course_id' => $course_id,
+                    'description'=>''
+                ];
+                Topic::where('topic_id', $request->topic_id)
+                    ->update($updateDetails);
+                $content_count = $request->input('content_count_topic_'.$i);
+                for($j = 0; $j<$content_count; $j++) {//echo 'jibi';
+                    $TopicFileName = $extension = $external_links = '';
+                    if($request->file() && !empty($request->content_upload[$i][$j])){
+                        $subtopicFile = $request->content_upload[$i][$j];
+                        $extension = $subtopicFile->extension();
+                        $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $destinationPath = public_path().'/storage/study_material';
+                        $subtopicFile->move($destinationPath,$TopicFileName);
+                    }
+                    $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
+                    for($k =0; $k <= $external_link_count; $k++) {
+                        $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
+                        $external_links = $external_links . $external_link.';';
+                    }
+                    if($request->input('content_topic_'.$i.'_'.$j) != ''){
+                        if($request->input('content_status_'.$i.'_'.$j) == '0'){
+                            TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j))->delete();
+                        }
+                        else{
+                            $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
+                            if($extension == '')
+                                $extension = $content['content_type'];
+                            if($TopicFileName == '')
+                                $TopicFileName = $content['document'];
+                            $updateDetails = [
+                                'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                'content_type' => $extension,
+                                'external_link'=>$external_links,
+                                'document'=>$TopicFileName,
+                            ];
+                            TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
+                                        ->update($updateDetails);
+                        }
+                        //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
+                    //->update($updateDetails);
+                    }
+                    else{
+                        if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
+                            $content = new TopicContent;
+                            $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                            $content->topic_id = $request->topic_id;
+                            $content->description = "";
+                            $content->content_type = $extension;
+                            $content->external_link = $external_links;
+                            $content->document = $TopicFileName;
+                            $content->save();
+                        }
+                    }
                 }
-                $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
-                for($k =1; $k <= $external_link_count; $k++) {
-                    $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
-                    $external_links = $external_links . $external_link.';';
-                }
-                $content = new TopicContent;
-                $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
-                $content->topic_id = $topic->id;
-                $content->description = "";
-                $content->content_type = 'link';
-                $content->document = $external_links;
-                $content->save();
             }
         }
-       
+        else{
+            for($i = 1; $i<= $topic_count; $i++) {
+                $topic = new Topic;
+                $topic->topic_title = $request->input('topic_title'.$i);
+                $topic->course_id = $course_id;
+                $topic->description = "";
+                $topic->save();
+                $content_count = $request->input('content_count_topic_'.$i);            
+                for($j = 1; $j<=$content_count; $j++) {
+                    $external_links = $extension = $TopicFileName = '';
+                    if($request->file() && !empty($request->content_upload[$i][$j])){
+                        $subtopicFile = $request->content_upload[$i][$j];
+                        $extension = $subtopicFile->extension();
+                        $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $destinationPath = public_path().'/storage/study_material';
+                        $subtopicFile->move($destinationPath,$TopicFileName);
+                    }
+                    if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
+                        continue;
+                    }
+                    $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
+                    for($k =1; $k <= $external_link_count; $k++) {
+                        $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
+                        $external_links = $external_links . $external_link.';';
+                    }
+                    $content = new TopicContent;
+                    $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                    $content->topic_id = $topic->id;
+                    $content->description = "";
+                    $content->content_type = $extension;
+                    $content->external_link = $external_links;
+                    $content->document = $TopicFileName;
+                    $content->save();
+                }
+            }
+        }
+        //exit;
         return redirect()->route('view-subtopics', ['course_id' => $course_id]);
     }
 
@@ -518,34 +591,46 @@ class CourseController extends Controller
     // }
 
     public function editSubTopics(Request $request, $topicId) {
-
-        $courseContents = [];
-        
+		$courseContents = [];
         if($topicId) {
-            
-        $subtopics = Topic::where('topic_id', $topicId)->get();
-        foreach($subtopics as $topics){
-
-            $topicId = $topics->topic_id;
-            $topic_title =  $topics->topic_title;
-            $course_id = $topics->course_id;
-            $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
-            $topicContentArray= TopicContent::where('topic_id', array($topicId))->get();
-            $contentsData = $topicContentArray->toArray();
-            $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
-            array_push($courseContents, array(
-                'topic_id' => $topicId,
-                'topic_title' =>$topic_title,
-                'contentsData' => $contentsData
-            ));
-            }
-
-            return view('Course.admin.edit_subtopic', [
-                'courseContents' => $courseContents,
-                'course_id' => $course_id,
-                'course_title' => $course_title,
-                'courseStatus' => $courseStatus
-            ]);
+			$subtopics = Topic::where('topic_id', $topicId)->first();
+			$topicContentArray= TopicContent::where('topic_id', array($topicId))->get();
+			$totalCount = $topicContentArray->count();
+			$contentsData = $topicContentArray->toArray();
+			if($contentsData){
+				foreach($contentsData as $data){
+					$linksArray = array();
+					if(!empty($data['external_link'])){
+						$linksArray = explode(';', $data['external_link']);
+					}
+					array_push($courseContents, array(
+						'topic_content_id' => $data['topic_content_id'],
+						'topic_id' =>$data['topic_id'],
+						'topic_title' => $data['topic_title'],
+						'topic_content_id' => $data['topic_content_id'],
+						'description' =>$data['description'],
+						'content_type' => $data['content_type'],
+						'document' => $linksArray,
+                        'uploaded_file_path' => public_path().'/storage/study_material/'.$data['document'],
+						'uploaded_file' => $data['document'],
+						'created_at' =>$data['created_at'],
+						'updated_at' => $data['updated_at']
+					));
+				}
+			}
+			$course_id = $subtopics['course_id'];
+			$course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
+			$courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
+			//var_dump($courseContents);exit;
+			return view('Course.admin.edit_subtopic', [
+				'courseContents' => $courseContents,
+				'course_id' => $course_id,
+				'course_title' => $course_title,
+				'courseStatus' => $courseStatus,
+				'topic_title' =>$subtopics['topic_title'],
+				'topic_id' => $topicId,
+				'totalCount'=>$totalCount
+			]);
         }
     }
 

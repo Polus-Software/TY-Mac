@@ -110,7 +110,7 @@
             <textarea class="form-control" id="topic_description" name="topic_description"></textarea>
           </div>
           <div class="mb-3">
-            <label for="course_description" class="col-form-label">Upload study material (if any)</label>
+            <label for="course_description" class="col-form-label">Upload course material (if any)</label>
             <input type="file" name="study_material" id="study_material">
           </div>
           <div class="modal-footer">
