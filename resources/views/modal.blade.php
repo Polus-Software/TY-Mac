@@ -71,6 +71,7 @@
               <span class="login"><a href="" id="login_link">&nbsp;Login</a></span>
               </p>                
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -123,6 +124,7 @@
                 </span>
                 <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -371,6 +373,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       const email = loginemail.value.trim();
       const password = loginpassword.value.trim();      
       let validLogin = true;
+      let redirect_to = '';
       if (email === '') {
         e.preventDefault();
         showError(loginemail, 'Email is required');
@@ -386,12 +389,13 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
         removeError(loginpassword)
       }
       if(!validLogin) return;
-      submitLogin(email, password);
+      redirect_to = document.getElementById('redirect_page').value;
+      submitLogin(email, password,redirect_to);
     });
 
-    const submitLogin = (email, password) => {
+    const submitLogin = (email, password,redirect) => {
       const errorEl = document.querySelector('.login-error-message');
-      let path = `{{route('user.login')}}?email=${email}&password=${password}`;
+      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}`;
       fetch(path, {
           method: 'POST',
           headers: {

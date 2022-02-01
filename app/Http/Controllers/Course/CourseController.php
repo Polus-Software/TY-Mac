@@ -132,12 +132,12 @@ class CourseController extends Controller
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
-        $who_learn_points_count = $request->input('who_learn_points_count');
+        /*$who_learn_points_count = $request->input('who_learn_points_count');
    
         for($i =1;  $i <= $who_learn_points_count; $i++){
           $who_learn_temp = $request->input('who_learn_points_'. $i);
           $who_learn = $who_learn . $who_learn_temp . ";";
-        }
+        }*/
         $courseFile = "";
         $courseThumbnailFile = "";
         if($request->file()){
@@ -162,7 +162,7 @@ class CourseController extends Controller
         $course->course_duration = $courseDuration;
         $course->short_description = $what_learn ;
         $course->course_details = $whoLearnDescription;
-        $course->course_details_points = $who_learn;
+        $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
@@ -250,14 +250,15 @@ class CourseController extends Controller
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
-                    // 'whothis' => explode(';', $data->value('courses.course_details_points')),
+                     'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
                     'thumbnail' => $data->value('courses.course_thumbnail_image')
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
 
-                $whoThis = explode(';', $data->value('courses.course_details_points'));
+                //$whoThis = explode(';', $data->value('courses.course_details_points'));
+                $whoThis = $data->value('courses.course_details_points');
 
 
                 $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
@@ -292,7 +293,7 @@ class CourseController extends Controller
                 'instructor' =>'required',
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
-                'who_learn_points_1'=>'required',
+                'who_learn_points'=>'required',
                 'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
                 'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
@@ -320,20 +321,20 @@ class CourseController extends Controller
                     
                 }
                 $whoLearnDescription = $request->input('who_learn_description');
-                $who_learn ="";
-                $who_learn_points_count = $request->input('who_learn_points_count');
+                $who_learn = $request->input('who_learn_points');
+                //$who_learn_points_count = $request->input('who_learn_points_count');
 
-                for($i = 1;  $i <= $who_learn_points_count; $i++){
+                //for($i = 1;  $i <= $who_learn_points_count; $i++){
                     
-                    $who_learn_temp = $request->input('who_learn_points_'. $i);
-                    if($who_learn_temp != null) {
-                        if($i == $what_learn_points_count) {
-                            $who_learn = $who_learn . $who_learn_temp;
-                        } else {
-                            $who_learn = $who_learn . $who_learn_temp . ";";
-                        }
-                    }
-                }
+                    //$who_learn_temp = $request->input('who_learn_points_'. $i);
+                    //if($who_learn_temp != null) {
+                        //if($i == $what_learn_points_count) {
+                            //$who_learn = $who_learn . $who_learn_temp;
+                        //} else {
+                            //$who_learn = $who_learn . $who_learn_temp . ";";
+                        //}
+                    //}
+               // }
                 
                 
                 $user = Auth::user();
@@ -438,42 +439,43 @@ class CourseController extends Controller
                         $subtopicFile->move($destinationPath,$TopicFileName);
                     }
                     $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
-                    //echo 'externalLink_count_topic_'.$i.'_content_'.$j;
-                   // var_dump($request->input('externalLink_count_topic_1_content_0'));
-                    //var_dump($external_link_count);
                     for($k =0; $k <= $external_link_count; $k++) {
                         $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
-                        echo 'external_topic'.$i.'_content_'.$j.'_link_'.$k;
-                        var_dump($external_link);
                         $external_links = $external_links . $external_link.';';
                     }
-                    //var_dump($external_links);
                     if($request->input('content_topic_'.$i.'_'.$j) != ''){
-                        $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
-                        if($extension == '')
-                            $extension = $content['content_type'];
-                        if($TopicFileName == '')
-                            $TopicFileName = $content['document'];
-                        $updateDetails = [
-                            'topic_title' => $request->input('content_title_'.$i.'_'.$j),
-                            'content_type' => $extension,
-                            'external_link'=>$external_links,
-                            'document'=>$TopicFileName,
-                        ];
-                        TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
+                        if($request->input('content_status_'.$i.'_'.$j) == '0'){
+                            TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j))->delete();
+                        }
+                        else{
+                            $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
+                            if($extension == '')
+                                $extension = $content['content_type'];
+                            if($TopicFileName == '')
+                                $TopicFileName = $content['document'];
+                            $updateDetails = [
+                                'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                'content_type' => $extension,
+                                'external_link'=>$external_links,
+                                'document'=>$TopicFileName,
+                            ];
+                            TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
+                        }
                         //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
                     //->update($updateDetails);
                     }
                     else{
-                        $content = new TopicContent;
-                        $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
-                        $content->topic_id = $request->topic_id;
-                        $content->description = "";
-                        $content->content_type = $extension;
-                        $content->external_link = $external_links;
-                        $content->document = $TopicFileName;
-                        $content->save();
+                        if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
+                            $content = new TopicContent;
+                            $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                            $content->topic_id = $request->topic_id;
+                            $content->description = "";
+                            $content->content_type = $extension;
+                            $content->external_link = $external_links;
+                            $content->document = $TopicFileName;
+                            $content->save();
+                        }
                     }
                 }
             }
