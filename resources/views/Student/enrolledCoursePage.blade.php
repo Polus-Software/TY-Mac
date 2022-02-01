@@ -133,7 +133,7 @@
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
                                             @if($userType == 'student')
                                                 <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                                                Add review
+                                                Add Course review
                                             </a>
                                             @endif
                                             <input type="hidden" id="course_id" value="{{$course['id']}}">
