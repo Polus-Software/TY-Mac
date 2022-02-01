@@ -109,19 +109,20 @@ class EnrolledCourseController extends Controller
                      $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
                      if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
                          $latestDate = $startDate;
+                         $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                         $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                         $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                         $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
                          break;
                      }   
                  }
+                 
+             } else if($startDate >= $current_date) {
+                 $latestDate = $startDate;
                  $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
                  $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
                  $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
                  $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-             } else if($startDate >= $current_date) {
-                 $latestDate = $startDate;
-                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-             $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-             $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-             $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
              } else {
                 $next_live_cohort = "This batch has ended";
              }
@@ -143,13 +144,14 @@ class EnrolledCourseController extends Controller
                     $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
                     if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
                         $latestDate = $startDate;
+                        $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
+                        $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
+                        $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
+                        $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
                         break;
                     }   
                 }
-                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
+                
             } else if($startDate >= $current_date) {
                 $latestDate = $startDate;
                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
@@ -264,7 +266,9 @@ class EnrolledCourseController extends Controller
                 }
                 
                 $assignmentList = $assignmentsArray->toArray();
-                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
+                $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+
                 array_push($topicDetails, array(
                     'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
@@ -276,10 +280,11 @@ class EnrolledCourseController extends Controller
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList,
-                    'isAssignmentSubmitted' => $isAssignmentSubmitted
+                    'isAssignmentSubmitted' => $isAssignmentSubmitted,
+                    'isAssignmentStarted' => $isAssignmentStarted
                 ));
             }
-           
+
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -409,7 +414,7 @@ class EnrolledCourseController extends Controller
             'status' => 'success', 
             'message' => 'submitted successfully'
          ]);
-        // return redirect('/enrolled-course' . '/' .$courseId)->with('message', 'Your review added successfully!');
+        
     }
    
     public function showassignment($id){
@@ -440,38 +445,58 @@ class EnrolledCourseController extends Controller
         
     }
 
-    public function submitAssignment(Request $request){
-        
+    public function startAssignment(Request $request){
+    
+
         $user = Auth::user();
         $userId = $user->id;
 
-        $comment = $request->input('assignment_comment');
-        $file = $request->assignment_upload;
-        
-        $topic_assignment_id = $request->input('assignment_id');
+        $assignmentId = $request->assignment_id;
 
-        $assignementFile = $file->getClientOriginalName();
 
         $assignments = Assignment::where('student_id' , $userId)
-                                  ->where('topic_assignment_id', $topic_assignment_id)->get();
-      
+                                  ->where('topic_assignment_id', $assignmentId)->get();
+                               
+                                  
         if(count($assignments) == 0){
 
-        $file->storeAs('assignmentAnswers', $assignementFile,'public');
-        $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
+        $topicAssignment = TopicAssignment::where('id', $assignmentId);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
         $topicId = $topicAssignment->value('topic_id');
-        
+
         $assignment = new Assignment;
-        $assignment->assignment_answer = $assignementFile;
-        $assignment->topic_assignment_id = $topic_assignment_id;
+
+        $assignment->topic_assignment_id = $assignmentId;
         $assignment->student_id = $userId;
         $assignment->course_id = $courseId;
         $assignment->instructor_id = $instructorId;
         $assignment->topic_id = $topicId;
-        $assignment->is_submitted = true;
+        $assignment->is_submitted = false;
         $assignment->save();
+        }
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
+        
+    }
+
+    public function submitAssignment(Request $request){
+
+        $user = Auth::user();
+        $userId = $user->id;
+        $topic_assignment_id = $request->assignment_id;
+        $comment = $request->input('assignment_comment');
+        
+        $file = $request->assignment_upload;
+        
+        $assignementFile = $file->getClientOriginalName();
+        $file->storeAs('assignmentAnswers', $assignementFile,'public');
+        
+        $assignment = Assignment::where('topic_assignment_id', $topic_assignment_id);
+       
+        $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
 
         $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
 
@@ -482,7 +507,7 @@ class EnrolledCourseController extends Controller
         $student_achievement->save();
 
         return redirect()->back();
-        }
+    
     
     }
 
@@ -689,6 +714,49 @@ class EnrolledCourseController extends Controller
             'courseId' => $courseId,
             'topics' => $topicsArray
         ]);
+    }
+
+    public function getIndividualStudentChart(Request $request) {
+        $student = $request->student;
+        $topic = $request->topic;
+        $course = $request->course;
+
+        $contentsArr = [];
+
+        $contentCount = TopicContent::where('topic_id', $topic)->count();
+
+        $contents = TopicContent::where('topic_id', $topic)->get();
+
+        $user = User::where('id', $student);
+
+        $userName = $user->value('firstname') . ' ' . $user->value('lastname');
+
+        foreach($contents as $content) {
+            $likes = 0;
+            $contentTitle = $content->topic_title;
+            $contentId = $content->topic_content_id;
+            $feedbacks = StudentFeedbackCount::where('content_id', $contentId)->where('student', $student)->get();
+            if(count($feedbacks)) {
+                foreach($feedbacks as $feedback) {
+                    if($feedback->positive == 1) {
+                        $likes = 1;
+                    } elseif($feedback->negative == 1) {
+                        $likes = -1;
+                    }
+                }
+            } else {
+                $likes = 0;
+            }
+
+            array_push($contentsArr, array(
+                'contentId' => $contentId,
+                'content_title'=> $contentTitle,
+                'likes' =>  $likes
+            ));
+        }
+        
+        return response()->json(['contents' => $contentsArr, 'contentCount' => $contentCount, 'student' => $userName]);
+
     }
 
 }

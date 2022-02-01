@@ -636,6 +636,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
         'App\\Models\\StudentAchievement' => __DIR__ . '/../..' . '/app/Models/StudentAchievement.php',
         'App\\Models\\StudentFeedbackCount' => __DIR__ . '/../..' . '/app/Models/StudentFeedbackCount.php',
+        'App\\Models\\Timezone' => __DIR__ . '/../..' . '/app/Models/Timezone.php',
         'App\\Models\\Topic' => __DIR__ . '/../..' . '/app/Models/Topic.php',
         'App\\Models\\TopicAssignment' => __DIR__ . '/../..' . '/app/Models/TopicAssignment.php',
         'App\\Models\\TopicContent' => __DIR__ . '/../..' . '/app/Models/TopicContent.php',
