@@ -33,7 +33,7 @@
             <label for="description">Assignment</label>
             <textarea type="text" class="form-control" id="description" name="assignment_description">{{$assignment_details['assignment_description']}}</textarea>
           </div>
-          <div class="row bd-highlight pt-3 ">
+          <div class="row bd-highlight pt-3">
           <div class="col-11">
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">

@@ -667,7 +667,7 @@
                                         @php ($slno = 0)
                                         @foreach($topicDetails as $topicDetail)
                                         @php ($slno = $slno + 1)
-
+                                    
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingThree">
@@ -680,89 +680,88 @@
                                                 @endif
                                                 </button>
                                                 </h2>
+                                               
+                                            
+                                               
                                                 <div id="collapseThree_{{$slno}}" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                @foreach($topicDetail['assignmentList'] as $assignment)
-                                                <div class="col-12 mb-3">
-                                                    <div class="card" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
-                                                    <div class="card-title p-3 bg-light border-bottom">
-                                                        Assignment: {{$assignment['assignment_title']}}</strong>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <p class="card-text">{{$assignment['assignment_description']}}</p>
-                                                        <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="row">
-                                                            
-
-                                                            <div class="col-lg-10">
-                                                                <p style="color:#6E7687;" class="mt-4">External Link</p>
-                                                                <a target="_blank" href="/storage/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
-                                                            <p></p>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="col-md-6">
-                                                            <div class="row">
-                                                            
-                                                            </div>
-                                                        </div>
-                                                    
-                                                    <div class="d-flex justify-content-center col-lg-12">
-                                                        <div class="card mb-3" style="border: 2px dashed rgba(0,0,0,.125);border-radius: 1rem;">
+                                                    <div class="accordion-body">
+                                                       @foreach($topicDetail['assignmentList'] as $assignment)
+                                                       <div class="col-12 mb-3">
+                                                           <div class="card" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
+                                                               <div class="card-title p-3 bg-light border-bottom">
+                                                                 Assignment: {{$assignment['assignment_title']}}</strong>
+                                                                </div>
                                                             <div class="card-body">
-                                                            
-                                                            <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
-                                                            <h5 class="card-title">Type your comment here</h5>
-                                                            <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
-                                                            @csrf
-                                                            <input type="hidden" name="assignment_id" value="{{ $assignment['id'] }}" />
-                                                            <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
-                                                                    <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;"> 
-                                                                        <div class="row p-2 flex-fill bd-highlight">
-                                                                            <div class="col-lg-3">Attach File:</div>
-                                                                                <div class="col-lg-5 col-12"><label>Upload from device</label>
-                                                                                    <input class="form-control" type="file" name="assignment_upload">
-                                                                                    <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
-                                                                                </div>
-                                                                            <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
+                                                                <p class="card-text">{{$assignment['assignment_description']}}</p>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-10">
+                                                                                <p style="color:#6E7687;" class="mt-4">External Link</p>
+                                                                                <a target="_blank" href="/storage/assignmentAttachments/{{$assignment['document']}}">{{$assignment['document']}}</a></p>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-12 text-end mt-4">
-                                                                            <a class="btn btn-sm btn-outline-secondary me-3">Cancel</a>
-                                                                            <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
-                                                                        </div>
-                                                            </form>
                                                                     </div>
-                                                                        </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="row">
                                                                         
+                                                                        </div>
                                                                     </div>
-                                                                <!-- </div> -->
-                                                            </div>
                                                     
+                                                                    <div class="d-flex justify-content-center col-lg-12">
+                                                                        <div class="card mb-3" style="border: 2px dashed rgba(0,0,0,.125);border-radius: 1rem;">
+                                                                            <div class="card-body">
+                                                                            
+                                                                                <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
+                                                                                    <h5 class="card-title">Type your comment here</h5>
+                                                                                    <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+                                                                                    @csrf
+                                                                                        <input type="hidden" name="assignment_id"  id ="assignment_id" value="{{ $assignment['id'] }}" />
+                                                                                        <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                            <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;"> 
+                                                                                                <div class="row p-2 flex-fill bd-highlight">
+                                                                                                    <div class="col-lg-3">Attach File:</div>
+                                                                                                        <div class="col-lg-6 col-12"><label>Upload from device</label>
+                                                                                                            <input class="form-control" type="file" name="assignment_upload">
+                                                                                                            <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                                        </div>
+                                                                                            <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
+                                                                                                    </div>
+                                                                                                    <div class="col-12 text-end mt-4">
+                                                                                                        <a class="btn btn-sm btn-outline-secondary me-3">Cancel</a>
+                                                                                                        <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
+                                                                                                    </div>
+                                                                                    </form>
+                                                                                    </div>
+                                                                                </div>       
+                                                                            </div>                                                                               <!-- </div> -->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    </div>
-
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                @if($topicDetail['isAssignmentSubmitted'] != true)
-                                                <div class="col-4 m-auto text-center">
-                                                <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
-                                                </div>
-                                                @else<div class="col-12 m-auto text-center">
-                                                <h3>Assignment Submitted</h3>
-                                                </div>
-
-                                                @endif
                                                 
-                                            @endforeach
+                                                    @if($topicDetail['isAssignmentSubmitted'] != true)
+                                                        <div class="col-4 m-auto text-center">
+                                                        <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
+                                                        </div>
+                                                   
+
+                                                    @else
+                                                        <div class="col-12 m-auto text-center">
+                                                        <h3>Assignment Submitted</h3>
+                                                        </div>
+                                                    @endif
+                                                
+                                                        @endforeach
                                                 </div>
-                                                </div>
+                                                
                                             </div>
+                                                
+                                        </div>
                                         </div>
 
                                         <!-- <h6 class="card-title pt-2" id="{{$topicDetail['topic_id']}}"></h6>
@@ -930,8 +929,28 @@
 
             document.getElementById('card_' + card).style.display = "block";
             this.style.display = "none";
+
+
+            let assignmentId = document.getElementById('assignment_id').value;
+            let path = "{{ route('start.assignment.post') }}?assignment_id=" + assignmentId;
+        
+            fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                },
+            body: JSON.stringify({})
+            }).then((response) => response.json()).then((data) => {
+                if (data.status =='success'){
+                console.log(data);
+                } 
+            });
         });
     }
+
+
     let finalRating = 0;
 
     let stars = document.getElementsByClassName('rating-star');
@@ -976,7 +995,7 @@
             },
             body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
-            if (data.status == 'success') {
+            if(data.status == 'success') {
                 closeModal('reviewModal');
                 // window.location.reload();
             }
