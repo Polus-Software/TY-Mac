@@ -354,12 +354,24 @@
                     <div class="tab-pane fade show {{($userType == 'student') ? 'active' : ''}}" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
                         <div class="card card-2 mb-3">
                             <div class="card-body">
-                                <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                            <div class="row">
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-12">
+                                        <h5 class="card-title pt-2">Session Info</h5>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                    @if($userType == 'student')
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}">Go to study materials</a>
+                                    @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                @php ($slno = 0)
                                 @foreach($topicDetails as $topicDetail)
                                 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
+                                    @php ($slno = $slno + 1)
+                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">Session {{$slno}} - {{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
@@ -371,7 +383,7 @@
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @else
-                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        <a style="background-color: #74648C;color: white;" type="button" target="_blank" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
                                     </div>
                                 </div>
@@ -415,7 +427,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 mt-3">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
                                                     <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
@@ -473,7 +485,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 mt-3">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
                                                     <li class="ms-3 border-0 pb-2">{{ $recommendation['content_title'] }}</li>
@@ -498,7 +510,7 @@
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Messsge</a>
+                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Message</a>
                                     </button>
                                        
                                     </h2>
@@ -516,7 +528,7 @@
                                                                     <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">1-on-1 Session</button>
                                                                 </div>
                                                                 <div class="col-lg-6">
-                                                                    <a href="#" class="btn btn-outline-secondary text-dark w-100">Chart</a>
+                                                                <button type="button" class="btn btn-outline-secondary text-dark w-100" data-bs-toggle="modal" data-bs-target="#chartModal" data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">Chart</button>
                                                                 </div> 
                                                             </div>
                                                             <div class="row mt-3">
@@ -791,7 +803,7 @@
                                                                                                     <div class="col-lg-3">Attach File:</div>
                                                                                                         <div class="col-lg-6 col-12"><label>Upload from device</label>
                                                                                                             <input class="form-control" type="file" name="assignment_upload">
-                                                                                                            <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                                            <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx,</small>
                                                                                                         </div>
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                                                     </div>
@@ -1125,6 +1137,78 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
 });
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@if($userType == 'instructor')
+<script>
+    
+    
+            function drawChart(count, contents, student) {
+                console.log(contents[0]['likes']);
+                var gdata = new google.visualization.DataTable();
+                gdata.addColumn('string', 'Subtopics');
+                gdata.addColumn('number', 'Feedbacks');
+                for(i=0;i<count;i++){
+                    gdata.addRows([
+                        [contents[i]['content_title'],contents[i]['likes']]
+                    ]);
+                }
+                
+                var options = {
+                chart: {
+                    title: student + "'s Activities"
+                },
+                width: 900,
+                height: 470,
+                colors: ['#A26B05'],
+                vAxis: {
+                    format: '0'
+                    },
+                };
+                var chart = new google.charts.Line(document.getElementById('graph_div'));
+                chart.draw(gdata, google.charts.Line.convertOptions(options));
+            }
+      
+    let contentCount = 0;
+    let contentArr = [];
+    document.getElementById('chartModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var student = button.getAttribute('data-bs-student-id');
+        var topic = button.getAttribute('data-bs-topic-id');
+        var course = document.getElementById('course_id');
+        
+        let path = "{{ route('get-individual-student-chart') }}?student=" + student +"&topic=" + topic +"&course=" + course;
+        fetch(path, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+        }).then((response) => response.json()).then((jsondata) => {
+            google.charts.load('current', {'packages':['line']});
+            
+            google.charts.setOnLoadCallback(function(){ drawChart(jsondata.contentCount, jsondata.contents, jsondata.student) });
+        });
+        setTimeout(hideAxisLabels, 500);
+        function hideAxisLabels(){
+            let axisElements = document.getElementById('graph_div').getElementsByTagName('g')[4].getElementsByTagName('text');   
+            let axisElementsLength = axisElements.length;
+            axisElements[parseInt(axisElementsLength) - 2].style.display = 'none';
+            axisElements[parseInt(axisElementsLength) - 4].style.display = 'none';
+            let title = document.getElementById('graph_div').getElementsByTagName('g')[0].getElementsByTagName('text')[0];
+            title.setAttribute('fill', '#2C3443');
+            title.style.fontSize = "16px";
+            title.style.fontWeight = "600";
+            let lineElement = document.getElementById('graph_div').getElementsByTagName('g')[2]; 
+            let path = lineElement.getElementsByTagName('path')[0];
+            let circle = lineElement.getElementsByTagName('circle');
+            path.setAttribute('stroke-width', '4');
+            for(i=0;i<circle.length;i++){
+                circle[i].setAttribute('fill-opacity', 1);
+            }
+        }
+    });
+</script>
+@elseif($userType == 'student')
 <script>
     google.charts.load('current', {
         'packages': ['bar']
@@ -1160,4 +1244,5 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
+@endif
 @endpush
