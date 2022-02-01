@@ -177,6 +177,7 @@ Route::get('/', function () {
     Route::get('/enrolled-course/{course}', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::get('/assignments/{assignment}', [EnrolledCourseController::class, 'showassignment'])->name('student.course.assignment');
     Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
+    Route::post('/start-assignment', [EnrolledCourseController::class, 'startAssignment'])->name('start.assignment.post');
     Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');
     Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
     Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');

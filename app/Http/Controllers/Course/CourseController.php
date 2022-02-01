@@ -661,7 +661,7 @@ class CourseController extends Controller
             'assignment_title' => $assignment_details->value('assignment_title'),
             'assignment_description' => $assignment_details->value('assignment_description'),
             'document' => $assignment_details->value('document'),
-            'due_date' => $assignment_details->value('due_date')
+            'due_date' => Carbon::createFromFormat('Y-m-d', $assignment_details->value('due_date'))->format('m-d-Y'),
         ];
 
         $courseStatus = DB::table('courses')->where('id', $request->course_id)->value('is_published');
@@ -712,7 +712,7 @@ class CourseController extends Controller
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
-        $topicAssignment->due_date = $request->input('due-date');
+        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
        
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
@@ -742,7 +742,8 @@ class CourseController extends Controller
         
         $topicAssignment->assignment_title = $request->input('assignment_title');
         $topicAssignment->assignment_description = $request->input('assignment_description');
-        $topicAssignment->due_date = $request->input('due-date');
+        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
+
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
