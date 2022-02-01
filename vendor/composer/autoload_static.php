@@ -767,6 +767,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'Database\\Seeders\\AchievementBadgesSeeder' => __DIR__ . '/../..' . '/database/seeders/AchievementBadgesSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\FilterSeeder' => __DIR__ . '/../..' . '/database/seeders/FilterSeeder.php',
+        'Database\\Seeders\\TimezoneTableSeeder' => __DIR__ . '/../..' . '/database/seeders/TimezoneTableSeeder.php',
         'Database\\Seeders\\UserTypesSeeder' => __DIR__ . '/../..' . '/database/seeders/UserTypesSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
