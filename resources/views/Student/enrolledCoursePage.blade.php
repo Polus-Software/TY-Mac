@@ -58,26 +58,63 @@
     border-bottom:1px solid #F5BC29;
     padding-bottom:30px;
 }
-/* .modal-dialog {
-    max-width: 895px !important;
-} */
-.modal-body {
+
+.chart-modal-body {
     height: 31rem;
 }
-.modal-header {
+.chart-modal-header {
     padding: 1.5rem 1rem 1rem 4rem;
     height: 4rem;
     border-bottom: none;
 }
-/* Chart modal */
+.session-modal-header {
+    padding: 2.5rem 1rem 2rem 3rem;
+    height: 4rem;
+    border-bottom: none;
+}
+.session-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #a6a6a6;
+}
+.session-modal-footer {
+    border-top:none;
+}
+.session-modal-body {
+    padding: 1rem 3rem 3rem 3rem;
+}
   </style>
+  <!-- 1 on 1 modal -->
+  <div class="modal fade" id="sessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header session-modal-header">
+        <h5 class="modal-title" id="sessionModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body session-modal-body">
+        <p class="session-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+      </div>
+      <div class="modal-footer session-modal-footer">
+        <button style="color: #5c636a;background-color: #fff;font-size: 13px;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="1_on_1_session_start" style="font-size: 13px;" type="button" class="btn btn-secondary" data-student-id="" data-topic-id="">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 1 on 1 modal ends here -->
+<!-- Chart modal -->
+
   <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header chart-modal-header">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body chart-modal-body">
         <div id="graph_div">
         </div>
       </div>
@@ -488,7 +525,7 @@
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <a href="#" class="btn btn-primary w-100">1-on-1 Session</a>
+                                                                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">1-on-1 Session</button>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     @csrf
