@@ -30,7 +30,7 @@
             @if(isset($course_details['title']))
             <input type="text" class="form-control" id="title" name="course_title" value="{{ $course_details['title'] }}">
             @else
-            <input type="text" class="form-control" id="title" name="course_title" placeholder="Ex: Fundamentals of Product Management">
+            <input type="text" class="form-control" id="title" name="course_title" placeholder="Ex: Fundamentals of Product Management" value="{{old('course_title')}}">
             @endif
             @if ($errors->has('course_title'))
               <span class="text-danger">{{ $errors->first('course_title') }}</span>
@@ -41,7 +41,7 @@
             @if(isset($course_details['description']))
             <textarea type="text" class="form-control autosize" id="description" name="description">{{ $course_details['description'] }}</textarea>
             @else
-            <textarea type="text" class="form-control autosize" id="description" name="description" placeholder="Product Management is the profession of building products. By taking this course, you will learn the fundamentals of Product Management"></textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description" placeholder="Product Management is the profession of building products. By taking this course, you will learn the fundamentals of Product Management">{{old('description')}}</textarea>
             @endif
             @if ($errors->has('description'))
               <span class="text-danger">{{ $errors->first('description') }}</span>
@@ -50,12 +50,13 @@
           <div class="col-md-6">
             <label for="category">Category</label>
             <select type="text" class="form-select" id="course_category" name="course_category">
-              <option value="">Select</option>
+            <option value="">Select</option>
             @foreach ($courseCategories as $courseCategory)
+            
             @if(isset($course_details['description']) && $courseCategory->id == $course_details['category_id'])
             <option value="{{$courseCategory->id}}" selected>{{ $courseCategory->category_name }}</option>
             @else
-            <option value="{{$courseCategory->id}}">{{ $courseCategory->category_name }}</option>
+            <option value="{{$courseCategory->id}}" {{ old('course_category') == "$courseCategory->id" ? 'selected' : '' }}>{{ $courseCategory->category_name }}</option>
             @endif                            
             @endforeach          
             </select>
