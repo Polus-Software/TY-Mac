@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                             @empty
-                                                <x-nodatafound message="No live classes at the moment!" />
+                                                <x-nodatafound message="No live classes at the moment!"  notype="video" />
                                             @endforelse
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                                 </div>
                                             </div>
                                             @empty
-                                                <x-nodatafound message="No upcoming classes at the moment!" />
+                                                <x-nodatafound message="No upcoming classes at the moment!"  notype="video" />
                                             @endforelse                                            
                                         </div>
                                     </div>

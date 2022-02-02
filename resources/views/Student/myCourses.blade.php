@@ -98,10 +98,7 @@
                             </button>
                         </div>
                         @else
-                        <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                            <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                            <h4 class="fw-bold">No live classes at the moment!</h4>
-                        </div>
+                        <x-nodatafound message="No live classes at the moment!" notype="video" />
                         @endif
                     </div>
                 </div>
@@ -158,10 +155,7 @@
                             </button>
                         </div>
                         @else
-                        <div class="think-nodata-box px-4 py-5 my-5 text-center mh-100">
-                            <i class="fas fa-box-open fa-5x think-color-primary mb-4"></i>
-                            <h4 class="fw-bold">No upcoming classes at the moment!</h4>
-                        </div>
+                        <x-nodatafound message="No upcoming classes at the moment!" notype="video" />
                         @endif.
                     </div>
                 </div>
