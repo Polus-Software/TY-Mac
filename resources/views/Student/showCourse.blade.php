@@ -103,6 +103,12 @@
             <span class="fw-bold">share this course: </span>
             <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
+              <meta property="twitter:card" content="TY-Mac">
+              <meta property="twitter:site" content="{{$currenturl}}">
+              <meta property="twitter:title" content="{{$singleCourseDetail['course_title']}}">
+              <meta property="twitter:description" content="{{$singleCourseDetail['description']}}">
+              <meta property="twitter:image" content="{{asset('/storage/courseImages/'.$singleCourseDetail['course_image'])}}">
+            <a target="_blank" href="https://twitter.com/intent/tweet?url={{$currenturl}}"><i class="fab fa-twitter fa-lg btn-close-white me-3"></i></a>
           </div>
           @endforeach
         </div>

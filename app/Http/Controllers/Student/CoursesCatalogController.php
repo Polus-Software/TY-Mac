@@ -86,7 +86,7 @@ class CoursesCatalogController extends Controller
 
 
     public function showCourse($id){
-
+        $currentURL = url()->current();
         $singleCourseDetails =[];
         $sessions = [];
         $enrolledFlag = false;
@@ -191,7 +191,8 @@ class CoursesCatalogController extends Controller
             'short_description' => $short_description,
             'course_details_points' => $course_details_points,
             'userType' => $userType,
-            'enrolledFlag' => $enrolledFlag
+            'enrolledFlag' => $enrolledFlag,
+            'currenturl' => $currentURL
         ]);
 
     }
