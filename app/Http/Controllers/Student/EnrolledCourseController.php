@@ -93,7 +93,7 @@ class EnrolledCourseController extends Controller
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
         $next_live_cohort = "No sessions scheduled";
-        
+        $course_completion = '';
         if($userType === 'instructor') {
              $selectedBatchObj = CohortBatch::where('id', $selectedBatch);
 
@@ -131,6 +131,7 @@ class EnrolledCourseController extends Controller
              
         } else if($userType === 'student') {
             $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id);
+            $course_completion = Carbon::createFromFormat('Y-m-d H:i:s', $enrolledCourseObj->value('course_completion_date'))->format('F d, Y');
             $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
             $occurrences = $selectedBatchObj->value('occurrence');
             $occArr = explode(',', $occurrences);
@@ -370,7 +371,8 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'userType' => $userType,
                 'next_live_cohort' =>  $next_live_cohort,
-                'progress' => $progress
+                'progress' => $progress,
+                'course_completion' => $course_completion
             ]);
         }
         
