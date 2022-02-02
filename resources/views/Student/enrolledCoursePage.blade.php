@@ -470,7 +470,7 @@
                                 </div>
                             </div>
                             @empty
-                             <x-nodatafound message="No recommendations for you yet!" />
+                             <x-nodatafound message="No recommendations for you yet!"  notype=""/>
                             @endforelse
                         </div>
                         @endif

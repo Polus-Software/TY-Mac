@@ -120,6 +120,9 @@
     background-color: #FFFDF7;
     border: 1px solid #F2F2F2;
 }
+.think-nodata-box img {
+  height: 100px;
+}
 .think-filters-sidebar i.fas.fa-star.filter-star, 
 .think-filters-sidebar i.far.fa-star.filter-no-star {  
   color: var(--color-primary) !important;

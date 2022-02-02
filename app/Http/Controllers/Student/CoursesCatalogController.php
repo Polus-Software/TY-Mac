@@ -480,7 +480,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '</div></div></div></div></div>';        
             }
         } else {
-            $html = '<h5 class="no_courses">No courses to display</h5>';
+            $html = '<div class="think-nodata-box px-4 py-5 my-5 text-center mh-100"><img class="mb-3" src="/storage/icons/no_data_available.svg" alt="No courses to be shown!"><h4 class="fw-bold">No courses to be shown!</h4></div>';
         }
      return response()->json([
         'status' => 'success', 
