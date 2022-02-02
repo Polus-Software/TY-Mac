@@ -238,18 +238,21 @@
             <h5 class="card-title mb-4">Upcoming Live Cohorts</h5>
 
 
-            @if(count($liveSessions))
-            @foreach($liveSessions as $liveSession)
+            @if(count($batchDetails))
+            @foreach($batchDetails as $batch)
             <div class="row g-0 border-bottom">
               <div class="col-auto">
-                <img src="/courselist/Mask Group 6.jpg" class="img-fluid mx-auto d-block py-2" alt="error">
+              @foreach($singleCourseDetails as $singleCourseDetail)
+                <img src="{{asset('/storage/courseImages/'.$singleCourseDetail['course_image'])}}" class="img-fluid mx-auto d-block py-2" alt="error" style="width:65px; height:74px;">
+                @endforeach
               </div>
               <div class="col">
                 <div class="card-body">
                   <h5 class="card-title">
-                    <a style="text-decoration:none;color:#2C3443;">{{$liveSession['session_title']}}</a>
+                    <a style="text-decoration:none;color:#2C3443;">{{$batch['batchname']}}</a>
                   </h5>
-                  <p class="card-text course-time">Mon, 9 AM IST - 10 AM IST - 10/11/2021</p>
+                  <p class="card-text course-time">
+                   </p>
                 </div>
               </div>
             </div>

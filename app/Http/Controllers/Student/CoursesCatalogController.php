@@ -92,10 +92,11 @@ class CoursesCatalogController extends Controller
         $enrolledFlag = false;
         $singleCourseFeedbacks = [];
         $courseContents = [];
+        $batchDetails = [];
 
         $course = Course::findOrFail($id);
         $duration = $course->course_duration . "h";
-        $liveSessions = LiveSession::where('course_id', $id)->get();
+    
         $short_description = explode(";",$course->short_description);
         $course_details_points = $course->course_details_points;
 
@@ -110,7 +111,14 @@ class CoursesCatalogController extends Controller
         $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
         $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
         $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
+        $liveSessions = LiveSession::where('course_id', $id)->get();
+        
+        $current_date = Carbon::now()->format('Y-m-d');
+            
+           $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
 
+           
+    
         $topics = Topic::where('course_id', $id)->get();
         
          foreach($topics as $topic){
@@ -187,6 +195,7 @@ class CoursesCatalogController extends Controller
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
             'courseContents' => $courseContents,
+            'batchDetails' => $batchDetails,
             'liveSessions' => $liveSessions,
             'short_description' => $short_description,
             'course_details_points' => $course_details_points,
