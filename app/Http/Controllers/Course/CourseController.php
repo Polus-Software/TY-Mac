@@ -23,6 +23,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InstructorMailAfterassigningCourse;
 
 class CourseController extends Controller
 {
@@ -154,6 +156,8 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
+        $instructorName = User::find($instructorName)->firstname.' '.User::find($instructorName)->lastname;
+        $instructorEmail = User::find($instructorName)->email;
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
@@ -174,6 +178,13 @@ class CourseController extends Controller
         $assignedCourse->course_id = $course->id;
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
+
+        $datas = [
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+
+         Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
     }

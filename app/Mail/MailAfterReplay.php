@@ -7,13 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
-class SignupMail extends Mailable
+class MailAfterReplay extends Mailable
 {
     use Queueable, SerializesModels;
-    
     public $details;
-
     /**
      * Create a new message instance.
      *
@@ -31,10 +28,7 @@ class SignupMail extends Mailable
      */
     public function build()
     {
-       
-        return $this->subject('Welcome to Thinklit! Let us get started')
-                    ->markdown('Emails.confirmationMail')
-                    ->with('details', $this->details);
-        
+        return $this->subject('You have got a new  reply to your message.')
+                    ->markdown('emails.MailAfterReplay');
     }
 }

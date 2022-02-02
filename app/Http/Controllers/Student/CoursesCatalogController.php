@@ -111,11 +111,34 @@ class CoursesCatalogController extends Controller
         $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
         $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
         $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
-        $liveSessions = LiveSession::where('course_id', $id)->get();
-        
+       
         $current_date = Carbon::now()->format('Y-m-d');
+        
+        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+        foreach($batches as $batch){
+            $batchname = $batch->batchname;
+            $batch_start_date = $batch->start_date;
+            $batch_start_time = $batch->start_time;
+            $batch_end_time = $batch->end_time;
+            $batch_end_date = $batch->end_date;
+            $batch_time_zone = $batch->time_zone;
             
-           $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+            $liveSession = LiveSession::where('batch_id', $batch->id)->where('start_date', '>', $current_date)->orderby('start_date', 'asc')->get();
+            if(count($liveSession)) {
+               $latest = $liveSession[0];
+               
+               array_push($batchDetails, array(
+                    'batchname' => $batchname,
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('M d'),
+                    'batch_start_time' => Carbon::createFromFormat('H:i:s',$batch_start_time)->format('h A'),
+                    'batch_end_time' => Carbon::createFromFormat('H:i:s',$batch_end_time)->format('h A'),
+                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
+                    'batch_time_zone' => $batch_time_zone,
+                    'latest' =>  $latest,
+                    
+                ));
+            }
+        }
 
            
     
@@ -196,7 +219,6 @@ class CoursesCatalogController extends Controller
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
             'courseContents' => $courseContents,
             'batchDetails' => $batchDetails,
-            'liveSessions' => $liveSessions,
             'short_description' => $short_description,
             'course_details_points' => $course_details_points,
             'userType' => $userType,

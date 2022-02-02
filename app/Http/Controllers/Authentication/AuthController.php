@@ -67,7 +67,7 @@ class AuthController extends Controller
            'lastname'=> $request->lastname
            
         ];
-        // Mail::to($email)->send(new Gmail($details));
+         Mail::to($email)->send(new SignupMail($details));
         
         $notification = new Notification; 
         $notification->user = $user->id;

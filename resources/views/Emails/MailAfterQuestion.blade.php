@@ -1,0 +1,14 @@
+@component('mail::message')
+
+<h1>Hi {{$details['instructorName']}}<h1>,
+
+You have got a new message from your student {{$details['studentName']}} on ThinkLit.
+
+To view the message, please log in to your account on ThinkLit.com
+
+Regards,
+The ThinkLit Team
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
