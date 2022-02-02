@@ -182,7 +182,21 @@ class CoursesCatalogController extends Controller
 
         );
         array_push($singleCourseDetails, $singleCourseData);
-  
+        $batches = DB::table('cohort_batches')->where('course_id', $id)->get();
+        $cohort_full = true;
+        foreach($batches as $batch){
+            $available_count = $batch->students_count;
+            $booked_slotes = DB::table('enrolled_courses')
+                ->where([['course_id','=',$id],['batch_id','=',$batch->id]])
+                ->get();
+            $booked_slotes_count = count($booked_slotes);
+            $available_count = $available_count-$booked_slotes_count;
+            if($available_count > 0){
+                $cohort_full = false;
+            }
+        }
+        //var_dump($enrolledFlag);    
+        //var_dump($cohort_full);
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
@@ -192,7 +206,8 @@ class CoursesCatalogController extends Controller
             'course_details_points' => $course_details_points,
             'userType' => $userType,
             'enrolledFlag' => $enrolledFlag,
-            'currenturl' => $currentURL
+            'currenturl' => $currentURL,
+            'cohort_full_status' => $cohort_full
         ]);
 
     }
@@ -240,15 +255,24 @@ class CoursesCatalogController extends Controller
        
         $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
         foreach($batches as $batch){
+            $available_count = $batch->students_count;
+           // if(!empty($available_count)){
+                $booked_slotes = DB::table('enrolled_courses')
+                                    ->where([['course_id','=',$course->id],['batch_id','=',$batch->id]])
+                                    ->get();
+                $booked_slotes_count = count($booked_slotes);
+                $available_count = $available_count-$booked_slotes_count;
+            //}
             $singleCourseData =  array (
-            'batch_id' => $batch->id,
-            'batchname' => $batch->batchname,
-            'title' => $batch->title,
-            'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
-            'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
-            'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
-            'time_zone' => $batch->time_zone,
-        );
+                'batch_id' => $batch->id,
+                'batchname' => $batch->batchname,
+                'title' => $batch->title,
+                'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
+                'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
+                'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
+                'time_zone' => $batch->time_zone,
+                'available_count' => $available_count
+            );
         
         array_push($singleCourseDetails, $singleCourseData);
       }

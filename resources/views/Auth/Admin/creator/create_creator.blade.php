@@ -71,19 +71,22 @@
                 <input type="password" class="form-control has-validation" id="creator_password" name="password"></input>
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
+               
                 @else
                 <div class="col-12"> 
                 <label>Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
                 <input type="password" class="form-control" value="" name="password" id="creator_password" placeholder=" Enter password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
-              </div>
+              
                 @endif
                   @if ($errors->has('password'))
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                   @endif
               </div>
-				<div class="col-1"></div>
+              @if(Route::current()->getName() == 'edit-creator')
+				        <!--<div class="col-1"></div>-->
+              @endif
               <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
                 <a class="btn btn-outline-secondary" href="{{route('manage-creators')}}">Cancel</a>                
                   @if(Route::current()->getName() == 'edit-creator')
@@ -96,6 +99,9 @@
           </form>
       </main>
   </div>
+  
+				        <div class="col-1"></div>
+             
 </div>
 <!-- container ends -->
 @endsection('content')

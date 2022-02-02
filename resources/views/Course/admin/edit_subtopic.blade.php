@@ -70,7 +70,7 @@
 									<div class="col-lg-5 col-12">
 										<label>Upload from device</label>
 										<input class="form-control" type="file" name="content_upload[1][{{$key}}]">
-										<small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small>
+										<small class="fst-italic">Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx</small>
 									</div>
 									<div class="col-lg-3 pt-4">
 										<a class="btn btn-sm btn-outline-secondary add_external_link">Add external link</a>
@@ -246,7 +246,7 @@ const generateSubTopicHTMLInitial = () => {
       {'type': 'file'},
       {'name': `content_upload[${topicNum}][${contentCount}]`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [

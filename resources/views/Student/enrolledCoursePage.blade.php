@@ -61,6 +61,10 @@
 .not_completed .card-body{
     padding:100px 0;
 }
+#reviewButton{
+    border: 1px solid #d1d0d0;
+    padding: 6px 25px;
+}
 .card-text-1-certificate{
     text-align: center;
     font-family: 'Roboto', sans-serif;
@@ -227,11 +231,6 @@
                                                
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
-                                            @if($userType == 'student')
-                                                <a class="btn btn-dark" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                                                Add Course review
-                                            </a>
-                                            @endif
                                             <input type="hidden" id="course_id" value="{{$course['id']}}">
                                             <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                         </div>
@@ -290,6 +289,9 @@
                                     <img src="/Badges/More.svg" alt="">
                                 </button>
                             </div>
+                        </div>
+                        <div class="border-top col-12 mt-4 pt-4 text-center">
+                            <a class="bg-transparent btn btn-dark text-black" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course review</a>
                         </div>
                         @endif
                     </div>
@@ -407,7 +409,7 @@
                                         @if(!empty($liveSessions))
                                         <span>Next Live Class:{{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
                                         @else
-                                        <span>No sessions scheduled</span>
+                                        <span class="text-muted">No sessions scheduled</span>
                                         @endif
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
