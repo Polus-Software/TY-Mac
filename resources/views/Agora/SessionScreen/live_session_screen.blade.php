@@ -1616,15 +1616,13 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
 
     
 let timer = 0;
-let flag = 0;
+
 $(document).ready(function(){
   var start = new Date;
   let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
-      if(flag == 0) {
-      flag = 1;
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
         fetch(path, {
         method: 'POST',
@@ -1648,7 +1646,6 @@ $(document).ready(function(){
       }).then((response) => response.json()).then((data) => {
         document.getElementById('chat_messages').innerHTML = data.html;
       });
-      }
   }, 1000);
 });
 
