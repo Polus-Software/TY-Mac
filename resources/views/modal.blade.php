@@ -217,16 +217,16 @@
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
 <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
-        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-center mb-2">
           <h5 class="modal-title custom-form-header" id="contactModalLabel">Add review</h5>
           <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>       
-            <div class="think-text-secondary-color">Add a review and a star rating!!!</div>
+            <div class="think-text-secondary-color">We'd appreciate your feedback!</div>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-                <div class="form-group mx-0 text-center">
+                <!--<div class="form-group mx-0 text-center">
                 <i class="far fa-thumbs-up fa-3x think-review"></i>
-              </div>
+              </div>-->
               <div class="form-group mx-0">
               <div class="rating text-center mb-3">
                     <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
