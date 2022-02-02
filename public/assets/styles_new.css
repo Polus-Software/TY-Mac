@@ -161,3 +161,8 @@
 .think-toast {
   background-color: #74648C;
 }
+/* style by jibi for enrolled-course certification starts */
+.card-body .date_of_issue{
+  display: block;
+}
+/* style by jibi for enrolled-course certification ends */
