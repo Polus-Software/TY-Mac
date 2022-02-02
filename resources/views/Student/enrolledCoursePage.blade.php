@@ -232,6 +232,9 @@
                                                 Add Course review
                                             </a>
                                             @endif
+                                            @if($userType == 'instructor')
+                                            <input type="hidden" id="batch_id" value="{{ $selectedBatch }}">
+                                            @endif
                                             <input type="hidden" id="course_id" value="{{$course['id']}}">
                                             <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                         </div>
@@ -1217,6 +1220,25 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
       
     let contentCount = 0;
     let contentArr = [];
+    document.getElementById('sessionModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var student = button.getAttribute('data-bs-student-id');
+        var topic = button.getAttribute('data-bs-topic-id');
+
+        startBtn = document.getElementById('1_on_1_session_start');
+
+        startBtn.setAttribute('data-student-id', student);
+        startBtn.setAttribute('data-topic-id', topic);
+    });
+
+    document.getElementById('1_on_1_session_start').addEventListener('click', function(e) {
+        var student = this.getAttribute('data-student-id');
+        var topic = this.getAttribute('data-topic-id');
+        var batch_id = document.getElementById('batch_id').value;
+        
+        location.replace("/1-on-1/" + student + "/" + topic + "?batchId=" + batch_id);
+    });
+    
     document.getElementById('chartModal').addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
         var student = button.getAttribute('data-bs-student-id');

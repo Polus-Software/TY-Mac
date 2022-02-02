@@ -28,6 +28,10 @@ use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\GeneralLiveSessionFeedback;
 use App\Models\LiveSessionChat;
+use App\Models\SingleSessionPushRecord;
+use App\Models\SingleSession;
+use App\Models\SingleSessionUser;
+use App\Models\SingleSessionChat;
 use Carbon\Carbon;
 
 require_once "AccessToken.php";
@@ -671,5 +675,219 @@ class RtmTokenGeneratorController extends Controller
         } 
         
         return response()->json(['status' => 'success', 'msg' => '', 'html' => $html, 'graphData' => $graphData]);
+    }
+
+    public function createRecommendationSession(Request $request, $student, $topic) {
+        $userObj = Auth::user();
+        $batchId = $request->batchId;
+        $topicId = $topic;
+        
+        $courseId = Topic::where('topic_id', $topicId)->value('course_id');
+
+        $instructor = AssignedCourse::where('course_id', $courseId)->value('user_id');
+
+        $topicContent = TopicContent::where('topic_content_id', $topicId)->value('topic_title');
+        
+        $participants = [];
+        $content = TopicContent::where('topic_content_id', $topicId)->get();
+
+        $feedbackQ1 = GeneralSetting::where('setting', 'feedback_question_1')->value('value');
+        $feedbackQ2 = GeneralSetting::where('setting', 'feedback_question_2')->value('value');
+        $feedbackQ3 = GeneralSetting::where('setting', 'feedback_question_3')->value('value');
+        
+        if($userObj) {
+            if($userObj->role_id == 2) {
+                $userId = $userObj->id;
+
+                $singleSessionUser = SingleSessionUser::where('student', $userId)->where('instructor', $instructor)->update(['student_present' => true]);
+            } else {
+                $userId = $student;
+
+                $singleSession = SingleSession::where('topic_content_id', $topicId)->where('student', $student)->get();
+                if(count($singleSession) == 0) {
+                    $singleSession = new SingleSession;
+                    $singleSession->topic_content_id = $topicId;
+                    $singleSession->student = $student;
+                    $singleSession->is_screen_shared = false;
+                    $singleSession->save();
+                }
+                
+                $singleSessionUser = SingleSessionUser::where('session', $singleSession[0]->id)->get();
+                if(count($singleSessionUser) == 0) {
+                    $singleSessionUser = new SingleSessionUser;
+                    $singleSessionUser->session = $singleSession[0]->id;
+                    $singleSessionUser->student = $userId;
+                    $singleSessionUser->instructor = $userObj->id;
+                    $singleSessionUser->instructor_present = true;
+                    $singleSessionUser->save();
+                } else {
+                    $singleSessionUser = SingleSessionUser::where('session', $singleSession[0]->id)->update(['instructor_present' => true]); 
+                }
+            }
+            
+            $userTypeLoggedIn =  UserType::find($userObj->role_id)->user_role;
+            
+
+            return view('Instructor.SessionScreen.1_on_1_session_screen', [
+                'topic_title' => $topicContent,
+                'contents' => $content,
+                'userType' => $userTypeLoggedIn,
+                'courseId' => $courseId,
+                'userId' => $userId,
+                'topicId' => $topicId,
+                'feedbackQ1' => $feedbackQ1,
+                'feedbackQ2' => $feedbackQ2,
+                'feedbackQ3' => $feedbackQ3,
+                'batchId' => $batchId
+            ]);
+        } else {
+            return redirect('/403');
+        }
+    }
+
+    public function buildToken1v1(Request $request, $topic, $user) {
+        
+        $session = $topic . '010' . $user;
+        
+        $sessionTitle = Topic::where('topic_id', $topic)->value('topic_title');
+        $userObj = Auth::user();
+        $user = "1005" . strval($userObj->id);
+        
+        
+        if($userObj->role_id == 2) {
+            $role = self::RoleSubscriber;
+            $roleName = $userObj->firstname;
+        } else {
+            $role = self::RolePublisher;
+            $roleName = "Instructor";
+        }
+        
+        $expireTimeInSeconds = 3600;
+        $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
+        $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds + 1800;
+        $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
+        $Privileges = AccessToken::Privileges;
+        $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
+        $generatedToken = $token->build();
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '101' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+    
+    }
+
+    public function startScreenshare(Request $request) {
+        $topic = $request->topicId;
+        $student = $request->student;
+
+        $singleSession = SingleSession::where('topic_content_id', $topic)->where('student', $student)->update(['is_screen_shared' => true]);
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function getSessionLiveRecord(Request $request) {
+        $topic = $request->topicId;
+        $student = $request->student;
+
+        $singleSession = SingleSession::where('topic_content_id', $topic)->where('student', $student);
+
+        $pushRecord = SingleSessionPushRecord::where('topic_content_id', $topic)->where('student', $student)->value('is_presenting');
+
+        $isScreenShared = $singleSession->value('is_screen_shared');
+
+        $docUrl = public_path() . "\storage\content_documents\\" . TopicContent::where('topic_content_id', $topic)->value('document');
+       
+        return response()->json(['screenShare' => $isScreenShared, 'is_presenting' => $pushRecord, 'docUrl' => $docUrl]);
+    }
+
+    public function pushSessionLiveRecord(Request $request) {
+        $topicId = $request->topicId;
+        $student = $request->student;
+
+        $pushRecord = SingleSessionPushRecord::where('topic_content_id', $topicId)->where('student', $student)->get();
+        if(count($pushRecord) == 0) {
+            $pushRecord = new SingleSessionPushRecord;
+            $pushRecord->topic_content_id = $topicId;
+            $pushRecord->student = $student;
+            $pushRecord->is_presenting = true;
+            $pushRecord->save();
+        } else {
+            $pushRecord = SingleSessionPushRecord::where('topic_content_id', $topicId)->where('student', $student)->update(['is_presenting' => true]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function stopContentPresenting(Request $request) {
+        $topicId = $request->topicId;
+        $student = $request->student;
+
+        $pushRecord = SingleSessionPushRecord::where('topic_content_id', $topicId)->where('student', $student)->update(['is_presenting' => false]);
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function getSessionAttendanceList(Request $request) {
+        $topic = $request->topic;
+        $student = $request->student;
+        $html = "";
+
+        $singleSession = SingleSession::where('topic_content_id', $topic)->where('student', $student)->get();
+        $singleSessionUser = SingleSessionUser::where('session', $singleSession[0]->id)->get();
+            
+        if($singleSessionUser[0]->instructor_present == true) {
+            $user = User::where('id', $singleSessionUser[0]->instructor);
+            $name = $user->value('firstname') . ' ' . $user->value('lastname');
+            $html = $html . '<div class="think-participant-container instructor"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $user->value('image') .'" alt="error">';
+            $html = $html . '</span>';
+            $html = $html . '<span class="think-participant-name">'. $name .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
+        }
+        if($singleSessionUser[0]->student_present == true) {
+            $user = User::where('id', $singleSessionUser[0]->student);
+            $name = $user->value('firstname') . ' ' . $user->value('lastname');
+            $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $user->value('image') .'" alt="error">';
+            $html = $html . '</span>';
+            $html = $html . '<span class="think-participant-name">'. $name .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
+        }
+        return response()->json(['status' => 'success', 'html' => $html]);
+    }
+
+    public function saveSingleSessionChat(Request $request) {
+        $topic = $request->topic;
+        $student = $request->student;
+        $message = $request->message;
+
+        $singleSession = SingleSession::where('topic_content_id', $topic)->where('student', $student)->get();
+        $sessionId = $singleSession[0]->id;
+        $userObj = Auth::user();
+
+        if($userObj) {
+            $sessionMessage = new SingleSessionChat;
+            $sessionMessage->session = $sessionId;
+            $sessionMessage->sender = $userObj->id;
+            $sessionMessage->message = $message;
+            $sessionMessage->save();
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function getSingleSessionChat(Request $request) {
+        
+        $html = "";
+        $loggedInUser = Auth::user();
+        $topic = $request->topic;
+        $student = $request->student;
+
+        $singleSession = SingleSession::where('topic_content_id', $topic)->where('student', $student)->get();
+        
+        $chats = SingleSessionChat::where('session', $singleSession[0]->id)->get();
+        
+        foreach($chats as $chat) {
+            $sameUser = $loggedInUser->id == $chat->sender ? 'same_user' :  '';
+            $user = User::find($chat->sender);
+
+            $name = $user->firstname . " " . $user->lastname;
+            $html = $html . "<p class='chat-message-body ". $sameUser ."'><b class='participant-name'>". $name .": </b><span class='participant-msg'>" . $chat->message . "</span></p>";
+        }
+        
+        return response()->json(['html' => $html]);
     }
 }
