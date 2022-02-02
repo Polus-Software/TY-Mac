@@ -634,6 +634,8 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Models\\LiveSession' => __DIR__ . '/../..' . '/app/Models/LiveSession.php',
         'App\\Models\\LiveSessionChat' => __DIR__ . '/../..' . '/app/Models/LiveSessionChat.php',
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
+        'App\\Models\\SingleSession' => __DIR__ . '/../..' . '/app/Models/SingleSession.php',
+        'App\\Models\\SingleSessionPushRecord' => __DIR__ . '/../..' . '/app/Models/SingleSessionPushRecord.php',
         'App\\Models\\StudentAchievement' => __DIR__ . '/../..' . '/app/Models/StudentAchievement.php',
         'App\\Models\\StudentFeedbackCount' => __DIR__ . '/../..' . '/app/Models/StudentFeedbackCount.php',
         'App\\Models\\Timezone' => __DIR__ . '/../..' . '/app/Models/Timezone.php',

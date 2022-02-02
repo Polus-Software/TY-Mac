@@ -56,6 +56,8 @@ return array(
     'App\\Models\\LiveSession' => $baseDir . '/app/Models/LiveSession.php',
     'App\\Models\\LiveSessionChat' => $baseDir . '/app/Models/LiveSessionChat.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
+    'App\\Models\\SingleSession' => $baseDir . '/app/Models/SingleSession.php',
+    'App\\Models\\SingleSessionPushRecord' => $baseDir . '/app/Models/SingleSessionPushRecord.php',
     'App\\Models\\StudentAchievement' => $baseDir . '/app/Models/StudentAchievement.php',
     'App\\Models\\StudentFeedbackCount' => $baseDir . '/app/Models/StudentFeedbackCount.php',
     'App\\Models\\Timezone' => $baseDir . '/app/Models/Timezone.php',
