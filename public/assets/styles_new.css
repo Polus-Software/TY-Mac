@@ -119,9 +119,10 @@
 .think-nodata-box {
     background-color: #FFFDF7;
     border: 1px solid #F2F2F2;
+    border-radius: 10px;
 }
 .think-nodata-box img {
-  height: 100px;
+  height: 120px;
 }
 .think-filters-sidebar i.fas.fa-star.filter-star, 
 .think-filters-sidebar i.far.fa-star.filter-no-star {  
@@ -169,3 +170,22 @@
   display: block;
 }
 /* style by jibi for enrolled-course certification ends */
+.think-tab-btn-rounded .nav-item{
+  margin-bottom: -1px;
+  margin-right: -1px;
+}
+.think-tab-btn-rounded .nav-item:first-child .nav-link.active {
+  border-radius: 8px 0px 0px 8px !important;
+}
+
+.think-tab-btn-rounded .nav-item:last-child .nav-link.active {
+  border-radius: 0px 8px 8px 0px !important;
+}
+.think-tab-btn-rounded .nav-item .nav-link:hover {
+  border-color: transparent !important;
+  color: var(--color-secondary);
+}
+.think-tab-btn-rounded .nav-item:first-child .nav-link.active:hover, 
+.think-tab-btn-rounded .nav-item:last-child .nav-link.active:hover {
+  color: var(--color-white);
+}

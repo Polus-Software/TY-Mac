@@ -26,7 +26,7 @@
                 <h3 class="think-tab-title">Current Live Classes</h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-5 col-12 d-flex  justify-content-lg-end justify-content-md-end justify-content-sm-end">
-                <ul class="nav nav-tabs border border-dark">
+                <ul class="nav nav-tabs border border-dark think-tab-btn-rounded">
                     <li class="nav-item active">
                         <button class="nav-link active" id="live-tab" type="button" data-bs-toggle="tab" data-bs-target="#live" role="tab" aria-controls="live" aria-selected="true" data-bs-toggle="tab">Live</button>
                     </li>
