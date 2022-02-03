@@ -29,6 +29,7 @@ use App\Models\StudentAchievement;
 use App\Models\AchievementBadge;
 use App\Models\AssignedCourse;
 use Config;
+use App\Mail\InstructorMailAfterStudentConcern;
 
 
 class CoursesCatalogController extends Controller
@@ -200,6 +201,7 @@ class CoursesCatalogController extends Controller
             'course_difficulty' => $course->course_difficulty,
             'course_details' => $course->course_details,
             'course_image' => $course->course_image,
+            'instructorId' => $assigned,
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'profile_photo' => $profilePhoto,
@@ -575,5 +577,39 @@ class CoursesCatalogController extends Controller
         }
         return $courseDetails;
     }
+
+    public function haveAnyQuestion(Request $request) {
+        
+        try {
+            $name = $request->name;
+            $phone = $request->phone;
+            $message = $request->message;
+            $email = $request->email;
+            $courseId = $request->course_id;
+
+            $assigned = DB::table('assigned_courses')->where('course_id',  $courseId)->value('user_id');
+            $instructorName = User::find($assigned)->firstname.' '.User::find($assigned)->lastname;
+            $instructorEmail =  User::find($assigned)->email;
+     
+            $details =[
+                // 'title' => 'Hey there, you have a new query!',
+                // 'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
+                'name' => $name,
+                'message' => $message,
+                'email' => $email,
+                'instructorName' => $instructorName
+            ];
+            
+             Mail::to('anjali.krishna@polussoftware.com')->send(new InstructorMailAfterStudentConcern($details));
+    
+            return redirect()->back()->with('message', 'Message sent successfully!');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('message', 'Message sent successfully!');
+        }
+        
+    }
+
+
+
 
 }

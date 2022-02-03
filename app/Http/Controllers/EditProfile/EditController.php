@@ -42,6 +42,7 @@ class EditController extends Controller
     }
 
     public function showChangePasswordForm(){ 
+        
     if(Auth::check()){
         return view('Auth.changePassword');
     }else{
@@ -52,7 +53,8 @@ class EditController extends Controller
 
     public function submitChangePasswordForm(Request $request)
     {
-        
+        try{
+
         
         $user = $request->validate([
             'currentPassword'=>'required',
@@ -64,10 +66,26 @@ class EditController extends Controller
         $user->password = Hash::make($request->newPassword);
         $user->save();
 
+        $StudentName = $user->firstname.' '.$user->lastname;
+        $StudentEmail = $user->email;
+  
+        $data= [
+           'StudentName' => $StudentName,
+        ];
+  
         auth()->user()->tokens()->delete();
         Session::flush();
         Auth::logout();
+
+        Mail::to($StudentEmail)
+                ->subject('Your password was changed successfully')
+                ->send(new PersonalDetailsUpdated($data));
+
         return redirect('/')->withSuccess('Your password has been changed!');
+
+    } catch (Exception $exception) {
+        return redirect('/')->withSuccess('Your password has been changed!');
+    }
 
     }
 

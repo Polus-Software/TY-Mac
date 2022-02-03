@@ -103,6 +103,7 @@ class CourseController extends Controller
     }
 
     public function saveCourse(Request $request) {
+        try{
 
         $request->validate([
             'course_title'=>'required',
@@ -187,6 +188,10 @@ class CourseController extends Controller
          Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
+
+        }catch (Exception $exception){
+            return redirect()->route('create-subtopic', ['course_id' => $course->id]);
+        }
     }
 
     /**

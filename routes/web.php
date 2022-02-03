@@ -179,6 +179,7 @@ Route::get('/', function () {
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
     Route::get('/show-course/{course}', [CoursesCatalogController::class, 'showCourse'])->name('student.course.show');
+    Route::post('/question', [CoursesCatalogController::class, 'haveAnyQuestion'])->name('question');
     Route::get('/enroll-course', [CoursesCatalogController::class, 'enrollCourse'])->name('student.course.enroll');
     Route::get('/register-course', [CoursesCatalogController::class, 'registerCourse'])->name('student.course.register');
     Route::post('userLogin', [CoursesCatalogController::class, 'loginModalProcess'])->name('user.login.post');

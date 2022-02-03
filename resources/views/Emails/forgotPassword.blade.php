@@ -9,6 +9,5 @@ You can reset password from bellow link:
 Reset Password
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+
 @endcomponent

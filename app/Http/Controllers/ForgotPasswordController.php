@@ -75,12 +75,10 @@ class ForgotPasswordController extends Controller
       ])->first();
          
       $user = User::where('email' , $request->email);
-      $firstname = $user->value('firstname');
-      $lastname = $user->value('lastname');
+      $userName = $user->firstname.' '.$user->lastname;
 
       $data= [
-         'firstname' => $firstname,
-         'lastname' => $lastname
+         'userName' => $StudentName,
       ];
 
        

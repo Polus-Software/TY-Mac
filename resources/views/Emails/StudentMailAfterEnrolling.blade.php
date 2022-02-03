@@ -11,6 +11,5 @@ If you have any questions regarding the course, please reach out via the Cohort 
 Regards,
 <p>{{ $mailDetails['instructor_name']}}</p>
 
-Thanks,<br>
-{{ config('app.name') }}
+
 @endcomponent

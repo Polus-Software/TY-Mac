@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\MailAfterReplay;
 use App\Mail\MailAfterQuestion;
 use App\Mail\MailAfterAssignmentSubmission;
+use App\Mail\InstructorMailAfterFeedback;
 
 class EnrolledCourseController extends Controller
 {
@@ -450,11 +451,18 @@ class EnrolledCourseController extends Controller
     }
 
      public function courseReviewProcess(Request $request){
-
+        
+        try{
         $courseId = $request->course_id;
         $userId = $request->user_id;
         $comment = $request->input('comment');
         $rating = $request->input('rating');
+
+        $assigned = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
+        $instructorName = User::find($assigned)->firstname.' '.User::find($assigned)->lastname;
+        $instructorEmail = User::find($assigned)->email;
+        $studentName = User::find($userId)->firstname.' '.User::find($userId)->lastname;
+        $courseTitle = Course::find($courseId)->course_title;
 
         $generalCourseFeedback = new GeneralCourseFeedback;
         $generalCourseFeedback->user_id = $userId;
@@ -463,10 +471,25 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback->rating = $rating;
         $generalCourseFeedback->save();
 
+        $details= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+
+         Mail::to($instructorEmail)->send(new InstructorMailAfterFeedback($details));
+
         return response()->json([
             'status' => 'success', 
             'message' => 'submitted successfully'
          ]);
+
+        }catch (Exception $exception) {
+            return response()->json([
+                'status' => 'success', 
+                'message' => 'submitted successfully'
+             ]);
+        }
         
     }
    
@@ -536,6 +559,7 @@ class EnrolledCourseController extends Controller
     }
 
     public function submitAssignment(Request $request){
+        try{
 
         $user = Auth::user();
         $userId = $user->id;
@@ -576,6 +600,10 @@ class EnrolledCourseController extends Controller
          Mail::to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
 
         return redirect()->back();
+
+        }catch (Exception $exception){
+            return redirect()->back();
+        }
     
     
     }
@@ -688,6 +716,7 @@ class EnrolledCourseController extends Controller
 
 
     public function replyToStudent(Request $request) {
+        try{
         $qaId = $request->qaId;
         $reply = $request->replyContent;
 
@@ -720,10 +749,23 @@ class EnrolledCourseController extends Controller
             'message' => 'Replied successfully'
          ]);
 
+        }catch (Exception $exception){
+
+            return response()->json([
+                'status' => 'success',
+                'reply' => $reply, 
+                'updatedAt' => $updatedAt,
+                'message' => 'Replied successfully'
+             ]);
+
+        }
+
          
     }
 
     public function askQuestion(Request $request) {
+        try{
+
         $question = $request->question;
         $course_id = $request->course_id;
         $student = 0;
@@ -767,6 +809,10 @@ class EnrolledCourseController extends Controller
         ->send(new MailAfterQuestion($data));
 
         return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
+        
+        }catch (Exception $exception){
+            return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
+        }
 
     }
 
