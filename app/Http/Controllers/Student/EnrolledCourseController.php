@@ -175,19 +175,7 @@ class EnrolledCourseController extends Controller
         } else {
             return false;
         }
-           
-            
-       
-       
-
-    //    if(count($batches)) {
-    //     $start_date = Carbon::createFromFormat('Y-m-d',$batches[0]->start_date)->format('m/d/Y');
-    //     $start_time = Carbon::createFromFormat('H:i:s',$batches[0]->start_time)->format('h:m A');
-    //     $end_time = Carbon::createFromFormat('H:i:s',$batches[0]->end_time)->format('h:m A');
  
-    //     $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$batches[0]->value('time_zone') . ' - ' . $end_time . ' ' . $batches[0]->value('time_zone');
-       
-    //    } 
 
         $achievements = StudentAchievement::where('student_id', $user->id)->get();
         
@@ -261,9 +249,18 @@ class EnrolledCourseController extends Controller
                 $liveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->orderby('start_date', 'asc')->get();
 
                 if(count($liveSessions) != 0) {
-                    $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                    if($userType == 'instructor') {
+                        $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                    } else {
+                        $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                    }
+                    
                     if(count($todaysLiveSessions) != 0) {
-                        $liveId = $liveSessions[0]->live_session_id;
+                        if($userType == 'instructor' || ($userType == 'student'  && $liveSessions[0]->is_instructor_present == true)) {
+                            $liveId = $liveSessions[0]->live_session_id;
+                        } else {
+                            $liveId = "Wait";
+                        }
                     } else {
                         $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('end_time', '<=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                         if(count($todaysLiveSessions) != 0) {
@@ -387,7 +384,7 @@ class EnrolledCourseController extends Controller
                     'isAssignmentStarted' => $isAssignmentStarted
                 ));
             }
-
+            
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,

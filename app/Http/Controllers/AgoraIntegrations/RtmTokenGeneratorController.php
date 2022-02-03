@@ -130,6 +130,7 @@ class RtmTokenGeneratorController extends Controller
         } else {
             $role = self::RolePublisher;
             $roleName = "Instructor";
+            $sessionObj->update(['is_instructor_present' => true]);
         }
         
         $expireTimeInSeconds = $totalSeconds + 1200;

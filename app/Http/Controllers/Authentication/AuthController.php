@@ -53,8 +53,8 @@ class AuthController extends Controller
             'privacy_policy' =>'accepted'
         ]);
 
-        $admins = User::where('role_id', $user_type)->pluck('email');
-    
+        $admins = User::where('role_id', $user_type)->get();
+        
         $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -74,15 +74,20 @@ class AuthController extends Controller
            'lastname'=> $request->lastname,
         ];
 
-        // $data=[
-        //     'firstname'=> $request->firstname,
-        //     'lastname'=> $request->lastname,
-        //     'email' => $request->email,
-        //     'admin' => $admin
-        //  ];
-         
+        
         Mail::to($email)->send(new SignupMail($details));
-        // Mail::to($admins)->send(new AdminMailAfterSignUp($data));
+        foreach($admins as $admin) {
+            $data=[
+                'firstname'=> $request->firstname,
+                'lastname'=> $request->lastname,
+                'email' => $email,
+                'adminEmail' => $admin->email,
+                'adminFirstname' => $admin->firstname,
+                'adminLastName' => $admin->lastname
+             ];
+            Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+        }
+        
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -259,7 +264,7 @@ class AuthController extends Controller
                 'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
             ];
             
-            //  Mail::to('anjali.krishna@polussoftware.com')->send(new InstructorMailAfterStudentConcern($details));
+            
     
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
