@@ -56,7 +56,7 @@ class CoursesCatalogController extends Controller
             $minutes = ($minutesDecimal/100) * 6000;
 
             $duration = $hours . 'h ' . $minutes . 'm';
-       
+            
             $courseData =  array (
                 'id' => $course->id,
                 'course_title' => $course->course_title,
@@ -559,7 +559,12 @@ class CoursesCatalogController extends Controller
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
             $instructorlastname = User::where('id', $assigned)->value('lastname');
-            $duration = $course->course_duration . "h";
+            $duration = $course->course_duration;
+            $hours = intval($duration);
+            $minutesDecimal = $duration - $hours;
+            $minutes = ($minutesDecimal/100) * 6000;
+
+            $duration = $hours . 'h ' . $minutes . 'm';
        
             $courseData =  array (
                 'id' => $course->id,
