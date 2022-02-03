@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Timezone extends Model
+class CustomTimezone extends Model
 {
     use HasFactory;
+
+    protected $table = 'timezones';
 }

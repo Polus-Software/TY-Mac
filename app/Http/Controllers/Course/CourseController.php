@@ -24,7 +24,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 use Carbon\Carbon;
 use DateTimeZone;
-use App\Models\Timezone;
+use App\Models\CustomTimezone;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InstructorMailAfterassigningCourse;
 
@@ -794,7 +794,7 @@ class CourseController extends Controller
 
     public function saveCohortBatch(Request $request) {
         
-        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       
@@ -884,7 +884,7 @@ class CourseController extends Controller
     public function updateCohortbatches(Request $request){
 
 
-        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       

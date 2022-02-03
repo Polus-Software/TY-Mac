@@ -30,7 +30,7 @@ use App\Models\CourseQA;
 use App\Models\EnrolledCourse;
 use App\Models\AttendanceTracker;
 use App\Models\LiveSession;
-use App\Models\TimeZone;
+use App\Models\CustomTimezone;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\Mail;
@@ -106,7 +106,7 @@ class EnrolledCourseController extends Controller
             if(count($cohort_batches)) {
               $cohort_batches = $cohort_batches[0];
                   // Time setting
-                  $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                  $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                         
                   $offsetHours = intval($offset[1] . $offset[2]);
                   $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -146,7 +146,7 @@ class EnrolledCourseController extends Controller
           if(count($cohort_batches)) {
             $cohort_batches = $cohort_batches[0];
                 // Time setting
-                $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                       
                 $offsetHours = intval($offset[1] . $offset[2]);
                 $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -272,7 +272,7 @@ class EnrolledCourseController extends Controller
                             if(count($cohort_batches) != 0) {
                                 $cohort_batches = $cohort_batches[0];
                                 // Time setting
-                                $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                                $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                                     
                                 $offsetHours = intval($offset[1] . $offset[2]);
                                 $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -305,7 +305,7 @@ class EnrolledCourseController extends Controller
                         
                         $cohort_batches = $liveSessions[0];
                         // Time setting
-                        $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                        $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                             
                         $offsetHours = intval($offset[1] . $offset[2]);
                         $offsetMinutes = intval($offset[4] . $offset[5]);
