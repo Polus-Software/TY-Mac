@@ -88,8 +88,12 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
     </div>
     <div class="row">
         @foreach($singleCourseDetails as $singleCourseDetail)
+            @php ($active_class = 'inactive')
         <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-4">
-            <div class="card-2 text-center" style="width: auto;">
+            @if($singleCourseDetail['available_count'] > 0)
+                @php ($active_class = 'active')
+            @endif
+            <div class="card-2 text-center {{$active_class}}" style="width: auto;">
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>
@@ -100,7 +104,11 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                             {{$singleCourseDetail['start_time']}} {{$singleCourseDetail['time_zone']}} - {{$singleCourseDetail['end_time']}}
                             {{$singleCourseDetail['time_zone']}}
                         </p>
-                    
+                        @if($singleCourseDetail['available_count'] > 0)
+                            <p class="think-register-card-title think-tertiary-color">Available slots: {{$singleCourseDetail['available_count']}}</p>
+                        @else
+                            <p class="think-register-card-title think-tertiary-color">No slot available</p>
+                        @endif
                     </div>
             </div>
         </div>
@@ -122,7 +130,7 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
 @endpush
 @push('child-scripts')
 <script>
-document.getElementsByClassName('card-2')[0].classList.add('active-batch');
+//document.getElementsByClassName('card-2')[0].classList.add('active-batch');
     document.getElementById('search-btn').addEventListener('click', function(e) {
   e.preventDefault();
   let searchTerm = document.getElementById('search-box').value;
@@ -130,7 +138,7 @@ document.getElementsByClassName('card-2')[0].classList.add('active-batch');
   window.location = '/course-search?search=' + searchTerm;
 });
 
-    let cards = document.getElementsByClassName('card-2');
+    let cards = document.getElementsByClassName('active');
     for(var index = 0; index < cards.length; index++) {
         cards[index].addEventListener('click', function (event){
             this.classList.add("active-batch");
@@ -140,7 +148,7 @@ document.getElementsByClassName('card-2')[0].classList.add('active-batch');
                     cards[index].classList.remove("active-batch");
                 }
             }
-    });
+        });
 }
 
 document.getElementById('registerNowButton').addEventListener('click', (event) => {

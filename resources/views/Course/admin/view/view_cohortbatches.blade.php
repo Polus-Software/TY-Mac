@@ -1,16 +1,19 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+@php 
+use App\Models\TimeZone;
+@endphp
 <input id="course_id" type="hidden" value="{{ $course_id }}" />
 @csrf
 <!-- container -->
-<div class="container llp-container">
+<div class="container-fluid llp-container">
   <div class="row">
-  <div class="col-2 position-fixed">
+  <div class="left_sidebar">
       <!-- include sidebar here -->
       @include('Course.admin.view.sidebar')
     </div>
-    <div class="col-9 ms-auto">
+    <div class="col-8 right_card_block">
       <!-- main -->
       <main>
     <div class="py-4"><h5>Course Title: {{$course_title}}</h5><hr class="my-4"></div>
@@ -26,9 +29,9 @@
       </div>
 
         <div class="row">
-          @php ($slno = 0)
+          @php ($slno = 0) @endphp
           @foreach($cohortbatches as $cohortbatch)
-          @php ($slno = $slno + 1)
+          @php ($slno = $slno + 1) @endphp
           <div class="col-12 mb-3">
             <div class="card">
               <div class="card-title ms-3 mt-3 pb-2 border-bottom">
@@ -56,10 +59,29 @@
                       <div class="col-lg-2">
                       <i class="far fa-clock fa-2x"></i>
                       </div>
+                      @php 
+             
 
+             $offset = TimeZone::where('name', $cohortbatch->time_zone)->value('offset');
+      
+             $offsetHours = intval($offset[1] . $offset[2]);
+             $offsetMinutes = intval($offset[4] . $offset[5]);
+             
+             if($offset[0] == "+") {
+                 $sTime = strtotime($cohortbatch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                 $eTime = strtotime($cohortbatch->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+             } else {
+                 $sTime = strtotime($cohortbatch->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                 $eTime = strtotime($cohortbatch->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+             }
+
+             $startTime = date("H:i:s", $sTime);
+             $endTime = date("H:i:s", $eTime);
+             $date = new DateTime("now");
+           @endphp
                       <div class="col-lg-10">
                         <p>{{$cohortbatch->occurrence}}</p>
-                        <p>{{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->start_time)->format('h:i A')}} - {{\Carbon\Carbon::createFromFormat('H:i:s',$cohortbatch->end_time)->format('h:i A')}} | {{$cohortbatch->time_zone}}</p>
+                        <p>{{\Carbon\Carbon::createFromFormat('H:i:s',$startTime)->format('h:i A')}} - {{\Carbon\Carbon::createFromFormat('H:i:s',$endTime)->format('h:i A')}} | {{ $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T')[0] == "-" ? "(UTC " . $offset . ")" : $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T') }}</p>
 
                       </div>
                     </div>
@@ -79,6 +101,7 @@
       </main>
       <!-- main ends -->
     </div>
+    <div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

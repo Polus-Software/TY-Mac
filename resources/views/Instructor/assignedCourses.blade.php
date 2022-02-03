@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                             @empty
-                                                <x-nodatafound message="No live classes at the moment!" />
+                                                <x-nodatafound message="No live classes at the moment!"  notype="video" />
                                             @endforelse
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                                 </div>
                                             </div>
                                             @empty
-                                                <x-nodatafound message="No upcoming classes at the moment!" />
+                                                <x-nodatafound message="No upcoming classes at the moment!"  notype="video" />
                                             @endforelse                                            
                                         </div>
                                     </div>
@@ -240,7 +240,7 @@
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-12">
                                                
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
-                                                 <small> {{ $singleEnrolledCourse['start_date'] }}
+                                                 <small> {{ $singleEnrolledCourse['nextCohort'] }}
                                                     </small>
                                                 </p>
                                                 

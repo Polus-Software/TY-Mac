@@ -23,6 +23,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 use Carbon\Carbon;
+use DateTimeZone;
+use App\Models\Timezone;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InstructorMailAfterassigningCourse;
 
 class CourseController extends Controller
 {
@@ -132,12 +136,12 @@ class CourseController extends Controller
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
-        $who_learn_points_count = $request->input('who_learn_points_count');
+        /*$who_learn_points_count = $request->input('who_learn_points_count');
    
         for($i =1;  $i <= $who_learn_points_count; $i++){
           $who_learn_temp = $request->input('who_learn_points_'. $i);
           $who_learn = $who_learn . $who_learn_temp . ";";
-        }
+        }*/
         $courseFile = "";
         $courseThumbnailFile = "";
         if($request->file()){
@@ -154,6 +158,8 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
+        $instructorName = User::find($instructorName)->firstname.' '.User::find($instructorName)->lastname;
+        $instructorEmail = User::find($instructorName)->email;
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
@@ -162,7 +168,7 @@ class CourseController extends Controller
         $course->course_duration = $courseDuration;
         $course->short_description = $what_learn ;
         $course->course_details = $whoLearnDescription;
-        $course->course_details_points = $who_learn;
+        $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
@@ -174,6 +180,13 @@ class CourseController extends Controller
         $assignedCourse->course_id = $course->id;
         $assignedCourse->user_id = $instructorName;
         $assignedCourse->save();
+
+        $datas = [
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+
+         Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
     }
@@ -250,14 +263,15 @@ class CourseController extends Controller
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
-                    // 'whothis' => explode(';', $data->value('courses.course_details_points')),
+                     'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
                     'thumbnail' => $data->value('courses.course_thumbnail_image')
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
 
-                $whoThis = explode(';', $data->value('courses.course_details_points'));
+                //$whoThis = explode(';', $data->value('courses.course_details_points'));
+                $whoThis = $data->value('courses.course_details_points');
 
 
                 $courseStatus = DB::table('courses')->where('id', $course_id)->value('is_published');
@@ -292,7 +306,7 @@ class CourseController extends Controller
                 'instructor' =>'required',
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
-                'who_learn_points_1'=>'required',
+                'who_learn_points'=>'required',
                 'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
                 'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
@@ -320,20 +334,20 @@ class CourseController extends Controller
                     
                 }
                 $whoLearnDescription = $request->input('who_learn_description');
-                $who_learn ="";
-                $who_learn_points_count = $request->input('who_learn_points_count');
+                $who_learn = $request->input('who_learn_points');
+                //$who_learn_points_count = $request->input('who_learn_points_count');
 
-                for($i = 1;  $i <= $who_learn_points_count; $i++){
+                //for($i = 1;  $i <= $who_learn_points_count; $i++){
                     
-                    $who_learn_temp = $request->input('who_learn_points_'. $i);
-                    if($who_learn_temp != null) {
-                        if($i == $what_learn_points_count) {
-                            $who_learn = $who_learn . $who_learn_temp;
-                        } else {
-                            $who_learn = $who_learn . $who_learn_temp . ";";
-                        }
-                    }
-                }
+                    //$who_learn_temp = $request->input('who_learn_points_'. $i);
+                    //if($who_learn_temp != null) {
+                        //if($i == $what_learn_points_count) {
+                            //$who_learn = $who_learn . $who_learn_temp;
+                        //} else {
+                            //$who_learn = $who_learn . $who_learn_temp . ";";
+                        //}
+                    //}
+               // }
                 
                 
                 $user = Auth::user();
@@ -438,42 +452,43 @@ class CourseController extends Controller
                         $subtopicFile->move($destinationPath,$TopicFileName);
                     }
                     $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
-                    //echo 'externalLink_count_topic_'.$i.'_content_'.$j;
-                   // var_dump($request->input('externalLink_count_topic_1_content_0'));
-                    //var_dump($external_link_count);
                     for($k =0; $k <= $external_link_count; $k++) {
                         $external_link = $request->input('external_topic'.$i.'_content_'.$j.'_link_'.$k);
-                        echo 'external_topic'.$i.'_content_'.$j.'_link_'.$k;
-                        var_dump($external_link);
                         $external_links = $external_links . $external_link.';';
                     }
-                    //var_dump($external_links);
                     if($request->input('content_topic_'.$i.'_'.$j) != ''){
-                        $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
-                        if($extension == '')
-                            $extension = $content['content_type'];
-                        if($TopicFileName == '')
-                            $TopicFileName = $content['document'];
-                        $updateDetails = [
-                            'topic_title' => $request->input('content_title_'.$i.'_'.$j),
-                            'content_type' => $extension,
-                            'external_link'=>$external_links,
-                            'document'=>$TopicFileName,
-                        ];
-                        TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
+                        if($request->input('content_status_'.$i.'_'.$j) == '0'){
+                            TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j))->delete();
+                        }
+                        else{
+                            $content= TopicContent::where('topic_content_id',$request->input('content_topic_'.$i.'_'.$j) )->first();
+                            if($extension == '')
+                                $extension = $content['content_type'];
+                            if($TopicFileName == '')
+                                $TopicFileName = $content['document'];
+                            $updateDetails = [
+                                'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                'content_type' => $extension,
+                                'external_link'=>$external_links,
+                                'document'=>$TopicFileName,
+                            ];
+                            TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
+                        }
                         //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
                     //->update($updateDetails);
                     }
                     else{
-                        $content = new TopicContent;
-                        $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
-                        $content->topic_id = $request->topic_id;
-                        $content->description = "";
-                        $content->content_type = $extension;
-                        $content->external_link = $external_links;
-                        $content->document = $TopicFileName;
-                        $content->save();
+                        if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
+                            $content = new TopicContent;
+                            $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
+                            $content->topic_id = $request->topic_id;
+                            $content->description = "";
+                            $content->content_type = $extension;
+                            $content->external_link = $external_links;
+                            $content->document = $TopicFileName;
+                            $content->save();
+                        }
                     }
                 }
             }
@@ -659,7 +674,7 @@ class CourseController extends Controller
             'assignment_title' => $assignment_details->value('assignment_title'),
             'assignment_description' => $assignment_details->value('assignment_description'),
             'document' => $assignment_details->value('document'),
-            'due_date' => $assignment_details->value('due_date')
+            'due_date' => Carbon::createFromFormat('Y-m-d', $assignment_details->value('due_date'))->format('m-d-Y'),
         ];
 
         $courseStatus = DB::table('courses')->where('id', $request->course_id)->value('is_published');
@@ -710,7 +725,7 @@ class CourseController extends Controller
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
-        $topicAssignment->due_date = $request->input('due-date');
+        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
        
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
@@ -740,7 +755,8 @@ class CourseController extends Controller
         
         $topicAssignment->assignment_title = $request->input('assignment_title');
         $topicAssignment->assignment_description = $request->input('assignment_description');
-        $topicAssignment->due_date = $request->input('due-date');
+        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
+
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
@@ -778,7 +794,21 @@ class CourseController extends Controller
 
     public function saveCohortBatch(Request $request) {
         
-       
+        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offsetHours = intval($offset[1] . $offset[2]);
+        $offsetMinutes = intval($offset[4] . $offset[5]);
+      
+        if($offset == "-") {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+        } else {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+        }
+
+        $startTime = date("H:i:s", $sTime);
+        $endTime = date("H:i:s", $eTime);
+
         $cohortbatch = new CohortBatch();
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->batchname = $request->input('batchname');
@@ -786,8 +816,8 @@ class CourseController extends Controller
         $cohortbatch->start_date = Carbon::parse($request->input('cohortbatch_startdate'))->format('Y-m-d');
         $cohortbatch->end_date = Carbon::parse($request->input('cohortbatch_enddate'))->format('Y-m-d');
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
-        $cohortbatch->start_time = $request->input('cohortbatch_starttime');
-        $cohortbatch->end_time = $request->input('cohortbatch_endtime');
+        $cohortbatch->start_time = $startTime;
+        $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
         $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
@@ -852,7 +882,23 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
-    
+
+
+        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offsetHours = intval($offset[1] . $offset[2]);
+        $offsetMinutes = intval($offset[4] . $offset[5]);
+      
+        if($offset == "-") {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+        } else {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+        }
+
+        $startTime = date("H:i:s", $sTime);
+        $endTime = date("H:i:s", $eTime);
+        
         $cohort_batch_id = intval($request->input('cohort_batch_id'));
         $course_id = $request->input('course_id');
   
@@ -865,8 +911,8 @@ class CourseController extends Controller
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
         $cohortbatch->end_date = $request->input('cohortbatch_enddate');
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
-        $cohortbatch->start_time = $request->input('cohortbatch_starttime');
-        $cohortbatch->end_time = $request->input('cohortbatch_endtime');
+        $cohortbatch->start_time = $startTime;
+        $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
         $cohortbatch->students_count = $request->input('students_count');

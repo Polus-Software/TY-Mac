@@ -49,13 +49,13 @@
           </div>
           <div class="col-12">
             <label>Who is this course is for?</label>
-            <ul>
+            <p>
             @foreach($course_details['whothis'] as $whothis)
             @if($whothis != '')
-            <li>{{$whothis}}</li>
+            {{$whothis}}
             @endif
             @endforeach
-            </ul>
+            </p>
           </div>
           <div class="col-12">
             <label>Course image</label>

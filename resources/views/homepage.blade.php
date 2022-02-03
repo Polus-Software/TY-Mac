@@ -4,7 +4,7 @@
 
   use App\Models\UserType;
   use App\Models\User;
-
+ 
   $user = Auth::user();
   $userType = "";
   if($user) {
@@ -180,7 +180,7 @@
               <span class="visually-hidden">Next</span>
             </button>
             @else
-            <x-nodatafound message="No courses to be shown!" />
+            <x-nodatafound message="No courses to be shown!"  notype="" />
           </div>
 
         </div>

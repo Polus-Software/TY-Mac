@@ -49,8 +49,26 @@ function displayPassword(){
 }
 }
 
-const textarea = document.querySelector('textarea.autosize');
-textarea.addEventListener('input', (e) => {
+/*const textarea = document.querySelector('textarea.autosize');
+textarea.addEventListener('input', (e) => {alert(5);
   e.target.style.height = 'auto';
   e.target.style.height = e.target.scrollHeight + 'px';
-});
+});*/
+/* added by jibi starts for auto resize the textarea and back when closes */
+var textarea = document.getElementsByClassName("autosize");
+var textarea_auto_height = function(e) {
+  e.target.style.height = 'auto';
+  e.target.style.height = e.target.scrollHeight + 'px';
+}
+for (var i=0; i < textarea.length; i++) {
+  textarea[i].addEventListener('input', textarea_auto_height, false);
+};
+var close_button = document.getElementsByClassName("think-modal-close-btn");
+var textarea_auto_height_to_normal = function(e) {
+  e.currentTarget.parentElement.parentElement.querySelector('.autosize').style.height = 'auto';
+  //e.target.style.height = 'auto';
+}
+for (var j=0; j < close_button.length; j++) {
+  close_button[i].addEventListener('click', textarea_auto_height_to_normal, false);
+};
+/* added by jibi ends */

@@ -5,7 +5,7 @@
         <div class="col-12 mx-auto ms-0">
         <p class="lh-lg">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem ex obcaecati blanditiis reprehenderit ab mollitia voluptatem consectetur?
-            <a href="#testimonials" class="btn think-btn-tertiary-outline ms-3">Apply to be an instructor</a>
+            
           </p> 
           
         </div>        
@@ -65,7 +65,7 @@
         <div class="row text-center text-white">
           <div class="col-12">
             <div class="footer-bottom__copyright">
-              &COPY; Copyright 2021 <a href="#">TY-Mac</a>
+              &COPY; Copyright 2021 <a href="#">Thinklit</a>
             </div>
           </div>
         </div>

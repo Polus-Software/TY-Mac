@@ -10,18 +10,8 @@
     <li class="nav-item">
       <a class="nav-link link-dark text-uppercase pe-none" href="{{ route('manage-course-categories') }}">Management</a>
     </li>
-    @if($userType == 'content_creator')
-    <li class="nav-item">
-      <a class="nav-link link-dark {{ Route::currentRouteName() == 'manage-courses' ? 'active' : ''}}" href="{{ route('manage-courses') }}">
-      <i class="fas fa-clipboard-list"></i>
-        Course Categories</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link link-dark {{ Route::currentRouteName() == 'manage-courses' ? 'active' : ''}}" href="{{ route('manage-courses') }}">
-      <i class="fas fa-book-reader"></i>
-        Courses</a>
-    </li>
-    @elseif($userType == 'admin')
+    
+    @if($userType == 'admin' || $userType == 'content_creator')
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'attendance.tracker.view' ? 'active' : ''}}" href="{{ route('attendance.tracker.view') }}">
       <i class="fas fa-graduation-cap"></i>
@@ -37,16 +27,19 @@
       <i class="fas fa-user-friends"></i>
         Instructors</a>
     </li>
+    @if($userType == 'admin')
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'manage-creators' ? 'active' : ''}}" href="{{ route('manage-creators') }}">
       <i class="fas fa-users-cog"></i>
         Content Creators</a>
     </li>
+    
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'manage-admin' ? 'active' : ''}}" href="{{ route('manage-admin') }}">
       <i class="fas fa-users-cog"></i>
         Admin Users</a>
     </li>
+    @endif
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'manage-course-categories' ? 'active' : ''}}" href="{{ route('manage-course-categories') }}">
       <i class="fas fa-clipboard-list"></i>
@@ -62,11 +55,13 @@
       <i class="fas fa-book-reader"></i>
         Schedule Live Session</a>
     </li>
+    @if($userType == 'admin')
     <li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'admin-settings' ? 'active' : ''}}" href="{{ route('admin-settings') }}">
       <i class="fas fa-cogs"></i>
         App Settings</a>
     </li>
+    @endif
 	<li class="nav-item">
       <a class="nav-link link-dark {{ Route::currentRouteName() == 'admin.manager_reviews' ? 'active' : ''}} {{ Route::currentRouteName() == 'admin.manager_reviews_filter' ? 'active' : ''}}" href="{{ route('admin.manager_reviews') }}">
       <i class="fas fa-cogs"></i>

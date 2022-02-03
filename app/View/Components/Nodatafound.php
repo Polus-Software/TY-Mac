@@ -7,14 +7,16 @@ use Illuminate\View\Component;
 class Nodatafound extends Component
 {
     public $message;
+    public $notype;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($message, $notype)
     {
         $this->message = $message;
+        $this->notype = $notype;
     }
 
     /**

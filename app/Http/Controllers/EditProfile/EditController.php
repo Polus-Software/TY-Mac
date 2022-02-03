@@ -25,14 +25,15 @@ class EditController extends Controller
         $request->validate([
             'firstname' =>'required',
             'lastname' =>'required',
-            'email' => 'required|email|unique:users,email,'.Auth::user()->id
-            
+            'email' => 'required|email|unique:users,email,'.Auth::user()->id,
+            'timezone' => 'required'
         ]);
         
         $user =Auth::user();
         $user->firstname = $request['firstname'];
         $user->lastname = $request['lastname'];
         $user->email = $request['email'];
+        $user->timezone = $request['timezone'];
         $user->save();
         if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3){
             return redirect('/')->with('message','Profile Updated');

@@ -55,9 +55,13 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-              <label class="form-check-label checkbox-text">
-                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creating an account , you agree to the
-                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+              <label class="form-check-label checkbox-text" id="chechbox-text">
+                  <input class="form-check-input" name="privacy_policy" type="checkbox" id="checkbox"> 
+                  By creating an account, you agree to the
+                  <a href="#">Terms of Service</a> and Privacy Policy <br>
+                  <small>Error message</small>
+                </label>
+                 
                 @if ($errors->has('privacy_policy'))
                 <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
                 @endif
@@ -71,6 +75,7 @@
               <span class="login"><a href="" id="login_link">&nbsp;Login</a></span>
               </p>                
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -123,6 +128,7 @@
                 </span>
                 <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -211,16 +217,16 @@
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
 <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
-        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-center mb-2">
           <h5 class="modal-title custom-form-header" id="contactModalLabel">Add review</h5>
           <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>       
-            <div class="think-text-secondary-color">Add a review and a star rating!!!</div>
+            <div class="think-text-secondary-color">We'd appreciate your feedback!</div>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-                <div class="form-group mx-0 text-center">
+                <!--<div class="form-group mx-0 text-center">
                 <i class="far fa-thumbs-up fa-3x think-review"></i>
-              </div>
+              </div>-->
               <div class="form-group mx-0">
               <div class="rating text-center mb-3">
                     <label for="star1" class="fas fa-star rating-star" star-rating="1"></label>
@@ -333,6 +339,12 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       } else if (password.value == passwordconfirm.value && password.value != '') {
         removeError(password)
       }
+      if (checkbox.value != 'checked') {
+        e.preventDefault();
+        showError(checkbox, 'Accept Terms and conditions');
+      } else {
+        removeError(checkbox)
+      }
 
     });
     const form = document.getElementById('signupForm');
@@ -341,8 +353,9 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const passwordconfirm = document.getElementById('password_confirmation');
-
-
+    const checkbox = document.getElementById('checkbox');
+   
+  
     function showError(input, message) {
       input.style.borderColor = 'red';
       const formControl = input.parentElement;
@@ -350,6 +363,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       small.innerText = message;
       small.style.visibility = 'visible';
     }
+  
 
     function removeError(input) {
       input.style.borderColor = '#ced4da';
@@ -371,6 +385,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       const email = loginemail.value.trim();
       const password = loginpassword.value.trim();      
       let validLogin = true;
+      let redirect_to = '';
       if (email === '') {
         e.preventDefault();
         showError(loginemail, 'Email is required');
@@ -386,12 +401,13 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
         removeError(loginpassword)
       }
       if(!validLogin) return;
-      submitLogin(email, password);
+      redirect_to = document.getElementById('redirect_page').value;
+      submitLogin(email, password,redirect_to);
     });
 
-    const submitLogin = (email, password) => {
+    const submitLogin = (email, password,redirect) => {
       const errorEl = document.querySelector('.login-error-message');
-      let path = `{{route('user.login')}}?email=${email}&password=${password}`;
+      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}`;
       fetch(path, {
           method: 'POST',
           headers: {

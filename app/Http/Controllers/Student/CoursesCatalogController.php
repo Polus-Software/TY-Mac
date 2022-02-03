@@ -86,18 +86,19 @@ class CoursesCatalogController extends Controller
 
 
     public function showCourse($id){
-
+        $currentURL = url()->current();
         $singleCourseDetails =[];
         $sessions = [];
         $enrolledFlag = false;
         $singleCourseFeedbacks = [];
         $courseContents = [];
+        $batchDetails = [];
 
         $course = Course::findOrFail($id);
         $duration = $course->course_duration . "h";
-        $liveSessions = LiveSession::where('course_id', $id)->get();
+    
         $short_description = explode(";",$course->short_description);
-        $course_details_points = explode(";",$course->course_details_points);
+        $course_details_points = $course->course_details_points;
 
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
@@ -110,7 +111,37 @@ class CoursesCatalogController extends Controller
         $instructorTwitter = User::where('id', $assigned)->value('twitter_social');
         $instructorLinkedin = User::where('id', $assigned)->value('linkedIn_social');
         $instructorYoutube = User::where('id', $assigned)->value('youtube_social');
+       
+        $current_date = Carbon::now()->format('Y-m-d');
+        
+        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+        foreach($batches as $batch){
+            $batchname = $batch->batchname;
+            $batch_start_date = $batch->start_date;
+            $batch_start_time = $batch->start_time;
+            $batch_end_time = $batch->end_time;
+            $batch_end_date = $batch->end_date;
+            $batch_time_zone = $batch->time_zone;
+            
+            $liveSession = LiveSession::where('batch_id', $batch->id)->where('start_date', '>', $current_date)->orderby('start_date', 'asc')->get();
+            if(count($liveSession)) {
+               $latest = $liveSession[0];
+               
+               array_push($batchDetails, array(
+                    'batchname' => $batchname,
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('M d'),
+                    'batch_start_time' => Carbon::createFromFormat('H:i:s',$batch_start_time)->format('h A'),
+                    'batch_end_time' => Carbon::createFromFormat('H:i:s',$batch_end_time)->format('h A'),
+                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
+                    'batch_time_zone' => $batch_time_zone,
+                    'latest' =>  $latest,
+                    
+                ));
+            }
+        }
 
+           
+    
         $topics = Topic::where('course_id', $id)->get();
         
          foreach($topics as $topic){
@@ -182,16 +213,32 @@ class CoursesCatalogController extends Controller
 
         );
         array_push($singleCourseDetails, $singleCourseData);
-  
+        $batches = DB::table('cohort_batches')->where('course_id', $id)->get();
+        $cohort_full = true;
+        foreach($batches as $batch){
+            $available_count = $batch->students_count;
+            $booked_slotes = DB::table('enrolled_courses')
+                ->where([['course_id','=',$id],['batch_id','=',$batch->id]])
+                ->get();
+            $booked_slotes_count = count($booked_slotes);
+            $available_count = $available_count-$booked_slotes_count;
+            if($available_count > 0){
+                $cohort_full = false;
+            }
+        }
+        //var_dump($enrolledFlag);    
+        //var_dump($cohort_full);
         return view('Student.showCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
             'courseContents' => $courseContents,
-            'liveSessions' => $liveSessions,
+            'batchDetails' => $batchDetails,
             'short_description' => $short_description,
             'course_details_points' => $course_details_points,
             'userType' => $userType,
-            'enrolledFlag' => $enrolledFlag
+            'enrolledFlag' => $enrolledFlag,
+            'currenturl' => $currentURL,
+            'cohort_full_status' => $cohort_full
         ]);
 
     }
@@ -239,15 +286,24 @@ class CoursesCatalogController extends Controller
        
         $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
         foreach($batches as $batch){
+            $available_count = $batch->students_count;
+           // if(!empty($available_count)){
+                $booked_slotes = DB::table('enrolled_courses')
+                                    ->where([['course_id','=',$course->id],['batch_id','=',$batch->id]])
+                                    ->get();
+                $booked_slotes_count = count($booked_slotes);
+                $available_count = $available_count-$booked_slotes_count;
+            //}
             $singleCourseData =  array (
-            'batch_id' => $batch->id,
-            'batchname' => $batch->batchname,
-            'title' => $batch->title,
-            'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
-            'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
-            'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
-            'time_zone' => $batch->time_zone,
-        );
+                'batch_id' => $batch->id,
+                'batchname' => $batch->batchname,
+                'title' => $batch->title,
+                'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
+                'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
+                'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
+                'time_zone' => $batch->time_zone,
+                'available_count' => $available_count
+            );
         
         array_push($singleCourseDetails, $singleCourseData);
       }
@@ -479,7 +535,7 @@ class CoursesCatalogController extends Controller
                 $html = $html . '</div></div></div></div></div>';        
             }
         } else {
-            $html = '<h5 class="no_courses">No courses to display</h5>';
+            $html = '<div class="think-nodata-box px-4 py-5 my-5 text-center mh-100"><img class="mb-3" src="/storage/icons/no_data_available.svg" alt="No courses to be shown!"><h4 class="fw-bold">No courses to be shown!</h4></div>';
         }
      return response()->json([
         'status' => 'success', 

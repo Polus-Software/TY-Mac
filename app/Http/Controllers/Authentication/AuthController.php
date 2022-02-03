@@ -56,18 +56,19 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role_id = $userType;
+        $user->timezone = "UTC";
         $user->save();
         
-        $user = Auth::user();
+        //$user = Auth::user();
     
-        $email= $request->get('email');
+        $email= $request->email;
     
         $details =[
            'firstname'=> $request->firstname,
            'lastname'=> $request->lastname
            
         ];
-        // Mail::to($email)->send(new Gmail($details));
+         Mail::to($email)->send(new SignupMail($details));
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -75,8 +76,13 @@ class AuthController extends Controller
         $notification->is_read = false;
         $notification->save();
         //return redirect('/')->withSuccess('Successfully registered!');
-        return redirect('/')->with('message', 'Successfully registered!');
-
+        //return redirect('/')->with('message', 'Successfully registered!');
+        if($request->redirect_page != ''){
+            return redirect($request->redirect_page)->with('message', 'Successfully registered!');
+        }
+        else{
+            return redirect('/')->with('message', 'Successfully registered!');
+        }
         } catch (Exception $exception) {
             return redirect('/')->with('message', 'Registration failed');
         }
@@ -118,6 +124,9 @@ class AuthController extends Controller
             }
             if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
                 $redirectTo = 'dashboard';
+            }
+            if($request->redirect != ''){
+                $redirectTo = $request->redirect;
             }
             return response()->json([
                 'status' => 'success',

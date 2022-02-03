@@ -150,6 +150,9 @@ Route::get('/', function () {
     Route::post('save-assignment', [CourseController::class, 'saveAssignment'])->name('save-assignment');
 
     Route::get('generate-token/{session}', [RtmTokenGeneratorController::class, 'buildToken'])->name('generate-token');
+    Route::get('generate-token-1-on-1/{topic}/{user}', [RtmTokenGeneratorController::class, 'buildToken1v1'])->name('generate-token-1-on-1');
+    Route::post('start-screen-share', [RtmTokenGeneratorController::class, 'startScreenshare'])->name('start-screen-share');
+    Route::post('get-session-push-record', [RtmTokenGeneratorController::class, 'getSessionLiveRecord'])->name('get-session-push-record');
     Route::get('generate-token-student', [RtmTokenGeneratorController::class, 'buildTokenStudent'])->name('generate-token-student');
     Route::get('session-view/{session}', [RtmTokenGeneratorController::class, 'index'])->name('session-view');
     Route::get('sessions-view', [RtmTokenGeneratorController::class, 'viewSessions'])->name('sessions-view');
@@ -157,15 +160,21 @@ Route::get('/', function () {
     Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
     Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
     Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
+    Route::post('push-session-live-record', [RtmTokenGeneratorController::class, 'pushSessionLiveRecord'])->name('push-session-live-record');
     Route::post('stop-presenting', [RtmTokenGeneratorController::class, 'stopPresenting'])->name('stop-presenting');
+    Route::post('stop-content-presenting', [RtmTokenGeneratorController::class, 'stopContentPresenting'])->name('stop-content-presenting');
     Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
     Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');
     Route::post('student-exit', [RtmTokenGeneratorController::class, 'studentExit'])->name('student-exit');
     Route::post('get-attendance-list', [RtmTokenGeneratorController::class, 'getAttendanceList'])->name('get-attendance-list');
+    Route::post('get-session-attendance-list', [RtmTokenGeneratorController::class, 'getSessionAttendanceList'])->name('get-session-attendance-list');
     Route::post('submit-feedback', [RtmTokenGeneratorController::class, 'submitSessionFeedback'])->name('submit-feedback');
     Route::post('save-session-chat', [RtmTokenGeneratorController::class, 'saveSessionChat'])->name('save-session-chat');
+    Route::post('save-single-session-chat', [RtmTokenGeneratorController::class, 'saveSingleSessionChat'])->name('save-single-session-chat');
     Route::post('get-session-chat', [RtmTokenGeneratorController::class, 'getSessionChat'])->name('get-session-chat');
+    Route::post('get-single-session-chat', [RtmTokenGeneratorController::class, 'getSingleSessionChat'])->name('get-single-session-chat');
     Route::post('get-session-chart', [RtmTokenGeneratorController::class, 'getSessionChart'])->name('get-session-chart');
+    Route::get('1-on-1/{student}/{topic}', [RtmTokenGeneratorController::class, 'createRecommendationSession'])->name('1-on-1');
     
     Route::get('/student-courses', [CoursesCatalogController::class, 'viewAllCourses'])->name('student.courses.get');
    
@@ -177,11 +186,15 @@ Route::get('/', function () {
     Route::get('/enrolled-course/{course}', [EnrolledCourseController::class, 'afterEnrollView'])->name('student.course.enrolled');
     Route::get('/assignments/{assignment}', [EnrolledCourseController::class, 'showassignment'])->name('student.course.assignment');
     Route::get('/download-assignments/{assignment}', [EnrolledCourseController::class, 'downloadAssignmentDocument'])->name('download.assignment');
+    Route::post('/start-assignment', [EnrolledCourseController::class, 'startAssignment'])->name('start.assignment.post');
     Route::post('/submit-assignment', [EnrolledCourseController::class, 'submitAssignment'])->name('submit.assignment');
     Route::post('/review-course', [EnrolledCourseController::class, 'courseReviewProcess'])->name('student.course.review.post');
     Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');
     Route::post('/ask-question', [EnrolledCourseController::class, 'askQuestion'])->name('ask.question');
     Route::get('/study-materials', [EnrolledCourseController::class, 'studyMaterials'])->name('study.materials');
+    Route::post('/get-individual-student-chart', [EnrolledCourseController::class, 'getIndividualStudentChart'])->name('get-individual-student-chart');
+    Route::post('/get-instructor-assignment-modal', [EnrolledCourseController::class, 'getAssignmentModal'])->name('get-instructor-assignment-modal');
+    Route::post('/complete-assignment', [EnrolledCourseController::class, 'completeAssignment'])->name('complete-assignment');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');

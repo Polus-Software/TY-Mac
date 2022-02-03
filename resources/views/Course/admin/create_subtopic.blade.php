@@ -6,7 +6,7 @@
   <div class="row">
   <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.create.sidebar')
+      @include('Course.admin.view.sidebar')
     </div>
     <div class="col-8 right_card_block">
     <div class="py-4">
@@ -147,7 +147,7 @@ window.onload = function(event) {
       {'type': 'file'},
       {'name': `content_upload[${topicNum}][${contentCount}]`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are:  ppt, pdf, doc, docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [

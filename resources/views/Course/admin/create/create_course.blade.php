@@ -16,7 +16,6 @@
         <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         <input type="hidden" id="course_id" name="course_id" value="{{ $course_id}}">
         <input type="hidden" id="what_learn_points_count" name="what_learn_points_count" value="{{ count($whatLearn) }}">
-        <input type="hidden" id="who_learn_points_count" name="who_learn_points_count"  value="{{ count($whoThis) }}">
         @else
         <input type="hidden" id="route_val" value="new" />
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
@@ -31,7 +30,7 @@
             @if(isset($course_details['title']))
             <input type="text" class="form-control" id="title" name="course_title" value="{{ $course_details['title'] }}">
             @else
-            <input type="text" class="form-control" id="title" name="course_title" placeholder="Ex: Fundamentals of Product Management">
+            <input type="text" class="form-control" id="title" name="course_title" placeholder="Ex: Fundamentals of Product Management" value="{{old('course_title')}}">
             @endif
             @if ($errors->has('course_title'))
               <span class="text-danger">{{ $errors->first('course_title') }}</span>
@@ -42,7 +41,7 @@
             @if(isset($course_details['description']))
             <textarea type="text" class="form-control autosize" id="description" name="description">{{ $course_details['description'] }}</textarea>
             @else
-            <textarea type="text" class="form-control autosize" id="description" name="description" placeholder="Product Management is the profession of building products. By taking this course, you will learn the fundamentals of Product Management"></textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="description" placeholder="Product Management is the profession of building products. By taking this course, you will learn the fundamentals of Product Management">{{old('description')}}</textarea>
             @endif
             @if ($errors->has('description'))
               <span class="text-danger">{{ $errors->first('description') }}</span>
@@ -51,12 +50,13 @@
           <div class="col-md-6">
             <label for="category">Category</label>
             <select type="text" class="form-select" id="course_category" name="course_category">
-              <option value="">Select</option>
+            <option value="">Select</option>
             @foreach ($courseCategories as $courseCategory)
+            
             @if(isset($course_details['description']) && $courseCategory->id == $course_details['category_id'])
             <option value="{{$courseCategory->id}}" selected>{{ $courseCategory->category_name }}</option>
             @else
-            <option value="{{$courseCategory->id}}">{{ $courseCategory->category_name }}</option>
+            <option value="{{$courseCategory->id}}" {{ old('course_category') == "$courseCategory->id" ? 'selected' : '' }}>{{ $courseCategory->category_name }}</option>
             @endif                            
             @endforeach          
             </select>
@@ -146,20 +146,14 @@
             @endif -->
             
             <label for="who-course-points mt-2">Points</label>
-            @if(isset($whoThis))
-            @php ($whoCount = 0)
-            @foreach($whoThis as $who)
-            @php ($whoCount = $whoCount + 1)
-            <input type="text" class="form-control mt-2" id="who_learn_points" name="who_learn_points_{{ $whoCount }}" value="{{ $who }}">
-            @endforeach
+            @if(isset($course_details['course_details_points']))
+            <textarea class="form-control mb-3" name="who_learn_points" rows="4">{{ $course_details['course_details_points'] }}</textarea>
             @else
-            <input type="text" class="form-control" id="who_learn_points" name="who_learn_points_1">
-            @endif 
-            @if ($errors->has('who_learn_points_1'))
-              <span class="text-danger">This field is required</span>
-            @endif           
-            <div id="add-points"></div>            
-            <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-who-learn">Add more answer</button>
+            <textarea class="form-control mb-3" name="who_learn_points" rows="4"></textarea>
+            @endif
+            @if ($errors->has('who_learn_points'))
+              <span class="text-danger mb-3">This field is required</span><br>
+            @endif
           </div>
           <div class="col-12">
             <label for="course-image">Course image</label>

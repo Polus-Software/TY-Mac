@@ -30,6 +30,13 @@ use App\Models\CourseQA;
 use App\Models\EnrolledCourse;
 use App\Models\AttendanceTracker;
 use App\Models\LiveSession;
+use App\Models\TimeZone;
+use DateTime;
+use DateTimeZone;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailAfterReplay;
+use App\Mail\MailAfterQuestion;
+use App\Mail\MailAfterAssignmentSubmission;
 
 class EnrolledCourseController extends Controller
 {
@@ -93,72 +100,77 @@ class EnrolledCourseController extends Controller
         $date_of_issue = Carbon::now();
         $current_date = Carbon::now()->format('Y-m-d');
         $next_live_cohort = "No sessions scheduled";
-        
+        $course_completion = '';
         if($userType === 'instructor') {
-             $selectedBatchObj = CohortBatch::where('id', $selectedBatch);
-
-             $occurrences = $selectedBatchObj->value('occurrence');
-             $occArr = explode(',', $occurrences);
- 
-             $startDate = $selectedBatchObj->value('start_date');
-             $endDate = $selectedBatchObj->value('end_date');
-             $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
-         
-             if($startDate < $current_date && $current_date < $endDate) {
-                 while($startDate < $endDate) {
-                     $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
-                     if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
-                         $latestDate = $startDate;
-                         break;
-                     }   
-                 }
-                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-                 $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-                 $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-                 $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-             } else if($startDate >= $current_date) {
-                 $latestDate = $startDate;
-                 $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-             $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-             $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-             $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-             } else {
-                $next_live_cohort = "This batch has ended";
-             }
+            $cohort_batches = DB::table('live_sessions')->where('batch_id', $selectedBatch)->where('start_date', '>=', $current_date)->get();
+            if(count($cohort_batches)) {
+              $cohort_batches = $cohort_batches[0];
+                  // Time setting
+                  $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                        
+                  $offsetHours = intval($offset[1] . $offset[2]);
+                  $offsetMinutes = intval($offset[4] . $offset[5]);
+  
+                  if($offset[0] == "+") {
+                      $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                      $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                  } else {
+                      $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                      $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                  }
+  
+                  $startTime = date("H:i:s", $sTime);
+                  $endTime = date("H:i:s", $eTime);
+                  $date = new DateTime("now");
+  
+                  $start_date =  $cohort_batches->start_date;
+                  $start_time =  $startTime;
+                  $end_time =  $endTime;
+                  $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+                  $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                } else {
+                  $next_live_cohort = "No live sessions scheduled";
+                }
              
              
              
         } else if($userType === 'student') {
             $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id);
-            $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
-            $occurrences = $selectedBatchObj->value('occurrence');
-            $occArr = explode(',', $occurrences);
-
-            $startDate = $selectedBatchObj->value('start_date');
-            $endDate = $selectedBatchObj->value('end_date');
-            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
-        
-            if($startDate < $current_date && $endDate > $current_date) {
-                while($startDate < $endDate) {
-                    $startDate = date('Y-m-d',strtotime($startDate . "+1 days"));
-                    if($startDate >= $current_date && in_array(Carbon::createFromFormat('Y-m-d',$startDate)->format('l'), $occArr)) {
-                        $latestDate = $startDate;
-                        break;
-                    }   
-                }
-                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-            } else if($startDate >= $current_date) {
-                $latestDate = $startDate;
-                $start_date = Carbon::createFromFormat('Y-m-d',$latestDate)->format('m/d/Y');
-                $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h:m A');
-                $end_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('end_time'))->format('h:m A');
-                $next_live_cohort = $start_date . '- ' . $start_time . ' ' .$selectedBatchObj->value('time_zone') . ' - ' . $end_time . ' ' . $selectedBatchObj->value('time_zone');
-            } else {
-                $next_live_cohort = "This batch has ended";
+            if($enrolledCourseObj->value('course_completion_date') != null) {
+                $course_completion = Carbon::createFromFormat('Y-m-d H:i:s', $enrolledCourseObj->value('course_completion_date'))->format('F d, Y');
             }
+            
+            
+            // $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
+            $cohort_batches = DB::table('live_sessions')->where('batch_id', $enrolledCourseObj->value('batch_id'))->where('start_date', '>=', $current_date)->get();
+          if(count($cohort_batches)) {
+            $cohort_batches = $cohort_batches[0];
+                // Time setting
+                $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                      
+                $offsetHours = intval($offset[1] . $offset[2]);
+                $offsetMinutes = intval($offset[4] . $offset[5]);
+
+                if($offset[0] == "+") {
+                    $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                    $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                } else {
+                    $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                    $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                }
+
+                $startTime = date("H:i:s", $sTime);
+                $endTime = date("H:i:s", $eTime);
+                $date = new DateTime("now");
+
+                $start_date =  $cohort_batches->start_date;
+                $start_time =  $startTime;
+                $end_time =  $endTime;
+                $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+                $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+              } else {
+                $next_live_cohort = "No live sessions scheduled";
+              }
         } else {
             return false;
         }
@@ -229,42 +241,133 @@ class EnrolledCourseController extends Controller
             ));
         }
         $topics = Topic::where('course_id',  $courseId)->get();
+        $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId);
+        $studentBatch = $enrolledCourseObj->value('batch_id');
         
             foreach($topics as $topic){
-
+                $nextCohort = "";
+                $scheduled = false;
+                $liveId = "";
                 $courseId =  $topic->course_id;
                 $topicId = $topic->topic_id;
                 $topic_title =  $topic->topic_title;
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
-                $liveSessions = LiveSession::where('topic_id', $topicId)->get();
+                
+                if($userType == 'instructor') {
+                    $studentBatch = $selectedBatch;
+                }
+                $liveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->orderby('start_date', 'asc')->get();
+
+                if(count($liveSessions) != 0) {
+                    $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                    if(count($todaysLiveSessions) != 0) {
+                        $liveId = $liveSessions[0]->live_session_id;
+                    } else {
+                        $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('end_time', '<=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                        if(count($todaysLiveSessions) != 0) {
+                            $liveId = "Over";
+                        } else {
+                            $cohort_batches = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                            if(count($cohort_batches) != 0) {
+                                $cohort_batches = $cohort_batches[0];
+                                // Time setting
+                                $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                                    
+                                $offsetHours = intval($offset[1] . $offset[2]);
+                                $offsetMinutes = intval($offset[4] . $offset[5]);
+                
+                                if($offset[0] == "+") {
+                                    $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                                    $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                                } else {
+                                    $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                                    $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                                }
+                
+                                $startTime = date("H:i:s", $sTime);
+                                $endTime = date("H:i:s", $eTime);
+                                $date = new DateTime("now");
+                
+                                $start_date =  $cohort_batches->start_date;
+                                $start_time =  $startTime;
+                                $end_time =  $endTime;
+                                $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+                                $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                                $scheduled = true;
+                                $liveId = Null;
+                            }
+                        }
+                    }
+                } else {
+                    $liveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '>', $current_date)->orderby('start_date', 'asc')->get();
+                    if(count($liveSessions) != 0) {
+                        
+                        $cohort_batches = $liveSessions[0];
+                        // Time setting
+                        $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                            
+                        $offsetHours = intval($offset[1] . $offset[2]);
+                        $offsetMinutes = intval($offset[4] . $offset[5]);
+        
+                        if($offset[0] == "+") {
+                            $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                            $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                        } else {
+                            $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                            $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                        }
+        
+                        $startTime = date("H:i:s", $sTime);
+                        $endTime = date("H:i:s", $eTime);
+                        $date = new DateTime("now");
+        
+                        $start_date =  $cohort_batches->start_date;
+                        $start_time =  $startTime;
+                        $end_time =  $endTime;
+                        $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+                        $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                        $scheduled = true;
+                        $liveId = Null;
+                    } else {
+                        $liveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->get();
+                        if(count($liveSessions) != 0) {
+                            $liveId = "Over";
+                        } else {
+                            $liveId = Null;
+                        }
+                    }
+                }
+                
                 $startDate = "";
                 $startTime = "";
                 $endTime = "";
                 $time_zone = "";
-                $liveId = null;
-                foreach($liveSessions as $liveSession) {
-                    $batch = CohortBatch::where('id', $liveSession->batch_id);
-                    $occurrence = $batch->value('occurrence');
-                    $startDate = $batch->value('start_date');
-                    $startTime = $batch->value('start_time');
-                    $endTime = $batch->value('end_time');
-                    $endDate = $batch->value('end_date');
-                    $time_zone = $batch->value('time_zone');
-                    $occurrenceArr = explode(',', $occurrence);
-                    $checkDay = in_array(date("l"), $occurrenceArr);
-                    if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
+                // foreach($liveSessions as $liveSession) {
+                //     $batch = CohortBatch::where('id', $liveSession->batch_id);
+                //     $occurrence = $batch->value('occurrence');
+                //     $startDate = $batch->value('start_date');
+                //     $startTime = $batch->value('start_time');
+                //     $endTime = $batch->value('end_time');
+                //     $endDate = $batch->value('end_date');
+                //     $time_zone = $batch->value('time_zone');
+                //     $occurrenceArr = explode(',', $occurrence);
+                //     $checkDay = in_array(date("l"), $occurrenceArr);
+                //     if(date("Y-m-d") >= $startDate && date("Y-m-d") <= $endDate && $checkDay == true) {
                         
-                        $liveId = $liveSession->live_session_id;
-                    }else if(date("Y-m-d") < $startDate && $checkDay == true) {
-                        $liveId = Null;
-                    }else if(date("Y-m-d") > $endDate && $checkDay == true) {
-                        $liveId = "Over";
-                    }
-                }
+                //         $liveId = $liveSession->live_session_id;
+                //     }else if(date("Y-m-d") < $startDate && $checkDay == true) {
+                //         $liveId = Null;
+                //     }else if(date("Y-m-d") > $endDate && $checkDay == true) {
+                //         $liveId = "Over";
+                //     }
+                // }
                 
                 $assignmentList = $assignmentsArray->toArray();
-                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
+                $isAssignmentCompleted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->where('is_completed', true)->count() ? true : false;
+                $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+
                 array_push($topicDetails, array(
                     'liveSessions' => $liveSessions,
                     'liveId' => $liveId,
@@ -272,14 +375,18 @@ class EnrolledCourseController extends Controller
                     'startTime' => $startTime,
                     'endTime' => $endTime,
                     'time_zone' => $time_zone,
+                    'scheduled' => $scheduled,
+                    'nextCohort' => $nextCohort,
                     'topic_id' => $topicId,
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList,
-                    'isAssignmentSubmitted' => $isAssignmentSubmitted
+                    'isAssignmentSubmitted' => $isAssignmentSubmitted,
+                    'isAssignmentCompleted' => $isAssignmentCompleted,
+                    'isAssignmentStarted' => $isAssignmentStarted
                 ));
             }
-           
+
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -341,6 +448,7 @@ class EnrolledCourseController extends Controller
             $reply = $qa->reply;
             $hasReplied = $qa->has_replied;
             $date = $qa->created_at;
+            $replay_date = $qa->updated_at;
             array_push($qaArray, array(
                 'id' => $qa->id,
                 'student' => $studentName,
@@ -350,6 +458,7 @@ class EnrolledCourseController extends Controller
                 'reply' => $reply,
                 'hasReplied' => $hasReplied,
                 'date' => Carbon::parse($date)->diffForHumans(),
+                'replay_date' =>Carbon::parse($replay_date)->diffForHumans(),
             ));
         }
         
@@ -365,11 +474,49 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'userType' => $userType,
                 'next_live_cohort' =>  $next_live_cohort,
-                'progress' => $progress
+                'progress' => $progress,
+                'course_completion' => $course_completion
             ]);
         }
         
         if($userType === 'instructor') {
+            $assignmentArr = [];
+            $assignments = TopicAssignment::where('course_id', $courseId)->get();
+            $assignmentCount = count($assignments);
+
+            $students = $this->studentsEnrolled($courseId, $selectedBatch);
+            foreach($students as $student){
+                $assignmentStatus = [];
+                $studentName = $student->firstname . ' ' . $student->lastname;
+                $studentImg = $student->image;
+                $batchName = CohortBatch::where('id', $selectedBatch)->value('batchname');
+                foreach($assignments as $assignment) {
+                    $status = "Submitted";
+                    $stuAssignment = "";
+                    $studentAssignment = Assignment::where('student_id' , $student->id)->where('topic_assignment_id', $assignment->id)->get();
+                    if(count($studentAssignment) == 0) {
+                        $status = "Pending";  
+                    } elseif($studentAssignment[0]->is_completed == true) {
+                        $status = "Completed";
+                        $stuAssignment = $studentAssignment[0]->assignment_id;
+                    } else {
+                        $stuAssignment = $studentAssignment[0]->assignment_id;
+                    }
+
+                    array_push($assignmentStatus, array(
+                        'status' => $status,
+                        'assignment_id' => $assignment->id,
+                        'stuAssignment' => $stuAssignment
+                    ));
+                }
+                
+                array_push($assignmentArr, array(
+                    'studentImg' => $studentImg,
+                    'student_name' => $studentName,
+                    'batch_name' => $batchName,
+                    'assignment_data' => $assignmentStatus
+                ));
+            }   
             $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
             $graph = $this->instructorGraph($courseId);
             return view('Student.enrolledCoursePage',[
@@ -382,7 +529,9 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'progress' => $progress,
                 'graph' => $graph,
-                'selectedBatch' => $selectedBatch
+                'selectedBatch' => $selectedBatch,
+                'assignments' => $assignments,
+                'assignmentArr' => $assignmentArr
             ]);
         }      
 
@@ -409,7 +558,7 @@ class EnrolledCourseController extends Controller
             'status' => 'success', 
             'message' => 'submitted successfully'
          ]);
-        // return redirect('/enrolled-course' . '/' .$courseId)->with('message', 'Your review added successfully!');
+        
     }
    
     public function showassignment($id){
@@ -440,38 +589,66 @@ class EnrolledCourseController extends Controller
         
     }
 
-    public function submitAssignment(Request $request){
-        
+    public function startAssignment(Request $request){
+    
+
         $user = Auth::user();
         $userId = $user->id;
 
-        $comment = $request->input('assignment_comment');
-        $file = $request->assignment_upload;
-        
-        $topic_assignment_id = $request->input('assignment_id');
+        $assignmentId = $request->assignment_id;
 
-        $assignementFile = $file->getClientOriginalName();
 
         $assignments = Assignment::where('student_id' , $userId)
-                                  ->where('topic_assignment_id', $topic_assignment_id)->get();
-      
+                                  ->where('topic_assignment_id', $assignmentId)->get();
+                               
+                                  
         if(count($assignments) == 0){
 
-        $file->storeAs('assignmentAnswers', $assignementFile,'public');
-        $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
+        $topicAssignment = TopicAssignment::where('id', $assignmentId);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
         $topicId = $topicAssignment->value('topic_id');
-        
+
         $assignment = new Assignment;
-        $assignment->assignment_answer = $assignementFile;
-        $assignment->topic_assignment_id = $topic_assignment_id;
+
+        $assignment->topic_assignment_id = $assignmentId;
         $assignment->student_id = $userId;
         $assignment->course_id = $courseId;
         $assignment->instructor_id = $instructorId;
         $assignment->topic_id = $topicId;
-        $assignment->is_submitted = true;
+        $assignment->is_submitted = false;
         $assignment->save();
+        }
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully'
+         ]);
+        
+    }
+
+    public function submitAssignment(Request $request){
+
+        $user = Auth::user();
+        $userId = $user->id;
+        $studentName = $user->firstname.' '.$user->lastname;
+        $topic_assignment_id = $request->assignment_id;
+        $comment = $request->input('assignment_comment');
+        
+        $file = $request->assignment_upload;
+        
+        $assignementFile = $file->getClientOriginalName();
+        $file->storeAs('assignmentAnswers', $assignementFile,'public');
+
+        $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
+        $courseId = $topicAssignment->value('course_id');
+        $instructorId = $topicAssignment->value('instructor_id');
+        $course_title = Course::where('id', $courseId)->value('course_title');
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        $instructorEmail = User::find($instructorId)->email;
+
+        $assignment = Assignment::where('topic_assignment_id', $topic_assignment_id);
+       
+        $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
 
         $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
 
@@ -481,8 +658,16 @@ class EnrolledCourseController extends Controller
         $student_achievement->is_achieved = true;
         $student_achievement->save();
 
+        $data= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+
+         Mail::to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
+
         return redirect()->back();
-        }
+    
     
     }
 
@@ -597,11 +782,27 @@ class EnrolledCourseController extends Controller
         $qaId = $request->qaId;
         $reply = $request->replyContent;
 
+        $instructorId = Auth::user()->id;
         $courseQA = CourseQA::find($qaId);
+        $courseTitle = Course::where('id', $courseQA->value('course_id'))->value('course_title');
+        $student = User::where('id',$courseQA->value('student'));
+        $studentEmail = $student->value('email');
+        $studentName = $student->value('firstname').' '.$student->value('lastname');
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        
+        $details= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+   
         $courseQA->reply = $reply;
         $courseQA->has_replied = true;
         $updatedAt = $courseQA->updated_at->format('d M H:m');
         $courseQA->save();
+
+        Mail::to($studentEmail)
+                ->send(new MailAfterReplay($details));
 
         return response()->json([
             'status' => 'success',
@@ -609,6 +810,8 @@ class EnrolledCourseController extends Controller
             'updatedAt' => $updatedAt,
             'message' => 'Replied successfully'
          ]);
+
+         
     }
 
     public function askQuestion(Request $request) {
@@ -620,6 +823,9 @@ class EnrolledCourseController extends Controller
         $qa->course_id = $course_id;
         $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
         $user =Auth::user();
+        $instructorName = User::find($instructor)->firstname.' '.User::find($instructor)->lastname;
+        $instructorEmail = User::where('id', $instructor)->value('email');
+        $studentName = $user->firstname.' '.$user->lastname;
         if($user) {
             $student = User::where('id', $user->id)->value('id');
             
@@ -637,12 +843,19 @@ class EnrolledCourseController extends Controller
             
         }
 
+        $data= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+         ];
         $qa->student = $student;
         $qa->instructor = $instructor;
         $qa->question = $question;
         $qa->has_replied = false;
 
         $qa->save();
+
+        Mail::to($instructorEmail)
+        ->send(new MailAfterQuestion($data));
 
         return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
 
@@ -689,6 +902,80 @@ class EnrolledCourseController extends Controller
             'courseId' => $courseId,
             'topics' => $topicsArray
         ]);
+    }
+
+    public function getIndividualStudentChart(Request $request) {
+        $student = $request->student;
+        $topic = $request->topic;
+        $course = $request->course;
+
+        $contentsArr = [];
+
+        $contentCount = TopicContent::where('topic_id', $topic)->count();
+
+        $contents = TopicContent::where('topic_id', $topic)->get();
+
+        $user = User::where('id', $student);
+
+        $userName = $user->value('firstname') . ' ' . $user->value('lastname');
+
+        foreach($contents as $content) {
+            $likes = 0;
+            $contentTitle = $content->topic_title;
+            $contentId = $content->topic_content_id;
+            $feedbacks = StudentFeedbackCount::where('content_id', $contentId)->where('student', $student)->get();
+            if(count($feedbacks)) {
+                foreach($feedbacks as $feedback) {
+                    if($feedback->positive == 1) {
+                        $likes = 1;
+                    } elseif($feedback->negative == 1) {
+                        $likes = -1;
+                    }
+                }
+            } else {
+                $likes = 0;
+            }
+
+            array_push($contentsArr, array(
+                'contentId' => $contentId,
+                'content_title'=> $contentTitle,
+                'likes' =>  $likes
+            ));
+        }
+        
+        return response()->json(['contents' => $contentsArr, 'contentCount' => $contentCount, 'student' => $userName]);
+
+    }
+
+    public function getAssignmentModal(Request $request) {
+        $assignmentId = $request->assignment_id;
+        $batchId = $request->batch_id;
+
+        $assignment = Assignment::where('assignment_id', $assignmentId);
+        $topicAssignmentId = $assignment->value('topic_assignment_id');
+        $topicAssignment = TopicAssignment::where('id', $topicAssignmentId);
+
+        $assignmentTitle = $topicAssignment->value('assignment_title');
+        $studentId = $assignment->value('student_id');
+
+        $student = User::where('id', $studentId);
+
+        $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+        $studentImg = $student->value('image');
+        $batchName = CohortBatch::where('id', $batchId)->value('batchname');
+        $assignmentDoc = $assignment->value('assignment_answer');
+        
+        return response()->json(['assignmentTitle' => $assignmentTitle, 'studentName' => $studentName, 'studentImg' => $studentImg, 'batchName' => $batchName, 'assignmentDoc' => $assignmentDoc]);
+
+    }
+
+    public function completeAssignment(Request $request) {
+        $assignment = $request->assignment_id;
+
+        $assignmentObj = Assignment::where('assignment_id', $assignment)->update(['is_completed' => true]);
+
+        return response()->json(['status' => 'success']);
+
     }
 
 }
