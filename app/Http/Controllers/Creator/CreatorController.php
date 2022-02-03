@@ -111,7 +111,7 @@ class CreatorController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => ['required', Rule::unique('users')->ignore($creatorId)],
-            'password' => 'required'
+            //'password' => 'required'
         ]);
         $userType = UserType::where('user_role', 'content_creator')->value('id');        
         $firstName = $request->input('firstname');
@@ -124,7 +124,9 @@ class CreatorController extends Controller
                 $creator->firstname = $firstName;
                 $creator->lastname = $lastName;
                 $creator->email = $email;
-                $creator->password = Hash::make($request->input('password'));
+                if($request->input('password') != ''){
+                    $creator->password = Hash::make($request->input('password'));
+                }
                 $creator->save();
                 return redirect()->route('view-creator', ['creator_id' => $creatorId]);
             }

@@ -532,7 +532,9 @@ class AdminController extends Controller
                 $admin->firstname = $firstName;
                 $admin->lastname = $lastName;
                 $admin->email = $email;
-                $admin->password = Hash::make($request->input('password'));
+                if($password != ''){
+                    $admin->password = Hash::make($request->input('password'));
+                }
                 $admin->save();
                 return redirect()->route('view-admin', ['admin_id' => $adminId]);
             }

@@ -172,7 +172,7 @@ class InstructorController extends Controller
                 'lastname' => 'required',
                 'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
                 'description' => 'required',
-                'signature' => 'required',
+                //'signature' => 'required',
                 //'password' => 'required'
             ]);
             
@@ -181,12 +181,13 @@ class InstructorController extends Controller
             $email = $request->input('email');
             //$signatureFile = $request->file('signature')->getClientOriginalName();
             //$request->signature->storeAs('signatures',$signatureFile,'public');
-
-            $signatureFile = $request->signature;
-            $signatureFileName = $signatureFile->getClientOriginalName();
-            $destinationPath = public_path().'/storage/signatures';
-            $signatureFile->move($destinationPath,$signatureFileName);
-
+            $signatureFileName = '';
+            if($request->file()){
+                $signatureFile = $request->signature;
+                $signatureFileName = $signatureFile->getClientOriginalName();
+                $destinationPath = public_path().'/storage/signatures';
+                $signatureFile->move($destinationPath,$signatureFileName);
+            }
 
             if ($instructor_id) {
                 $instructor = User::findOrFail($instructor_id);
@@ -203,7 +204,9 @@ class InstructorController extends Controller
                     if($request->input('password') != ''){
                         $instructor->password = Hash::make($request->input('password'));
                     }
-                    $instructor->signature = $signatureFileName;
+                    if($signatureFileName != ''){
+                        $instructor->signature = $signatureFileName;
+                    }
                     $instructor->save();
                     
                     return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
