@@ -509,10 +509,12 @@ small#assignment_table_batch {
                                         @if($topicDetail['scheduled'] == true)
                                         <span style="font-size:13px;">Next Live Class:{{ $topicDetail['nextCohort'] }}</span>
                                         @else
-                                        <span class="text-muted">No sessions scheduled</span>
+                                        <span class="text-muted" style="font-size:13px;">No sessions scheduled</span>
                                         @endif
                                         @elseif($topicDetail['liveId'] == "Over")
                                         <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        @elseif($topicDetail['liveId'] == "Wait")
+                                        <span class="text-muted" style="font-size:13px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
@@ -540,7 +542,7 @@ small#assignment_table_batch {
                         <div class="row mt-3 mb-3">
                             @forelse($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
-                                <div class="card card-3" style="height: 560px;">
+                                <div class="card card-3">
                                     <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <div class="row">
@@ -557,7 +559,7 @@ small#assignment_table_batch {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mt-3">
                                             <div class="col-lg-12">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
@@ -598,7 +600,7 @@ small#assignment_table_batch {
                         <div class="row mt-3 mb-3">
                         @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
-                                <div class="card card-3" style="height: 560px;">
+                                <div class="card card-3">
                                     <img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <div class="row">
@@ -615,7 +617,7 @@ small#assignment_table_batch {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mt-3">
                                             <div class="col-lg-12">
                                                 <h6 class="card-title">{{ $recommendation['topic_title'] }}</h6>
                                                 <ul class="list-group list-group-flush border-bottom pb-3">
