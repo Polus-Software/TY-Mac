@@ -33,6 +33,10 @@ use App\Models\LiveSession;
 use App\Models\TimeZone;
 use DateTime;
 use DateTimeZone;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailAfterReplay;
+use App\Mail\MailAfterQuestion;
+use App\Mail\MailAfterAssignmentSubmission;
 
 class EnrolledCourseController extends Controller
 {
@@ -444,6 +448,7 @@ class EnrolledCourseController extends Controller
             $reply = $qa->reply;
             $hasReplied = $qa->has_replied;
             $date = $qa->created_at;
+            $replay_date = $qa->updated_at;
             array_push($qaArray, array(
                 'id' => $qa->id,
                 'student' => $studentName,
@@ -453,6 +458,7 @@ class EnrolledCourseController extends Controller
                 'reply' => $reply,
                 'hasReplied' => $hasReplied,
                 'date' => Carbon::parse($date)->diffForHumans(),
+                'replay_date' =>Carbon::parse($replay_date)->diffForHumans(),
             ));
         }
         
@@ -624,6 +630,7 @@ class EnrolledCourseController extends Controller
 
         $user = Auth::user();
         $userId = $user->id;
+        $studentName = $user->firstname.' '.$user->lastname;
         $topic_assignment_id = $request->assignment_id;
         $comment = $request->input('assignment_comment');
         
@@ -631,7 +638,14 @@ class EnrolledCourseController extends Controller
         
         $assignementFile = $file->getClientOriginalName();
         $file->storeAs('assignmentAnswers', $assignementFile,'public');
-        
+
+        $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
+        $courseId = $topicAssignment->value('course_id');
+        $instructorId = $topicAssignment->value('instructor_id');
+        $course_title = Course::where('id', $courseId)->value('course_title');
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        $instructorEmail = User::find($instructorId)->email;
+
         $assignment = Assignment::where('topic_assignment_id', $topic_assignment_id);
        
         $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
@@ -643,6 +657,14 @@ class EnrolledCourseController extends Controller
         $student_achievement->badge_id =  $badgeId;
         $student_achievement->is_achieved = true;
         $student_achievement->save();
+
+        $data= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+
+         Mail::to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
 
         return redirect()->back();
     
@@ -760,11 +782,27 @@ class EnrolledCourseController extends Controller
         $qaId = $request->qaId;
         $reply = $request->replyContent;
 
+        $instructorId = Auth::user()->id;
         $courseQA = CourseQA::find($qaId);
+        $courseTitle = Course::where('id', $courseQA->value('course_id'))->value('course_title');
+        $student = User::where('id',$courseQA->value('student'));
+        $studentEmail = $student->value('email');
+        $studentName = $student->value('firstname').' '.$student->value('lastname');
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        
+        $details= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+   
         $courseQA->reply = $reply;
         $courseQA->has_replied = true;
         $updatedAt = $courseQA->updated_at->format('d M H:m');
         $courseQA->save();
+
+        Mail::to($studentEmail)
+                ->send(new MailAfterReplay($details));
 
         return response()->json([
             'status' => 'success',
@@ -772,6 +810,8 @@ class EnrolledCourseController extends Controller
             'updatedAt' => $updatedAt,
             'message' => 'Replied successfully'
          ]);
+
+         
     }
 
     public function askQuestion(Request $request) {
@@ -783,6 +823,9 @@ class EnrolledCourseController extends Controller
         $qa->course_id = $course_id;
         $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
         $user =Auth::user();
+        $instructorName = User::find($instructor)->firstname.' '.User::find($instructor)->lastname;
+        $instructorEmail = User::where('id', $instructor)->value('email');
+        $studentName = $user->firstname.' '.$user->lastname;
         if($user) {
             $student = User::where('id', $user->id)->value('id');
             
@@ -800,12 +843,19 @@ class EnrolledCourseController extends Controller
             
         }
 
+        $data= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+         ];
         $qa->student = $student;
         $qa->instructor = $instructor;
         $qa->question = $question;
         $qa->has_replied = false;
 
         $qa->save();
+
+        Mail::to($instructorEmail)
+        ->send(new MailAfterQuestion($data));
 
         return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
 

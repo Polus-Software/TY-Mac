@@ -7,22 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
-class SignupMail extends Mailable
+class InstructorMailAfterassigningCourse extends Mailable
 {
     use Queueable, SerializesModels;
-    
-    public $details;
-
+    Public $datas;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($datas)
     {
-        $this->details = $details;
+        $this->datas = $datas;
     }
+
 
     /**
      * Build the message.
@@ -31,10 +29,7 @@ class SignupMail extends Mailable
      */
     public function build()
     {
-       
-        return $this->subject('Welcome to Thinklit! Let us get started')
-                    ->markdown('Emails.confirmationMail')
-                    ->with('details', $this->details);
-        
+        return $this->subject('A new course assigned to you')
+                    ->markdown('emails.CourseAssigning');
     }
 }

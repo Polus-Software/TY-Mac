@@ -55,9 +55,13 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-              <label class="form-check-label checkbox-text">
-                  <input class="form-check-input" name="privacy_policy" type="checkbox"> By creating an account , you agree to the
-                  <a href="#">Terms of Service</a> and Conditions, and Privacy Policy</label>
+              <label class="form-check-label checkbox-text" id="chechbox-text">
+                  <input class="form-check-input" name="privacy_policy" type="checkbox" id="checkbox"> 
+                  By creating an account, you agree to the
+                  <a href="#">Terms of Service</a> and Privacy Policy <br>
+                  <small>Error message</small>
+                </label>
+                 
                 @if ($errors->has('privacy_policy'))
                 <span class="text-danger">{{ $errors->first('privacy_policy') }}</span>
                 @endif
@@ -335,6 +339,12 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       } else if (password.value == passwordconfirm.value && password.value != '') {
         removeError(password)
       }
+      if (checkbox.value != 'checked') {
+        e.preventDefault();
+        showError(checkbox, 'Accept Terms and conditions');
+      } else {
+        removeError(checkbox)
+      }
 
     });
     const form = document.getElementById('signupForm');
@@ -343,8 +353,9 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const passwordconfirm = document.getElementById('password_confirmation');
-
-
+    const checkbox = document.getElementById('checkbox');
+   
+  
     function showError(input, message) {
       input.style.borderColor = 'red';
       const formControl = input.parentElement;
@@ -352,6 +363,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       small.innerText = message;
       small.style.visibility = 'visible';
     }
+  
 
     function removeError(input) {
       input.style.borderColor = '#ced4da';
