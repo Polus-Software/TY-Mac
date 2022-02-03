@@ -21,6 +21,16 @@ section .card-2{
     color: #F5BC29;
     font-size: 30px;
 }
+section .card-2.inactive,section .card-2.inactive:hover {
+    background-color: #ffecec;
+    outline: 1px solid #ffecec;
+}
+section .card-2.inactive .fa-calendar-alt{
+    color: #b30000;
+}
+section .card-2.inactive .think-register-card-title{
+    color: #830000!important;
+}
 /* .btn{
     background-color:#2C3443;
     color: white;

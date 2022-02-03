@@ -81,7 +81,7 @@
 
         <div class="row align-items-center mt-2">
           @unless($userType == 'admin' || $userType == 'instructor' || $userType == 'content-creator')
-          @if($enrolledFlag == false)
+          @if($enrolledFlag == false && $cohort_full_status == false)
           <div class="col-md-auto">
             <a class="btn think-btn-tertiary think-h-48" id="enrollButton">
               Enroll now
@@ -91,7 +91,11 @@
           </div>
           @else
           <div class="col-md-auto">
-            <h6 class="m-0 think-color-primary">Already enrolled!</h6>
+            @if($enrolledFlag == true)
+              <h6 class="m-0 think-color-primary">Already enrolled!</h6>
+            @else
+              <h6 class="m-0 think-color-primary">Cohort is full!</h6>
+            @endif
           </div>
           @endif
           <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><span>Have a question?</span></a></div>
@@ -101,8 +105,14 @@
           @foreach($singleCourseDetails as $singleCourseDetail)
           <div class="col-lg-12">
             <span class="fw-bold">share this course: </span>
-            <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
+              <a style="display:none;" class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
+              <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url($currenturl)); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
+              <input type="hidden" id="twittertitle" value="{{$singleCourseDetail['course_title']}}">
+              <input type="hidden" id="twitterdescription" value="{{$singleCourseDetail['description']}}">
+              <input type="hidden" id="twittercreator" value="{{$singleCourseDetail['course_title']}}">
+              <input type="hidden" id="twitterimage" value="{{asset('/storage/courseImages/'.$singleCourseDetail['course_image'])}}">
+            <a target="_blank" href="https://twitter.com/intent/tweet?url={{$currenturl}}&text={{$singleCourseDetail['course_title']}}&via=TY"><i class="fab fa-twitter fa-lg btn-close-white me-3"></i></a>
           </div>
           @endforeach
         </div>
@@ -321,30 +331,31 @@
 @endpush
 @push('child-scripts')
 <script>
-  document.getElementById('enrollButton').addEventListener('click', (e) => {
-    e.preventDefault();
-    let path = "{{ route('student.course.enroll') }}";
-    fetch(path, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
+  if(document.getElementById('enrollButton')){
+    document.getElementById('enrollButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      let path = "{{ route('student.course.enroll') }}";
+      fetch(path, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
 
-    }).then((response) => response.json()).then((data) => {
-      if (data.status == 'success') {
-        let courseId = document.getElementById('course_id').value;
-        window.location.href = "/register-course?id=" + courseId;
+      }).then((response) => response.json()).then((data) => {
+        if (data.status == 'success') {
+          let courseId = document.getElementById('course_id').value;
+          window.location.href = "/register-course?id=" + courseId;
 
-      } else {
-        let loginModal = new bootstrap.Modal(
-          document.getElementById("loginModal"), {});
-        loginModal.show();
-      }
+        } else {
+          let loginModal = new bootstrap.Modal(
+            document.getElementById("loginModal"), {});
+          loginModal.show();
+        }
+      });
     });
-  });
-
+  }
 
   let finalRating = 0;
 
@@ -377,10 +388,26 @@
       els[i].value = currentURL;
     }
     var toastLiveExample = document.getElementById('liveToast');
-  if(toastLiveExample) {
-    var toast = new bootstrap.Toast(toastLiveExample);
-    toast.show();
-  }
+    if(toastLiveExample) {
+      var toast = new bootstrap.Toast(toastLiveExample);
+      toast.show();
+    }
+    let title = document.getElementById('twittertitle').value;
+    let description = document.getElementById('twitterdescription').value;
+    let image = document.getElementById('twitterimage').value;
+    let creator = document.getElementById('twittercreator').value;
+    if(title){
+      //document.getElementById('twitter_title').setAttribute("content", title);
+    }
+    if(description){
+      //document.getElementById('twitter_description').setAttribute("content", description);
+    }
+    if(image){
+      //document.getElementById('twitter_image').setAttribute("content", image);
+    }
+    if(creator){
+      //document.getElementById('twitter_creator').setAttribute("content", creator);
+    }
   }
 </script>
 <script type="text/javascript" src="{{ asset('/assets/app.js') }}"></script>
