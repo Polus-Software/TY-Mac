@@ -506,8 +506,8 @@ small#assignment_table_batch {
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
-                                        @if(!empty($liveSessions))
-                                        <span>Next Live Class:{{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
+                                        @if($topicDetail['scheduled'] == true)
+                                        <span style="font-size:13px;">Next Live Class:{{ $topicDetail['nextCohort'] }}</span>
                                         @else
                                         <span class="text-muted">No sessions scheduled</span>
                                         @endif
@@ -817,7 +817,7 @@ small#assignment_table_batch {
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <div class="card card-8 mb-5">
-                                    <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
+                                    <div class="row g-0 border-bottom think-bg think-br">
                                         <div class="col-lg-2 col-sm-4 col-4">
                                             @foreach($singleCourseDetails as $course)
                                             <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" alt="..." style="width:94px; height:94px;">

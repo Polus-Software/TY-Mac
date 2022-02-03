@@ -61,6 +61,7 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role_id = $userType;
+        $user->timezone = "UTC";
         $user->save();
         
         //$user = Auth::user();
