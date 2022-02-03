@@ -1,9 +1,9 @@
 <!-- timezone -->
 @php
-use App\Models\Timezone;
+use App\Models\CustomTimezone;
 
 $date = new DateTime("now");
-$timezones = Timezone::Orderby('offset')->get();
+$timezones = CustomTimezone::Orderby('offset')->get();
 @endphp
 @foreach($timezones as $timezone) 
     <option value="{{$timezone->name}}">({{ $timezone->diff_from_gtm }}) {{$timezone->name}}</option>
