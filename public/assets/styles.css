@@ -11,6 +11,7 @@
     --text-tertiary: #474747;
     --color-grey: #6e7687;
     --color-primary-light: #fffdf7;
+    --color-grey-bg: #F8F7FC;
 }
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: none !important;

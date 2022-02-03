@@ -184,7 +184,7 @@
       <!-- instructor profile -->
       <div class="col-lg-4 d-flex flex-column">
         <div class="card card-3 mb-3">
-          <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
+          <div class="row g-0 border-bottom think-bg think-br">
             <div class="col-sm-auto col-12">
               @foreach($singleCourseDetails as $singleCourseDetail)
               <img src="{{ asset('/storage/images/'.$singleCourseDetail['profile_photo']) }}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" alt="..." style="width:94px; height:94px;">
@@ -243,7 +243,7 @@
         </div>
         <!-- instructor profile end -->
         <!-- live cohorts -->
-        <div class="card card-4 mb-3 mt-3 flex-grow-1" style="background: #F8F7FC;">
+        <div class="card card-4 mb-3 mt-3 flex-grow-1 think-bg">
           <div class="card-body p-4">
             <h5 class="card-title mb-4">Upcoming Live Cohorts</h5>
 
@@ -315,7 +315,7 @@
               </div>
               @endforeach
               @else
-              <h6 class="mt-4" style="text-align:center;">No reviews yet.</h6>
+              <x-nodatafound message="No reviews yet.!"  notype="" />
               @endif
             </div>
           </div>

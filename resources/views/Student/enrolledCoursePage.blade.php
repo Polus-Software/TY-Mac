@@ -817,7 +817,7 @@ small#assignment_table_batch {
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <div class="card card-8 mb-5">
-                                    <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
+                                    <div class="row g-0 border-bottom think-bg think-br">
                                         <div class="col-lg-2 col-sm-4 col-4">
                                             @foreach($singleCourseDetails as $course)
                                             <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" alt="..." style="width:94px; height:94px;">
