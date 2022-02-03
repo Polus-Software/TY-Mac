@@ -520,8 +520,8 @@ small#assignment_table_batch {
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
-                                        @if(!empty($liveSessions))
-                                        <span>Next Live Class:{{ $topicDetail['startDate'] }} - {{ $topicDetail['startTime'] }} {{ $topicDetail['time_zone'] }} - {{ $topicDetail['endTime'] }} {{ $topicDetail['time_zone'] }}</span>
+                                        @if($topicDetail['scheduled'] == true)
+                                        <span style="font-size:13px;">Next Live Class:{{ $topicDetail['nextCohort'] }}</span>
                                         @else
                                         <span class="text-muted">No sessions scheduled</span>
                                         @endif

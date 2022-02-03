@@ -105,6 +105,21 @@
                       </div>
                     </div>
                     <div class="row">
+                      <div class="form-group col-md-12 col-sm-12 col-xs-2">
+                        <label for="email" class="email-label">Timezone</label>
+                        <select type="select" class="form-control" name="timezone" id="timezone" value="{{ Auth::user()->timezone }}">
+                        <option value="">Select Timezone</option>
+                        <!-- include timezones here -->
+                        @include('Course.admin.timezones')
+                        </select>
+                        <small>Error message</small>
+
+                        @if ($errors->has('timezone'))
+                        <span class="text-danger">{{ $errors->first('timezone') }}</span>
+                    @endif
+                      </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group buttons d-flex justify-content-end">
                           @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
                             <a href="/" class="btn think-btn-secondary-outline">Cancel</a>
@@ -202,4 +217,8 @@
         </div>
 </footer>
 <script src="{{ asset('assets/editUser.js') }}"></script>
+<script>
+    let selectedTimeZone = document.getElementById('timezone').getAttribute('value');
+    document.getElementById('timezone').value = selectedTimeZone;
+</script>
 @endsection('content')

@@ -4,11 +4,7 @@
 
   use App\Models\UserType;
   use App\Models\User;
-  use App\Models\Timezone;
-
-  $date = new DateTime("now", new DateTimeZone('Asia/Kolkata'));
-  $timezones = Timezone::Orderby('offset')->get();
-
+ 
   $user = Auth::user();
   $userType = "";
   if($user) {

@@ -23,6 +23,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 use Carbon\Carbon;
+use DateTimeZone;
+use App\Models\Timezone;
 
 class CourseController extends Controller
 {
@@ -781,7 +783,21 @@ class CourseController extends Controller
 
     public function saveCohortBatch(Request $request) {
         
-       
+        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offsetHours = intval($offset[1] . $offset[2]);
+        $offsetMinutes = intval($offset[4] . $offset[5]);
+      
+        if($offset == "-") {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+        } else {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+        }
+
+        $startTime = date("H:i:s", $sTime);
+        $endTime = date("H:i:s", $eTime);
+
         $cohortbatch = new CohortBatch();
         $cohortbatch->title = $request->input('cohortbatch_title');
         $cohortbatch->batchname = $request->input('batchname');
@@ -789,8 +805,8 @@ class CourseController extends Controller
         $cohortbatch->start_date = Carbon::parse($request->input('cohortbatch_startdate'))->format('Y-m-d');
         $cohortbatch->end_date = Carbon::parse($request->input('cohortbatch_enddate'))->format('Y-m-d');
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
-        $cohortbatch->start_time = $request->input('cohortbatch_starttime');
-        $cohortbatch->end_time = $request->input('cohortbatch_endtime');
+        $cohortbatch->start_time = $startTime;
+        $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
         $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
@@ -855,7 +871,23 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
-    
+
+
+        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offsetHours = intval($offset[1] . $offset[2]);
+        $offsetMinutes = intval($offset[4] . $offset[5]);
+      
+        if($offset == "-") {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+        } else {
+            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+        }
+
+        $startTime = date("H:i:s", $sTime);
+        $endTime = date("H:i:s", $eTime);
+        
         $cohort_batch_id = intval($request->input('cohort_batch_id'));
         $course_id = $request->input('course_id');
   
@@ -868,8 +900,8 @@ class CourseController extends Controller
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
         $cohortbatch->end_date = $request->input('cohortbatch_enddate');
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
-        $cohortbatch->start_time = $request->input('cohortbatch_starttime');
-        $cohortbatch->end_time = $request->input('cohortbatch_endtime');
+        $cohortbatch->start_time = $startTime;
+        $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
         $cohortbatch->students_count = $request->input('students_count');
