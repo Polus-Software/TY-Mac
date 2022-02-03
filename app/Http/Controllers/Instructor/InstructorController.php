@@ -36,10 +36,16 @@ class InstructorController extends Controller
     }
     public function addInstructor() {
         $userType = UserType::where('user_role', 'instructor')->value('id');
-        return view('Auth.Admin.instructor.create_instructor', [
-            'userType' => $userType
-        ]);
-
+        $user = Auth::user();
+        if($user){
+            $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
+            return view('Auth.Admin.instructor.create_instructor', [
+                'userType' => $userTypeLoggedIn
+            ]);
+        }
+        else{
+            return redirect('/403');
+        }
     }
 
     public function saveInstructor(Request $request) {
@@ -76,6 +82,7 @@ class InstructorController extends Controller
     }
         
     public function viewInstructor(Request $request) {
+        $storage_path = storage_path();
         $instructorId = $request->input('instructor_id');
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
@@ -105,7 +112,8 @@ class InstructorController extends Controller
                 return view('Auth.Admin.instructor.view_instructor', [
                     'instructorDetails' => $data,
                     'userType' => $userType,
-                    'assigned_courses' => $assigned_courses
+                    'assigned_courses' => $assigned_courses,
+                    'storage_path'=>$storage_path.'/app/public/signatures/'.$instructor->value('signature')
                 ]);
             }
             

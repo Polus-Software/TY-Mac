@@ -29,6 +29,9 @@ class AdminController extends Controller
 {
     public function viewAllStudents()
     {
+        $current_page = isset($_REQUEST['page'])?$_REQUEST['page']:'1';
+        $num_rec_per_page = 10;
+        $start_from = ($current_page-1) * $num_rec_per_page+1;
         $studentDetails = [];
 
         $students = User::where('role_id', 2)->get();
@@ -56,7 +59,8 @@ class AdminController extends Controller
 
         return view('Auth.Admin.AdminDashboard', [
             'studentDatas' => $studentDatas,
-            'userType' => $userType
+            'userType' => $userType,
+            'start_from' => $start_from
         ]);
     }
 

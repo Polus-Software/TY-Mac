@@ -33,7 +33,7 @@
                 <h3 class="titles">{{ (!!$isEdit) ? 'Edit profile' : 'Add Instructor' }}</h3>
               </div>
               <div class="col-md-6">
-                <label>First Name</label>
+                <label>First Name*</label>
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @else
@@ -44,7 +44,7 @@
                 @endif
               </div>
               <div class="col-md-6">
-                <label>Last Name</label>
+                <label>Last Name*</label>
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @else
@@ -56,7 +56,7 @@
               </div>
               
               <div class="col-md-6">
-                <label>Email Id</label>
+                <label>Email Id*</label>
                 @if(!!$isEdit)
                 <input type="email" class="form-control" value="{{$instructorDetails['instructor_email']}}" name="email" id="email" placeholder=" Enter email">
                 @else
@@ -126,7 +126,7 @@
                 @endif
               </div>
               <div class="col-md-12">
-                <label for="about">About</label>
+                <label for="about">About*</label>
                 @if(!!$isEdit)
                 <textarea class="form-control" value="{{$instructorDetails['instructor_description']}}" name="description" id="description" placeholder="Enter description" cols="30" rows="5">{{$instructorDetails['instructor_description']}}</textarea>
                 @else
@@ -144,7 +144,7 @@
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @else
-                <label for="password">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating password."></i></label>
+                <label for="password">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating password."></i></label>
                 <input type="password" class="form-control has-validation" id="instructor_password" name="password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondary" id="generate_password">Generate password</button>
@@ -156,7 +156,7 @@
                
               </div>
               <div class="col-md-12">
-                <label for="about">Signature</label>
+                <label for="about">Signature*</label>
                 @if(!!$isEdit)
                 <input class="form-control" type="file" value="{{$instructorDetails['instructor_signature']}}" name="signature" id="signature" placeholder="Enter signature">
                 <p>{{$instructorDetails['instructor_signature']}}</p>
