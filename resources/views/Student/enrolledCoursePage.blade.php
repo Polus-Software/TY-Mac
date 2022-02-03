@@ -114,7 +114,118 @@
 .session-modal-body {
     padding: 1rem 3rem 3rem 3rem;
 }
+.instructor-assignment-table th {
+    color: #2C3443;
+    font-size: 14px;
+}
+.instructor-assignment-table, .instructor-assignment-table tr, .instructor-assignment-table td {
+    border: 1px solid #dee2e6;
+}
+.assign-modal-header {
+    border-bottom : none;
+    padding: 1.5rem 3rem 0 3rem;
+}
+.assignment_list_div {
+    border: 1px solid #cacaca;
+    border-radius: 15px;
+    padding: 20px 20px 20px 20px;
+    margin-top: 25px;
+}
+.assignment_list_div a {
+    float: right;
+    margin-top: -5px;
+    background-color: #fff;
+    color: #666666;
+    font-size: 12px;
+    border-color: #cacaca;
+}
+.assign_cancel {
+    background-color: #fff;
+    color: #666666;
+    font-size: 12px;
+    border-color: #cacaca;
+}
+#assign_completed {
+    font-size: 12px;
+}
+span#assignment_title {
+    font-size: 13px;
+    font-weight: 600;
+}
+.assignment-modal-heading {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+#add_comment {
+    position: relative;
+    left: -14.3rem;
+}
+#modal_student_img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+span#assignment_table_student {
+    position: relative;
+    left: 10px;
+}
+
+small#assignment_table_batch {
+    position: relative;
+    left: 40px;
+}
+
   </style>
+  <!-- instructor assignment modal -->
+  <div class="modal fade" id="instructAssignModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" style="width: 35rem;">
+      <div class="modal-header assign-modal-header">
+        <h5 class="assignment-modal-heading" id="exampleModalLabel">Assignment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 0 3rem 0rem 3rem;">
+        <h6 class="mt-4" style="font-size: 14px;font-weight: 500;">Topic</h6>
+        <h6 id="modal_topic_title" class="mt-1" style="font-size: 14px;font-weight: 500;">Topic</h6>
+        <table class="mt-3 w-100">
+            <tr>
+                <td><img src="" id="modal_student_img"/></td>
+            <td colspan="1" style="font-size: 14px;font-weight: 600;"><span id="modal_student_name">Angeline Rozario</span><br>
+                <small class="text-truncate">Batch: <span id="modal_batch_name" style="color:#6a6a6a;font-weight:500;">Cohort 2</span></small>
+            </td>
+            <td style="text-align:right;vertical-align:bottom;"><small style="font-size: 12px;color:#6a6a6a;font-weight:500;">1 Document Attached</small></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="assignment_list_div">
+                        <span id="assignment_title">Assignment Title</span>
+                        <a id="modal_file_download" href="" class="btn btn-secondary" style="float: right;"><i class="fa fa-download"></i> Download File</a>
+                    </div>
+                </td>
+                
+            </tr>
+        </table>
+        <div id="modal_comment_div" class="llpcard-inner bg-light mt-3 mb-3" style="padding: 1rem 1rem 3rem 1rem;display:none;">
+                                            <h5 style="font-size: 13px;font-weight:500;" class="card-title">Type your comment here</h5>
+                                                                             
+                                            @csrf
+                                            <input type="hidden" name="assignment_id"  id ="assignment_id" value="" />
+                                            <textarea style="font-size: 13px;font-weight:500;" style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                        </div>
+      </div>
+      
+      <div class="modal-footer" style="border-top:none;">
+        <button id="add_comment" type="button" class="btn btn-secondary assign_cancel">Add comment</button>
+        <button type="button" class="btn btn-secondary assign_cancel" data-bs-dismiss="modal">Cancel</button>
+        <button id="assign_completed" type="button" class="btn btn-secondary" data-assignment="" >Completed</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Modal ends here -->
   <!-- 1 on 1 modal -->
   <div class="modal fade" id="sessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -755,7 +866,55 @@
                         </div>
                         @endif
                     </div>
+                    @if($userType == 'instructor')
+                    <div class="tab-pane fade" id="v-pills-personalizedActivity" role="tabpanel" aria-labelledby="v-pills-personalizedActivity-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-2">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title border-bottom pt-2 pb-2">Personalized Activity Info</h5>
 
+                                        
+                                        <table class="table llp-table instructor-assignment-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" colspan="2">Name</th>
+                                                    <th></th>
+                                                    @php ($aSlNo = 0)
+                                                    @foreach($assignments as $assignment)
+                                                    @php ($aSlNo = $aSlNo + 1)
+                                                    <th scope="col"><small style="color:#7e8c9a;">Assignment {{ $aSlNo }}</small><br>{{ $assignment->assignment_title }}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($assignmentArr as $assignment)
+                                                <tr>
+                                                    
+                                                    <td colspan="3" style="font-size: 14px;font-weight: 600;"><img src="/storage/images/{{ $assignment['studentImg'] }}" id="modal_student_img"/><span id="assignment_table_student">{{ $assignment['student_name'] }}</span><br>
+                                                        <small id="assignment_table_batch" class="text-truncate">Batch: <span  style="color:#6a6a6a;font-weight:500;">{{ $assignment['batch_name'] }}</span></small>
+                                                    </td>
+                                                    
+                                                    @foreach($assignment['assignment_data'] as $data)
+                                                    @if($data['status'] == 'Submitted')
+                                                        <td style="vertical-align: middle;font-size: 13px;color:#74648C;" id="{{ $data['assignment_id'] }}"><i class="fas fa-file"></i> <a style="color:#74648C;" href="#" data-bs-toggle="modal" data-bs-target="#instructAssignModal" bs-data-assignment="{{ $data['stuAssignment'] }}"> {{ $data['status'] }}</a></td>
+                                                    @elseif($data['status'] == 'Pending')
+                                                        <td style="vertical-align: middle;font-size: 13px;background-color: #ffefc5;color: #9c791c;padding-left: 25px;" id="{{ $data['assignment_id'] }}"><i class="far fa-clock"></i> {{ $data['status'] }} </td>
+                                                    @elseif($data['status'] == 'Completed')
+                                                        <td style="vertical-align: middle;font-size: 13px;background-color: #e4ffe4;color: #4aa24a;padding-left: 25px;" id="{{ $data['assignment_id'] }}"><i class="fa fa-check-double"></i> {{ $data['status'] }} </td>
+                                                    @endif
+                                                    @endforeach
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    @if($userType == 'student')
                     <div class="tab-pane fade" id="v-pills-personalizedActivity" role="tabpanel" aria-labelledby="v-pills-personalizedActivity-tab">
                         <div class="row">
                             <div class="col-lg-12">
@@ -772,7 +931,9 @@
                                                 <h2 class="accordion-header" id="headingThree">
                                                 <button class="accordion-button collapsed plus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree_{{$slno}}" aria-expanded="false" aria-controls="collapseThree">
                                                 Session {{$slno}} - {{$topicDetail['topic_title']}}
-                                                @if($topicDetail['isAssignmentSubmitted'] == true)
+                                                @if($topicDetail['isAssignmentSubmitted'] == true && $topicDetail['isAssignmentCompleted'] == true)
+                                                <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Completed</span>
+                                                @elseif($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
                                                 @else
                                                 <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; !important;width:6rem;" class="badge pill text-dark">Pending</span>
@@ -842,16 +1003,18 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                
-                                                    @if($topicDetail['isAssignmentSubmitted'] != true)
-                                                        <div class="col-4 m-auto text-center">
-                                                        <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
+                                                    @if($topicDetail['isAssignmentSubmitted'] == true && $topicDetail['isAssignmentCompleted'] == true)
+                                                    <div class="col-12 m-auto text-center">
+                                                        <h3>Assignment Completed</h3>
                                                         </div>
-                                                  
-
-                                                    @else
-                                                        <div class="col-12 m-auto text-center">
+                                                    @elseif($topicDetail['isAssignmentSubmitted'] == true)
+                                                        
+                                                    <div class="col-12 m-auto text-center">
                                                         <h3>Assignment Submitted</h3>
+                                                        </div>
+                                                    @else
+                                                    <div class="col-4 m-auto text-center">
+                                                        <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
                                                         </div>
                                                     @endif
                                                 
@@ -873,7 +1036,7 @@
                             </div>
                         </div>
                     </div>
-                    @if($userType == 'student')
+                    
                         <div class="tab-pane fade" id="v-pills-achievements" role="tabpanel" aria-labelledby="v-pills-achievements-tab">
                             <div class="card card-8 mb-3">
                                 <div class="card-body">
@@ -1017,6 +1180,58 @@
 @push('child-scripts')
 <script>
 
+var instructModal = document.getElementById('instructAssignModal')
+instructModal.addEventListener('show.bs.modal', function (event) {
+  document.getElementById('modal_comment_div').style.display = "none";
+  document.getElementById('add_comment').style.display = "block";
+  var button = event.relatedTarget
+  var assignment = button.getAttribute('bs-data-assignment');
+  
+  document.getElementById('assign_completed').setAttribute('data-assignment', assignment);
+  let batch_id = document.getElementById('batch_id').value;
+  let path = "{{ route('get-instructor-assignment-modal') }}?assignment_id=" + assignment + "&batch_id=" + batch_id;
+        
+            fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                },
+            body: JSON.stringify({})
+            }).then((response) => response.json()).then((data) => {
+                document.getElementById('modal_topic_title').innerHTML = data.assignmentTitle;
+                document.getElementById('modal_student_name').innerHTML = data.studentName;
+                document.getElementById('modal_batch_name').innerHTML = data.batchName;
+                document.getElementById('assignment_title').innerHTML = data.assignmentTitle;
+                document.getElementById('modal_student_img').src = "/storage/images/" + data.studentImg;
+                document.getElementById('modal_file_download').href = "/storage/assignmentAnswers/" + data.assignmentDoc;
+            });
+});
+
+document.getElementById('assign_completed').addEventListener('click', function(e) {
+
+    let assignment = this.getAttribute('data-assignment');
+    let path = "{{ route('complete-assignment') }}?assignment_id=" + assignment;
+        
+            fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                },
+            body: JSON.stringify({})
+            }).then((response) => response.json()).then((data) => {
+                window.location.reload();
+            });
+});
+
+    document.getElementById('add_comment').addEventListener('click', function(e) {
+        document.getElementById('modal_comment_div').style.display = "block";
+        this.style.display = "none";
+    });
+
     let startAssignment = document.getElementsByClassName('start_assignment');
 
     let startAssignmentLength = startAssignment.length;
@@ -1042,9 +1257,7 @@
                 },
             body: JSON.stringify({})
             }).then((response) => response.json()).then((data) => {
-                if (data.status =='success'){
-                console.log(data);
-                } 
+               
             });
         });
     }

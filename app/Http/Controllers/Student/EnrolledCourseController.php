@@ -135,7 +135,11 @@ class EnrolledCourseController extends Controller
              
         } else if($userType === 'student') {
             $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id);
-            $course_completion = Carbon::createFromFormat('Y-m-d H:i:s', $enrolledCourseObj->value('course_completion_date'))->format('F d, Y');
+            if($enrolledCourseObj->value('course_completion_date') != null) {
+                $course_completion = Carbon::createFromFormat('Y-m-d H:i:s', $enrolledCourseObj->value('course_completion_date'))->format('F d, Y');
+            }
+            
+            
             $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
             $occurrences = $selectedBatchObj->value('occurrence');
             $occArr = explode(',', $occurrences);
@@ -272,6 +276,7 @@ class EnrolledCourseController extends Controller
                 
                 $assignmentList = $assignmentsArray->toArray();
                 $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
+                $isAssignmentCompleted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->where('is_completed', true)->count() ? true : false;
                 $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
 
                 array_push($topicDetails, array(
@@ -286,6 +291,7 @@ class EnrolledCourseController extends Controller
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList,
                     'isAssignmentSubmitted' => $isAssignmentSubmitted,
+                    'isAssignmentCompleted' => $isAssignmentCompleted,
                     'isAssignmentStarted' => $isAssignmentStarted
                 ));
             }
@@ -383,6 +389,43 @@ class EnrolledCourseController extends Controller
         }
         
         if($userType === 'instructor') {
+            $assignmentArr = [];
+            $assignments = TopicAssignment::where('course_id', $courseId)->get();
+            $assignmentCount = count($assignments);
+
+            $students = $this->studentsEnrolled($courseId, $selectedBatch);
+            foreach($students as $student){
+                $assignmentStatus = [];
+                $studentName = $student->firstname . ' ' . $student->lastname;
+                $studentImg = $student->image;
+                $batchName = CohortBatch::where('id', $selectedBatch)->value('batchname');
+                foreach($assignments as $assignment) {
+                    $status = "Submitted";
+                    $stuAssignment = "";
+                    $studentAssignment = Assignment::where('student_id' , $student->id)->where('topic_assignment_id', $assignment->id)->get();
+                    if(count($studentAssignment) == 0) {
+                        $status = "Pending";  
+                    } elseif($studentAssignment[0]->is_completed == true) {
+                        $status = "Completed";
+                        $stuAssignment = $studentAssignment[0]->assignment_id;
+                    } else {
+                        $stuAssignment = $studentAssignment[0]->assignment_id;
+                    }
+
+                    array_push($assignmentStatus, array(
+                        'status' => $status,
+                        'assignment_id' => $assignment->id,
+                        'stuAssignment' => $stuAssignment
+                    ));
+                }
+                
+                array_push($assignmentArr, array(
+                    'studentImg' => $studentImg,
+                    'student_name' => $studentName,
+                    'batch_name' => $batchName,
+                    'assignment_data' => $assignmentStatus
+                ));
+            }   
             $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
             $graph = $this->instructorGraph($courseId);
             return view('Student.enrolledCoursePage',[
@@ -395,7 +438,9 @@ class EnrolledCourseController extends Controller
                 'qas' => $qaArray,
                 'progress' => $progress,
                 'graph' => $graph,
-                'selectedBatch' => $selectedBatch
+                'selectedBatch' => $selectedBatch,
+                'assignments' => $assignments,
+                'assignmentArr' => $assignmentArr
             ]);
         }      
 
@@ -808,6 +853,37 @@ class EnrolledCourseController extends Controller
         }
         
         return response()->json(['contents' => $contentsArr, 'contentCount' => $contentCount, 'student' => $userName]);
+
+    }
+
+    public function getAssignmentModal(Request $request) {
+        $assignmentId = $request->assignment_id;
+        $batchId = $request->batch_id;
+
+        $assignment = Assignment::where('assignment_id', $assignmentId);
+        $topicAssignmentId = $assignment->value('topic_assignment_id');
+        $topicAssignment = TopicAssignment::where('id', $topicAssignmentId);
+
+        $assignmentTitle = $topicAssignment->value('assignment_title');
+        $studentId = $assignment->value('student_id');
+
+        $student = User::where('id', $studentId);
+
+        $studentName = $student->value('firstname') . ' ' . $student->value('lastname');
+        $studentImg = $student->value('image');
+        $batchName = CohortBatch::where('id', $batchId)->value('batchname');
+        $assignmentDoc = $assignment->value('assignment_answer');
+        
+        return response()->json(['assignmentTitle' => $assignmentTitle, 'studentName' => $studentName, 'studentImg' => $studentImg, 'batchName' => $batchName, 'assignmentDoc' => $assignmentDoc]);
+
+    }
+
+    public function completeAssignment(Request $request) {
+        $assignment = $request->assignment_id;
+
+        $assignmentObj = Assignment::where('assignment_id', $assignment)->update(['is_completed' => true]);
+
+        return response()->json(['status' => 'success']);
 
     }
 
