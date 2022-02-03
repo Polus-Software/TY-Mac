@@ -60,8 +60,13 @@ class InstructorController extends Controller
         ]);
 
         $userType = UserType::where('user_role', 'instructor')->value('id');
-        $signatureFile = $request->file('signature')->getClientOriginalName();
-        $request->signature->storeAs('signatures',$signatureFile,'public');
+        //$signatureFile = $request->file('signature')->getClientOriginalName();
+        //$request->signature->storeAs('signatures',$signatureFile,'public');
+
+        $signatureFile = $request->signature;
+        $signatureFileName = $signatureFile->getClientOriginalName();
+        $destinationPath = public_path().'/storage/signatures';
+        $signatureFile->move($destinationPath,$signatureFileName);
        
         $instructor = new User;
         $instructor->firstname = $request->input('firstname');
@@ -75,7 +80,7 @@ class InstructorController extends Controller
         $instructor->youtube_social = $request->input('youtube_social');
         $instructor->description = $request->input('description');
        
-        $instructor->signature = $signatureFile;
+        $instructor->signature = $signatureFileName;
         $instructor->role_id = $userType;
         $instructor->save();
         return redirect()->route('manage-instructors');
@@ -174,8 +179,15 @@ class InstructorController extends Controller
             $firstName = $request->input('firstname');
             $lastName = $request->input('lastname');
             $email = $request->input('email');
-            $signatureFile = $request->file('signature')->getClientOriginalName();
-            $request->signature->storeAs('signatures',$signatureFile,'public');
+            //$signatureFile = $request->file('signature')->getClientOriginalName();
+            //$request->signature->storeAs('signatures',$signatureFile,'public');
+
+            $signatureFile = $request->signature;
+            $signatureFileName = $signatureFile->getClientOriginalName();
+            $destinationPath = public_path().'/storage/signatures';
+            $signatureFile->move($destinationPath,$signatureFileName);
+
+
             if ($instructor_id) {
                 $instructor = User::findOrFail($instructor_id);
                 if ($instructor) {
@@ -189,7 +201,7 @@ class InstructorController extends Controller
                     $instructor->youtube_social = $request->input('youtube_social');
                     $instructor->description = $request->input('description');
                     $instructor->password = Hash::make($request->input('password'));
-                    $instructor->signature = $signatureFile;
+                    $instructor->signature = $signatureFileName;
                     $instructor->save();
                     
                     return redirect()->route('view-instructor', ['instructor_id' => $instructor_id]);
