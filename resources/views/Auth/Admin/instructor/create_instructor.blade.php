@@ -37,7 +37,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @else
-                <input type="text" class="form-control" value="" name="firstname" id="firstname" placeholder="Enter First Name">
+                <input type="text" class="form-control" value="{{old('firstname')}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @endif
                 @if ($errors->has('firstname'))
                 <div class="invalid-feedback d-block">{{ $errors->first('firstname') }}</div>
@@ -48,7 +48,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @else
-                <input type="text" class="form-control" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
+                <input type="text" class="form-control" value="{{old('lastname')}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @endif
                 @if ($errors->has('lastname'))
                 <div class="invalid-feedback d-block">{{ $errors->first('lastname') }}</div>
@@ -60,7 +60,7 @@
                 @if(!!$isEdit)
                 <input type="email" class="form-control" value="{{$instructorDetails['instructor_email']}}" name="email" id="email" placeholder=" Enter email">
                 @else
-                <input type="email" class="form-control" value="" name="email" id="email" placeholder=" Enter email">
+                <input type="email" class="form-control" value="{{old('email')}}" name="email" id="email" placeholder=" Enter email">
                 @endif
                 @if ($errors->has('email'))
                 <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div>
@@ -71,7 +71,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_institute']}}" name="institute" id="institute" placeholder="Enter institute">
                 @else
-                <input type="text" class="form-control" name="institute" id="institute" placeholder="Enter institute">
+                <input type="text" class="form-control" name="institute" id="institute" placeholder="Enter institute" value="{{old('institute')}}">
                 @endif
                 @if ($errors->has('institute'))
                 <div class="invalid-feedback d-block">{{ $errors->first('institute') }}</div>
@@ -83,7 +83,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_designation']}}" name="designation" id="designation" placeholder="Enter designation">
                 @else
-                <input type="text" class="form-control" name="designation" id="designation" placeholder="Enter designation">
+                <input type="text" class="form-control" name="designation" id="designation" placeholder="Enter designation" value="{{old('designation')}}">
                 @endif
                 @if ($errors->has('designation'))
                 <div class="invalid-feedback d-block">{{ $errors->first('designation') }}</div>
@@ -95,7 +95,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_twitter_social']}}" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
                 @else
-                <input type="text" class="form-control" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
+                <input type="text" class="form-control" name="twitter_social" id="twitter_social" placeholder="Enter twitter link" value="{{old('twitter_social')}}">
                 @endif
                 @if ($errors->has('twitter_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('twitter_social') }}</div>
@@ -107,7 +107,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_linkedin_social']}}" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
                 @else
-                <input type="text" class="form-control" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
+                <input type="text" class="form-control" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link" value="{{old('linkedin_social')}}">
                 @endif
                 @if ($errors->has('linkedin_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('linkedin_social') }}</div>
@@ -119,7 +119,7 @@
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$instructorDetails['instructor_youtube_social']}}" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
                 @else
-                <input type="text" class="form-control" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
+                <input type="text" class="form-control" name="youtube_social" id="youtube_social" placeholder="Enter youtube link" value="{{old('youtube_social')}}">
                 @endif
                 @if ($errors->has('youtube_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('youtube_social') }}</div>
@@ -130,7 +130,7 @@
                 @if(!!$isEdit)
                 <textarea class="form-control" value="{{$instructorDetails['instructor_description']}}" name="description" id="description" placeholder="Enter description" cols="30" rows="5">{{$instructorDetails['instructor_description']}}</textarea>
                 @else
-                <textarea class="form-control"  name="description" id="description" placeholder="Enter description" cols="30" rows="5"></textarea>
+                <textarea class="form-control"  name="description" id="description" placeholder="Enter description" cols="30" rows="5">{{old('description')}}</textarea>
                 @endif
                 @if ($errors->has('description'))
                 <div class="invalid-feedback d-block">{{ $errors->first('description') }}</div>

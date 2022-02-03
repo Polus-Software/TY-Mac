@@ -173,7 +173,7 @@ class InstructorController extends Controller
                 'email' => ['required', Rule::unique('users')->ignore($instructor_id)],
                 'description' => 'required',
                 'signature' => 'required',
-                'password' => 'required'
+                //'password' => 'required'
             ]);
             
             $firstName = $request->input('firstname');
@@ -200,7 +200,9 @@ class InstructorController extends Controller
                     $instructor->linkedin_social = $request->input('linkedin_social');
                     $instructor->youtube_social = $request->input('youtube_social');
                     $instructor->description = $request->input('description');
-                    $instructor->password = Hash::make($request->input('password'));
+                    if($request->input('password') != ''){
+                        $instructor->password = Hash::make($request->input('password'));
+                    }
                     $instructor->signature = $signatureFileName;
                     $instructor->save();
                     
