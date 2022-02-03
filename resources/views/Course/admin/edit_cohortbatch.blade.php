@@ -1,6 +1,9 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+@php 
+use App\Models\TimeZone;
+@endphp
 <!-- container -->
 <div class="container-fluid llp-container">
   <div class="row">
@@ -197,7 +200,27 @@
           @endif
           <div class="col-lg-3 col-md-3 col-sm-4 col-9">
             <label for="duration">Start time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly value="{{$cohortbatch->start_time}}">
+            @php 
+             
+
+              $offset = TimeZone::where('name', $cohortbatch->time_zone) ->value('offset');
+          
+              $offsetHours = intval($offset[1] . $offset[2]);
+              $offsetMinutes = intval($offset[4] . $offset[5]);
+              
+              if($offset[0] == "+") {
+                  $sTime = strtotime($cohortbatch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                  $eTime = strtotime($cohortbatch->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+              } else {
+                  $sTime = strtotime($cohortbatch->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                  $eTime = strtotime($cohortbatch->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+              }
+
+              $startTime = date("H:i:s", $sTime);
+              $endTime = date("H:i:s", $eTime);
+
+            @endphp
+            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly value="{{$startTime}}">
             @if ($errors->has('cohortbatch_starttime'))
               <span class="text-danger">The batch start time is required</span>
             @endif
@@ -210,7 +233,7 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-4 col-9">
             <label for="duration">End time</label>
-            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly value="{{$cohortbatch->end_time}}">
+            <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly value="{{$endTime}}">
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
@@ -223,7 +246,7 @@
           </div>
           <div class="col-md-4">
             <label for="duration">Timezone</label>
-            <select name="cohortbatch_timezone" class="form-control" checked value="{{$cohortbatch->time_zone}}">
+            <select id="cohortbatch_timezone" name="cohortbatch_timezone" class="form-control" checked value="{{$cohortbatch->time_zone}}">
     <!-- include timezones here -->
               @include('Course.admin.timezones')
             </select>
@@ -264,6 +287,8 @@
 <link rel="stylesheet" href="{{ asset('/assets/dtsel.css') }}">
 <script type="text/javascript" src="{{ asset('/assets/dtsel.js') }}"></script>
 <script>
+  let selectedTimeZone = document.getElementById('cohortbatch_timezone').getAttribute('value');
+  document.getElementById('cohortbatch_timezone').value = selectedTimeZone;
   startdate = new dtsel.DTS('input[name="cohortbatch_startdate"]', {
     paddingX: 15, paddingY: 15
   });
