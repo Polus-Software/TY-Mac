@@ -262,8 +262,9 @@
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-            <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+            <form id="contactForm" class="form" method="POST" action="{{route('question')}}">
               @csrf
+              <input type="hidden" name="course_id" class="course_id" id="course_id">
               <div class="form-group mx-0">
                 <label for="name" class="name-label">Name</label>
                 <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
@@ -339,7 +340,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       } else if (password.value == passwordconfirm.value && password.value != '') {
         removeError(password)
       }
-      if (checkbox.value != 'checked') {
+      if (checkbox.checked != true) {
         e.preventDefault();
         showError(checkbox, 'Accept Terms and conditions');
       } else {
@@ -486,5 +487,16 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
     });
 </script>
 @endif
+
+<script>
+  var contactModal = document.getElementById('contactModal');
+  contactModal.addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var recipient = button.getAttribute('data-bs-id')
+    var modalBodyButton = contactModal.querySelector('.modal-body .course_id');
+    modalBodyButton.value = recipient;
+
+  });
+</script>
 @endpush
   

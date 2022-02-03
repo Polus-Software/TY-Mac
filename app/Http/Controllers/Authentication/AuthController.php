@@ -10,6 +10,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SignupMail;
+use App\Mail\InstructorMailAfterStudentConcern;
+use App\Mail\AdminMailAfterSignUp;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\EnrolledCourse;
@@ -40,6 +42,7 @@ class AuthController extends Controller
 
         try {
         $userType = UserType::where('user_role', 'Student')->value('id');
+        $user_type = UserType::where('user_role', 'Admin')->value('id');
        
         $request->validate([
             'firstname' => 'required',
@@ -50,6 +53,8 @@ class AuthController extends Controller
             'privacy_policy' =>'accepted'
         ]);
 
+        $admins = User::where('role_id', $user_type)->pluck('email');
+    
         $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -62,13 +67,22 @@ class AuthController extends Controller
         //$user = Auth::user();
     
         $email= $request->email;
+        
     
         $details =[
            'firstname'=> $request->firstname,
-           'lastname'=> $request->lastname
-           
+           'lastname'=> $request->lastname,
         ];
-         Mail::to($email)->send(new SignupMail($details));
+
+        // $data=[
+        //     'firstname'=> $request->firstname,
+        //     'lastname'=> $request->lastname,
+        //     'email' => $request->email,
+        //     'admin' => $admin
+        //  ];
+         
+        Mail::to($email)->send(new SignupMail($details));
+        // Mail::to($admins)->send(new AdminMailAfterSignUp($data));
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -233,23 +247,23 @@ class AuthController extends Controller
     }
 
     public function contactUs(Request $request) {
-        
         try {
             $name = $request->name;
             $phone = $request->phone;
             $message = $request->message;
             $email = $request->email;
+            
     
             $details =[
                 'title' => 'Hey there, you have a new query!',
-                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
+                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
             ];
-    
-            // Mail::to('support@thinklit.com')->send(new Gmail($details));
+            
+            //  Mail::to('anjali.krishna@polussoftware.com')->send(new InstructorMailAfterStudentConcern($details));
     
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
-            return redirect('/')->with('message', 'Registration failed');
+            return redirect('/')->with('message', 'Message sent successfully!');
         }
         
     }
