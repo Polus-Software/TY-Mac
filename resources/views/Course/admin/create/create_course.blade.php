@@ -113,6 +113,38 @@
               <span class="text-danger">{{ $errors->first('course_duration') }}</span>
             @endif
           </div>
+
+
+
+          <div class="col-md-6">
+            <label for="course-rating">Custom Rating</label>
+            @if(isset($course_details['duration']))
+            <select class="form-select" id="course_rating" name="course_rating" value="{{ $course_details['course_rating'] }}">
+            @else
+            <select class="form-select" id="course_rating" name="course_rating" value="">
+            @endif
+            @for ($i = 1; $i <= 5; $i++)
+              <option value ="{{ $i }}" selected>{{ $i }}</option>
+            @endfor         
+            </select>
+            @if ($errors->has('course_rating'))
+              <span class="text-danger">{{ $errors->first('course_rating') }}</span>
+            @endif
+          </div>
+          <div class="col-md-6" style="margin-top: 2.2rem;">
+            @if(isset($course_details['use_custom_ratings']))
+            @php 
+                $checked = $course_details['use_custom_ratings'] ? 'checked' : ''; 
+            @endphp
+            <input type="checkbox" id="use_custom_ratings" name="use_custom_ratings" {{$checked}}>
+            <label for="use_custom_ratings">Use custom ratings?</label> 
+            @else
+            <input type="checkbox" id="use_custom_ratings" name="use_custom_ratings">
+            <label for="use_custom_ratings">Use custom ratings?</label> 
+            @endif
+          </div>
+
+
          
           <div class="col-12">
             <label for="what-learn">What you'll learn</label>            
@@ -222,8 +254,8 @@
   let coursePoint = 1;
   let descPoint = 1;
   if(document.getElementById('route_val').value == "edit") {
-    coursePoint = document.getElementById('who_learn_points_count').value;
-    descPoint = document.getElementById('what_learn_points_count').value;
+    let rating = document.getElementById('course_rating').getAttribute('value');
+    document.getElementById('course_rating').value = rating;
   }
 
   document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{

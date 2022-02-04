@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="{{ asset('/assets/styles_new.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
+  <link rel="icon" href="{{ asset('/assets/favicon.png') }}">
   @stack('styles')
   <title>TY- MAC</title>
 </head>
