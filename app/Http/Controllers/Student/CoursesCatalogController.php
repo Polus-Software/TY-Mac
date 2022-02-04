@@ -66,7 +66,9 @@ class CoursesCatalogController extends Controller
                     $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
                     $ratingsCount++;
                 }
-                $ratings = intval($ratingsSum/$ratingsCount);
+                if($ratingsCount != 0) {
+                    $ratings = intval($ratingsSum/$ratingsCount);
+                }
             }
             
             $duration = $hours . 'h ' . $minutes . 'm';
@@ -591,7 +593,9 @@ class CoursesCatalogController extends Controller
                     $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
                     $ratingsCount++;
                 }
-                $ratings = intval($ratingsSum/$ratingsCount);
+                if($ratingsCount != 0) {
+                    $ratings = intval($ratingsSum/$ratingsCount);
+                }
             }
 
             $duration = $hours . 'h ' . $minutes . 'm';
