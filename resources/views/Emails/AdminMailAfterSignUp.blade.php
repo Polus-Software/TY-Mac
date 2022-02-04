@@ -1,6 +1,6 @@
 @component('mail::message')
 
-Hello {{ $data['adminFirstName'] }} {{ $data['adminLastName'] }},
+Hello {{ $data['adminFirstname'] }} {{ $data['adminLastName'] }},
 
 You have got a new student registration on ThinkLit.
 

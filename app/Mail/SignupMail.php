@@ -32,7 +32,8 @@ class SignupMail extends Mailable
     public function build()
     {
        
-        return $this->subject('Welcome to Thinklit! Let us get started')
+        return $this->from('ashishbabythoppil@gmail.com')
+                    ->subject('Welcome to Thinklit! Let us get started')
                     ->markdown('Emails.confirmationMail')
                     ->with('details', $this->details);
         
