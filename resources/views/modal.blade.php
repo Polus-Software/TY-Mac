@@ -490,6 +490,7 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
 
 <script>
   var contactModal = document.getElementById('contactModal');
+  if(contactModal){
   contactModal.addEventListener('show.bs.modal', function(event) {
     var button = event.relatedTarget;
     var recipient = button.getAttribute('data-bs-id')
@@ -497,6 +498,7 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
     modalBodyButton.value = recipient;
 
   });
+  }
 </script>
 @endpush
   

@@ -668,6 +668,22 @@ class CourseController extends Controller
 			]);
         }
     }
+    public function deleteSubTopics(Request $request, $topicId) {
+       $courseContents = [];
+		try {
+            if($topicId) {
+                $subtopics = Topic::where('topic_id', $topicId)->first();
+                if($subtopics){
+                    $course_id = $subtopics->course_id;
+                    $subtopics = Topic::where('topic_id', $topicId)->delete();
+                    return redirect()->route('view-subtopics', ['course_id' => $course_id]);
+                }
+            }
+        }
+        catch (Exception $exception) {
+            return ($exception->getMessage());
+        }
+    }
 
 
     public function createAssignment(Request $request){
@@ -743,7 +759,7 @@ class CourseController extends Controller
             'assignment_title'=>'required',
             'assignment_description' => 'required',
             'document' =>'required',
-            'difficulty' => 'required',
+            //'difficulty' => 'required',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
