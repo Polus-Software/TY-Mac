@@ -106,7 +106,6 @@ class CourseController extends Controller
 
     public function saveCourse(Request $request) {
         try{
-
         $request->validate([
             'course_title'=>'required',
             'description' => 'required',
@@ -114,6 +113,7 @@ class CourseController extends Controller
             'difficulty' => 'required',
             'instructor' =>'required',
             'course_duration' =>'required',
+            'course_rating' =>'required',
             'what_learn_1' =>'required',
             'course_image' =>'required| mimes:jpeg,jpg,png,.svg| max:500000',
             'course_thumbnail_image' =>'required| mimes:jpeg,jpg,png,.svg| max:100000',
@@ -127,6 +127,8 @@ class CourseController extends Controller
         $courseDifficulty = $request->input('difficulty');
         $instructorId = $request->input('instructor');
         $courseDuration = $request->input('course_duration');
+        $course_rating = $request->input('course_rating');
+        $use_custom_ratings = $request->input('use_custom_ratings') == "on" ? true : false;
        
         $what_learn = "";
         $what_learn_points_count = $request->input('what_learn_points_count');
@@ -176,7 +178,9 @@ class CourseController extends Controller
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
-        $course->instructor_id = $instructorId;
+        $course->instructor_id = $instructorName;
+        $course->course_rating = $course_rating;
+        $course->use_custom_ratings = $use_custom_ratings;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
@@ -269,6 +273,8 @@ class CourseController extends Controller
                     'category_id' => $data->value('courses.category'),
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
+                    'course_rating' => $data->value('courses.course_rating'),
+                    'use_custom_ratings' => $data->value('courses.use_custom_ratings'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
                      'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
@@ -303,7 +309,7 @@ class CourseController extends Controller
 
     public function updateCourse(Request $request) {        
         try{
-            
+
             $request->validate([
                 'course_title'=>'required',
                 'description' => 'required',
@@ -311,6 +317,7 @@ class CourseController extends Controller
                 'difficulty' => 'required',
                 'instructor' =>'required',
                 'course_duration' =>'required',
+                'course_rating' =>'required',
                 'what_learn_1' =>'required',
                 'who_learn_points'=>'required',
                 //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
@@ -325,7 +332,8 @@ class CourseController extends Controller
                 $instructor = $request->input('instructor');
                 $course_id = $request->input('course_id');
                 $difficulty = $request->input('difficulty');
-
+                $course_rating = $request->input('course_rating');
+                $use_custom_ratings = $request->input('use_custom_ratings') == "on" ? true : false;
                 $courseDuration = $request->input('course_duration');       
                 $what_learn = "";
                 $what_learn_points_count = $request->input('what_learn_points_count');
@@ -368,6 +376,8 @@ class CourseController extends Controller
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
                 $course->instructor_id = $instructor;
+                $course->course_rating = $course_rating;
+                $course->use_custom_ratings = $use_custom_ratings;
 
                 if($request->file()) {
                     if($request->course_image != null) {

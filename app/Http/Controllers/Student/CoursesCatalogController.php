@@ -54,7 +54,21 @@ class CoursesCatalogController extends Controller
             $hours = intval($duration);
             $minutesDecimal = $duration - $hours;
             $minutes = ($minutesDecimal/100) * 6000;
+            $ratings = 0;
+            $ratingsSum = 0;
+            $ratingsCount = 0;
 
+            if($course->use_custom_ratings) {
+                $ratings = $course->course_rating;
+            } else {
+                $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                    $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                    $ratingsCount++;
+                }
+                $ratings = intval($ratingsSum/$ratingsCount);
+            }
+            
             $duration = $hours . 'h ' . $minutes . 'm';
             
             $courseData =  array (
@@ -66,7 +80,9 @@ class CoursesCatalogController extends Controller
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
-                'rating' => $course->course_rating,
+                'rating' => $ratings,
+                'use_custom_ratings' => $course->use_custom_ratings,
+                'ratingsCount' => $ratingsCount,
                 'duration' => $duration                
             );
             array_push($courseDetails, $courseData);
@@ -563,6 +579,20 @@ class CoursesCatalogController extends Controller
             $hours = intval($duration);
             $minutesDecimal = $duration - $hours;
             $minutes = ($minutesDecimal/100) * 6000;
+            $ratings = 0;
+            $ratingsSum = 0;
+            $ratingsCount = 0;
+
+            if($course->use_custom_ratings) {
+                $ratings = $course->course_rating;
+            } else {
+                $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                    $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                    $ratingsCount++;
+                }
+                $ratings = intval($ratingsSum/$ratingsCount);
+            }
 
             $duration = $hours . 'h ' . $minutes . 'm';
        
@@ -575,7 +605,9 @@ class CoursesCatalogController extends Controller
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
-                'rating' => $course->course_rating,
+                'rating' => $ratings,
+                'use_custom_ratings' => $course->use_custom_ratings,
+                'ratingsCount' => $ratingsCount,
                 'duration' => $duration
             );
             array_push($courseDetails, $courseData);
