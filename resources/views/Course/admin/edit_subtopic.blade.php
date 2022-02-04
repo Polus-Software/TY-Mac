@@ -37,8 +37,8 @@
 					<input class="form-control" type="text" name="topic_title1" placeholder="Ex: Session 1 - Intro to G Suite &amp; Google Drive" value="{{$topic_title}}">
 					<div class="llpcard-inner bg-light mt-3 mb-3 p-3">
 						<input class="content_count" type="hidden" id="content_count_topic_1" name="content_count_topic_1" value="{{$totalCount}}" rel="1">
-						@if(!empty($courseContents))
-						<div class="row content-container" id="topic-1">	
+						<div class="row content-container" id="topic-1">
+            @if(!empty($courseContents))
 						@foreach ($courseContents as $key => $courseContent)
 							<div class="card card-body mb-3">
 								<input class="form-control mb-3" type="text" name="content_title_1_{{$key}}" placeholder="Ex: What is Google Suite?" value="{{$courseContent['topic_title']}}">
@@ -81,8 +81,8 @@
 								</div>
 							</div>
 						@endforeach
-						</div>
 						@endif	
+            </div>
 						<div class="row">
 							<div class="col-12">
 								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content" id="add_content_for_topic">Add content for topic</a>
@@ -143,7 +143,9 @@ window.onload = function(event) {
       const topicNum = contentCountHiddenEl.getAttribute('rel');
       content_count = e.currentTarget.parentElement.parentElement.parentElement.getElementsByClassName('card-body').length;
       //alert(content_count);
-      e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, content_count));
+      //alert(topicNum);
+      //e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, content_count));
+      document.querySelector('#topic-1').appendChild(generateContentHTML(topicNum, content_count));
       //content_count++;
   });
 
@@ -236,7 +238,7 @@ const generateSubTopicHTMLInitial = () => {
       {'class':'status'},
       {'value':1}
     ]);
-    const addExternalLinkEl = createNewElement('div', ['add_external_link', 'mb-3']);
+    const addExternalLinkEl = createNewElement('div', ['add_external_link1', 'mb-3']);
     const contentEl = createNewElement('div', ['row', 'p-2', 'flex-fill', 'bd-highlight']);
     const studyMaterialEl = createNewElement('div', ['col-lg-3'], [], 'Course material:');
 
@@ -253,7 +255,7 @@ const generateSubTopicHTMLInitial = () => {
       {'type': 'hidden'}, {'id': `externalLink_count_topic_${topicNum}_content_${contentCount}`},
       {'name': `externalLink_count_topic_${topicNum}_content_${contentCount}`},{'value': 0}
     ]);
-    const contentLinkEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Add external link');
+    const contentLinkEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary','add_external_link'],[],'Add external link');
     contentLinkEl.addEventListener('click', (e) => {
     const linkCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count');
     linkCountHiddenEl.value = parseInt(linkCountHiddenEl.value)+1;
@@ -276,12 +278,14 @@ const generateSubTopicHTMLInitial = () => {
     contentEl.appendChild(uploadContainerEl);
     contentEl.appendChild(contentLinkContainerEl);
     contentEl.appendChild(removeContentContainerEl);
+    //console.log(contentContainerEl);
     contentContainerEl.appendChild(contentTitleEl);
     contentContainerEl.appendChild(contenttopicidEl1);
     contentContainerEl.appendChild(contentTopicstatusEl1);
     addExternalLinkEl.appendChild(externalLinkCountEl);
     contentContainerEl.appendChild(addExternalLinkEl);
     contentContainerEl.appendChild(contentEl);
+    //console.log(contentContainerEl);
     return contentContainerEl;
   }
   const generateExternalLinkHTML = (topicNum, contentCount, linkCount) => {

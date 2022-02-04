@@ -498,11 +498,12 @@ small#assignment_table_batch {
                         <div class="card card-2 mb-3">
                             <div class="card-body">
                                 <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                @php ($sl_no=0)
                                 @foreach($topicDetails as $topicDetail)
-                                
+                                @php ($sl_no++)
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
+                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">Session {{$sl_no}} - {{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)

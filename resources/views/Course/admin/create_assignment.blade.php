@@ -27,14 +27,14 @@
       </div> 
         <div class="col-12">
             <label for="title" class="mb-2">Title</label>
-            <input type="text" class="form-control" id="title" name="assignment_title">
+            <input type="text" class="form-control" id="title" name="assignment_title" value="{{old('assignment_title')}}">
             @if ($errors->has('assignment_title'))
               <span class="text-danger">{{ $errors->first('assignment_title') }}</span>
             @endif
           </div>
           <div class="col-12">
             <label for="description" class="mb-2">Assignment</label>
-            <textarea type="text" class="form-control autosize" id="description" name="assignment_description"></textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="assignment_description">{{old('assignment_description')}}</textarea>
             @if ($errors->has('assignment_description'))
               <span class="text-danger">{{ $errors->first('assignment_description') }}</span>
             @endif
@@ -52,7 +52,7 @@
           <!-- <div class="vr me-2 ms-2"></div> -->
           <div id="external-link-div" class="mt-2" style="display:none;">
             <label>Add external link</label>
-            <input class="form-control" type="text" id="external-link" name="external-link" /><i id="close-ext" class="fas fa-trash-alt mt-2"></i>
+            <input class="form-control" type="text" id="external-link" name="external-link" value="{{old('external-link')}}"/><i id="close-ext" class="fas fa-trash-alt mt-2"></i>
           </div>
           <br>
           <a style="margin-top:10px;" id="add-ext-link-assign" href="#" class="btn btn-sm btn-outline-dark">Add external link</a>
@@ -64,7 +64,7 @@
           
           <!-- <option selected>Select...</option> -->
           @foreach ($subTopics as $subTopic)
-          <option value="{{$subTopic->topic_id}}">{{$subTopic->topic_title}}</option>
+          <option value="{{$subTopic->topic_id}}" {{ old('assignment_topic_id') == "$subTopic->topic_id" ? 'selected' : '' }}>{{$subTopic->topic_title}}</option>
           @endforeach
           </select>
           @if ($errors->has('assignment_topic_id'))
@@ -74,7 +74,7 @@
           <div class="col-md-6">
             <label for="due-date" class="mb-2">Assignment due date</label>
             <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon">
+            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon" value="{{old('due-date')}}">
             <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
           </div>
           @if ($errors->has('due-date'))

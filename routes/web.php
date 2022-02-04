@@ -141,6 +141,7 @@ Route::get('/', function () {
 
     Route::get('view-subtopics', [CourseController::class, 'viewSubTopics'])->name('view-subtopics');
     Route::get('edit-subtopics/{topic}', [CourseController::class, 'editSubTopics'])->name('edit-subtopics');
+    Route::get('delete-subtopics/{topic}', [CourseController::class, 'deleteSubTopics'])->name('delete-subtopics');
     Route::get('view_cohortbatches', [CourseController::class, 'viewCohortbatches'])->name('view_cohortbatches');
     Route::post('update_cohortbatches', [CourseController::class, 'updateCohortbatches'])->name('update_cohortbatches');
     Route::post('add-assignment', [CourseController::class, 'addAssignment'])->name('add-assignment');

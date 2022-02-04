@@ -286,7 +286,7 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-      return false;
+      //return false;
       window.location.reload();
     });
   });
