@@ -437,6 +437,7 @@ class CourseController extends Controller
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
+        
         if(isset($request->topic_id) && !empty($request->topic_id)){
             for($i = 1; $i<= $topic_count; $i++) {
                 $updateDetails = [
@@ -447,7 +448,7 @@ class CourseController extends Controller
                 Topic::where('topic_id', $request->topic_id)
                     ->update($updateDetails);
                 $content_count = $request->input('content_count_topic_'.$i);
-                for($j = 0; $j<$content_count; $j++) {//echo 'jibi';
+                for($j = 0; $j<$content_count; $j++) {
                     $TopicFileName = $extension = $external_links = '';
                     if($request->file() && !empty($request->content_upload[$i][$j])){
                         $subtopicFile = $request->content_upload[$i][$j];
@@ -480,8 +481,6 @@ class CourseController extends Controller
                             TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
                         }
-                        //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
-                    //->update($updateDetails);
                     }
                     else{
                         if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
@@ -500,6 +499,10 @@ class CourseController extends Controller
         }
         else{
             for($i = 1; $i<= $topic_count; $i++) {
+                $request->validate([
+                    'topic_title' . $i => 'required',
+                    'content_count_topic_'.$i => 'required'
+                ]);
                 $topic = new Topic;
                 $topic->topic_title = $request->input('topic_title'.$i);
                 $topic->course_id = $course_id;
@@ -721,6 +724,16 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function saveAssignment(Request $request) {
+
+        $request->validate([
+            'assignment_title'=>'required',
+            'assignment_description' => 'required',
+            'document' =>'required',
+            'difficulty' => 'required',
+            'due-date' =>'required',
+            'assignment_topic_id' =>'required'
+        ]);
+
         $externalLink = $request->input('external-link');
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
