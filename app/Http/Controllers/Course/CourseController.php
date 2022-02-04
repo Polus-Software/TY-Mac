@@ -115,15 +115,17 @@ class CourseController extends Controller
             'instructor' =>'required',
             'course_duration' =>'required',
             'what_learn_1' =>'required',
-            'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
-            'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
+            'course_image' =>'required| mimes:jpeg,jpg,png,.svg| max:500000',
+            'course_thumbnail_image' =>'required| mimes:jpeg,jpg,png,.svg| max:100000',
+            //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+            //'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
         ]);
 
         $courseTitle = $request->input('course_title');
         $courseDesc = $request->input('description');
         $courseCategory = $request->input('course_category');
         $courseDifficulty = $request->input('difficulty');
-        $instructorName = $request->input('instructor');
+        $instructorId = $request->input('instructor');
         $courseDuration = $request->input('course_duration');
        
         $what_learn = "";
@@ -133,7 +135,7 @@ class CourseController extends Controller
            $what_learn_temp = $request->input('what_learn_' . $index);
            $what_learn = $what_learn . $what_learn_temp . ";";
         }
- 
+        $what_learn = rtrim($what_learn, ';');
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
@@ -159,27 +161,27 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
-        $instructorName = User::find($instructorName)->firstname.' '.User::find($instructorName)->lastname;
-        $instructorEmail = User::find($instructorName)->email;
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        $instructorEmail = User::find($instructorId)->email;
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
         $course->category = $courseCategory;
         $course->course_difficulty = $courseDifficulty;
         $course->course_duration = $courseDuration;
-        $course->short_description = $what_learn ;
+        $course->short_description = $what_learn;
         $course->course_details = $whoLearnDescription;
         $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
-        $course->instructor_id = $instructorName;
+        $course->instructor_id = $instructorId;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
         $assignedCourse->course_id = $course->id;
-        $assignedCourse->user_id = $instructorName;
+        $assignedCourse->user_id = $instructorId;
         $assignedCourse->save();
 
         $datas = [
@@ -274,7 +276,6 @@ class CourseController extends Controller
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
-
                 //$whoThis = explode(';', $data->value('courses.course_details_points'));
                 $whoThis = $data->value('courses.course_details_points');
 
@@ -312,8 +313,8 @@ class CourseController extends Controller
                 'course_duration' =>'required',
                 'what_learn_1' =>'required',
                 'who_learn_points'=>'required',
-                'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
-                'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
+                //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+                //'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
             
             if($request->isMethod('post')){
@@ -374,14 +375,14 @@ class CourseController extends Controller
                         $courseFileName = $courseFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/courseImages';
                         $courseFile->move($destinationPath,$courseFileName);
-                        $course->course_image = $courseFile;
+                        $course->course_image = $courseFileName;
                     }
                     if($request->course_thumbnail_image != null) {
                         $courseThumbnailFile = $request->course_thumbnail_image;
                         $courseThumbnailFileName = $courseThumbnailFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/courseThumbnailImages';
                         $courseThumbnailFile->move($destinationPath,$courseThumbnailFileName);
-                        $course->course_thumbnail_image = $courseThumbnailFile;
+                        $course->course_thumbnail_image = $courseThumbnailFileName;
                     }
                 }                      
                

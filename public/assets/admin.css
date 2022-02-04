@@ -328,6 +328,12 @@ td .badge.bg-warning{
     background-color: #2C3443;
     color: #fff;
 }
+#course-image::-webkit-file-upload-button,
+#course-image::file-selector-button,
+#course-thumbnail-image::-webkit-file-upload-button,
+#course-thumbnail-image::file-selector-button {
+    display: none;
+}
 @media (max-width:900px){
 	.left_sidebar{
 		width:210px;
