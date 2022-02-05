@@ -55,7 +55,7 @@ Route::get('/', function () {
     Route::get('/add-course', [CourseController::class, 'addCourse'])->name('add-course');
     Route::get('/create-subtopic', [CourseController::class, 'createSubtopic'])->name('create-subtopic');
     Route::get('/create-assignment', [CourseController::class, 'createAssignment'])->name('create-assignment');
-    Route::get('/view-assignments/{course}', [CourseController::class, 'viewAssignments'])->name('view-assignments');
+    Route::get('/view-assignments', [CourseController::class, 'viewAssignments'])->name('view-assignments');
     Route::get('/edit-assignment', [CourseController::class, 'editAssignment'])->name('edit-assignment');
     Route::post('/update-assignment', [CourseController::class, 'updateAssignment'])->name('update-assignment');
     Route::get('/delete-assignment', [CourseController::class, 'deleteAssignment'])->name('delete-assignment');

@@ -87,7 +87,9 @@ class CourseController extends Controller
         
         return view('Course.admin.create.create_course',[
             'courseCategories' => $courseCategories,
-            'instructors' => $instructors
+            'instructors' => $instructors,
+            'courseStatus' => 0,
+            'course_id' => ''
         ]);
     }
 
@@ -727,8 +729,9 @@ class CourseController extends Controller
     /**
      * For viewing a assignments
      */
-    public function viewAssignments($course_id) {
+    public function viewAssignments(Request $request) {
         try {
+            $course_id = $request->get('course_id');
             if($course_id){
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
               

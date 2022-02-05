@@ -6,7 +6,7 @@
   <div class="row">
   <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.create.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-8 right_card_block">
     <div class="py-4">
