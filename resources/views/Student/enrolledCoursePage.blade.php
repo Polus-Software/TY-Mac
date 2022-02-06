@@ -644,7 +644,7 @@ small#assignment_table_batch {
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Messsge</a>
+                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Message</a>
                                     </button>
                                        
                                     </h2>
