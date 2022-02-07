@@ -180,7 +180,7 @@ class CourseController extends Controller
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
-        $course->instructor_id = $instructorName;
+        $course->instructor_id = $instructorId;
         $course->course_rating = $course_rating;
         $course->use_custom_ratings = $use_custom_ratings;
         $course->save();

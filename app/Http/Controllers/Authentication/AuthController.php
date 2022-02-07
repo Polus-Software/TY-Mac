@@ -173,8 +173,8 @@ class AuthController extends Controller
 
             $instructor_count = DB::table('users')->where('role_id', '=', 3)-> where('deleted_at' , '=', NULL)->count();
             $registered_course_count = DB::table('courses')->count();
-            //$students_registered = DB::table('users')->where('role_id', '=', 2)->count();
-            $students_registered = User::where('role_id', 2)->count();
+            $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
+            //$students_registered = User::where('role_id', 2)->count();
             $liveSessions = LiveSession::all();
             $current_date = Carbon::now()->format('Y-m-d');
             $backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
