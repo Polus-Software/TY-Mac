@@ -6,7 +6,7 @@
   <div class="row">
     <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.create.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-8 right_card_block">
       <!-- main -->
@@ -16,10 +16,11 @@
         <form action="{{ route('update-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
         <input type="hidden" id="course_id" name="course_id" value="{{ $course_id}}">
         <input type="hidden" id="what_learn_points_count" name="what_learn_points_count" value="{{ count($whatLearn) }}">
+        <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
         @else
         <input type="hidden" id="route_val" value="new" />
         <form action="{{ route('save-course') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
-        <input type="hidden" id="what_learn_points_count" name="what_learn_points_count">
+        <input type="hidden" id="what_learn_points_count" name="what_learn_points_count" value="1">
         <input type="hidden" id="who_learn_points_count" name="who_learn_points_count">
         @endif
         @csrf
@@ -55,8 +56,10 @@
             
             @if(isset($course_details['description']) && $courseCategory->id == $course_details['category_id'])
             <option value="{{$courseCategory->id}}" selected>{{ $courseCategory->category_name }}</option>
+            @elseif(old('course_category') == $courseCategory->id)
+              <option value="{{$courseCategory->id}}" selected>{{ $courseCategory->category_name }}</option>
             @else
-            <option value="{{$courseCategory->id}}" {{ old('course_category') == "$courseCategory->id" ? 'selected' : '' }}>{{ $courseCategory->category_name }}</option>
+            <option value="{{$courseCategory->id}}">{{ $courseCategory->category_name }}</option>
             @endif                            
             @endforeach          
             </select>
@@ -70,17 +73,17 @@
               @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Beginner')
               <option value ="Beginner" selected>Beginner</option>
               @else
-              <option value ="Beginner">Beginner</option>
+              <option value ="Beginner" {{ old('difficulty') == "Beginner" ? 'selected' : '' }}>Beginner</option>
               @endif
               @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Intermediate')
               <option value ="Intermediate" selected>Intermediate</option>
               @else
-              <option value ="Intermediate">Intermediate</option>
+              <option value ="Intermediate" {{ old('difficulty') == "Intermediate" ? 'selected' : '' }}>Intermediate</option>
               @endif
               @if(isset($course_details['difficulty']) && $course_details['difficulty'] =='Advanced')
               <option value ="Advanced" selected>Advanced</option>
               @else
-              <option value ="Advanced">Advanced</option>
+              <option value ="Advanced" {{ old('difficulty') == "Advanced" ? 'selected' : '' }}>Advanced</option>
               @endif
             </select>
             @if ($errors->has('difficulty'))
@@ -94,7 +97,7 @@
             @if(isset($course_details['instructor_id']) && $instructor->id == $course_details['instructor_id'])
             <option value ="{{ $instructor->id }}" selected>{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
             @else
-            <option value ="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
+            <option value ="{{ $instructor->id }}" {{ old('instructor') == "$instructor->id" ? 'selected' : '' }}>{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
             @endif
             @endforeach          
             </select>
@@ -107,23 +110,57 @@
             @if(isset($course_details['duration']))
             <input type="number" class="form-control" id="duration" name="course_duration" value="{{ $course_details['duration'] }}">
             @else
-            <input type="number" class="form-control" id="duration" name="course_duration" value="1">
+            <input type="number" class="form-control" id="duration" name="course_duration" value="{{ old('course_duration') ? old('course_duration') : '1' }}">
             @endif
             @if ($errors->has('course_duration'))
               <span class="text-danger">{{ $errors->first('course_duration') }}</span>
             @endif
           </div>
+
+
+
+          <div class="col-md-6">
+            <label for="course-rating">Custom Rating</label>
+            @if(isset($course_details['duration']))
+            <select class="form-select" id="course_rating" name="course_rating" value="{{ $course_details['course_rating'] }}">
+            @else
+            <select class="form-select" id="course_rating" name="course_rating" value="">
+            @endif
+            @for ($i = 1; $i <= 5; $i++)
+              <option value ="{{ $i }}" selected>{{ $i }}</option>
+            @endfor         
+            </select>
+            @if ($errors->has('course_rating'))
+              <span class="text-danger">{{ $errors->first('course_rating') }}</span>
+            @endif
+          </div>
+          <div class="col-md-6" style="margin-top: 2.2rem;">
+            @if(isset($course_details['use_custom_ratings']))
+            @php 
+                $checked = $course_details['use_custom_ratings'] ? 'checked' : ''; 
+            @endphp
+            <input type="checkbox" id="use_custom_ratings" name="use_custom_ratings" {{$checked}}>
+            <label for="use_custom_ratings">Use custom ratings?</label> 
+            @else
+            <input type="checkbox" id="use_custom_ratings" name="use_custom_ratings">
+            <label for="use_custom_ratings">Use custom ratings?</label> 
+            @endif
+          </div>
+
+
          
           <div class="col-12">
             <label for="what-learn">What you'll learn</label>            
             @if(isset($whatLearn))
             @php ($whatCount = 0)
             @foreach($whatLearn as $learn)
+            @if($learn!='')
             @php ($whatCount = $whatCount + 1)
                 <input type="text" class="form-control mt-2" id="what-learn" name="what_learn_{{ $whatCount }}" value="{{ $learn }}">
+            @endif
             @endforeach
             @else
-            <input type="text" class="form-control" id="what-learn" name="what_learn_1">
+            <input type="text" class="form-control" id="what-learn" name="what_learn_1" value="{{old('what_learn_1')}}">
             @endif
             @if ($errors->has('what_learn_1'))
               <span class="text-danger">This field is required</span>
@@ -149,14 +186,14 @@
             @if(isset($course_details['course_details_points']))
             <textarea class="form-control mb-3" name="who_learn_points" rows="4">{{ $course_details['course_details_points'] }}</textarea>
             @else
-            <textarea class="form-control mb-3" name="who_learn_points" rows="4"></textarea>
+            <textarea class="form-control mb-3" name="who_learn_points" rows="4">{{old('who_learn_points')}}</textarea>
             @endif
             @if ($errors->has('who_learn_points'))
               <span class="text-danger mb-3">This field is required</span><br>
             @endif
           </div>
           <div class="col-12">
-            <label for="course-image">Course image</label>
+            <label>Course image</label>
             <div class="row">
               @if(isset($course_details['image']))
               <div class="col-4"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="..."></div>
@@ -180,7 +217,7 @@
             </div>
           </div>
           <div class="col-12">
-            <label for="course-thumbnail-image">Course thumbnail image</label>
+            <label>Course thumbnail image</label>
             <div class="row">
             @if(isset($course_details['thumbnail']))
             <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
@@ -222,20 +259,21 @@
   let coursePoint = 1;
   let descPoint = 1;
   if(document.getElementById('route_val').value == "edit") {
-    coursePoint = document.getElementById('who_learn_points_count').value;
-    descPoint = document.getElementById('what_learn_points_count').value;
+    let rating = document.getElementById('course_rating').getAttribute('value');
+    document.getElementById('course_rating').value = rating;
   }
+  if(document.getElementById('add-more-who-learn')){
+    document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{
 
-  document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{
-
-  var input = document.createElement("INPUT");
-  coursePoint++;
-  input.setAttribute("name", "who_learn_points_" + coursePoint);
-  document.getElementById('who_learn_points_count').value = coursePoint;
-  document.getElementById("add-points").appendChild(input);
-   
-  });
-
+    var input = document.createElement("INPUT");
+    coursePoint++;
+    input.setAttribute("name", "who_learn_points_" + coursePoint);
+    document.getElementById('who_learn_points_count').value = coursePoint;
+    document.getElementById("add-points").appendChild(input);
+    
+    });
+  }
+  if(document.getElementById('add-more-what-learn')){
   document.getElementById('add-more-what-learn').addEventListener('click', (event) =>{
 
   var inputElement = document.createElement("INPUT");
@@ -246,6 +284,7 @@
 
    
   });
+  }
 
 
 </script>

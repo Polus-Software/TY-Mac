@@ -18,13 +18,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       @if(Auth::check())  
-      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6">
+      <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 w-xl-75 w-100 mx-xl-4 mx-lg-2 mx-0">
         @csrf
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
-        <button class="btn btn-outline-dark" type="button" id="search-btn">Search</button>
+        <button class="btn px-3 think-btn-secondary-outline" type="button" id="search-btn">Search</button>
       </form>
       @else
-      <div class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 col-lg-6 col-md-9 col-sm-9 col-6"></div>
+      <div class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 w-xl-75 w-100 mx-xl-5 mx-lg-2 mx-0"></div>
       @endif
       
     

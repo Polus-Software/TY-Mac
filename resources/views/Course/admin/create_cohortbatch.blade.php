@@ -6,7 +6,7 @@
   <div class="row">
   <div class="col-2 position-fixed">
       <!-- include sidebar here -->
-      @include('Course.admin.create.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-9 ms-auto">
       <!-- main -->

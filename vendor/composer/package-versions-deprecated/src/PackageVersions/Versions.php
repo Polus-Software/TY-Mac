@@ -55,7 +55,7 @@ final class Versions
   'guzzlehttp/psr7' => '2.1.0@089edd38f5b8abba6cb01567c2a8aaa47cec4c72',
   'knplabs/knp-snappy' => 'v1.4.0@b4db557ef3794cc661165b1900792ca180cd0e49',
   'laravel/framework' => 'v8.64.0@3337c029e1bb31d9712d27437cc27010ba302c9e',
-  'laravel/sanctum' => 'v2.11.4@2cc0c0f79eb92578f606f6130fafd31b18229db1',
+  'laravel/sanctum' => 'v2.14.0@0647a87140c7522e75826cffcadb3ad6e01f71e9',
   'laravel/serializable-closure' => 'v1.0.3@6cfc678735f22ccedad761b8cae2bab14c3d8e5b',
   'laravel/tinker' => 'v2.6.2@c808a7227f97ecfd9219fbf913bad842ea854ddc',
   'league/commonmark' => '2.0.2@2df87709f44b0dd733df86aef0830dce9b1f0f13',
@@ -156,7 +156,7 @@ final class Versions
   'sebastian/type' => '2.3.4@b8cd8a1c753c90bc1a0f5372170e3e489136f914',
   'sebastian/version' => '3.0.2@c6c1022351a901512170118436c764e473f6de8c',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'laravel/laravel' => 'dev-main@097c062fbf91cc8bcd16ec673e9b2aebf393fa71',
+  'laravel/laravel' => 'dev-main@8a5c6b91352a42e232fc5f6086e058d94af6d06f',
 );
 
     private function __construct()

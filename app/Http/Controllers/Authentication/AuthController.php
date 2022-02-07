@@ -10,6 +10,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SignupMail;
+use App\Mail\InstructorMailAfterStudentConcern;
+use App\Mail\AdminMailAfterSignUp;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\EnrolledCourse;
@@ -40,6 +42,7 @@ class AuthController extends Controller
 
         try {
         $userType = UserType::where('user_role', 'Student')->value('id');
+        $user_type = UserType::where('user_role', 'Admin')->value('id');
        
         $request->validate([
             'firstname' => 'required',
@@ -50,6 +53,8 @@ class AuthController extends Controller
             'privacy_policy' =>'accepted'
         ]);
 
+        $admins = User::where('role_id', $user_type)->get();
+        
         $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -62,21 +67,33 @@ class AuthController extends Controller
         //$user = Auth::user();
     
         $email= $request->email;
+        
     
         $details =[
            'firstname'=> $request->firstname,
-           'lastname'=> $request->lastname
-           
+           'lastname'=> $request->lastname,
         ];
-         Mail::to($email)->send(new SignupMail($details));
+
+        
+        Mail::to($email)->send(new SignupMail($details));
+        foreach($admins as $admin) {
+            $data=[
+                'firstname'=> $request->firstname,
+                'lastname'=> $request->lastname,
+                'email' => $email,
+                'adminEmail' => $admin->email,
+                'adminFirstname' => $admin->firstname,
+                'adminLastName' => $admin->lastname
+             ];
+            Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+        }
+        
         
         $notification = new Notification; 
         $notification->user = $user->id;
         $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
         $notification->is_read = false;
         $notification->save();
-        //return redirect('/')->withSuccess('Successfully registered!');
-        //return redirect('/')->with('message', 'Successfully registered!');
         if($request->redirect_page != ''){
             return redirect($request->redirect_page)->with('message', 'Successfully registered!');
         }
@@ -156,8 +173,8 @@ class AuthController extends Controller
 
             $instructor_count = DB::table('users')->where('role_id', '=', 3)-> where('deleted_at' , '=', NULL)->count();
             $registered_course_count = DB::table('courses')->count();
-            $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
-
+            //$students_registered = DB::table('users')->where('role_id', '=', 2)->count();
+            $students_registered = User::where('role_id', 2)->count();
             $liveSessions = LiveSession::all();
             $current_date = Carbon::now()->format('Y-m-d');
             $backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
@@ -233,23 +250,23 @@ class AuthController extends Controller
     }
 
     public function contactUs(Request $request) {
-        
         try {
             $name = $request->name;
             $phone = $request->phone;
             $message = $request->message;
             $email = $request->email;
+            
     
             $details =[
                 'title' => 'Hey there, you have a new query!',
-                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message
+                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
             ];
-    
-            // Mail::to('support@thinklit.com')->send(new Gmail($details));
+            
+            
     
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
-            return redirect('/')->with('message', 'Registration failed');
+            return redirect('/')->with('message', 'Message sent successfully!');
         }
         
     }
@@ -267,6 +284,177 @@ class AuthController extends Controller
             }
             return response()->json(['status' => 'success', 'msg' => '', 'html' => $html]);
         }
+    }
+
+// API actions
+
+    public function loginProcessApi(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        $remember_me = (!empty($request->remember_me)) ? TRUE : FALSE;
+        $redirectTo = '';
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $userType =  UserType::find($user->role_id)->user_role;
+            $token = $user->createToken('token')->plainTextToken;
+            Auth::login($user, $remember_me);
+            if ($userType == Config::get('common.ROLE_NAME_STUDENT')) {
+                $redirectTo = '/';
+            }
+            if ($userType == Config::get('common.ROLE_NAME_INSTRUCTOR')) {
+                $redirectTo = 'assigned-courses';
+            }
+            if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
+                $redirectTo = 'dashboard';
+            }
+            if($request->redirect != ''){
+                $redirectTo = $request->redirect;
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login success',
+                'url' => $redirectTo,
+                'token' => $token
+            ]);
+        }
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'Invalid username/password',
+            'url' => ''
+        ]);
+    }
+
+
+    public function signupProcessApi(Request $request) {
+   
+
+        try {
+        $userType = UserType::where('user_role', 'Student')->value('id');
+        $user_type = UserType::where('user_role', 'Admin')->value('id');
+       
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|confirmed',
+            'password_confirmation' =>'required',
+            'privacy_policy' =>'accepted'
+        ]);
+        
+        $admins = User::where('role_id', $user_type)->get();
+        $user = new User;
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role_id = $userType;
+        $user->timezone = "UTC";
+        $user->save();
+    
+        $email= $request->email;
+        
+   
+        $details =[
+           'firstname'=> $request->firstname,
+           'lastname'=> $request->lastname,
+        ];
+
+        
+        Mail::to($email)->send(new SignupMail($details));
+        foreach($admins as $admin) {
+            $data=[
+                'firstname'=> $request->firstname,
+                'lastname'=> $request->lastname,
+                'email' => $email,
+                'adminEmail' => $admin->email,
+                'adminFirstname' => $admin->firstname,
+                'adminLastName' => $admin->lastname
+             ];
+            Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+        }
+        
+        
+        $notification = new Notification; 
+        $notification->user = $user->id;
+        $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
+        $notification->is_read = false;
+        $notification->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Signup success'
+        ]);
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 'fail',
+                'message' => $exception->getMessage()
+            ]);
+        }
+        
+        
+    }
+
+    public function logoutApi() {
+        try {
+            if(auth()->user()) {
+                auth()->user()->tokens()->delete();
+                Session::flush();
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'logout successful'
+            ]);
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => $exception->getMessage()
+            ]);
+        }
+        
+    }
+
+    public function getNotificationsApi(Request $request) {
+        try {
+            $user = Auth::user();
+            $userId = $user->id;
+            $notifications = Notification::where('user', $userId)->get();
+            return response()->json(['status' => 'success', 'user_id' => $userId, 'notifications' => $notifications ]);
+        } catch(Exception $exception) {
+            return response()->json(['status' => 'error', 'message' => $exception->getMessage() ]);
+        }
+    }
+
+
+    public function contactUsApi(Request $request) {
+        try {
+            $name = $request->name;
+            $phone = $request->phone;
+            $message = $request->message;
+            $email = $request->email;
+            
+    
+            $details =[
+                'title' => 'Hey there, you have a new query!',
+                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
+            ];
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Submitted succesfully'
+            ]);
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+        
     }
     
 }

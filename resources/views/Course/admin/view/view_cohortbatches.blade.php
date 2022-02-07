@@ -2,7 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 @php 
-use App\Models\TimeZone;
+use App\Models\CustomTimezone;
 @endphp
 <input id="course_id" type="hidden" value="{{ $course_id }}" />
 @csrf
@@ -11,7 +11,7 @@ use App\Models\TimeZone;
   <div class="row">
   <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.view.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-8 right_card_block">
       <!-- main -->
@@ -62,7 +62,7 @@ use App\Models\TimeZone;
                       @php 
              
 
-             $offset = TimeZone::where('name', $cohortbatch->time_zone)->value('offset');
+             $offset = CustomTimezone::where('name', $cohortbatch->time_zone)->value('offset');
       
              $offsetHours = intval($offset[1] . $offset[2]);
              $offsetMinutes = intval($offset[4] . $offset[5]);

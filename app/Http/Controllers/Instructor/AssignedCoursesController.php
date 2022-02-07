@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Instructor;
 
+use App\Models\CustomTimezone;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,6 @@ use File;
 use Closure;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\TimeZone;
 use DateTime;
 use DateTimeZone;
 
@@ -61,7 +61,7 @@ class AssignedCoursesController extends Controller
           if(count($cohort_batches)) {
             $cohort_batches = $cohort_batches[0];
                 // Time setting
-                $offset = TimeZone::where('name', $user->timezone)->value('offset');
+                $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                       
                 $offsetHours = intval($offset[1] . $offset[2]);
                 $offsetMinutes = intval($offset[4] . $offset[5]);

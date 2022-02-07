@@ -33,33 +33,33 @@
                 <h3 class="titles">{{ (!!$isEdit) ? 'Edit profile' : 'Add Admin' }}</h3>
               </div>
               <div class="col-md-6">
-                <label>First Name</label>
+                <label>First Name*</label>
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$adminDetails['firstname']}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @else
-                <input type="text" class="form-control" value="" name="firstname" id="firstname" placeholder="Enter First Name">
+                <input type="text" class="form-control" value="{{old('firstname')}}" name="firstname" id="firstname" placeholder="Enter First Name">
                 @endif
                 @if ($errors->has('firstname'))
                 <div class="invalid-feedback d-block">{{ $errors->first('firstname') }}</div>
                 @endif
               </div>
               <div class="col-md-6">
-                <label>Last Name</label>
+                <label>Last Name*</label>
                 @if(!!$isEdit)
                 <input type="text" class="form-control" value="{{$adminDetails['lastname']}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @else
-                <input type="text" class="form-control" value="" name="lastname" id="lastname" placeholder="Enter Last Name">
+                <input type="text" class="form-control" value="{{old('lastname')}}" name="lastname" id="lastname" placeholder="Enter Last Name">
                 @endif
                 @if ($errors->has('lastname'))
                 <div class="invalid-feedback d-block">{{ $errors->first('lastname') }}</div>
                 @endif
               </div>
               <div class="col-12">
-                <label>Email id</label>
+                <label>Email id*</label>
                 @if(!!$isEdit)
                 <input type="email" class="form-control" value="{{$adminDetails['email']}}" name="email" id="email" placeholder=" Enter email">
                 @else
-                <input type="email" class="form-control" value="" name="email" id="email" placeholder=" Enter email">
+                <input type="email" class="form-control" value="{{old('email')}}" name="email" id="email" placeholder=" Enter email">
                 @endif
                 @if ($errors->has('email'))
                 <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div>
@@ -67,7 +67,7 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-                <label for="admin_password" class="col-form-label">Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating a new password."></i></label>
+                <label for="admin_password" class="col-form-label">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating a new password."></i></label>
                 <input type="password" class="form-control has-validation" id="admin_password" name="password"></input>
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link text-secondary text-decoration-none shadow-none" id="generate_password">Generate password</button>
@@ -82,8 +82,6 @@
                   @if ($errors->has('password'))
                   <div class="invalid-feedback d-block">{{ $errors->first('password') }}</div>
                   @endif
-              </div>
-				<div class="col-1"></div>
               <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-4">
                 <a class="btn btn-outline-secondary" href="{{route('manage-admin')}}">Cancel</a>                
                   @if(Route::current()->getName() == 'edit-admin')
@@ -96,6 +94,7 @@
           </form>
       </main>
     </div>
+    <div class="col-1"></div>
   </div>
 </div>
 <!-- container ends -->

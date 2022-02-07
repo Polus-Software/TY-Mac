@@ -98,13 +98,13 @@
             @endif
           </div>
           @endif
-          <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal"><span>Have a question?</span></a></div>
+          <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal" data-bs-id="{{$singleCourseDetail['id']}}"><span>Have a question?</span></a></div>
           @endunless
         </div>
         <div class="row mt-2">
           @foreach($singleCourseDetails as $singleCourseDetail)
           <div class="col-lg-12">
-            <span class="fw-bold">share this course: </span>
+            <span class="fw-bold">Share this course: </span>
               <a style="display:none;" class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url($currenturl)); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
@@ -184,7 +184,7 @@
       <!-- instructor profile -->
       <div class="col-lg-4 d-flex flex-column">
         <div class="card card-3 mb-3">
-          <div class="row g-0 border-bottom" style=" background:#F8F7FC; border-radius:10px 10px 0px 0px;">
+          <div class="row g-0 border-bottom think-bg think-br">
             <div class="col-sm-auto col-12">
               @foreach($singleCourseDetails as $singleCourseDetail)
               <img src="{{ asset('/storage/images/'.$singleCourseDetail['profile_photo']) }}" class="img-fluid rounded-circle m-2 p-2 d-flex align-items-center" alt="..." style="width:94px; height:94px;">
@@ -243,7 +243,7 @@
         </div>
         <!-- instructor profile end -->
         <!-- live cohorts -->
-        <div class="card card-4 mb-3 mt-3 flex-grow-1" style="background: #F8F7FC;">
+        <div class="card card-4 mb-3 mt-3 flex-grow-1 think-bg">
           <div class="card-body p-4">
             <h5 class="card-title mb-4">Upcoming Live Cohorts</h5>
 
@@ -315,7 +315,7 @@
               </div>
               @endforeach
               @else
-              <h6 class="mt-4" style="text-align:center;">No reviews yet.</h6>
+              <x-nodatafound message="No reviews yet.!"  notype="" />
               @endif
             </div>
           </div>
