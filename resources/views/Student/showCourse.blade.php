@@ -104,7 +104,7 @@
         <div class="row mt-2">
           @foreach($singleCourseDetails as $singleCourseDetail)
           <div class="col-lg-12">
-            <span class="fw-bold">share this course: </span>
+            <span class="fw-bold">Share this course: </span>
               <a style="display:none;" class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <a class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url($currenturl)); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>

@@ -7,7 +7,7 @@
 
     <div class="left_sidebar"> 
       <!-- include sidebar here -->
-      @include('Course.admin.view.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-8 right_card_block">
       <!-- main -->

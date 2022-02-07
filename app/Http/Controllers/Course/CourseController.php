@@ -87,7 +87,9 @@ class CourseController extends Controller
         
         return view('Course.admin.create.create_course',[
             'courseCategories' => $courseCategories,
-            'instructors' => $instructors
+            'instructors' => $instructors,
+            'courseStatus' => 0,
+            'course_id' => ''
         ]);
     }
 
@@ -422,8 +424,11 @@ class CourseController extends Controller
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
                     $html = $html . '<td class="align-middle">' . $course->course_title . '</td>';
                     $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-                    $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-                    $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
+                    $html = $html . '<td class="align-middle">' . $course->updated_at . '</td>';
+                    if($course->is_published == 1)
+                        $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-success text-dark">Published</span></td>';
+                    else
+                        $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
                     $html = $html . '<td class="text-center align-middle"><a href="" title="View course"><i class="fas fa-eye"></i></a>';
                     $html = $html . '<a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
@@ -665,6 +670,22 @@ class CourseController extends Controller
 			]);
         }
     }
+    public function deleteSubTopics(Request $request, $topicId) {
+       $courseContents = [];
+		try {
+            if($topicId) {
+                $subtopics = Topic::where('topic_id', $topicId)->first();
+                if($subtopics){
+                    $course_id = $subtopics->course_id;
+                    $subtopics = Topic::where('topic_id', $topicId)->delete();
+                    return redirect()->route('view-subtopics', ['course_id' => $course_id]);
+                }
+            }
+        }
+        catch (Exception $exception) {
+            return ($exception->getMessage());
+        }
+    }
 
 
     public function createAssignment(Request $request){
@@ -708,8 +729,9 @@ class CourseController extends Controller
     /**
      * For viewing a assignments
      */
-    public function viewAssignments($course_id) {
+    public function viewAssignments(Request $request) {
         try {
+            $course_id = $request->get('course_id');
             if($course_id){
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
               
@@ -740,7 +762,7 @@ class CourseController extends Controller
             'assignment_title'=>'required',
             'assignment_description' => 'required',
             'document' =>'required',
-            'difficulty' => 'required',
+            //'difficulty' => 'required',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);

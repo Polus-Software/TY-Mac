@@ -266,7 +266,7 @@
           <h2 class="fw-bold text-center text-white mb-4">
             Have a question?
           </h2>
-          <button class="btn bg-white" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
+          <button class="btn think-btn-secondary-outline border-0" type="button" data-bs-toggle="modal" data-bs-target="#contactModal">CONTACT US</button>
         </div>
       </div>
 

@@ -363,36 +363,36 @@ small#assignment_table_batch {
         <div class="row mb-5">
             <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
                 <div class="row sidebar pt-4">
-                    <h3 class="text-center">Cohort Details</h3>
+                    <h3 class="ps-4">Cohort Details</h3>
                     <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         @if($userType == 'instructor')
-                        <button class="nav-link mb-2 ps-5 text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
-                            <i class="fas fa-chart-bar pe-3"></i>Cohort Overview
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                            <i class="fas fa-chart-bar pe-3"></i><span>Cohort Overview</span>
                         </button>
                         @endif
-                        <button class="nav-link {{($userType == 'student') ? 'active' : ''}} mb-2 ps-5 text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
-                            <i class="far fa-clock pe-3"></i>Cohort Schedule
+                        <button class="nav-link {{($userType == 'student') ? 'active' : ''}} mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                        <img src="/storage/icons/_cohort_schedule.svg" alt="error" class="pe-3"><span>Cohort Schedule</span>
                         </button>
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
-                        <i class="fas fa-tv pe-3"></i>Personalized Recommendations
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <img src="/storage/icons/_personalized_recommendations.svg" alt="error" class="pe-3"><span>Personalized Recommendations</span>
                         </button>
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
-                        <i class="fas fa-comments pe-3"></i>Cohort Q&A
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <img src="/storage/icons/_cohort_Q&A.svg" alt="error" class="pe-3"><span>Cohort Q&A</span>
                         </button>
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
-                        <i class="fas fa-info-circle pe-3"></i>Cohort Info
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
+                        <img src="/storage/icons/_cohort_info.svg" alt="error" class="pe-3"><span>Cohort Info</span>
                         </button>
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-personalizedActivity-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedActivity" type="button" role="tab" aria-controls="v-pills-personalizedActivity" aria-selected="false">
-                        <i class="fas fa-newspaper pe-3"></i>Personalized Activity
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedActivity-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedActivity" type="button" role="tab" aria-controls="v-pills-personalizedActivity" aria-selected="false">
+                        <img src="/storage/icons/_assignments.svg" alt="error" class="pe-3"><span>Personalized Activity</span>
                         </button>
                         @if($userType == 'student')
-                        <button class="nav-link mb-2 ps-5 text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
-                        <img src="/storage/icons/Icon awesome-trophy.svg" alt="error" class="pe-2">Completion Certificate
+                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
+                        <img src="/storage/icons/_completion _certificate.svg" alt="error" class="pe-3"><span>Completion Certificate</span>
                     </button>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
-                        <p class="ps-5 text-start align-items-start achievement">ACHIEVEMENTS</p>
+                        <p class="ps-4 text-start align-items-start achievement">ACHIEVEMENTS</p>
 
-                        <div class="container d-flex">
+                        <div class="container achievements-badge-container d-flex">
                             <div class="badge-shadow left-0"><img src="/Badges/Badge 1.svg" alt=""></div>
                             <div class="badge-shadow left--15"><img src="/Badges/Badge 2.svg" alt=""></div>
                             <div class="badge-shadow left--30"><img src="/Badges/Badge 3.svg" alt=""></div>
@@ -402,8 +402,8 @@ small#assignment_table_batch {
                                 </button>
                             </div>
                         </div>
-                        <div class="border-top col-12 mt-4 pt-4 text-center">
-                            <a class="bg-transparent btn btn-dark text-black" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course review</a>
+                        <div class="border-top col-12 mt-4 pt-4 text-center px-4">
+                            <a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course review</a>
                         </div>
                         @endif
                     </div>
@@ -411,7 +411,7 @@ small#assignment_table_batch {
                 </div>
             </div>
 
-            <div class="col-lg-9 col-md-8 col-sm-12 col-12 gx-5">
+            <div class="col-lg-9 col-md-8 col-sm-12 col-12 gx-5 pe-3">
                 <div class="tab-content" id="v-pills-tabContent">
                     <!-- overview tab -->
                     @if($userType == 'instructor')
@@ -498,23 +498,24 @@ small#assignment_table_batch {
                         <div class="card card-2 mb-3">
                             <div class="card-body">
                                 <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                                @php ($sl_no=0)
                                 @foreach($topicDetails as $topicDetail)
-                                
+                                @php ($sl_no++)
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">{{ $topicDetail['topic_title'] }}</h6>
+                                        <h6 class="card-title pt-2" data-id="{{ $topicDetail['topic_id'] }}">Session {{$sl_no}} - {{ $topicDetail['topic_title'] }}</h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mt-2">
                                         @if($topicDetail['liveId'] == null)
                                         @if($topicDetail['scheduled'] == true)
-                                        <span style="font-size:13px;">Next Live Class:{{ $topicDetail['nextCohort'] }}</span>
+                                        <span style="font-size:14px;">Next Live Class:{{ $topicDetail['nextCohort'] }}</span>
                                         @else
-                                        <span class="text-muted" style="font-size:13px;">No sessions scheduled</span>
+                                        <span class="text-muted" style="font-size:14px;">No sessions scheduled</span>
                                         @endif
                                         @elseif($topicDetail['liveId'] == "Over")
-                                        <a style="background-color: #f0f0f0;color: black;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        <a style="color: #6E7687;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
                                         @elseif($topicDetail['liveId'] == "Wait")
-                                        <span class="text-muted" style="font-size:13px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
+                                        <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
@@ -643,7 +644,7 @@ small#assignment_table_batch {
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Messsge</a>
+                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Message</a>
                                     </button>
                                        
                                     </h2>

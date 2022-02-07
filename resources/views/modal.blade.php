@@ -55,7 +55,7 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-              <label class="form-check-label checkbox-text" id="chechbox-text">
+              <label class="form-check-label checkbox-text fw-normal" id="chechbox-text">
                   <input class="form-check-input" name="privacy_policy" type="checkbox" id="checkbox"> 
                   By creating an account, you agree to the
                   <a href="#">Terms of Service</a> and Privacy Policy <br>
@@ -490,6 +490,7 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
 
 <script>
   var contactModal = document.getElementById('contactModal');
+  if(contactModal){
   contactModal.addEventListener('show.bs.modal', function(event) {
     var button = event.relatedTarget;
     var recipient = button.getAttribute('data-bs-id')
@@ -497,6 +498,7 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
     modalBodyButton.value = recipient;
 
   });
+  }
 </script>
 @endpush
   
