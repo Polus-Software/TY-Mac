@@ -39,6 +39,7 @@ return array(
     'App\\Mail\\InstructorMailAfterFeedback' => $baseDir . '/app/Mail/InstructorMailAfterFeedback.php',
     'App\\Mail\\InstructorMailAfterStudentConcern' => $baseDir . '/app/Mail/InstructorMailAfterStudentConcern.php',
     'App\\Mail\\InstructorMailAfterassigningCourse' => $baseDir . '/app/Mail/InstructorMailAfterassigningCourse.php',
+    'App\\Mail\\LiveSessionReminderMail' => $baseDir . '/app/Mail/LiveSessionReminderMail.php',
     'App\\Mail\\MailAfterAssignmentSubmission' => $baseDir . '/app/Mail/MailAfterAssignmentSubmission.php',
     'App\\Mail\\MailAfterQuestion' => $baseDir . '/app/Mail/MailAfterQuestion.php',
     'App\\Mail\\MailAfterReplay' => $baseDir . '/app/Mail/MailAfterReplay.php',
