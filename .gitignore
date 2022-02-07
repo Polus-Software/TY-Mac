@@ -1,1 +1,2 @@
 /.vscode
+vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php
