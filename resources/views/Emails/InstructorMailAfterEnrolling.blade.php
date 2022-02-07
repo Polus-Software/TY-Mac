@@ -10,7 +10,6 @@
 Regards,<br>
 Thinklit Team
 
-{{ config('app.name') }}
 @endcomponent
 
 

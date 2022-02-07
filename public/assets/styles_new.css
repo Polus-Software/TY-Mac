@@ -117,8 +117,8 @@
   }
 
 .think-nodata-box {
-    background-color: #FFFDF7;
-    border: 1px solid #F2F2F2;
+    /* background-color: #FFFDF7; */
+    border: 1px solid #dee2e6;
     border-radius: 10px;
 }
 .think-nodata-box img {
@@ -189,3 +189,5 @@
 .think-tab-btn-rounded .nav-item:last-child .nav-link.active:hover {
   color: var(--color-white);
 }
+.think-bg {background: var(--color-grey-bg);}
+.think-br {border-radius:10px 10px 0px 0px;}

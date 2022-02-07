@@ -24,7 +24,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
 use Carbon\Carbon;
 use DateTimeZone;
-use App\Models\Timezone;
+use App\Models\CustomTimezone;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InstructorMailAfterassigningCourse;
 
@@ -87,7 +87,9 @@ class CourseController extends Controller
         
         return view('Course.admin.create.create_course',[
             'courseCategories' => $courseCategories,
-            'instructors' => $instructors
+            'instructors' => $instructors,
+            'courseStatus' => 0,
+            'course_id' => ''
         ]);
     }
 
@@ -105,7 +107,7 @@ class CourseController extends Controller
     }
 
     public function saveCourse(Request $request) {
-
+        try{
         $request->validate([
             'course_title'=>'required',
             'description' => 'required',
@@ -113,17 +115,22 @@ class CourseController extends Controller
             'difficulty' => 'required',
             'instructor' =>'required',
             'course_duration' =>'required',
+            'course_rating' =>'required',
             'what_learn_1' =>'required',
-            'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
-            'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
+            'course_image' =>'required| mimes:jpeg,jpg,png,.svg| max:500000',
+            'course_thumbnail_image' =>'required| mimes:jpeg,jpg,png,.svg| max:100000',
+            //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+            //'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
         ]);
 
         $courseTitle = $request->input('course_title');
         $courseDesc = $request->input('description');
         $courseCategory = $request->input('course_category');
         $courseDifficulty = $request->input('difficulty');
-        $instructorName = $request->input('instructor');
+        $instructorId = $request->input('instructor');
         $courseDuration = $request->input('course_duration');
+        $course_rating = $request->input('course_rating');
+        $use_custom_ratings = $request->input('use_custom_ratings') == "on" ? true : false;
        
         $what_learn = "";
         $what_learn_points_count = $request->input('what_learn_points_count');
@@ -132,7 +139,7 @@ class CourseController extends Controller
            $what_learn_temp = $request->input('what_learn_' . $index);
            $what_learn = $what_learn . $what_learn_temp . ";";
         }
- 
+        $what_learn = rtrim($what_learn, ';');
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
@@ -158,27 +165,29 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
-        $instructorName = User::find($instructorName)->firstname.' '.User::find($instructorName)->lastname;
-        $instructorEmail = User::find($instructorName)->email;
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        $instructorEmail = User::find($instructorId)->email;
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
         $course->category = $courseCategory;
         $course->course_difficulty = $courseDifficulty;
         $course->course_duration = $courseDuration;
-        $course->short_description = $what_learn ;
+        $course->short_description = $what_learn;
         $course->course_details = $whoLearnDescription;
         $course->course_details_points = $request->input('who_learn_points');
         $course->course_image = $courseFileName;
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
-        $course->instructor_id = $instructorName;
+        $course->instructor_id = $instructorId;
+        $course->course_rating = $course_rating;
+        $course->use_custom_ratings = $use_custom_ratings;
         $course->save();
 
         $assignedCourse = new AssignedCourse;
         $assignedCourse->course_id = $course->id;
-        $assignedCourse->user_id = $instructorName;
+        $assignedCourse->user_id = $instructorId;
         $assignedCourse->save();
 
         $datas = [
@@ -189,6 +198,10 @@ class CourseController extends Controller
          Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
+
+        }catch (Exception $exception){
+            return redirect()->route('create-subtopic', ['course_id' => $course->id]);
+        }
     }
 
     /**
@@ -262,6 +275,8 @@ class CourseController extends Controller
                     'category_id' => $data->value('courses.category'),
                     'category' => $data->value('course_category.category_name'),
                     'duration' => $data->value('courses.course_duration'),
+                    'course_rating' => $data->value('courses.course_rating'),
+                    'use_custom_ratings' => $data->value('courses.use_custom_ratings'),
                     // 'whatlearn' => explode(';', $data->value('courses.course_details')),
                      'course_details_points' => $data->value('courses.course_details_points'),
                     'image' => $data->value('courses.course_image'),
@@ -269,7 +284,6 @@ class CourseController extends Controller
                 ];
 
                 $whatLearn = explode(';', $data->value('courses.short_description'));
-
                 //$whoThis = explode(';', $data->value('courses.course_details_points'));
                 $whoThis = $data->value('courses.course_details_points');
 
@@ -297,7 +311,7 @@ class CourseController extends Controller
 
     public function updateCourse(Request $request) {        
         try{
-            
+
             $request->validate([
                 'course_title'=>'required',
                 'description' => 'required',
@@ -305,10 +319,11 @@ class CourseController extends Controller
                 'difficulty' => 'required',
                 'instructor' =>'required',
                 'course_duration' =>'required',
+                'course_rating' =>'required',
                 'what_learn_1' =>'required',
                 'who_learn_points'=>'required',
-                'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
-                'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
+                //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
+                //'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
             ]);
             
             if($request->isMethod('post')){
@@ -319,7 +334,8 @@ class CourseController extends Controller
                 $instructor = $request->input('instructor');
                 $course_id = $request->input('course_id');
                 $difficulty = $request->input('difficulty');
-
+                $course_rating = $request->input('course_rating');
+                $use_custom_ratings = $request->input('use_custom_ratings') == "on" ? true : false;
                 $courseDuration = $request->input('course_duration');       
                 $what_learn = "";
                 $what_learn_points_count = $request->input('what_learn_points_count');
@@ -362,6 +378,8 @@ class CourseController extends Controller
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
                 $course->instructor_id = $instructor;
+                $course->course_rating = $course_rating;
+                $course->use_custom_ratings = $use_custom_ratings;
 
                 if($request->file()) {
                     if($request->course_image != null) {
@@ -369,14 +387,14 @@ class CourseController extends Controller
                         $courseFileName = $courseFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/courseImages';
                         $courseFile->move($destinationPath,$courseFileName);
-                        $course->course_image = $courseFile;
+                        $course->course_image = $courseFileName;
                     }
                     if($request->course_thumbnail_image != null) {
                         $courseThumbnailFile = $request->course_thumbnail_image;
                         $courseThumbnailFileName = $courseThumbnailFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/courseThumbnailImages';
                         $courseThumbnailFile->move($destinationPath,$courseThumbnailFileName);
-                        $course->course_thumbnail_image = $courseThumbnailFile;
+                        $course->course_thumbnail_image = $courseThumbnailFileName;
                     }
                 }                      
                
@@ -406,8 +424,11 @@ class CourseController extends Controller
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
                     $html = $html . '<td class="align-middle">' . $course->course_title . '</td>';
                     $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-                    $html = $html . '<td class="align-middle">' . $course->description . '</td>';
-                    $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
+                    $html = $html . '<td class="align-middle">' . $course->updated_at . '</td>';
+                    if($course->is_published == 1)
+                        $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-success text-dark">Published</span></td>';
+                    else
+                        $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
                     $html = $html . '<td class="text-center align-middle"><a href="" title="View course"><i class="fas fa-eye"></i></a>';
                     $html = $html . '<a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;
@@ -432,6 +453,7 @@ class CourseController extends Controller
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
+        
         if(isset($request->topic_id) && !empty($request->topic_id)){
             for($i = 1; $i<= $topic_count; $i++) {
                 $updateDetails = [
@@ -442,7 +464,7 @@ class CourseController extends Controller
                 Topic::where('topic_id', $request->topic_id)
                     ->update($updateDetails);
                 $content_count = $request->input('content_count_topic_'.$i);
-                for($j = 0; $j<$content_count; $j++) {//echo 'jibi';
+                for($j = 0; $j<$content_count; $j++) {
                     $TopicFileName = $extension = $external_links = '';
                     if($request->file() && !empty($request->content_upload[$i][$j])){
                         $subtopicFile = $request->content_upload[$i][$j];
@@ -475,8 +497,6 @@ class CourseController extends Controller
                             TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
                         }
-                        //TopicContent::where('topic_content_id ', $request->input('content_topic_'.$i.'_'.$j)
-                    //->update($updateDetails);
                     }
                     else{
                         if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
@@ -495,6 +515,10 @@ class CourseController extends Controller
         }
         else{
             for($i = 1; $i<= $topic_count; $i++) {
+                $request->validate([
+                    'topic_title' . $i => 'required',
+                    'content_count_topic_'.$i => 'required'
+                ]);
                 $topic = new Topic;
                 $topic->topic_title = $request->input('topic_title'.$i);
                 $topic->course_id = $course_id;
@@ -646,6 +670,22 @@ class CourseController extends Controller
 			]);
         }
     }
+    public function deleteSubTopics(Request $request, $topicId) {
+       $courseContents = [];
+		try {
+            if($topicId) {
+                $subtopics = Topic::where('topic_id', $topicId)->first();
+                if($subtopics){
+                    $course_id = $subtopics->course_id;
+                    $subtopics = Topic::where('topic_id', $topicId)->delete();
+                    return redirect()->route('view-subtopics', ['course_id' => $course_id]);
+                }
+            }
+        }
+        catch (Exception $exception) {
+            return ($exception->getMessage());
+        }
+    }
 
 
     public function createAssignment(Request $request){
@@ -689,8 +729,9 @@ class CourseController extends Controller
     /**
      * For viewing a assignments
      */
-    public function viewAssignments($course_id) {
+    public function viewAssignments(Request $request) {
         try {
+            $course_id = $request->get('course_id');
             if($course_id){
                 $course_title = DB::table('courses')->where('id', $course_id)->value('course_title');
               
@@ -716,6 +757,15 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function saveAssignment(Request $request) {
+
+        $request->validate([
+            'assignment_title'=>'required',
+            'assignment_description' => 'required',
+            'document' =>'required',
+            //'difficulty' => 'required',
+            'due-date' =>'required',
+            'assignment_topic_id' =>'required'
+        ]);
         $externalLink = $request->input('external-link');
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
@@ -794,7 +844,7 @@ class CourseController extends Controller
 
     public function saveCohortBatch(Request $request) {
         
-        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       
@@ -883,8 +933,7 @@ class CourseController extends Controller
 
     public function updateCohortbatches(Request $request){
 
-
-        $offset = TimeZone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
+        $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       
@@ -914,7 +963,16 @@ class CourseController extends Controller
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
-        $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
+        $notifications = "";
+        
+        for($i=1;$i<=3;$i++){
+            
+            if($request->input('cohortbatch_notification_' . $i) != null) {
+                    $notifications = $notifications . $request->input('cohortbatch_notification_' . $i) . ";";
+            }
+        }
+        $notifications = substr($notifications, 0, strlen($notifications) - 1);
+        $cohortbatch->cohort_notification_id = $notifications;
         $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->save();
 

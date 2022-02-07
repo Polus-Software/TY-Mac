@@ -6,7 +6,7 @@
   <div class="row">
   <div class="left_sidebar">
       <!-- include sidebar here -->
-      @include('Course.admin.view.sidebar')
+      @include('Course.admin.sidebar')
     </div>
     <div class="col-8 right_card_block">
       <!-- main -->
@@ -44,7 +44,7 @@
                     <div class="d-flex justify-content-end mb-4">
                      
                       <a class="btn btn-sm btn-outline-dark me-2" href="{{ route('edit-subtopics', ['topic' => $courseContent['topic_id']]) }}">Edit</a>
-                      <a class="btn btn-sm btn-outline-dark" href="">Delete</a>
+                      <a class="btn btn-sm btn-outline-dark" href="{{ route('delete-subtopics', ['topic' => $courseContent['topic_id']]) }}">Delete</a>
                     </div>
                 </ul>
                 

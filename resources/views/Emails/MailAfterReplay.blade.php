@@ -10,6 +10,5 @@ To view the message, please log in to your account on ThinkLit.com
 Regards,
 The ThinkLit Team
 
-Thanks,<br>
-{{ config('app.name') }}
+
 @endcomponent

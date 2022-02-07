@@ -4,7 +4,7 @@
    font-size: 20px;
    color: #2C3443;
 }
-.sidebar img{
+.sidebar .achievements-badge-container img{
     box-shadow: -4px 0px 6px #00000029;
     border-radius: 40px;
 }
@@ -17,7 +17,7 @@
     background-color: #F1EEFD;
     width: 100%;
     font-family: 'Roboto', sans-serif;
-    font-weight: 900;
+    font-weight: 700;
 }
 .nav-pills .nav-link {
     color: #2C3443;

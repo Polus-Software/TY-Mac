@@ -11,6 +11,7 @@
     --text-tertiary: #474747;
     --color-grey: #6e7687;
     --color-primary-light: #fffdf7;
+    --color-grey-bg: #F8F7FC;
 }
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: none !important;
@@ -107,6 +108,11 @@
 .think-btn-secondary:active:focus {
     box-shadow: none;
 }
+.think-btn-secondary:hover {
+    background: var(--color-white);
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+}
 .think-btn-secondary-outline {
     text-decoration: none !important;
     min-height: 38px;
@@ -114,7 +120,7 @@
     padding-right: 25px;
     border: 1px solid var(--color-secondary);
     font-size: 1rem !important;
-    background-color: transparent !important;
+    background-color: var(--color-white) !important;
 }
 .think-btn-secondary-outline:focus,
 .think-btn-secondary-outline:hover,
@@ -124,6 +130,10 @@
     box-shadow: none;
     color: #2c3443 !important;
     /* border: none; */
+}
+.think-btn-secondary-outline:hover {
+    background: var(--color-secondary) !important;
+    color: var(--color-white) !important;
 }
 /* Tertiary Button */
 .think-btn-tertiary {
@@ -151,7 +161,8 @@
     cursor: pointer;
 }
 .think-btn-tertiary-outline:hover {
-    color: var(--color-white);
+    color: var(--color-secondary);
+    background-color: var(--color-white) !important;
 }
 .think-btn-tertiary-outline:focus {
     outline: 0;

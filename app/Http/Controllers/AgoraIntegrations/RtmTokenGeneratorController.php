@@ -130,9 +130,10 @@ class RtmTokenGeneratorController extends Controller
         } else {
             $role = self::RolePublisher;
             $roleName = "Instructor";
+            $sessionObj->update(['is_instructor_present' => true]);
         }
         
-        $expireTimeInSeconds = $totalSeconds;
+        $expireTimeInSeconds = $totalSeconds + 1200;
         $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
         $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds + 1800;
         $token = AccessToken::init(self::appId, self::appCertificate, $user, "");

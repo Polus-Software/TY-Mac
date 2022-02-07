@@ -28,8 +28,8 @@ class StudentMailAfterEnrolling extends Mailable
      */
     public function build()
     {
-        return $this->markdown('Emails.studentConfirmationAfterEnrolling')
-                    ->from('ashishbabythoppil@gmail.com');
+        return $this->subject('Welcome to the course ' .$this->mailDetails['course'].'!')
+                    ->markdown('Emails.StudentMailAfterEnrolling');
     }
     
 }

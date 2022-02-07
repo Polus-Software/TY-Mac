@@ -29,10 +29,9 @@
               </tr>
             </thead>
             <tbody>
-              @php ($slno = 0)
+              @php ($slno = $start_from)
               @if(!empty($studentDatas))
               @foreach($studentDatas as $studentData)
-              @php ($slno = $slno + 1)
               <tr id="{{$studentData['id'] }}">
                 <td>{{ $slno }}</td>
                 <td class="align-middle text-center">
@@ -52,6 +51,7 @@
                   </a>
                 </td>
               </tr>
+              @php ($slno = $slno + 1)
               @endforeach
               @else
                  <tr>
@@ -60,10 +60,10 @@
                  @endif
             </tbody>
           </table>
-          <div class="d-flex justify-content-end">
+        </div>
+        <div class="d-flex justify-content-end">
           {!! $studentDatas->links() !!}
           </div>
-        </div>
 		</main>
       <!-- main ends -->
 

@@ -9,7 +9,4 @@ To view the submitted assignment, please log in to your account on ThinkLit.com
 Regards,
 ThinkLit Team
 
-
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent

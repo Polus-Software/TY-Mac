@@ -28,6 +28,7 @@ class PersonalDetailsUpdatedMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('Emails.PersonalDetailsupdated');
+        return $this->subject('Your '. $this->data["detail"] .' was changed successfully')
+                    ->markdown('Emails.PersonalDetailsupdated');
     }
 }
