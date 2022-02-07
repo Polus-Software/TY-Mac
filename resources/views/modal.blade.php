@@ -170,7 +170,7 @@
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0 d-grid">
-              <button type="submit" class="btn btn-secondary sendContactInfo"><span class="button">Submit</span></button>
+              <button type="submit" class="btn btn-secondary sendContactInfo">Submit</button>
               </div>
 
             </form>
@@ -200,7 +200,7 @@
                 <small id="question_error" style="color:red;"></small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
-                <button type="button" class="btn btn-dark" id="submitStudentQuestion"><span class="button">Submit</span></button>
+                <button type="button" class="btn btn-dark" id="submitStudentQuestion">Submit</button>
               </div>
 
             </form>
@@ -286,7 +286,7 @@
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
-                <button type="submit" class="btn btn-secondary think-btn-secondary sendContactInfo w-100"><span class="button">Submit</span></button>
+                <button type="submit" class="btn btn-secondary think-btn-secondary sendContactInfo w-100">Submit</button>
               </div>
 
             </form>
