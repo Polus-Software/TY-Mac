@@ -113,7 +113,7 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-              <label class="form-check-label rememberme"><input class="form-check-input" name="remember_me" type="checkbox"> &nbsp;Remember me</label>
+              <label class="form-check-label rememberme"><input class="form-check-input" name="remember_me" type="checkbox" id="remember_me"> &nbsp;Remember me</label>
               </div>
               <div class="form-group mx-0">
               <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
@@ -381,10 +381,14 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
     const loginform = document.getElementById('loginForm');
     const loginemail = document.getElementById('inputEmail');
     const loginpassword = document.getElementById('inputPassword');
-    document.querySelector('#loginForm').addEventListener('submit', (e) => {debugger
+    document.querySelector('#loginForm').addEventListener('submit', (e) => {//debugger
       e.preventDefault();
       const email = loginemail.value.trim();
-      const password = loginpassword.value.trim();      
+      const password = loginpassword.value.trim();
+      let loginrememberme = 0;
+      if(document.getElementById('remember_me').checked){
+        loginrememberme = 1;
+      }
       let validLogin = true;
       let redirect_to = '';
       if (email === '') {
@@ -403,12 +407,12 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       }
       if(!validLogin) return;
       redirect_to = document.getElementById('redirect_page').value;
-      submitLogin(email, password,redirect_to);
+      submitLogin(email, password,redirect_to,loginrememberme);
     });
 
-    const submitLogin = (email, password,redirect) => {
+    const submitLogin = (email, password,redirect,rememberme) => {
       const errorEl = document.querySelector('.login-error-message');
-      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}`;
+      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}&remember_me=${rememberme}`;
       fetch(path, {
           method: 'POST',
           headers: {
@@ -417,7 +421,7 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
               "X-CSRF-Token": document.querySelector('input[name=_token]').value
           },
           body: JSON.stringify({})
-      }).then((response) => response.json()).then((data) => {debugger
+      }).then((response) => response.json()).then((data) => {//debugger
         console.log(data);
         if(data.status ==='success') {
           location.replace(data.url);

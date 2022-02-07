@@ -19,7 +19,7 @@
 				<form action="{{ route('admin.manager_reviews_filter') }}" enctype="multipart/form-data" method="GET" class="d-flex filter_table">
 					@csrf
 					<div class="col-md-4 m-lg-1">
-						<input type="text" name="course" class="form-control" placeholder="Course Name" value="{{$course}}">
+						<input type="text" name="course" class="form-control" placeholder="Course" value="{{$course}}">
 					</div>
 					<div class="col-md-3 m-lg-1">
 						<input type="text" name="comment" class="form-control" placeholder="Comment" value="{{$comment}}">
@@ -54,10 +54,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					@php ($slno = 0)
+					@php ($slno = $start_from)
 					@if($totalCount > 0)
 					@foreach($userfeedbacks as $userfeedback)
-					@php ($slno = $slno + 1)
 					<tr id="{{$userfeedback['id'] }}">
 						<td>{{ $slno }}</td>
 						<td id="username_{{$userfeedback['id'] }}">{{$userfeedback['user_name'] }}</td>
@@ -81,6 +80,7 @@
 							@endif
 						</td>
 					</tr>
+					@php ($slno = $slno + 1)
 					@endforeach
 					@else
 						<tr>

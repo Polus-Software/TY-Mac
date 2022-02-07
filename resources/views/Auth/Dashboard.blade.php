@@ -10,7 +10,7 @@
     <div class="col-8 right_card_block">
       <!-- main -->
       <main>
-        @if($userType == "admin")
+        @if($userType == "admin" || $userType == "content_creator")
         <div class="row mt-4">
           <div class="col-12 col-lg-3 col-md-3 col-sm-6">
             <div class="card llp-countbox mb-3">
