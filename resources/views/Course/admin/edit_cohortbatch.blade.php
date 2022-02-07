@@ -2,7 +2,7 @@
 @section('content')
 @include('Layouts.admin.header')
 @php 
-use App\Models\TimeZone;
+use App\Models\CustomTimezone;
 @endphp
 <!-- container -->
 <div class="container-fluid llp-container">
@@ -203,7 +203,7 @@ use App\Models\TimeZone;
             @php 
              
 
-              $offset = TimeZone::where('name', $cohortbatch->time_zone) ->value('offset');
+              $offset = CustomTimezone::where('name', $cohortbatch->time_zone) ->value('offset');
           
               $offsetHours = intval($offset[1] . $offset[2]);
               $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -266,7 +266,7 @@ use App\Models\TimeZone;
             
             @foreach($notifications as $notification)
             <div class="form-check">
-                <input type="checkbox" value="{{$notification->id}}" name="cohortbatch_notification" checked>
+                <input type="checkbox" value="{{$notification->id}}" name="cohortbatch_notification_{{$notification->id}}" checked>
                 <label for="">{{ $notification->description }}</label>
             </div>
             @endforeach

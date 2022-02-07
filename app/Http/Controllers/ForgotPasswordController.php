@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 use Carbon\Carbon; 
 use Hash;
 use App\Mail\ForgotPasswordMail;
-use App\Mail\PersonalDetailsUpdated;
+use App\Mail\PersonalDetailsUpdatedMail;
+use Illuminate\Support\Facades\Auth;
 
 class ForgotPasswordController extends Controller
 {
@@ -79,6 +80,7 @@ class ForgotPasswordController extends Controller
 
       $data= [
          'userName' => $StudentName,
+         'detail' => 'password'
       ];
 
        
@@ -92,15 +94,53 @@ class ForgotPasswordController extends Controller
 
       DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
-      Mail::to($request->email)
-      ->subject('Your password was changed successfully')
-      ->send(new PersonalDetailsUpdated($data));
+      Mail::to($request->email)->send(new PersonalDetailsUpdatedMail($data));
          
       return redirect('/')->withSuccess('Your password has been changed!');
 
      
-   }catch (Exception $exception){
+   } catch (Exception $exception){
       return redirect('/')->withSuccess('Your password has been changed!');
    }
 }
+
+
+public function resetPasswordApi(Request $request) {
+   try{
+      $request->validate([
+         'email' => 'required|email|exists:users',
+         'password' => 'required|string|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|confirmed',
+         'password_confirmation' => 'required'
+      ]);
+         
+      $user = User::where('email' , $request->email);
+    
+      $userName = $user->value('firstname').' '.$user->value('lastname');
+
+      $data= [
+         'userName' => $userName,
+      ];
+        
+      $user = User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+
+      DB::table('password_resets')->where(['email'=> $request->email])->delete();
+  
+      Mail::to($request->email)->send(new PersonalDetailsUpdatedMail($data));
+      
+      
+         
+      return response()->json([
+         'status' => 'success',
+         'message' => 'Your password has been changed!'
+     ]);
+
+     
+   } catch (Exception $exception){
+      return response()->json([
+         'status' => 'failed',
+         'message' => $exception->getMessage()
+     ]);
+   }
+}
+
 }

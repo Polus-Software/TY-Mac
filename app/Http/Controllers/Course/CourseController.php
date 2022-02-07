@@ -744,7 +744,6 @@ class CourseController extends Controller
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
-
         $externalLink = $request->input('external-link');
         $topicId =intval($request->input('assignment_topic_id'));
         $course_id = $request->input('course_id');
@@ -912,7 +911,6 @@ class CourseController extends Controller
 
     public function updateCohortbatches(Request $request){
 
-
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -943,6 +941,12 @@ class CourseController extends Controller
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
+        $notifications = "";
+        for($i=1;$i<=3;$i++){
+            if($request->input('cohortbatch_notification_' . $i) != null) {
+               $notifications = $notifications . $request->input('cohortbatch_notification_' . $i) . ";";
+            }
+        }
         $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
         $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->save();

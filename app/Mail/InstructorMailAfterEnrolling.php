@@ -29,7 +29,6 @@ class InstructorMailAfterEnrolling extends Mailable
     public function build()
     {
         return $this->subject('New student enrolled in your course')
-                    ->markdown('Emails.InstructorMailAfterEnrolling')
-                    ->from('ashishbabythoppil@gmail.com');
+                    ->markdown('Emails.InstructorMailAfterEnrolling');
     }
 }
