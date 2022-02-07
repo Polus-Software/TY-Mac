@@ -396,27 +396,27 @@ small#assignment_table_batch {
                     <h3 class="ps-4">Cohort Details</h3>
                     <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4 pb-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         @if($userType == 'instructor')
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
                             <i class="fas fa-chart-bar pe-3"></i><span>Cohort Overview</span>
                         </button>
                         @endif
-                        <button class="nav-link {{($userType == 'student') ? 'active' : ''}} mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
+                        <button class="nav-link align-items-center {{($userType == 'student') ? 'active' : ''}} mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortSchedule-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortSchedule" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
                         <img src="/storage/icons/_cohort_schedule.svg" alt="error" class="pe-3"><span>Cohort Schedule</span>
                         </button>
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedRecommondations-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedRecommendations" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
                         <img src="/storage/icons/_personalized_recommendations.svg" alt="error" class="pe-3"><span>Personalized Recommendations</span>
                         </button>
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-CohortQuestions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-CohortQuestions" type="button" role="tab" aria-controls="v-pills-CohortQuestions" aria-selected="false">
                         <img src="/storage/icons/_cohort_Q&A.svg" alt="error" class="pe-3"><span>Cohort Q&A</span>
                         </button>
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-cohortInfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cohortInfo" type="button" role="tab" aria-controls="v-pills-cohortInfo" aria-selected="false">
                         <img src="/storage/icons/_cohort_info.svg" alt="error" class="pe-3"><span>Cohort Info</span>
                         </button>
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedActivity-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedActivity" type="button" role="tab" aria-controls="v-pills-personalizedActivity" aria-selected="false">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-personalizedActivity-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personalizedActivity" type="button" role="tab" aria-controls="v-pills-personalizedActivity" aria-selected="false">
                         <img src="/storage/icons/_assignments.svg" alt="error" class="pe-3"><span>Personalized Activity</span>
                         </button>
                         @if($userType == 'student')
-                        <button class="nav-link mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
+                        <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start" id="v-pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#v-pills-certificate" type="button" role="tab" aria-controls="v-pills-certificate" aria-selected="false">
                         <img src="/storage/icons/_completion _certificate.svg" alt="error" class="pe-3"><span>Completion Certificate</span>
                     </button>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12 border-bottom mt-3 mb-3"></div>
@@ -432,8 +432,8 @@ small#assignment_table_batch {
                                 </button>
                             </div>
                         </div>
-                        <div class="border-top col-12 mt-4 pt-4 text-center px-4">
-                            <a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course review</a>
+                        <div class="border-top col-12 mt-4 py-4 text-center px-4">
+                            <a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
                         </div>
                         @endif
                     </div>
@@ -979,7 +979,7 @@ small#assignment_table_batch {
                                                 @elseif($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
                                                 @else
-                                                <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; !important;width:6rem;" class="badge pill text-dark">Pending</span>
+                                                <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; width:6rem;" class="badge pill text-dark">Pending</span>
                                                 @endif
                                                 </button>
                                                 </h2>
