@@ -1,0 +1,27 @@
+.ty-mac-footer{
+    background:#2C3443; 
+    color:#D6D6D6;
+    height:auto;
+}
+.copyRight{
+    color:#EBEBEB;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+.ty-mac-footer h4{
+    font-size: 20px;
+    font-weight:bold ;
+    color:#F2F2F2;
+    font-family: 'Roboto', sans-serif;
+}
+.ty-mac-footer p{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+}
+.ty-mac-footer a{
+    color:#D6D6D6;
+    text-decoration: none;
+}

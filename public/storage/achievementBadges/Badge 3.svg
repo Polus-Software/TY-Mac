@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="69" viewBox="0 0 69 69">
+  <g id="Badge_3" data-name="Badge 3" transform="translate(-17 -15)">
+    <g id="Ellipse_29" data-name="Ellipse 29" transform="translate(17 15)" fill="#fff" stroke="#e0e0e0" stroke-width="1">
+      <circle cx="34.5" cy="34.5" r="34.5" stroke="none"/>
+      <circle cx="34.5" cy="34.5" r="34" fill="none"/>
+    </g>
+    <g id="Badge" transform="translate(29.5 24.997)">
+      <path id="Icon_material-star" data-name="Icon material-star" d="M17.212,24.7,25.995,30l-2.331-9.991,7.76-6.722-10.218-.867L17.212,3l-3.994,9.423L3,13.289l7.76,6.722L8.429,30Z" transform="translate(4 7.503)" fill="#74648c"/>
+      <path id="Icon_feather-hexagon" data-name="Icon feather-hexagon" d="M47.714,36.609V17.4a4.8,4.8,0,0,0-2.4-4.153l-16.805-9.6a4.8,4.8,0,0,0-4.8,0L6.9,13.249A4.8,4.8,0,0,0,4.5,17.4V36.609a4.8,4.8,0,0,0,2.4,4.153l16.805,9.6a4.8,4.8,0,0,0,4.8,0l16.805-9.6a4.8,4.8,0,0,0,2.4-4.153Z" transform="translate(-4 -3)" fill="none" stroke="#74648c" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+    </g>
+  </g>
+</svg>
