@@ -943,7 +943,9 @@ class CoursesCatalogController extends Controller
         ]);
 
     }
+/*
 
+*/ 
     public function registerCourseProcessApi(Request $request){
       
     try {
@@ -958,7 +960,6 @@ class CoursesCatalogController extends Controller
        $instructor = User::where('id', $assigned);
        $instructorEmail =  $instructor->value('email');
        $instructorName =  $instructor->value('firstname') .' '.$instructor->value('lastname');
-       
        
        $enrolledCourse = new EnrolledCourse;
        $enrolledCourse->user_id = $userId;
@@ -998,8 +999,7 @@ class CoursesCatalogController extends Controller
             'message' => 'Enrolled successfully'
             ]);
             
-       }catch (Exception $exception){
-
+       } catch(Exception $exception){
         return response()->json([
             'status' => 'success', 
             'message' => 'Enrolled successfully'

@@ -180,7 +180,7 @@ class CourseController extends Controller
         $course->course_thumbnail_image = $courseThumbnailFileName;
         $course->created_by = $userId;
         $course->is_published = false;
-        $course->instructor_id = $instructorName;
+        $course->instructor_id = $instructorId;
         $course->course_rating = $course_rating;
         $course->use_custom_ratings = $use_custom_ratings;
         $course->save();
@@ -963,7 +963,16 @@ class CourseController extends Controller
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
-        $cohortbatch->cohort_notification_id = $request->input('cohortbatch_notification');
+        $notifications = "";
+        
+        for($i=1;$i<=3;$i++){
+            
+            if($request->input('cohortbatch_notification_' . $i) != null) {
+                    $notifications = $notifications . $request->input('cohortbatch_notification_' . $i) . ";";
+            }
+        }
+        $notifications = substr($notifications, 0, strlen($notifications) - 1);
+        $cohortbatch->cohort_notification_id = $notifications;
         $cohortbatch->students_count = $request->input('students_count');
         $cohortbatch->save();
 

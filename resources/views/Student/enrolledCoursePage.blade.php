@@ -1,40 +1,7 @@
 @extends('Layouts.app')
 @section('content')
 <style>
-  .btn-outline-success {
-    border-color: #000000 !important;
-}
-.btn-outline-success:hover {
-  background-color: #fff !important;
-  border-color: #000000 !important;
-  color: #000000 !important;
-}
-
-.card-title-certificate{
-    padding-bottom:35px;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 900;
-    margin-top:55px;
-    
-}
-.accordion-button:not(.collapsed) {
-    color: #6E7687 !important;
-    background-color: transparent !important;
-}
-
-
-.card-title-1-certificate{
-    color:#F5BC29;
-    text-align: center;
-    padding-bottom: 40px;
-    padding-top:20px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 900;
-    font-size:28px;
-   
-}
-.card-text-1.team_text{
+    .card-text-1.team_text{
     padding-bottom:40px;
 }
 .completion_info{
@@ -61,6 +28,68 @@
 .not_completed .card-body{
     padding:100px 0;
 }
+  .btn-outline-success {
+    border-color: #000000 !important;
+}
+.btn-outline-success:hover {
+  background-color: #fff !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.card-title-certificate{
+    padding-bottom:35px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    margin-top:55px;
+    
+}
+.accordion-button:not(.collapsed) {
+    color: #6E7687 !important;
+    background-color: transparent !important;
+}
+
+
+.card-title-1-certificate{
+    /* color:#F5BC29; */
+    color:#af7e00;
+    text-align: center;
+    padding-bottom: 40px;
+    /* padding-top:20px; */
+    padding-top:40px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    font-size:28px;
+   
+}
+.card-text-1.team_text{
+    padding-bottom:40px;
+}
+.completion_info{
+    line-height:30px;
+}
+.card.pill_card{
+    border:0;
+}
+.complete_warning{
+    display: block;
+    color: #6E7687;
+}
+.welcome_text{
+    color: #af7e00;
+    font-weight: bold;
+    margin: 20px 0 8px 0;
+    display: block;
+}
+.download_certificate,.download_certificate:hover,.download_certificate:focus {
+    background: #F1EEFD;
+    color:#6c757d;
+    float:right;
+}
+.not_completed .card-body{
+    padding:100px 0;
+}
 #reviewButton{
     border: 1px solid #d1d0d0;
     padding: 6px 25px;
@@ -70,6 +99,10 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 400; 
     color: #6E7687;
+    padding-bottom:0px;
+    font-size:25px;
+    width:60%;
+    display:inline-block;
 }
 .card-text-2-certificate{
     text-align: center;
@@ -333,10 +366,7 @@ small#assignment_table_batch {
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-8 col-md-8 col-sm-8 col-12">
-                                                <!-- <p class="duration"><i class="far fa-clock pe-1"></i>
-                                                    Next Live Class: - <small>{{$next_live_cohort}}</small>
-                                                   
-                                                </p> -->
+                                             
                                                
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
@@ -364,7 +394,7 @@ small#assignment_table_batch {
             <div class="col-lg-3 col-md-4 col-sm-12 col-12 vertcalNav mb-3">
                 <div class="row sidebar pt-4">
                     <h3 class="ps-4">Cohort Details</h3>
-                    <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <div class="nav flex-column nav-pills d-flex align-items-start pe-0 pt-4 pb-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         @if($userType == 'instructor')
                         <button class="nav-link align-items-center mb-2 ps-4 pe-4 d-flex text-start active" id="v-pills-cohortOverview-tab" data-bs-toggle="pill" data-bs-target="#cohort-overview" type="button" role="tab" aria-controls="v-pills-cohortSchedule" aria-selected="true">
                             <i class="fas fa-chart-bar pe-3"></i><span>Cohort Overview</span>
@@ -497,7 +527,17 @@ small#assignment_table_batch {
                     <div class="tab-pane fade show {{($userType == 'student') ? 'active' : ''}}" id="v-pills-cohortSchedule" role="tabpanel" aria-labelledby="v-pills-cohortSchedule">
                         <div class="card card-2 mb-3">
                             <div class="card-body">
-                                <h5 class="card-title border-bottom pt-2 pb-2">Session info</h5>
+                            <div class="row">
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-12">
+                                        <h5 class="card-title pt-2">Session Info</h5>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                    @if($userType == 'student')
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}">Go to study materials</a>
+                                    @endif
+                                    </div>
+                                </div>
+                                <hr>
                                 @php ($sl_no=0)
                                 @foreach($topicDetails as $topicDetail)
                                 @php ($sl_no++)
@@ -517,7 +557,7 @@ small#assignment_table_batch {
                                         @elseif($topicDetail['liveId'] == "Wait")
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
-                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
                                         @endif
                                     </div>
                                 </div>
@@ -662,7 +702,7 @@ small#assignment_table_batch {
                                                                     <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">1-on-1 Session</button>
                                                                 </div>
                                                                 <div class="col-lg-6">
-                                                                    <a href="#" class="btn btn-outline-secondary text-dark w-100">Chart</a>
+                                                                   <button type="button" class="btn btn-outline-secondary text-dark w-100" data-bs-toggle="modal" data-bs-target="#chartModal" data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">Chart</button>
                                                                 </div> 
                                                             </div>
                                                             <div class="row mt-3">
@@ -987,7 +1027,7 @@ small#assignment_table_batch {
                                                                                                     <div class="col-lg-3">Attach File:</div>
                                                                                                         <div class="col-lg-6 col-12"><label>Upload from device</label>
                                                                                                             <input class="form-control" type="file" name="assignment_upload">
-                                                                                                            <small class="fst-italic">Supported File Formats are:  pdf, doc, docx,</small>
+                                                                                                            <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx,</small>
                                                                                                         </div>
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                                                     </div>
@@ -1094,76 +1134,86 @@ small#assignment_table_batch {
                                     <div class="card card-2">
                                         <div class="card-body p-4">
                                             <div class="row">
+                                                
                                                 <div class="col-lg-6 col-md-8 col-sm-6 col-12 mb-4  border-bottom">
                                                 <h5 class="card-title pt-2 pb-2">Completion Certificate</h5>
                                                 </div>
-                                                    <div class="col-lg-6 col-md-4 col-sm-6 col-12 mb-4 border-bottom">
-                                                        <ul class="nav nav-pills justify-content-end mb-3" id="pills-tab" role="tablist">
-                                                        <li class="nav-item" role="presentation" style="list-style:none;">
-                                                            <button class="nav-link" id="pills-certificate-tab" data-bs-toggle="pill" data-bs-target="#pills-certificate" type="button" role="tab" aria-controls="pills-certificate" aria-selected="true">View Certificate</button>
-                                                        </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="tab-content" id="pills-tabContent">
-                                                            <div class="tab-pane fade show active" id="pills-back" role="tabpanel" aria-labelledby="pills-back-tab">
-                                                                No certificates
-                                                            </div>
-                                                            <div class="tab-pane fade" id="pills-certificate" role="tabpanel" aria-labelledby="pills-back-certificate">
-                                                                <div class="col-lg-12 d-flex justify-content-center">
-                                                                    <div class="card text-center" style="margin: auto; width: 100%;">
-                                                                        <div class="card-body">
-                                                                        <!-- <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;"> -->
-                                                                            <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
-                                                                            <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :  
+                                                </div>
+                                            <div class="row">
+                                                <div class="col-lg-12 d-flex justify-content-center">
+                                                @if($progress == 100)
+                                                    <div class="tab-content" id="pills-tabContent">
+                                                        <div class="tab-pane fade" id="pills-back" role="tabpanel" aria-labelledby="pills-back-tab">
+                                                            No certificates
+                                                        </div>
+                                                        <div class="tab-pane fade show active" id="pills-certificate" role="tabpanel" aria-labelledby="pills-back-certificate">
+                                                            <div class="col-lg-12 d-flex justify-content-center">
+                                                                <div class="card text-center pill_card" style="margin: auto; width: 100%;">
+                                                                    <div class="card-body">
+                                                                        <small style="position: absolute; left: 0px; top:20px; left:40px;">Thinklit</small>
+                                                                        <small style="position: absolute; right: 40px; top:20px;text-align:left;">
+                                                                            <span style="color:#6E7687;">DATE OF ISSUE :</span>  
+                                                                            <span class="date_of_issue">
                                                                             @foreach($singleCourseDetails as $course)
                                                                                 {{ $course['date_of_issue'] }} 
-                                                                            @endforeach</small>
-                                                                            <small style="position: absolute; right: 45px; top:40px;"></small>
-                                                                            <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
-                                                                            <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
-                                                                            <div style="background:#FFF9E8;">
+                                                                                @endforeach
+                                                                            </span>
+                                                                        </small>
+                                                                        <small style="position: absolute; right: 45px; top:40px;"></small>
+                                                                        <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
+                                                                        <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
+                                                                        <div style="background:#FFFEF5;">
+                                                                            <h3 class="card-title-1-certificate">Certification of Completion</h3>
                                                                             <h3 class="card-title-1-certificate">Certificate of completion</h3>
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
                                                                                         {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
                                                                                         @endforeach</p>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                                <p class="card-text-1">Has successfully completed the {{$course['course_title']}}  <br>
-                                                                                    online cohort on (course completion date)</p>
+                                                                                        <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <p class="card-text-1 completion_info">Has successfully completed the {{$course['course_title']}}  <br>
+                                                                                        online cohort on {{$course_completion}}</p>
+                                                                                </div>
+                                                                            </div>1
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    @foreach($singleCourseDetails as $course)
+                                                                                        <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid" 
+                                                                                        style="border-bottom:1px solid #F5BC29;"> 
+                                                                                    @endforeach
+                                                                                </div>
+                                                                                <div class="col-lg-12 mt-4">
+                                                                                    <p class="card-text-1">@foreach($singleCourseDetails as $course)
+                                                                                        {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
+                                                                                            @endforeach
+                                                                                    </p>
+                                                                                    <p class="card-text-1 team_text">&<br>Team ThinkLit</p>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                            @foreach($singleCourseDetails as $course)
-                                                                            <img src="{{asset('/storage/signatures/'.$course['instructor_signature'])}}" alt="" class="img-fluid" 
-                                                                            style="border-bottom:1px solid #F5BC29;"> 
-                                                                            @endforeach
-                                                                            </div>
-                                                                            <div class="col-lg-12 mt-4">
-                                                                                <p class="card-text-1">@foreach($singleCourseDetails as $course)
-                                                                                    {{ $course['instructor_firstname'] }}  {{ $course['instructor_lastname'] }}
-                                                                                        @endforeach
-                                                                                </p>
-                                                                                <p class="card-text-1">&<br>Team ThinkLit</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        </div>
-                                                                        
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row mt-4">
-                                                                @foreach($singleCourseDetails as $course)
-                                                                        <a href="{{ route('generate-certificate', $course['id']) }}"  target="_blank" class="btn btn-dark">Download certificate</a>
-                                                                @endforeach
                                                             </div>
                                                         </div>
+                                                        @else
+                                                <div class="card text-center pill_card not_completed" style="margin: auto; width: 100%;">
+                                                    <div class="card-body">
+                                                        <img src="{{asset('/storage/images/Page-1.png')}}" alt="" class="img-fluid">
+                                                        <p class="card-text-2-certificate-1"><span class="welcome_text">Hi 
+                                                            @foreach($singleCourseDetails as $course)
+                                                                {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
+                                                            @endforeach
+                                                            , you haven't finished the course yet!</span>
+                                                            <span class="complete_warning">Complete the course to get certificate</span>
+                                                        </p>
                                                     </div>
+                                                    </div>
+                                                    @endif
                                                 </div>
+                                            </div>
+                                                </div>
+</div>
                                         </div>
-                                     </div>
-                                </div>
+                                     
                             </div>
                         </div>
 
@@ -1373,6 +1423,94 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
 });
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@if($userType == 'instructor')
+<script>
+    
+    
+            function drawChart(count, contents, student) {
+                console.log(contents[0]['likes']);
+                var gdata = new google.visualization.DataTable();
+                gdata.addColumn('string', 'Subtopics');
+                gdata.addColumn('number', 'Feedbacks');
+                for(i=0;i<count;i++){
+                    gdata.addRows([
+                        [contents[i]['content_title'],contents[i]['likes']]
+                    ]);
+                }
+                
+                var options = {
+                chart: {
+                    title: student + "'s Activities"
+                },
+                width: 900,
+                height: 470,
+                colors: ['#A26B05'],
+                vAxis: {
+                    format: '0'
+                    },
+                };
+                var chart = new google.charts.Line(document.getElementById('graph_div'));
+                chart.draw(gdata, google.charts.Line.convertOptions(options));
+            }
+      
+    let contentCount = 0;
+    let contentArr = [];
+    document.getElementById('sessionModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var student = button.getAttribute('data-bs-student-id');
+        var topic = button.getAttribute('data-bs-topic-id');
+        startBtn = document.getElementById('1_on_1_session_start');
+        startBtn.setAttribute('data-student-id', student);
+        startBtn.setAttribute('data-topic-id', topic);
+    });
+    document.getElementById('1_on_1_session_start').addEventListener('click', function(e) {
+        var student = this.getAttribute('data-student-id');
+        var topic = this.getAttribute('data-topic-id');
+        var batch_id = document.getElementById('batch_id').value;
+        
+        location.replace("/1-on-1/" + student + "/" + topic + "?batchId=" + batch_id);
+    });
+    
+    document.getElementById('chartModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var student = button.getAttribute('data-bs-student-id');
+        var topic = button.getAttribute('data-bs-topic-id');
+        var course = document.getElementById('course_id');
+        
+        let path = "{{ route('get-individual-student-chart') }}?student=" + student +"&topic=" + topic +"&course=" + course;
+        fetch(path, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+        }).then((response) => response.json()).then((jsondata) => {
+            google.charts.load('current', {'packages':['line']});
+            
+            google.charts.setOnLoadCallback(function(){ drawChart(jsondata.contentCount, jsondata.contents, jsondata.student) });
+        });
+        setTimeout(hideAxisLabels, 500);
+        function hideAxisLabels(){
+            let axisElements = document.getElementById('graph_div').getElementsByTagName('g')[4].getElementsByTagName('text');   
+            let axisElementsLength = axisElements.length;
+            axisElements[parseInt(axisElementsLength) - 2].style.display = 'none';
+            axisElements[parseInt(axisElementsLength) - 4].style.display = 'none';
+            let title = document.getElementById('graph_div').getElementsByTagName('g')[0].getElementsByTagName('text')[0];
+            title.setAttribute('fill', '#2C3443');
+            title.style.fontSize = "16px";
+            title.style.fontWeight = "600";
+            let lineElement = document.getElementById('graph_div').getElementsByTagName('g')[2]; 
+            let path = lineElement.getElementsByTagName('path')[0];
+            let circle = lineElement.getElementsByTagName('circle');
+            path.setAttribute('stroke-width', '4');
+            for(i=0;i<circle.length;i++){
+                circle[i].setAttribute('fill-opacity', 1);
+            }
+        }
+    });
+</script>
+@elseif($userType == 'student')
 <script>
     google.charts.load('current', {
         'packages': ['bar']
@@ -1408,4 +1546,5 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
+@endif
 @endpush

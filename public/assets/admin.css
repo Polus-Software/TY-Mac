@@ -319,9 +319,12 @@ td .badge.bg-warning{
   background-color: transparent;
   color: #000;
 }
-.add_external_link:hover,
+a.add_external_link:hover,
 #add_content_for_topic:hover,
-.upload_audio:hover{
+.upload_audio:hover,
+.add_links:hover,
+.btn-sub-content:hover,
+.upload_btn:hover{
     background-color: #2C3443;
 }
 .btn-secondary,.btn-secondary:hover{

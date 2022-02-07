@@ -34,7 +34,8 @@ class AdminController extends Controller
         $start_from = ($current_page-1) * $num_rec_per_page+1;
         $studentDetails = [];
 
-        $students = User::where('role_id', 2)->get();
+        //$students = User::where('role_id', 2)->get();
+        $students = DB::table('users')->where('role_id', '=', 2)->get();
         $user = Auth::user();
         $userType =  UserType::find($user->role_id)->user_role;
 
@@ -48,6 +49,7 @@ class AdminController extends Controller
                 'lastname' => $student->lastname,
                 'email' => $student->email,
                 'image' => $student->image,
+                'deleted_at' => $student->deleted_at,
                 'enrolledCourseCount' => $enrolledCourseCount
             );
             array_push($studentDetails, $studentData);
@@ -575,6 +577,9 @@ class AdminController extends Controller
     }
 	/* by jibi for getting user reviews starts */
 	public function getUserReviews(){
+        $current_page = isset($_REQUEST['page'])?$_REQUEST['page']:'1';
+        $num_rec_per_page = 10;
+        $start_from = ($current_page-1) * $num_rec_per_page+1;
 		$userfeedbacks = [];
         $generalCourseFeedbacks = DB::table('general_course_feedback')
 									->select('general_course_feedback.id', 'general_course_feedback.course_id','courses.course_title','general_course_feedback.user_id','users.firstname','users.lastname','general_course_feedback.rating','general_course_feedback.comment','general_course_feedback.is_moderated')
@@ -620,7 +625,8 @@ class AdminController extends Controller
 			'course' => '',
 			'comment' => '',
 			'rating' => '',
-			'totalCount' => $totalCount
+            'totalCount' => $totalCount,
+            'start_from' => $start_from
         ]);
 	}
 	public function getUserReviewsFilter(Request $request){
