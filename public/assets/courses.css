@@ -1,0 +1,73 @@
+.ty-mac-header-bg {
+    min-height: 600px;
+    background-size: cover;
+    background-image: url("/courselist/Illustration/Background.svg");
+}
+
+.filter{
+    background:#f8f7fc;
+}
+
+
+
+.filter-button {
+    color: #000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0px;
+}
+
+.accordion-body {
+    padding-left: 0px;
+}
+
+.rateCourse{
+    color:#F5BC29;   
+}
+.filter-star {
+    color: #F5BC29;
+}
+.filter-no-star {
+    color: #d8d8d8;
+}
+.filter-item {
+    background-color: transparent !important;
+    border:none !important;
+    border-bottom: 1px solid rgba(0,0,0,.125) !important;
+}
+.fa-tag{
+   color:#6E7687;
+}
+
+.item-1,.tech{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #6E7687;  
+
+}
+.item-2, .item-3{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #6E7687;
+}
+
+.item-3 {
+    text-align-last: end;
+}
+select{
+    width: 200px;
+    border: 1px solid #6E7687;
+}
+.btn{
+
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+}
+.btn:focus{
+    box-shadow: none;
+}
+
