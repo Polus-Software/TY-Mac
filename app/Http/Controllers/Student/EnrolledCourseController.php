@@ -38,6 +38,8 @@ use App\Mail\MailAfterReplay;
 use App\Mail\MailAfterQuestion;
 use App\Mail\MailAfterAssignmentSubmission;
 use App\Mail\InstructorMailAfterFeedback;
+use App\Models\Notification;
+use App\Mail\mailAfterAssignmentReview;
 
 class EnrolledCourseController extends Controller
 {
@@ -77,9 +79,6 @@ class EnrolledCourseController extends Controller
             }
         }
 
-        
-       
-        
         $currentUserRoleId = User::where('id', $user->id)->value('role_id');
         $userType = Usertype::where('id', $currentUserRoleId)->value('user_role');
         $student_firstname = $user->firstname;
@@ -454,7 +453,7 @@ class EnrolledCourseController extends Controller
                 'student_profile_photo' => $student_profile_photo,
                 'question' => $question,
                 'reply' => $reply,
-                'hasReplied' => $hasReplied,
+                'hasReplied' => Carbon::parse($hasReplied)->diffForHumans(),
                 'date' => Carbon::parse($date)->diffForHumans(),
                 'replay_date' =>Carbon::parse($replay_date)->diffForHumans(),
             ));
@@ -567,6 +566,13 @@ class EnrolledCourseController extends Controller
 
          Mail::to($instructorEmail)->send(new InstructorMailAfterFeedback($details));
 
+        $notification = new Notification; 
+        $notification->user = $assigned;
+        $notification->notification = "Hi ".$instructorName."
+                                      You have new feedback from your student ".$studentName." on your course ".$courseTitle.".";
+        $notification->is_read = false;
+        $notification->save();
+
         return response()->json([
             'status' => 'success', 
             'message' => 'submitted successfully'
@@ -616,12 +622,9 @@ class EnrolledCourseController extends Controller
         $userId = $user->id;
 
         $assignmentId = $request->assignment_id;
-
-
         $assignments = Assignment::where('student_id' , $userId)
                                   ->where('topic_assignment_id', $assignmentId)->get();
-                               
-                                  
+                                          
         if(count($assignments) == 0){
 
         $topicAssignment = TopicAssignment::where('id', $assignmentId);
@@ -663,7 +666,8 @@ class EnrolledCourseController extends Controller
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
-        $course_title = Course::where('id', $courseId)->value('course_title');
+        $courseTitle = Course::where('id', $courseId)->value('course_title');
+       
         $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
         $instructorEmail = User::find($instructorId)->email;
 
@@ -686,6 +690,13 @@ class EnrolledCourseController extends Controller
          ];
 
          Mail::to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
+
+         $notification = new Notification; 
+         $notification->user = $instructorId;
+         $notification->notification = "Hi ".$instructorName.", You have got a new assignment submitted by ".$studentName." for the course ".$courseTitle.
+                                        "To view the submitted assignment, please log in to your account on ThinkLit.com";
+         $notification->is_read = false;
+         $notification->save();
 
         return redirect()->back();
 
@@ -810,8 +821,9 @@ class EnrolledCourseController extends Controller
 
         $instructorId = Auth::user()->id;
         $courseQA = CourseQA::find($qaId);
+        $studentId = $courseQA->value('student');
         $courseTitle = Course::where('id', $courseQA->value('course_id'))->value('course_title');
-        $student = User::where('id',$courseQA->value('student'));
+        $student = User::where('id', $studentId);
         $studentEmail = $student->value('email');
         $studentName = $student->value('firstname').' '.$student->value('lastname');
         $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
@@ -827,8 +839,14 @@ class EnrolledCourseController extends Controller
         $updatedAt = $courseQA->updated_at->format('d M H:m');
         $courseQA->save();
 
-        Mail::to($studentEmail)
-                ->send(new MailAfterReplay($details));
+        Mail::to($studentEmail)->send(new MailAfterReplay($details));
+
+        $notification = new Notification; 
+        $notification->user = $studentId;
+        $notification->notification = "Hello ". $studentName.", You have got a reply to your message from your Instructor ". $instructorName."for the course ". $courseTitle." on ThinkLit. To view the message,
+         please log in to your account on ThinkLit.com";
+        $notification->is_read = false;
+        $notification->save();
 
         return response()->json([
             'status' => 'success',
@@ -893,8 +911,13 @@ class EnrolledCourseController extends Controller
 
         $qa->save();
 
-        Mail::to($instructorEmail)
-        ->send(new MailAfterQuestion($data));
+        Mail::to($instructorEmail)->send(new MailAfterQuestion($data));
+
+        $notification = new Notification; 
+        $notification->user = $instructor;
+        $notification->notification = "Hi ". $instructorName.",You have got a new message from your student ".$studentName." on ThinkLit. To view the message, please log in to your account on ThinkLit.com";
+        $notification->is_read = false;
+        $notification->save();
 
         return response()->json(['status' => 'success', 'msg' => 'Saved successfully!']);
         
@@ -1013,10 +1036,30 @@ class EnrolledCourseController extends Controller
     }
 
     public function completeAssignment(Request $request) {
+
         $assignment = $request->assignment_id;
-
         $assignmentObj = Assignment::where('assignment_id', $assignment)->update(['is_completed' => true]);
+        
+        $assignmentData = Assignment::where('assignment_id', $assignment);
+        $studentId = $assignmentData->value('student_id');
+        $courseId = $assignmentData->value('course_id');
+        $student = User::where('id', $studentId);
+        $studentName = $student->value('firstname').' '.$student->value('lastname');
+        $studentEmail = $student->value('email');
+        $courseTitle = Course::where('id', $courseId)->value('course_title');
 
+        $details= [
+            'studentName' => $studentName,
+            'courseTitle' => $courseTitle
+         ];
+        
+         Mail::to($studentEmail)->send(new mailAfterAssignmentReview($details));
+         $notification = new Notification; 
+         $notification->user = $sessionInstructor;
+         $notification->notification = "Hello ".$studentName." ,Your assignment for the course ".$courseTitle." has been reviewed by the instructor. 
+                                        To view the reviewed assignment, please log in to your account on ThinkLit.com";
+         $notification->is_read = false;
+         $notification->save();
         return response()->json(['status' => 'success']);
 
     }

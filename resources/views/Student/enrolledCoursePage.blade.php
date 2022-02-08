@@ -235,7 +235,7 @@ small#assignment_table_batch {
                 <td colspan="3">
                     <div class="assignment_list_div">
                         <span id="assignment_title">Assignment Title</span>
-                        <a id="modal_file_download" href="" class="btn btn-secondary" style="float: right;"><i class="fa fa-download"></i> Download File</a>
+                        <a id="modal_file_download" href="" class="btn btn-secondary" target="_blank" style="float: right;"><i class="fa fa-download"></i> Download File</a>
                     </div>
                 </td>
                 
@@ -1163,7 +1163,6 @@ small#assignment_table_batch {
                                                                         <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
                                                                         <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                                         <div style="background:#FFFEF5;">
-                                                                            <h3 class="card-title-1-certificate">Certification of Completion</h3>
                                                                             <h3 class="card-title-1-certificate">Certificate of completion</h3>
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
                                                                                         {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
@@ -1232,7 +1231,13 @@ small#assignment_table_batch {
 @endpush
 @push('child-scripts')
 <script>
+var url_string = window.location.href
+var url = new URL(url_string);
+var c = url.searchParams.get("feedback");
+if(c == true || c == 'true') {
+    document.getElementById('reviewButton').click();
 
+}
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
   document.getElementById('modal_comment_div').style.display = "none";

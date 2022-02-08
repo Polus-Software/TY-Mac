@@ -7,7 +7,7 @@ for the course {{$details['courseTitle']}}  on Thinklit.
 
 To view the message, please log in to your account on ThinkLit.com
 
-Regards,
+Regards,<br>
 The ThinkLit Team
 
 
