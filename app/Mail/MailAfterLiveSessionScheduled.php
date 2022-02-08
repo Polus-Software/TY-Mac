@@ -10,15 +10,15 @@ use Illuminate\Queue\SerializesModels;
 class MailAfterLiveSessionScheduled extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -28,6 +28,7 @@ class MailAfterLiveSessionScheduled extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.MailAfterLiveSessionScheduled');
+        return $this->subject('Just scheduled: '.$this->data['courseTitle'].'!')
+                    ->markdown('emails.MailAfterLiveSessionScheduled');
     }
 }

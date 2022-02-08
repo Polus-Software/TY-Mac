@@ -27,6 +27,8 @@ use DateTimeZone;
 use App\Models\CustomTimezone;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InstructorMailAfterassigningCourse;
+use App\Mail\mailAfterCourseCreation;
+use App\Models\Notification;
 
 class CourseController extends Controller
 {
@@ -190,12 +192,38 @@ class CourseController extends Controller
         $assignedCourse->user_id = $instructorId;
         $assignedCourse->save();
 
+        $userType = UserType::where('user_role', 'content_creator')->value('id');
+        $user_type = UserType::where('user_role', 'Admin')->value('id');
+        $admins = User::where('role_id', $user_type)->get();
+        $name = $user->firstname.' '.$user->lastname;
+
+        if($user->role_id == $userType){
+            foreach($admins as $admin) {
+                $data=[
+                    'adminFirstName' => $admin->firstname,
+                    'adminLastName' => $admin->lastname,
+                    'courseTitle' => $courseTitle,
+                    'name' => $name
+                 ];
+
+                Mail::to($admin->email)->send(new mailAfterCourseCreation($data));
+            }
+            
+        }
+
         $datas = [
             'instructorName' => $instructorName,
             'courseTitle' => $courseTitle
          ];
 
          Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
+         
+         $notification = new Notification; 
+         $notification->user = $instructorId;
+         $notification->notification = "Hi ".$instructorName.", You have been assigned a new course " .$courseTitle;
+         $notification->is_read = false;
+         $notification->save();
+         
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
 

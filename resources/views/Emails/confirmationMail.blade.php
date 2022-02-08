@@ -9,7 +9,7 @@
 
 <p>Get started by exploring our courses </p>
 
-<p>If you have any questions, please email us at support@ThinkLit.com</p>
+<p>If you have any questions, please email us at support@thinklit.com</p>
 
 Regards,<br>
 Thinklit Team
