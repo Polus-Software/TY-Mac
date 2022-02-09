@@ -35,7 +35,6 @@ use App\Services\UserService;
 use App\Mail\AdminMailAfterStudentEnrolling;
 use App\Models\Notification;
 
-
 class CoursesCatalogController extends Controller
 {
     public function viewAllCourses(Request $request) {
