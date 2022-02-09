@@ -144,7 +144,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '303' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '99' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
@@ -960,5 +960,32 @@ class RtmTokenGeneratorController extends Controller
         }
         
         return response()->json(['html' => $html]);
+    }
+
+    public function viewVideoAgain(Request $request, $session) {
+        $liveSession = LiveSession::where('live_session_id', $session);
+
+        $topicId = $liveSession->value('topic_id');
+        $courseId = $liveSession->value('course_id');
+        $topic = Topic::where('topic_id', $topicId)->value('topic_title');
+        $course = Course::where('id', $courseId)->value('course_title');
+        $session = "99" . $session;
+        $userObj = Auth::user();
+        $user = "1005" . strval($userObj->id);
+        $expireTimeInSeconds = 1800;
+        $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
+        $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds + 1800;
+        $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
+        $Privileges = AccessToken::Privileges;
+        $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
+        $generatedToken = $token->build();
+        return view('view_again', [
+           'session' => $session,
+           'appId' => self::appId,
+           'token' => $generatedToken,
+           'uid' => $user,
+           'topic' => $topic,
+           'course' => $course
+        ]);
     }
 }
