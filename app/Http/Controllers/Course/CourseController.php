@@ -167,8 +167,8 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
-        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
-        $instructorEmail = User::find($instructorId)->email;
+        $instructorName = User::where('id',$instructorId)->value('firstname').' '.User::where('id',$instructorId)->value('lastname');
+        $instructorEmail = User::where('id',$instructorId)->value('email');
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
@@ -207,6 +207,11 @@ class CourseController extends Controller
                  ];
 
                 Mail::to($admin->email)->send(new mailAfterCourseCreation($data));
+                $notification = new Notification; 
+                $notification->user = $admin->id;
+                $notification->notification = "Hi " .$admin->firstname ." ".$admin->lastname.", A new course has been created by the content creator ".$name." The following course has been added : ".$courseTitle;
+                $notification->is_read = false;
+                $notification->save();
             }
             
         }

@@ -409,6 +409,11 @@ class CoursesCatalogController extends Controller
                 'course_title' => $course_title
              ];
             Mail::to($admin->email)->send(new AdminMailAfterStudentEnrolling($mailData));
+            $notification = new Notification; 
+            $notification->user = $admin->id;
+            $notification->notification = "Hello ".$admin->firstname." " .$admin->lastname.", You have got a new student enrolled in your ".$course_title." course.";
+            $notification->is_read = false;
+            $notification->save();
         }
        
         $notification = new Notification; 
