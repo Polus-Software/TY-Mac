@@ -537,13 +537,11 @@ class CoursesCatalogController extends Controller
             $email = $request->email;
             $courseId = $request->course_id;
 
-
             $assigned = CourseService::getInstructorByCourse($courseId);
             $instructorName = UserService::getUserFullName($assigned);
             $instructorEmail = UserService::getUserEmail($assigned);
-
      
-            $details =[
+            $details = [
                 'name' => $name,
                 'message' => $message,
                 'email' => $email,
