@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\UserType;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -109,11 +110,11 @@ class EditController extends Controller
         $user->password = Hash::make($request->newPassword);
         $user->save();
 
-        $StudentName = $user->firstname.' '.$user->lastname;
+        $userName = $user->firstname.' '.$user->lastname;
         $StudentEmail = $user->email;
   
         $data= [
-           'userName' => $StudentName,
+           'userName' => $userName,
            'detail' => 'password'
         ];
   
@@ -122,6 +123,12 @@ class EditController extends Controller
         Auth::logout();
 
         Mail::to($StudentEmail)->send(new PersonalDetailsUpdatedMail($data));
+
+         $notification = new Notification; 
+         $notification->user = $user->id;
+         $notification->notification = "You've successfully changed your ThinkLit password.";
+         $notification->is_read = false;
+         $notification->save();
 
         return redirect('/')->withSuccess('Your password has been changed!');
 

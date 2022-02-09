@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Timezone;
+use App\Models\CustomTimezone;
 
 class TimezoneTableSeeder extends Seeder
 {
@@ -20,7 +20,7 @@ class TimezoneTableSeeder extends Seeder
             $zones['offset'] = date('P', $timestamp);
             $zones['diff_from_gtm'] = 'UTC/GMT '.date('P', $timestamp);
 
-            Timezone::updateOrCreate(['name' => $zone], $zones);
+            CustomTimezone::updateOrCreate(['name' => $zone], $zones);
         }
     }
 }

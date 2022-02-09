@@ -32,6 +32,9 @@ use Config;
 use App\Mail\InstructorMailAfterStudentConcern;
 use App\Services\CourseService;
 use App\Services\UserService;
+use App\Mail\AdminMailAfterStudentEnrolling;
+use App\Models\Notification;
+
 
 class CoursesCatalogController extends Controller
 {
@@ -230,13 +233,14 @@ class CoursesCatalogController extends Controller
        $user = Auth::user();
        $userId = $user->id;
        $userType = UserType::all();
+       $user_type = UserType::where('user_role', 'Admin')->value('id');
+       $admins = User::where('role_id', $user_type)->get();
        $studentEmail= $user->email;
        $assigned = DB::table('assigned_courses')->where('course_id',  $courseId)->value('user_id');
        $instructor = User::where('id', $assigned);
        $instructorEmail =  $instructor->value('email');
        $instructorName =  $instructor->value('firstname') .' '.$instructor->value('lastname');
-       
-       
+    
        $enrolledCourse = new EnrolledCourse;
        $enrolledCourse->user_id = $userId;
        $enrolledCourse->batch_id = $batchId;
@@ -271,6 +275,20 @@ class CoursesCatalogController extends Controller
 
         Mail::to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
 
+        foreach($admins as $admin) {
+            $mailData=[
+                'adminFirstName' => $admin->firstname,
+                'adminLastName' => $admin->lastname,
+                'course_title' => $course_title
+             ];
+            Mail::to($admin->email)->send(new AdminMailAfterStudentEnrolling($mailData));
+            $notification = new Notification; 
+            $notification->user = $admin->id;
+            $notification->notification = "Hello ".$admin->firstname." " .$admin->lastname.", You have got a new student enrolled in your ".$course_title." course.";
+            $notification->is_read = false;
+            $notification->save();
+        }
+       
         $notification = new Notification; 
         $notification->user = $user->id;
         $notification->notification = "Welcome to the ". $course_title ." course, hope you have a great learning experience!";
@@ -524,16 +542,22 @@ class CoursesCatalogController extends Controller
             $instructorName = UserService::getUserFullName($assigned);
             $instructorEmail = UserService::getUserEmail($assigned);
      
-            $details =[
-                // 'title' => 'Hey there, you have a new query!',
-                // 'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
+            $details = [
                 'name' => $name,
                 'message' => $message,
                 'email' => $email,
                 'instructorName' => $instructorName
             ];
             
-             Mail::to('anjali.krishna@polussoftware.com')->send(new InstructorMailAfterStudentConcern($details));
+            Mail::to($instructorEmail)->send(new InstructorMailAfterStudentConcern($details));
+
+            $notification = new Notification; 
+            $notification->user =  $assigned;
+            $notification->notification = "Hi ".$instructorName.", You have got a new concern from a student.".$name."
+                                           Details as follows," .$message.".";
+            $notification->is_read = false;
+            $notification->save();
+
     
             return redirect()->back()->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
