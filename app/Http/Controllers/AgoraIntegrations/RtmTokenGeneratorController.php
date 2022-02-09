@@ -102,7 +102,6 @@ class RtmTokenGeneratorController extends Controller
         
         $startTime = $batch->value('start_time');
         $endTime = $batch->value('end_time');
-
         $firstTime=strtotime($startTime);
         $lastTime=strtotime($endTime);
         $timeDiff=$lastTime-$firstTime;
@@ -140,7 +139,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '100' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '303' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 

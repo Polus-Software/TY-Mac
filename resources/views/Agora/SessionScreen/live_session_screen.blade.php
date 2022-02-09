@@ -1588,11 +1588,6 @@ z-index: 100;
     
         });
 
-
-
-
-
-
 document.getElementById('chat_box').addEventListener('keyup', function(e) {
   let message = document.getElementById('chat_box').value;
   message = message.trim();
