@@ -210,8 +210,61 @@ small#assignment_table_batch {
     position: relative;
     left: 40px;
 }
+#copy-link{
+    position: absolute;
+    top: 8.5rem;
+    color: #6c757d;
+    font-size: 13px;
+    cursor: pointer;
+}
+#copy-link:hover{
+    text-decoration: underline;
+}
+
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #74648C;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 
   </style>
+  <div id="snackbar">Link copied.</div>
   <!-- instructor assignment modal -->
   <div class="modal fade" id="instructAssignModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
@@ -558,6 +611,7 @@ small#assignment_table_batch {
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        <a id="copy-link" data-href="{{url('/')}}/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">Copy link to session</a>
                                         @endif
                                     </div>
                                 </div>
@@ -1231,13 +1285,20 @@ small#assignment_table_batch {
 @endpush
 @push('child-scripts')
 <script>
-var url_string = window.location.href
-var url = new URL(url_string);
-var c = url.searchParams.get("feedback");
-if(c == true || c == 'true') {
-    document.getElementById('reviewButton').click();
+    var url_string = window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("feedback");
+    if(c == true || c == 'true') {
+        document.getElementById('reviewButton').click();
+    }
+    
+    document.getElementById('copy-link').addEventListener('click', function(e) {
+        navigator.clipboard.writeText(this.getAttribute('data-href'));
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    });
 
-}
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
   document.getElementById('modal_comment_div').style.display = "none";
