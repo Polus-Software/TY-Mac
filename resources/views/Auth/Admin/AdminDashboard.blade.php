@@ -41,12 +41,16 @@
                 <td>{{$studentData['lastname'] }}</td>
                 <td >{{$studentData['email'] }}</td>
                 <td class="align-middle text-center">{{$studentData['enrolledCourseCount']}}</td>
-                <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
+                @if($studentData['deleted_at']  == '')
+                  <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
+                @else
+                  <td class="align-middle text-center"><span class="badge bg-warning text-dark">Inactive</span></td>
+                @endif
                 <td class="align-middle text-center">
                 <a href="{{ route('view-student', ['student_id' => $studentData['id']]) }}" title="View student">
                   <i class="fas fa-eye"></i>
                   </a>                  
-                  <a title="Delete student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
+                  <a title="Deactivate student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>

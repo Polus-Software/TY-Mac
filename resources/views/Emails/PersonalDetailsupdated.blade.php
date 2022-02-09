@@ -4,7 +4,7 @@
 
 You've successfully changed your {{ $data['detail']}}.
 
-Regards,
+Regards,<br>
 The ThinkLit Team
 
 

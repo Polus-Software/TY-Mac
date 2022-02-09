@@ -287,7 +287,9 @@
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
       //return false;
-      window.location.reload();
+      if(data.status == 'success') {
+        // window.location.reload();
+      }
     });
   });
 
