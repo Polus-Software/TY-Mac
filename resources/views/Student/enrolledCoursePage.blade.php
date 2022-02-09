@@ -1285,7 +1285,13 @@ small#assignment_table_batch {
 @endpush
 @push('child-scripts')
 <script>
-
+    var url_string = window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("feedback");
+    if(c == true || c == 'true') {
+        document.getElementById('reviewButton').click();
+    }
+    
     document.getElementById('copy-link').addEventListener('click', function(e) {
         navigator.clipboard.writeText(this.getAttribute('data-href'));
         var x = document.getElementById("snackbar");
@@ -1293,12 +1299,6 @@ small#assignment_table_batch {
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     });
 
-    var url_string = window.location.href
-    var url = new URL(url_string);
-    var c = url.searchParams.get("feedback");
-    if(c == true || c == 'true') {
-        document.getElementById('reviewButton').click();
-    }
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
   document.getElementById('modal_comment_div').style.display = "none";
