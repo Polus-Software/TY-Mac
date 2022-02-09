@@ -27,6 +27,8 @@ use DateTimeZone;
 use App\Models\CustomTimezone;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InstructorMailAfterassigningCourse;
+use App\Mail\mailAfterCourseCreation;
+use App\Models\Notification;
 
 class CourseController extends Controller
 {
@@ -165,8 +167,8 @@ class CourseController extends Controller
         
         $user = Auth::user();
         $userId = $user->id;
-        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
-        $instructorEmail = User::find($instructorId)->email;
+        $instructorName = User::where('id',$instructorId)->value('firstname').' '.User::where('id',$instructorId)->value('lastname');
+        $instructorEmail = User::where('id',$instructorId)->value('email');
         $course = new Course;
         $course->course_title = $courseTitle;
         $course->description = $courseDesc;
@@ -190,12 +192,43 @@ class CourseController extends Controller
         $assignedCourse->user_id = $instructorId;
         $assignedCourse->save();
 
+        $userType = UserType::where('user_role', 'content_creator')->value('id');
+        $user_type = UserType::where('user_role', 'Admin')->value('id');
+        $admins = User::where('role_id', $user_type)->get();
+        $name = $user->firstname.' '.$user->lastname;
+
+        if($user->role_id == $userType){
+            foreach($admins as $admin) {
+                $data=[
+                    'adminFirstName' => $admin->firstname,
+                    'adminLastName' => $admin->lastname,
+                    'courseTitle' => $courseTitle,
+                    'name' => $name
+                 ];
+
+                Mail::to($admin->email)->send(new mailAfterCourseCreation($data));
+                $notification = new Notification; 
+                $notification->user = $admin->id;
+                $notification->notification = "Hi " .$admin->firstname ." ".$admin->lastname.", A new course has been created by the content creator ".$name." The following course has been added : ".$courseTitle;
+                $notification->is_read = false;
+                $notification->save();
+            }
+            
+        }
+
         $datas = [
             'instructorName' => $instructorName,
             'courseTitle' => $courseTitle
          ];
 
          Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
+         
+         $notification = new Notification; 
+         $notification->user = $instructorId;
+         $notification->notification = "Hi ".$instructorName.", You have been assigned a new course " .$courseTitle;
+         $notification->is_read = false;
+         $notification->save();
+         
 
         return redirect()->route('create-subtopic', ['course_id' => $course->id]);
 

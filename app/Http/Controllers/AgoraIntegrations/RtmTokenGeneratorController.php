@@ -33,6 +33,11 @@ use App\Models\SingleSession;
 use App\Models\SingleSessionUser;
 use App\Models\SingleSessionChat;
 use Carbon\Carbon;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InstructorMailAfterLiveSessionScheduled;
+use App\Mail\MailAfterLiveSessionScheduled;
+use App\Mail\mailAfterCourseCompletion;
 
 require_once "AccessToken.php";
 
@@ -218,21 +223,28 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function saveSessionDetails(Request $request) {
+        
         $sessionCourse = $request->sessionCourse;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
         $topicsCounter = 0;
 
+
+        $instructor = User::where('id', $sessionInstructor);
+        $instructorName = $instructor->value('firstname').' '.$instructorlastname = $instructor->value('lastname');
+        $instructorEmail = $instructor->value('email');
+        $courseTitle = Course::where('id', $sessionCourse)->value('course_title');
+        
         $topics = Topic::where('course_id', $sessionCourse)->get();
 
         $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
-
+        $batchname = $selectedBatchObj->value('batchname');
         $occurrences = $selectedBatchObj->value('occurrence');
         $occArr = explode(',', $occurrences);
 
         $startDate = $selectedBatchObj->value('start_date');
         $endDate = $selectedBatchObj->value('end_date');
-        $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'));
+        $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
 
         $date = $startDate;
 
@@ -256,6 +268,51 @@ class RtmTokenGeneratorController extends Controller
                 $date = date('Y-m-d',strtotime($date . "+1 days"));
             }
         }
+                $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
+                $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
+               
+                $details=[
+                    'courseTitle' => $courseTitle,
+                    'instructorName'=> $instructorName,
+                    'batchname' =>$batchname,
+                    'startDate' => $batchStartDate,
+                    'endDate' => $batchEndDate,
+                    'startTime' => $batchStartTime,
+                    'sessionTitle'=> $topics[$topicsCounter]->topic_title
+                 ];
+                 
+                Mail::to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
+
+                $notification = new Notification; 
+                $notification->user = $sessionInstructor;
+                $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for".
+                                               $batchStartDate.".";
+                $notification->is_read = false;
+                $notification->save();
+
+                $students = EnrolledCourse::where('batch_id', $sessionBatch)->get();
+               
+                foreach($students as $student){
+                   
+                    $studentName = User::find($student->user_id)->firstname.' '.User::find($student->user_id)->lastname;
+                    $studentEmail = User::find($student->user_id)->email;
+                   
+                    $data = [
+                    'courseTitle' => $courseTitle,
+                    'instructorName'=> $instructorName,
+                    'studentName' => $studentName,
+                    'startDate' => $batchStartDate,
+                    'endDate' => $batchEndDate,
+                    ];
+                
+                    Mail::to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
+                    
+                    $notification = new Notification; 
+                    $notification->user = $student->user_id;
+                    $notification->notification = "Dear ".$studentName." , Thank you for your interest in ".$courseTitle.". Live sessions for".$courseTitle." have been scheduled from ". $batchStartDate." to " .$batchEndDate.". We're excited to have you join our live session.";
+                    $notification->is_read = false;
+                    $notification->save();
+                }
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
@@ -395,18 +452,12 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function studentExitAfterFeedback($sessionId, $newTime) {
+
         $attendedSessions = 0;
-        
         $user = Auth::user();
-        
         if($user) {
-
             $courseId = LiveSession::where('live_session_id', $sessionId)->value('course_id');
-
             $student =  $user->id;
-
-            
-
             $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
             if($attendance) {
                 $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
@@ -450,9 +501,29 @@ class RtmTokenGeneratorController extends Controller
                 }
 
             $percent = $attendedSessions * 100 / $topicsCount;
-
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
+           
+            if($percent == 100){
+                $studentName = $user->firstname.' '.$user->lastname;
+                $studentEmail = $user->email;
+                $url = base_path() . "/enrolled-course/" . $courseId . "?feedback=true";
 
+                $mailData = [
+                    'courseTitle' => $courseTitle,
+                    'studentName' => $studentName,
+                    'url' => $url
+                ];
+               
+                Mail::to($studentEmail)->send(new mailAfterCourseCompletion($mailData));
+                
+                $notification = new Notification; 
+                $notification->user = $user->id;
+                $notification->notification = "Hello ". $studentName.", Thank you for completing the course .".$courseTitle." Please feel free to share your feedback by reviewing the course.";
+                $notification->is_read = false;
+                $notification->save();
+            }
+
+            }
                 $attendance->update(['attendance_Status' => true ]);
             } else {
                 $attendance->update(['attendance_Status' => false ]);
@@ -460,7 +531,7 @@ class RtmTokenGeneratorController extends Controller
 
             return response()->json(['status' => 'success', 'msg' => 'Student closed window', 'course_id' => $courseId]);
         }
-    }
+    
 
     public function studentExit(Request $request) {
         $attendedSessions = 0;

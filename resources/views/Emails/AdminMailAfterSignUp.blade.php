@@ -1,20 +1,18 @@
 @component('mail::message')
 
-Hello {{ $data['adminFirstname'] }} {{ $data['adminLastName'] }},
+Hello {{ $data['adminFirstName'] }} {{ $data['adminLastName'] }},
 
 You have got a new student registration on ThinkLit.
 
-Details:
+Details:<br>
 
 Student Name : {{ $data['firstname'] }} {{ $data['lastname'] }}<br>
-Email Id : {{ $data['email'] }}
+Email Id : {{ $data['email'] }}<br>
 
 To view registered students, please log in to your account on ThinkLit.com
 
 
-Regards,
+Regards,<br>
 Thinklit Team
 
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent

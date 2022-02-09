@@ -6,10 +6,10 @@ You have got a new concern from a student {{ $details['name'] }}
 
 Details as follows,
 
-{{$details['message']}}
+<p>{{$details['message']}}</p>
 
 
-Regards,
-The ThinkLitThinklit Team
+Regards,<br>
+The ThinkLit Team
 
 @endcomponent
