@@ -61,8 +61,8 @@ class ForgotPasswordController extends Controller
 
    public function submitResetPasswordForm(Request $request)
    {
+     
         try{
-
       $request->validate([
          'email' => 'required|email|exists:users',
          'password' => 'required|string|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|confirmed',
@@ -74,16 +74,15 @@ class ForgotPasswordController extends Controller
          'email' => $request->email, 
          'token' => $request->token
       ])->first();
-         
-      $user = User::where('email' , $request->email);
-      $userName = $user->firstname.' '.$user->lastname;
 
+      $user = User::where('email' , $request->email);
+      $userId = $user->value('id');
+      $studentName = $user->value('firstname').' '.$user->value('lastname');
+      
       $data= [
-         'userName' => $StudentName,
+         'studentName' => $studentName,
          'detail' => 'password'
       ];
-
-       
 
       if(!$updatePassword)
       {
@@ -95,6 +94,12 @@ class ForgotPasswordController extends Controller
       DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
       Mail::to($request->email)->send(new PersonalDetailsUpdatedMail($data));
+
+         $notification = new Notification; 
+         $notification->user = $userId;
+         $notification->notification = "You've successfully changed your ThinkLit password.";
+         $notification->is_read = false;
+         $notification->save();
          
       return redirect('/')->withSuccess('Your password has been changed!');
 

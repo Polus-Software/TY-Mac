@@ -108,7 +108,7 @@ window.onload = function(event) {
       e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
       content_count++;
     });
-    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Upload audio/video');
+    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary','upload_btn'],[],'Upload audio/video');
     colEl.appendChild(addContentbtnEl);
     colEl.appendChild(uploadContentbtnEl);
     rowEl.appendChild(colEl);
@@ -154,7 +154,7 @@ window.onload = function(event) {
       {'type': 'hidden'}, {'id': `externalLink_count_topic_${topicNum}_content_${contentCount}`},
       {'name': `externalLink_count_topic_${topicNum}_content_${contentCount}`},{'value': 0}
     ]);
-    const contentLinkEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary'],[],'Add external link');
+    const contentLinkEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary','add_links'],[],'Add external link');
     contentLinkEl.addEventListener('click', (e) => {
     const linkCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector('.externalLink_count');
     linkCountHiddenEl.value = parseInt(linkCountHiddenEl.value)+1;

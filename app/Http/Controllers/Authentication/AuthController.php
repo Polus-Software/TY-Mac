@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SignupMail;
 use App\Mail\InstructorMailAfterStudentConcern;
 use App\Mail\AdminMailAfterSignUp;
+use App\Mail\MailAfterContactUsSubmission;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\EnrolledCourse;
@@ -38,8 +39,6 @@ class AuthController extends Controller
      * Register a student user
      */
     public function signupProcess(Request $request) {
-   
-
         try {
         $userType = UserType::where('user_role', 'Student')->value('id');
         $user_type = UserType::where('user_role', 'Admin')->value('id');
@@ -54,7 +53,6 @@ class AuthController extends Controller
         ]);
 
         $admins = User::where('role_id', $user_type)->get();
-        
         $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -63,18 +61,13 @@ class AuthController extends Controller
         $user->role_id = $userType;
         $user->timezone = "UTC";
         $user->save();
-        
-        //$user = Auth::user();
-    
+     
         $email= $request->email;
-        
-    
         $details =[
            'firstname'=> $request->firstname,
            'lastname'=> $request->lastname,
         ];
 
-        
         Mail::to($email)->send(new SignupMail($details));
         foreach($admins as $admin) {
             $data=[
@@ -82,12 +75,11 @@ class AuthController extends Controller
                 'lastname'=> $request->lastname,
                 'email' => $email,
                 'adminEmail' => $admin->email,
-                'adminFirstname' => $admin->firstname,
+                'adminFirstName' => $admin->firstname,
                 'adminLastName' => $admin->lastname
              ];
             Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
         }
-        
         
         $notification = new Notification; 
         $notification->user = $user->id;
@@ -173,8 +165,8 @@ class AuthController extends Controller
 
             $instructor_count = DB::table('users')->where('role_id', '=', 3)-> where('deleted_at' , '=', NULL)->count();
             $registered_course_count = DB::table('courses')->count();
-            //$students_registered = DB::table('users')->where('role_id', '=', 2)->count();
-            $students_registered = User::where('role_id', 2)->count();
+            $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
+            //$students_registered = User::where('role_id', 2)->count();
             $liveSessions = LiveSession::all();
             $current_date = Carbon::now()->format('Y-m-d');
             $backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
@@ -256,14 +248,22 @@ class AuthController extends Controller
             $message = $request->message;
             $email = $request->email;
             
-    
-            $details =[
-                'title' => 'Hey there, you have a new query!',
-                'body' => 'Query from ' . $name . '(' . $email . ')\n\n' . $message,
-            ];
+            $user_type = UserType::where('user_role', 'Admin')->value('id');
+            $admins = User::where('role_id', $user_type)->get();
+          
             
+            foreach($admins as $admin) {
+                $details=[
+                    'name'=> $name,
+                    'message' => $message,
+                    'adminEmail' => $admin->email,
+                    'adminFirstName' => $admin->firstname,
+                    'adminLastName' => $admin->lastname,
+                    'email' => $email
+                 ];
+                Mail::to($admin->email)->send(new MailAfterContactUsSubmission($details));
+            }
             
-    
             return redirect('/')->with('message', 'Message sent successfully!');
         } catch (Exception $exception) {
             return redirect('/')->with('message', 'Message sent successfully!');

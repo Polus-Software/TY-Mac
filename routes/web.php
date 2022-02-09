@@ -31,7 +31,9 @@ use App\User;
 Route::get('/403', function () {
     return view('Errors.accessDenied');
 });
-
+Route::get('/404', function () {
+    return view('Errors.404');
+});
 
 Route::group(['middleware' => 'prevent-back-history'],function() {
     
