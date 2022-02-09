@@ -1,7 +1,7 @@
 @component('mail::message')
 
 
-Hello {{ $mailData['adminFirstName'] }} {{ $mailData['adminLastname'] }},</h1>
+Hello {{ $mailData['adminFirstName'] }} {{ $mailData['adminLastName'] }},</h1>
 
 You have got a new student enrolled in your {{ $mailData['course_title']}} course.
 
