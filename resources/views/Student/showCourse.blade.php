@@ -58,8 +58,10 @@
         <div class="row row-2 mb-2">
           <div class="col-lg-12">
             <p class="para-1 mb-2">What You'll Learn</p>
-            @foreach($short_description as $value)
+            @foreach($singleCourseDetails as $singleCourseDetail)
+            @foreach($singleCourseDetail['short_description'] as $value)
             <p class="para-2 mb-1"><img class="me-2" src="/storage/icons/tick__icon.svg" alt="error">{{$value}} <br>
+              @endforeach
               @endforeach
             </p>
 
@@ -176,7 +178,9 @@
                 {{$singleCourseDetail['course_details']}}
               </p>
               @endforeach
-              <p class="card-text-1 mb-2">{{$course_details_points}} </p>
+              @foreach($singleCourseDetails as $singleCourseDetail)
+              <p class="card-text-1 mb-2">{{$singleCourseDetail['course_details_points']}} </p>
+              @endforeach
             </div>
           </div>
         </div>
@@ -292,7 +296,7 @@
                 <img src="{{asset('/storage/images/'.$singleCourseFeedback['studentProfilePhoto'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:54px; height:54px;">
                 <div class="card-body">
                   <h5 class="card-title text-left">
-                    {{$singleCourseFeedback['studentFirstname']}} {{$singleCourseFeedback['studentLastname']}}
+                    {{$singleCourseFeedback['studentFullname']}}
                   </h5>
                   <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
