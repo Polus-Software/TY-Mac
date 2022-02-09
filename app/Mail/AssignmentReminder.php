@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class LiveSessionReminderMail extends Mailable
+class AssignmentReminder extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,6 +30,6 @@ class LiveSessionReminderMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Reminder for ThinkLit course' . $this->details['course_name'])->markdown('emails.LiveSessionReminder');
+        return $this->subject('Your assignment for ' . $this->details['course_name'] .' is due soon!')->markdown('emails.AssignmentReminder');;
     }
 }
