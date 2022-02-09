@@ -1542,7 +1542,12 @@ z-index: 100;
 }
 </style>
   <script type="text/javascript">
-    
+
+    let appId = '';
+    let roomId = '';
+    let token = '';
+    let uid = '';
+
     $('#offcanvasClose').click(function(){
       $('#offcanvasBottom').removeClass('show');
       $('#offcanvasBottom').css('visibility', 'hidden');
@@ -1563,7 +1568,7 @@ z-index: 100;
           
             AgoraEduSDK.config({
            // Here pass in the Agora App ID you have got
-           appId: data.appId,
+            appId: data.appId,
            })
     AgoraEduSDK.launch(
       document.querySelector("#root1"), {
@@ -1581,17 +1586,35 @@ z-index: 100;
         startTime: new Date().getTime(),
         duration: data.duration,
         courseWareList: [],
-        listener: (evt) => {
+        listener: (evt, params) => {
+          if ( evt === 1 && params.type === "whiteboard") {
+          setTimeout(() => {
+            appId = data.appId;
+            roomId = data.roomid;
+            token = data.token;
+            alert(token);
+            uid = data.uid;
+            let recordPath = "https://api.agora.io/edu/apps/"+data.appId+"/v2/rooms/"+data.roomid+"/records/states/1";
+            fetch(recordPath, {
+                    method: 'PUT',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                      'retryTimeout': 60,
+                      'x-agora-token':data.token,
+                      'x-agora-uid':data.uid,
+                      "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                    },
+                  }).then((response) => response.json()).then((data) => {
+                 
+                  });
+          }, 10000);
+        }
         }
       }
     )
     
         });
-
-
-
-
-
 
 document.getElementById('chat_box').addEventListener('keyup', function(e) {
   let message = document.getElementById('chat_box').value;
@@ -1668,6 +1691,21 @@ window.addEventListener("beforeunload", function (e) {
     }).then((response) => response.json()).then((data) => {
 
     });
+  } else if(userType == "instructor") {
+    let stopRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
+                      fetch(stopRecordPath , {
+                        method: 'PUT',
+                        headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                          'retryTimeout': 60,
+                          'x-agora-token':token,
+                          'x-agora-uid': uid,
+                          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                        },
+                      }).then((response) => response.json()).then((data) => {       
+                          
+                      });
   }
   (e || window.event).returnValue = confirmationMessage; //Gecko + IE
   return confirmationMessage;                            //Webkit, Safari, Chrome
@@ -1715,7 +1753,7 @@ window.addEventListener("click", windowOnClick);
 toggleModal();
     
   } else {
-    location.replace("/enrolled-course/" + course_id + "?batchId=" + batchId);
+    location.replace("/assigned-courses");
   }
 });
 
