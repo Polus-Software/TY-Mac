@@ -79,6 +79,11 @@ class AuthController extends Controller
                 'adminLastName' => $admin->lastname
              ];
             Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+            $notification = new Notification; 
+            $notification->user = $admin->id;
+            $notification->notification = "Hello  ".$admin->firstname." ". $admin->lastname." , You have got a new student registration on ThinkLit. Details: Student Name : ".$request->firstname." ".$request->lastname .",". "Email Id : ".$email;
+            $notification->is_read = false;
+            $notification->save();
         }
         
         $notification = new Notification; 
@@ -262,6 +267,11 @@ class AuthController extends Controller
                     'email' => $email
                  ];
                 Mail::to($admin->email)->send(new MailAfterContactUsSubmission($details));
+                $notification = new Notification; 
+                $notification->user = $admin->id;
+                $notification->notification = "Hi ".$admin->firstname." ". $admin->lastname." ,You have got a new query from the student ".$name;
+                $notification->is_read = false;
+                $notification->save();
             }
             
             return redirect('/')->with('message', 'Message sent successfully!');
