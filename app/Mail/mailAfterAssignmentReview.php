@@ -29,6 +29,6 @@ class mailAfterAssignmentReview extends Mailable
     public function build()
     {
         return $this->subject('Your assignment for '. $this->details['courseTitle'].' has been reviewed')
-                    ->markdown('emails.MailAfterAssignmentReview');
+                    ->markdown('Emails.MailAfterAssignmentReview');
     }
 }

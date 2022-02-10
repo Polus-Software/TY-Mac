@@ -29,6 +29,6 @@ class MailAfterContactUsSubmission extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  query from your student.')
-                    ->markdown('emails.MailAfterContactUsSubmission');
+                    ->markdown('Emails.MailAfterContactUsSubmission');
     }
 }

@@ -29,6 +29,6 @@ class MailAfterQuestion extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  message.')
-                    ->markdown('emails.MailAfterQuestion');
+                    ->markdown('Emails.MailAfterQuestion');
     }
 }
