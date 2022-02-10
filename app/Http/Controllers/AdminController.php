@@ -145,7 +145,8 @@ class AdminController extends Controller
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|',
+            'email' => 'required|email|'
+            //'password' => 'required'
         ]);
        
         $studentId = $request->input('student_id');
@@ -153,7 +154,8 @@ class AdminController extends Controller
         $student->firstname = $request['firstname'];
         $student->lastname = $request['lastname'];
         $student->email = $request['email'];
-        $student->password = Hash::make($request->password);
+		if($request->password != '')
+			$student->password = Hash::make($request->password);
         $student->save();
 
         return redirect()->route('view-student', ['student_id' => $studentId]);
