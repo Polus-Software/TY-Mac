@@ -9,5 +9,7 @@ You can reset password from bellow link:
 Reset Password
 @endcomponent
 
+Regards,<br>
+Thinklit Team
 
 @endcomponent
