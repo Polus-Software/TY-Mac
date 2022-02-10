@@ -1188,13 +1188,19 @@ small#assignment_table_batch {
                                     <div class="card card-2">
                                         <div class="card-body p-4">
                                             <div class="row">
-                                                
                                                 <div class="col-lg-6 col-md-8 col-sm-6 col-12 mb-4  border-bottom">
-                                                <h5 class="card-title pt-2 pb-2">Completion Certificate</h5>
+													<h5 class="card-title pt-2 pb-2">Completion Certificate</h5>
                                                 </div>
+												<div class="col-lg-6 col-md-4 col-sm-6 col-12 mb-4  border-bottom">
+													@if($progress == 100)
+														@foreach($singleCourseDetails as $course)
+															<a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-2 mb-3 download_certificate">Download certificate</a>
+														@endforeach
+													@endif
+												</div>
                                                 </div>
                                             <div class="row">
-                                                <div class="col-lg-12 d-flex justify-content-center">
+                                                <div class="col-lg-12 justify-content-center">
                                                 @if($progress == 100)
                                                     <div class="tab-content" id="pills-tabContent">
                                                         <div class="tab-pane fade" id="pills-back" role="tabpanel" aria-labelledby="pills-back-tab">
@@ -1226,7 +1232,7 @@ small#assignment_table_batch {
                                                                                     <p class="card-text-1 completion_info">Has successfully completed the {{$course['course_title']}}  <br>
                                                                                         online cohort on {{$course_completion}}</p>
                                                                                 </div>
-                                                                            </div>1
+                                                                            </div>
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
                                                                                     @foreach($singleCourseDetails as $course)
