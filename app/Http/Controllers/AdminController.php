@@ -145,7 +145,7 @@ class AdminController extends Controller
         $updateData = $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|',
+			'email' => 'required|email|'
             //'password' => 'required'
         ]);
        
