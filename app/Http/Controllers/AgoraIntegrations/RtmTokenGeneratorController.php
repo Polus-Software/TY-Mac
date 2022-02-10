@@ -504,6 +504,8 @@ class RtmTokenGeneratorController extends Controller
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
            
             if($percent == 100){
+				$current_time = (new DateTime("now", new DateTimeZone('UTC')));
+				$completion_date = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['course_completion_date' => $current_time]);
                 $studentName = $user->firstname.' '.$user->lastname;
                 $studentEmail = $user->email;
                 $url = base_path() . "/enrolled-course/" . $courseId . "?feedback=true";
