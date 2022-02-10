@@ -147,7 +147,6 @@ class AdminController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|',
             //'password' => 'required'
-
         ]);
        
         $studentId = $request->input('student_id');

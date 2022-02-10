@@ -606,7 +606,7 @@ small#assignment_table_batch {
                                         <span class="text-muted" style="font-size:14px;">No sessions scheduled</span>
                                         @endif
                                         @elseif($topicDetail['liveId'] == "Over")
-                                        <a style="color: #6E7687;" type="button" class="btn" href=""><i class="fas fa-undo pe-2"></i>View again</a>
+                                        <a style="color: #6E7687;" type="button" class="btn" href="/view-again/{{ $topicDetail['overId'] }}"><i class="fas fa-undo pe-2"></i>View again</a>
                                         @elseif($topicDetail['liveId'] == "Wait")
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
