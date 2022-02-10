@@ -29,6 +29,6 @@ class AdminMailAfterSignUp extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  student registered on ThinkLit')
-                    ->markdown('emails.AdminMailAfterSignUp');
+                    ->markdown('Emails.AdminMailAfterSignUp');
     }
 }

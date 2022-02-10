@@ -28,6 +28,6 @@ class mailAfterCourseCreation extends Mailable
     public function build()
     {
         return $this->subject('New course added on ThinkLit')
-                    ->markdown('emails.MailAfterCourseCreation');
+                    ->markdown('Emails.MailAfterCourseCreation');
     }
 }

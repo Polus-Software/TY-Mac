@@ -46,7 +46,9 @@ use Session;
 class ApiController extends Controller
 {
     /**
-     *  
+     *  Api function for login
+     *  $request variables : email, password
+     *  returns a token which is to be used as bearer token
      */
 
     public function loginProcessApi(Request $request)
@@ -91,7 +93,10 @@ class ApiController extends Controller
         ]);
     }
 
-
+    /**
+     * Api function for student sign up
+     * request variables : firstname, lastname, email, password, password_confirmation, privacy_policy
+     */
     public function signupProcessApi(Request $request) {
    
 
@@ -134,7 +139,7 @@ class ApiController extends Controller
                 'lastname'=> $request->lastname,
                 'email' => $email,
                 'adminEmail' => $admin->email,
-                'adminFirstname' => $admin->firstname,
+                'adminFirstName' => $admin->firstname,
                 'adminLastName' => $admin->lastname
              ];
             Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
@@ -160,7 +165,9 @@ class ApiController extends Controller
         
         
     }
-
+    /**
+     * Api function for student logout
+     */
     public function logoutApi() {
         try {
             if(auth()->user()) {
@@ -180,6 +187,9 @@ class ApiController extends Controller
         
     }
 
+    /**
+     * Api function for retrieving all notifications of logged in user
+     */
     public function getNotificationsApi(Request $request) {
         try {
             $user = Auth::user();
@@ -191,7 +201,10 @@ class ApiController extends Controller
         }
     }
 
-
+    /**
+     * Api function for student feedback
+     * request variables : name, phone, message, email
+     */
     public function contactUsApi(Request $request) {
         try {
             $name = $request->name;
@@ -217,7 +230,11 @@ class ApiController extends Controller
         }
         
     }
-
+    
+    /**
+     * Api function for password reset
+     * request variables : email, password, password_confirmation
+     */
     public function resetPasswordApi(Request $request) {
         try{
            $request->validate([
@@ -240,8 +257,6 @@ class ApiController extends Controller
        
            Mail::to($request->email)->send(new PersonalDetailsUpdatedMail($data));
            
-           
-              
            return response()->json([
               'status' => 'success',
               'message' => 'Your password has been changed!'
@@ -256,6 +271,10 @@ class ApiController extends Controller
         }
      }
 
+     /**
+      * Api function to edit the students profile
+      * request variables: firstname, lastname, email, timezone
+      */
      public function profileUpdateApi(Request $request){
        
         try {
@@ -288,6 +307,10 @@ class ApiController extends Controller
         
     }
 
+    /**
+      * Api function to upload student user avatar
+      * request variables: image
+      */
     public function uploadImageApi(Request $request)
     {
     try {
@@ -306,13 +329,16 @@ class ApiController extends Controller
             $user->save();
         }
 
-        return response()->json(['status' => 'success', 'message' => 'Successfully changesd avatar']);
+        return response()->json(['status' => 'success', 'message' => 'Successfully changed avatar']);
     } catch (Exception $exception) {
         return response()->json(['status' => 'error', 'message' => $exception->getMessage() ]);
     }
     
     }
 
+    /**
+      * Api function to retrieve all courses
+      */
     public function viewAllCoursesApi(Request $request) {
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
@@ -372,6 +398,10 @@ class ApiController extends Controller
         return response()->json(['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => '']);
     }
 
+    /**
+    * Api function to retrieve a single course
+    * @param $id
+    */
     public function showCourseApi($id){
         $currentURL = url()->current();
         $singleCourseDetails =[];
@@ -432,8 +462,6 @@ class ApiController extends Controller
             }
         }
 
-           
-    
         $topics = Topic::where('course_id', $id)->get();
         
          foreach($topics as $topic){
@@ -451,7 +479,6 @@ class ApiController extends Controller
              ));
          }
 
-         
         $user = Auth::user();
         $userType = "";
         if($user){
@@ -472,18 +499,18 @@ class ApiController extends Controller
             $studentFirstname = User::where('id', $generalCourseFeedback->user_id )->value('firstname');
             $studentLastname = User::where('id',  $generalCourseFeedback->user_id)->value('lastname');
             $studentProfilePhoto = User::where('id', $generalCourseFeedback->user_id)->value('image');
-        array_push($singleCourseFeedbacks, array(
-            'user_id' => $generalCourseFeedback->user_id,
-            'rating' => $generalCourseFeedback->rating,
-            'comment' => $generalCourseFeedback->comment,
-            'created_at' => Carbon::parse($generalCourseFeedback->created_at)->diffForHumans(),
-            'studentFirstname' => $studentFirstname,
-            'studentLastname' => $studentLastname,
-            'studentProfilePhoto' => $studentProfilePhoto,
+
+            array_push($singleCourseFeedbacks, array(
+                'user_id' => $generalCourseFeedback->user_id,
+                'rating' => $generalCourseFeedback->rating,
+                'comment' => $generalCourseFeedback->comment,
+                'created_at' => Carbon::parse($generalCourseFeedback->created_at)->diffForHumans(),
+                'studentFirstname' => $studentFirstname,
+                'studentLastname' => $studentLastname,
+                'studentProfilePhoto' => $studentProfilePhoto,
             ));   
         }
         
-
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,
@@ -505,10 +532,11 @@ class ApiController extends Controller
             'duration' => $duration
 
         );
+
         array_push($singleCourseDetails, $singleCourseData);
         $batches = DB::table('cohort_batches')->where('course_id', $id)->get();
         $cohort_full = true;
-        foreach($batches as $batch){
+        foreach($batches as $batch) {
             $available_count = $batch->students_count;
             $booked_slotes = DB::table('enrolled_courses')
                 ->where([['course_id','=',$id],['batch_id','=',$batch->id]])
@@ -519,6 +547,7 @@ class ApiController extends Controller
                 $cohort_full = false;
             }
         }
+
         return response()->json([
             'singleCourseDetails' => $singleCourseDetails,
             'singleCourseFeedbacks' => $singleCourseFeedbacks,
@@ -534,7 +563,10 @@ class ApiController extends Controller
 
     }
 
-
+    /**
+    * Api function to retrieve batches for student to select before enrolling
+    * request: id (course id)
+    */
     public function registerCourseApi(Request $request) {
 
         $singleCourseDetails =[];
@@ -583,9 +615,11 @@ class ApiController extends Controller
         ]);
 
     }
-/*
 
-*/ 
+    /**
+    * Api function to select batch and enrollstudent to a course
+    * request: course_id, batch_id
+    */
     public function registerCourseProcessApi(Request $request){
       
     try {
@@ -647,6 +681,10 @@ class ApiController extends Controller
         }
     }
 
+    /**
+    * Api function to submit course review for a course
+    * request: course_id, comment, rating
+    */
     public function courseReviewApi(Request $request){
         
         try{
@@ -690,6 +728,10 @@ class ApiController extends Controller
         
     }
 
+    /**
+    * Api function to retrieve course progress
+    * @param $id (course id)
+    */
     public function getCourseProgressApi($id) {
         try {
             $user = Auth::user();
@@ -715,113 +757,114 @@ class ApiController extends Controller
         
     }
 
-
+    /**
+    * Api function to retrieve enrolled course details
+    * @param $course_id
+    */
     public function afterEnrollViewApi($courseId) {
         try {
     
-        $courseDetails =[];
-        $topicDetails = [];
-        $liveIdArr = [];
-        $achievedBadgeDetails = [];
-        $badgesDetails = [];
-        $allBadges = [];
-        $badgeComparisonArray = [];
-        $upcoming = [];
-        $singleRec = [];
-        $finalRec = [];
-        $qaArray = [];
-        $next_live_cohort = '';
-        $course = Course::findOrFail($courseId);
-        $user =Auth::user();
-        $userType = "";
-        $attendedTopics = 0;
-        $progress = 0;
+            $courseDetails =[];
+            $topicDetails = [];
+            $liveIdArr = [];
+            $achievedBadgeDetails = [];
+            $badgesDetails = [];
+            $allBadges = [];
+            $badgeComparisonArray = [];
+            $upcoming = [];
+            $singleRec = [];
+            $finalRec = [];
+            $qaArray = [];
+            $next_live_cohort = '';
+            $course = Course::findOrFail($courseId);
+            $user =Auth::user();
+            $userType = "";
+            $attendedTopics = 0;
+            $progress = 0;
         
-        if($user){
-        $attendanceRecs = AttendanceTracker::where('student', $user->id)->get();
-        $topics = Topic::where('course_id', $courseId)->get();
-        $totalTopics = count($topics);
-        foreach($attendanceRecs as $attendanceRec) {
-            $liveSessionId = $attendanceRec->value('live_session_id');
+            if($user){
+            $attendanceRecs = AttendanceTracker::where('student', $user->id)->get();
+            $topics = Topic::where('course_id', $courseId)->get();
+            $totalTopics = count($topics);
+                foreach($attendanceRecs as $attendanceRec) {
+                    $liveSessionId = $attendanceRec->value('live_session_id');
 
-            $sessionCourse = LiveSession::where('live_session_id', $liveSessionId);
+                    $sessionCourse = LiveSession::where('live_session_id', $liveSessionId);
 
-            if($sessionCourse == $courseId) {
-                $attendedTopics = $attendedTopics + 1;
+                    if($sessionCourse == $courseId) {
+                        $attendedTopics = $attendedTopics + 1;
+                    }
+                }
+                $currentUserRoleId = User::where('id', $user->id)->value('role_id');
+                $userType = UserType::where('id', $currentUserRoleId)->value('user_role');
+                $student_firstname = $user->firstname;
+                $student_lastname = $user->lastname;
+            
+                $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+                $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+                $instructor = User::where('id', $assigned);
+                $instructorfirstname = $instructor->value('firstname');
+                $instructorlastname = $instructor->value('lastname');
+                $profilePhoto = $instructor->value('image');
+                $instructorDesignation = $instructor->value('designation');
+                $instructorInstitute = $instructor->value('institute');
+                $instructorDescription = $instructor->value('description');
+                $instructorTwitter = $instructor->value('twitter_social');
+                $instructorLinkedin =$instructor->value('linkedIn_social');
+                $instructorYoutube = $instructor->value('youtube_social');
+                $instructorSignature = $instructor->value('signature');
+                $date_of_issue = Carbon::now();
+                $current_date = Carbon::now()->format('Y-m-d');
+                $next_live_cohort = "No sessions scheduled";
+                $course_completion = '';
+                $topics = Topic::where('course_id',  $courseId)->get();
+                $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId);
+                $studentBatch = $enrolledCourseObj->value('batch_id');
+        
+                foreach($topics as $topic){
+                    $nextCohort = "";
+                    $scheduled = false;
+                    $liveId = "";
+                    $courseId =  $topic->course_id;
+                    $topicId = $topic->topic_id;
+                    $topic_title =  $topic->topic_title;
+                    $topicContents = TopicContent::where('topic_id', $topicId)->get();
+                    $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
+                    $assignmentList = $assignmentsArray->toArray();
+                    $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
+                    $isAssignmentCompleted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->where('is_completed', true)->count() ? true : false;
+                    $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+
+                    array_push($topicDetails, array(
+
+                        'topic_id' => $topicId,
+                        'topic_title' =>$topic_title,
+                        'topic_content' => $topicContents,
+                        'assignmentList'=> $assignmentList,
+                        'isAssignmentSubmitted' => $isAssignmentSubmitted,
+                        'isAssignmentCompleted' => $isAssignmentCompleted,
+                        'isAssignmentStarted' => $isAssignmentStarted
+                    ));
+                }
+                return response()->json([
+                    'status' => 'success',
+                    'course_id' => $courseId,
+                    'user_id' => $user->id,
+                    'assignment_details' => $topicDetails
+                ]);
             }
+        } catch(Exception $exeption) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
         }
-
-        
-       
-        
-        $currentUserRoleId = User::where('id', $user->id)->value('role_id');
-        $userType = UserType::where('id', $currentUserRoleId)->value('user_role');
-        $student_firstname = $user->firstname;
-        $student_lastname = $user->lastname;
-       
-        $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
-        $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
-        $instructor = User::where('id', $assigned);
-        $instructorfirstname = $instructor->value('firstname');
-        $instructorlastname = $instructor->value('lastname');
-        $profilePhoto = $instructor->value('image');
-        $instructorDesignation = $instructor->value('designation');
-        $instructorInstitute = $instructor->value('institute');
-        $instructorDescription = $instructor->value('description');
-        $instructorTwitter = $instructor->value('twitter_social');
-        $instructorLinkedin =$instructor->value('linkedIn_social');
-        $instructorYoutube = $instructor->value('youtube_social');
-        $instructorSignature = $instructor->value('signature');
-        $date_of_issue = Carbon::now();
-        $current_date = Carbon::now()->format('Y-m-d');
-        $next_live_cohort = "No sessions scheduled";
-        $course_completion = '';
-        $topics = Topic::where('course_id',  $courseId)->get();
-        $enrolledCourseObj = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId);
-        $studentBatch = $enrolledCourseObj->value('batch_id');
-        
-            foreach($topics as $topic){
-                $nextCohort = "";
-                $scheduled = false;
-                $liveId = "";
-                $courseId =  $topic->course_id;
-                $topicId = $topic->topic_id;
-                $topic_title =  $topic->topic_title;
-                $topicContents = TopicContent::where('topic_id', $topicId)->get();
-                $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
-                $assignmentList = $assignmentsArray->toArray();
-                $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
-                $isAssignmentCompleted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->where('is_completed', true)->count() ? true : false;
-                $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
-
-                array_push($topicDetails, array(
-
-                    'topic_id' => $topicId,
-                    'topic_title' =>$topic_title,
-                    'topic_content' => $topicContents,
-                    'assignmentList'=> $assignmentList,
-                    'isAssignmentSubmitted' => $isAssignmentSubmitted,
-                    'isAssignmentCompleted' => $isAssignmentCompleted,
-                    'isAssignmentStarted' => $isAssignmentStarted
-                ));
-            }
-      return response()->json([
-          'status' => 'success',
-          'course_id' => $courseId,
-          'user_id' => $user->id,
-          'assignment_details' => $topicDetails
-      ]);
-    }
-}catch(Exception $exeption) {
-    return response()->json([
-        'status' => 'error',
-        'message' => $exception->getMessage()
-    ]);
-}
     }
 
-
-
+    /**
+    * Api function to submit an assignment by a student
+    * request: assignment_id, assignment_comment, assignment_upload
+    */
     public function submitAssignmentApi(Request $request){
         try{
 
@@ -874,12 +917,12 @@ class ApiController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
-    
-    
     }
 
+    /**
+    * Api function to retrieve badges for a student
+    */
     public function getBadgesApi() {
-
         try {
             $badgesDetails = [];
             $allBadges = [];

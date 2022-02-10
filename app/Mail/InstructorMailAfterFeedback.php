@@ -29,6 +29,6 @@ class InstructorMailAfterFeedback extends Mailable
     public function build()
     {
         return $this->subject('You got new course feedback')
-                    ->markdown('emails.MailAfterFeedback');
+                    ->markdown('Emails.MailAfterFeedback');
     }
 }

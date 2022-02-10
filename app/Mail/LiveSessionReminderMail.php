@@ -30,6 +30,6 @@ class LiveSessionReminderMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Reminder for ThinkLit course' . $this->details['course_name'])->markdown('emails.LiveSessionReminder');
+        return $this->subject('Reminder for ThinkLit course' . $this->details['course_name'])->markdown('Emails.LiveSessionReminder');
     }
 }

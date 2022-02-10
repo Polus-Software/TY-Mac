@@ -30,6 +30,6 @@ class AdminMailAfterStudentEnrolling extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  student enrolled in your '.$this->mailData['course_title'].'course')
-                    ->markdown('emails.AdminMailAfterStudentEnrolling');
+                    ->markdown('Emails.AdminMailAfterStudentEnrolling');
     }
 }

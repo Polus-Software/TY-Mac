@@ -29,6 +29,6 @@ class MailAfterReplay extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  reply to your message.')
-                    ->markdown('emails.MailAfterReplay');
+                    ->markdown('Emails.MailAfterReplay');
     }
 }

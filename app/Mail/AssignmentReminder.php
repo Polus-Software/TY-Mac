@@ -30,6 +30,6 @@ class AssignmentReminder extends Mailable
      */
     public function build()
     {
-        return $this->subject('Your assignment for ' . $this->details['course_name'] .' is due soon!')->markdown('emails.AssignmentReminder');;
+        return $this->subject('Your assignment for ' . $this->details['course_name'] .' is due soon!')->markdown('Emails.AssignmentReminder');;
     }
 }
