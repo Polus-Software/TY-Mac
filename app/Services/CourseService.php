@@ -120,6 +120,7 @@ class CourseService {
      * @output - content data
      */
     public static function getBatchDetails($id) {
+        $user = Auth::user();
         $batchDetails = [];
         $batches = self::getCohortBatchesByCourse($id);
         foreach($batches as $batch){
@@ -129,19 +130,36 @@ class CourseService {
             $batch_end_time = $batch->end_time;
             $batch_end_date = $batch->end_date;
             $batch_time_zone = $batch->time_zone;
+
+            $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
+                        
+            $offsetHours = intval($offset[1] . $offset[2]);
+            $offsetMinutes = intval($offset[4] . $offset[5]);
+                    
+            if($offset[0] == "+") {
+                $sTime = strtotime($batch_start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                $eTime = strtotime($batch_end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            } else {
+                $sTime = strtotime($batch_start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                $eTime = strtotime($batch_end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            }
+                    
+            $startTime = date("H:i A", $sTime);
+            $endTime = date("H:i A", $eTime);
+
+            $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
             
             $liveSession = self::getLiveSessionDetails($batch->id);
             if(count($liveSession)) {
                $latest = $liveSession[0];               
                array_push($batchDetails, array(
                     'batchname' => $batchname,
-                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('M d'),
-                    'batch_start_time' => Carbon::createFromFormat('H:i:s',$batch_start_time)->format('h A'),
-                    'batch_end_time' => Carbon::createFromFormat('H:i:s',$batch_end_time)->format('h A'),
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('m/d/Y'),
+                    'batch_start_time' => $startTime,
+                    'batch_end_time' => $endTime,
                     'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
-                    'batch_time_zone' => $batch_time_zone,
-                    'latest' =>  $latest,
-                    
+                    'batch_time_zone' => $time_zone,
+                    'latest' =>  $latest
                 ));
             }
         }
