@@ -136,7 +136,7 @@
           </div>
           </h3>
           <p class="lh-lg my-5">
-            I signed up for the Fundamentals of Quality Analysis course without having any prior knowledge in the field, but by the time I completed the course, I became proficient in functional QA & got a job in the field! The instructor did a wonderful job at teaching the subjects in a simple way!
+          I signed up for the Fundamentals of Quality Analysis course without having any prior knowledge in the field, but by the time I completed the course, I became proficient in functional QA & got a job in the field! The instructor did a wonderful job at teaching the subjects in a simple way!
           </p>
         </div>
       </div>
