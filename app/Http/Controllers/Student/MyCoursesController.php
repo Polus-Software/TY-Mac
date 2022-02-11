@@ -19,15 +19,22 @@ use DateTimeZone;
 
 class MyCoursesController extends Controller
 {
-    public function showMyCourses(){
-      
-       $singleEnrolledCourseData = [];
+    public function showMyCourses(Request $request){
+	   $singleEnrolledCourseData = [];
        $liveSessionDetails = [];
        $upComingSessionDetails = [];
        $user = Auth::user();
        $current_date = Carbon::now()->format('Y-m-d');
        if($user){
-        $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
+		 if($request->courses && $request->courses == 1){
+			 $filter_course = 'completed';
+			$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->where('progress','=', 100)->get();
+		 }
+		 else{
+			 $filter_course = 'most-popular';
+			 $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->where('progress','<', 100)->get();
+		 }
+        //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
         foreach($enrolledCourses as $enrolledCourse){
 
           $courseId = $enrolledCourse->course_id;
@@ -156,6 +163,7 @@ class MyCoursesController extends Controller
         'singleEnrolledCourseData' => $singleEnrolledCourseData,
         'upComingSessionDetails' => $upComingSessionDetails,
         'liveSessionDetails' => $liveSessionDetails,
+		'filter_course'=>$filter_course
       ]);
     } else {
       return redirect('/student-courses');

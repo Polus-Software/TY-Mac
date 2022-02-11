@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
 use App\Models\EnrolledCourse;
+use App\Models\GeneralCourseFeedback;
 use App\Models\Filter;
 use App\Models\UserType;
 use App\Models\GeneralSetting;
@@ -311,7 +312,22 @@ class AdminController extends Controller
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
             $instructorlastname = User::where('id', $assigned)->value('lastname');
             $duration = $course->course_duration . "h";
-       
+			$ratings = 0;
+            $ratingsSum = 0;
+            $ratingsCount = 0;
+
+            if($course->use_custom_ratings) {
+                $ratings = $course->course_rating;
+            } else {
+                $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                    $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                    $ratingsCount++;
+                }
+                if($ratingsCount != 0) {
+                    $ratings = intval($ratingsSum/$ratingsCount);
+                }
+            }
             $courseData =  array (
                 'id' => $course->id,
                 'course_title' => $course->course_title,
@@ -321,7 +337,9 @@ class AdminController extends Controller
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
-                'rating' => $course->course_rating,
+				'use_custom_ratings' => $course->use_custom_ratings,
+                //'rating' => $course->course_rating,
+				'rating' => $ratings,
                 'duration' => $duration
             );
             array_push($courseDetails, $courseData);
