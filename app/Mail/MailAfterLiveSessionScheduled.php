@@ -29,6 +29,6 @@ class MailAfterLiveSessionScheduled extends Mailable
     public function build()
     {
         return $this->subject('Just scheduled: '.$this->data['courseTitle'].'!')
-                    ->markdown('emails.MailAfterLiveSessionScheduled');
+                    ->markdown('Emails.MailAfterLiveSessionScheduled');
     }
 }

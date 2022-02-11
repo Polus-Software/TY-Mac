@@ -30,6 +30,6 @@ class mailAfterCourseCompletion extends Mailable
     public function build()
     {
         return $this->subject('Please leave us a course review')
-                    ->markdown('emails.MailAfterCourseCompletion');
+                    ->markdown('Emails.MailAfterCourseCompletion');
     }
 }

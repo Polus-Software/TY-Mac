@@ -30,6 +30,6 @@ class InstructorMailAfterassigningCourse extends Mailable
     public function build()
     {
         return $this->subject('A new course assigned to you')
-                    ->markdown('emails.CourseAssigning');
+                    ->markdown('Emails.CourseAssigning');
     }
 }

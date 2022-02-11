@@ -52,6 +52,24 @@ return [
             ],
         ],
 
+        'infosmtp' => [
+            'transport' => 'smtp',
+            'host' => env('INFOMAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('INFOMAIL_PORT', 587),
+            'encryption' => env('INFOMAIL_ENCRYPTION', 'tls'),
+            'username' => env('INFOMAIL_USERNAME'),
+            'password' => env('INFOMAIL_PASSWORD'),
+            'timeout' => null,
+            'auth_mode' => null,
+            'stream' => [
+                'ssl' => [
+                    'allow_self_signed' => true,
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ],
+        ],
+        
         'ses' => [
             'transport' => 'ses',
         ],

@@ -40,63 +40,63 @@ class AuthController extends Controller
      */
     public function signupProcess(Request $request) {
         try {
-        $userType = UserType::where('user_role', 'Student')->value('id');
-        $user_type = UserType::where('user_role', 'Admin')->value('id');
-       
-        $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|confirmed',
-            'password_confirmation' =>'required',
-            'privacy_policy' =>'accepted'
-        ]);
+            $userType = UserType::where('user_role', 'Student')->value('id');
+            $user_type = UserType::where('user_role', 'Admin')->value('id');
+        
+            $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|confirmed',
+                'password_confirmation' =>'required',
+                'privacy_policy' =>'accepted'
+            ]);
 
-        $admins = User::where('role_id', $user_type)->get();
-        $user = new User;
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->role_id = $userType;
-        $user->timezone = "UTC";
-        $user->save();
-     
-        $email= $request->email;
-        $details =[
-           'firstname'=> $request->firstname,
-           'lastname'=> $request->lastname,
-        ];
+            $admins = User::where('role_id', $user_type)->get();
+            $user = new User;
+            $user->firstname = $request->firstname;
+            $user->lastname = $request->lastname;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->role_id = $userType;
+            $user->timezone = "UTC";
+            $user->save();
+        
+            $email= $request->email;
+            $details =[
+            'firstname'=> $request->firstname,
+            'lastname'=> $request->lastname,
+            ];
 
-        Mail::to($email)->send(new SignupMail($details));
-        foreach($admins as $admin) {
-            $data=[
-                'firstname'=> $request->firstname,
-                'lastname'=> $request->lastname,
-                'email' => $email,
-                'adminEmail' => $admin->email,
-                'adminFirstName' => $admin->firstname,
-                'adminLastName' => $admin->lastname
-             ];
-            Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+            Mail::mailer('smtp')->to($email)->send(new SignupMail($details));
+            foreach($admins as $admin) {
+                $data=[
+                    'firstname'=> $request->firstname,
+                    'lastname'=> $request->lastname,
+                    'email' => $email,
+                    'adminEmail' => $admin->email,
+                    'adminFirstName' => $admin->firstname,
+                    'adminLastName' => $admin->lastname
+                ];
+                Mail::to($admin->email)->send(new AdminMailAfterSignUp($data));
+                $notification = new Notification; 
+                $notification->user = $admin->id;
+                $notification->notification = "Hello  ".$admin->firstname." ". $admin->lastname." , You have got a new student registration on ThinkLit. Details: Student Name : ".$request->firstname." ".$request->lastname .",". "Email Id : ".$email;
+                $notification->is_read = false;
+                $notification->save();
+            }
+            
             $notification = new Notification; 
-            $notification->user = $admin->id;
-            $notification->notification = "Hello  ".$admin->firstname." ". $admin->lastname." , You have got a new student registration on ThinkLit. Details: Student Name : ".$request->firstname." ".$request->lastname .",". "Email Id : ".$email;
+            $notification->user = $user->id;
+            $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
             $notification->is_read = false;
             $notification->save();
-        }
-        
-        $notification = new Notification; 
-        $notification->user = $user->id;
-        $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
-        $notification->is_read = false;
-        $notification->save();
-        if($request->redirect_page != ''){
-            return redirect($request->redirect_page)->with('message', 'Successfully registered!');
-        }
-        else{
-            return redirect('/')->with('message', 'Successfully registered!');
-        }
+            if($request->redirect_page != ''){
+                return redirect($request->redirect_page)->with('message', 'Successfully registered!');
+            }
+            else{
+                return redirect('/')->with('message', 'Successfully registered!');
+            }
         } catch (Exception $exception) {
             return redirect('/')->with('message', 'Registration failed');
         }

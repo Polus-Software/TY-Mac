@@ -6,7 +6,7 @@
         <div class="alert alert-danger text-center">
             <h2 class="display-3">404</h2>
             <p class="display-5">Oops! Something is wrong.</p>
-            <p class="display-5">{{ $errorMessage }}</p>
+            <p class="display-5"></p>
         </div>
     </div>
 @endsection('content')

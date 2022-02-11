@@ -29,6 +29,6 @@ class MailAfterAssignmentSubmission extends Mailable
     public function build()
     {
         return $this->subject('You have got a new  assignment submitted')
-                    ->markdown('emails.MailAfterAssignmentSubmission');
+                    ->markdown('Emails.MailAfterAssignmentSubmission');
     }
 }

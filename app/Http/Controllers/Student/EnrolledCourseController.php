@@ -178,7 +178,7 @@ class EnrolledCourseController extends Controller
         }
  
 
-        $achievements = StudentAchievement::where('student_id', $user->id)->get();
+        $achievements = StudentAchievement::where('student_id', $user->id)->where('course_id', $courseId)->get();
         
         foreach($achievements as $achievement){
 
@@ -662,11 +662,16 @@ class EnrolledCourseController extends Controller
 
         $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
 
-        $student_achievement = new StudentAchievement;
-        $student_achievement->student_id = $userId;
-        $student_achievement->badge_id =  $badgeId;
-        $student_achievement->is_achieved = true;
-        $student_achievement->save();
+        $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('course_id', $courseId)->where('badge_id', $badgeId)->get();
+
+        if(count($badgeAlreadyExists) == 0) {
+            $student_achievement = new StudentAchievement;
+            $student_achievement->student_id = $userId;
+            $student_achievement->badge_id =  $badgeId;
+            $student_achievement->course_id =  $courseId;
+            $student_achievement->is_achieved = true;
+            $student_achievement->save();
+        }
 
         $data= [
             'studentName' => $studentName,
@@ -873,12 +878,13 @@ class EnrolledCourseController extends Controller
             
             
             $badgeId = AchievementBadge::where('title', 'Q&A')->value('id');
-            $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('badge_id', $badgeId)->count();
+            $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('course_id', $course_id)->where('badge_id', $badgeId)->count();
             
             if(!$achievementCheck) {
                 $student_achievement = new StudentAchievement;
                 $student_achievement->student_id = $user->id;
                 $student_achievement->badge_id =  $badgeId;
+                $student_achievement->course_id =  $course_id;
                 $student_achievement->is_achieved = true;
                 $student_achievement->save();
             }
