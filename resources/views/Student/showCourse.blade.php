@@ -108,7 +108,7 @@
           <div class="col-lg-12">
             <span class="fw-bold">Share this course: </span>
               <a style="display:none;" class="btn" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url('/')); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
-              <a class="" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url($currenturl)); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
+              <a style="margin-left: 1rem;" target="_blank" href="http://www.facebook.com/sharer.php?s=100&p[title]= <?php echo urlencode($singleCourseDetail['course_title']); ?>&amp;p[summary]=<?php echo urlencode($singleCourseDetail['description']) ?>&amp;p[url]=<?php echo urlencode(url($currenturl)); ?>&amp;p[images][0]=<?php echo urlencode('/storage/courseImages/' . $singleCourseDetail['course_image']); ?>">
               <i class="fab fa-facebook fa-lg btn-dark me-3"></i></a>
               <input type="hidden" id="twittertitle" value="{{$singleCourseDetail['course_title']}}">
               <input type="hidden" id="twitterdescription" value="{{$singleCourseDetail['description']}}">
@@ -266,7 +266,7 @@
                     <a style="text-decoration:none;color:#2C3443;">{{$batch['batchname']}}</a>
                   </h5>
                   <p class="card-text course-time">{{$batch['batch_start_date']}}, {{$batch['batch_start_time']}} {{$batch['batch_time_zone']}} - 
-                  {{$batch['batch_end_time']}} {{$batch['batch_time_zone']}} - {{$batch['batch_end_date']}}
+                  {{$batch['batch_end_time']}} {{$batch['batch_time_zone']}}
                    </p>
                 </div>
               </div>

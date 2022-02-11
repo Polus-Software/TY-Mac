@@ -117,7 +117,12 @@ class CoursesCatalogController extends Controller
         $singleCourseFeedbacks = [];
         $courseContents = [];
         $batchDetails = [];
-        $batchDetails = CourseService::getBatchDetails($id);
+        if(Auth::user()) {
+            $userId = Auth::user()->id;
+        } else {
+            $userId = "";
+        }
+        $batchDetails = CourseService::getBatchDetails($id, $userId);
         $courseContents = CourseService::getContentsData($id);
         $user = UserService::getCurrentUserInfo();
         $userType = "";
