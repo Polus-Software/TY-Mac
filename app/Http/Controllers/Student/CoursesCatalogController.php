@@ -249,12 +249,13 @@ class CoursesCatalogController extends Controller
 
        $badgeId = AchievementBadge::where('title', 'Joinee')->value('id');
 
-       $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('badge_id', $badgeId)->get();
+       $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('course_id', $courseId)->where('badge_id', $badgeId)->get();
        
-       if(count($badgeAlreadyExists)) {
+       if(count($badgeAlreadyExists) == 0) {
             $student_achievement = new StudentAchievement;
             $student_achievement->student_id = $userId;
             $student_achievement->badge_id =  $badgeId;
+            $student_achievement->course_id =  $courseId;
             $student_achievement->is_achieved = true;
             $student_achievement->save();
        }

@@ -252,7 +252,7 @@
             <x-courseboxsmall :course="$course" />
           </div>
           @empty
-          <x-nodatafound message="No live classes at the moment!" notype="course" />
+          <x-nodatafound message="No courses to be shown!" notype="course" />
           @endforelse
         </div>
       </div>
