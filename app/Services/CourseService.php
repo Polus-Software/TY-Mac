@@ -7,10 +7,14 @@ use App\Models\Course;
 use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Models\CourseCategory;
+use App\Models\CustomTimezone;
 use App\Models\LiveSession;
 use App\Models\EnrolledCourse;
 use Carbon\Carbon;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+use DateTime;
+use DateTimeZone;
 
 
 class CourseService {
@@ -146,7 +150,7 @@ class CourseService {
                     
             $startTime = date("H:i A", $sTime);
             $endTime = date("H:i A", $eTime);
-
+            $date = new DateTime("now");
             $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
             
             $liveSession = self::getLiveSessionDetails($batch->id);
