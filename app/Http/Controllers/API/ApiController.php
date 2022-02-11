@@ -644,13 +644,14 @@ class ApiController extends Controller
 
        $badgeId = AchievementBadge::where('title', 'Joinee')->value('id');
 
-       $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('badge_id', $badgeId)->get();
+       $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('course_id', $courseId)->where('badge_id', $badgeId)->get();
        
        if(count($badgeAlreadyExists)) {
             $student_achievement = new StudentAchievement;
             $student_achievement->student_id = $userId;
             $student_achievement->badge_id =  $badgeId;
             $student_achievement->is_achieved = true;
+            $student_achievement->course_id = $courseId;
             $student_achievement->save();
        }
 
@@ -891,12 +892,16 @@ class ApiController extends Controller
         $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
 
         $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
-
-        $student_achievement = new StudentAchievement;
-        $student_achievement->student_id = $userId;
-        $student_achievement->badge_id =  $badgeId;
-        $student_achievement->is_achieved = true;
-        $student_achievement->save();
+        $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('course_id', $courseId)->where('badge_id', $badgeId)->get();
+        if(count($badgeAlreadyExists) == 0) {
+            $student_achievement = new StudentAchievement;
+            $student_achievement->student_id = $userId;
+            $student_achievement->badge_id =  $badgeId;
+            $student_achievement->course_id =  $courseId;
+            $student_achievement->is_achieved = true;
+            $student_achievement->save();
+        }
+        
 
         $data= [
             'studentName' => $studentName,
