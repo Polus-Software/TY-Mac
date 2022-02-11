@@ -145,12 +145,6 @@ class CourseController extends Controller
         $whoLearnDescription = $request->input('who_learn_description');
 
         $who_learn ="";
-        /*$who_learn_points_count = $request->input('who_learn_points_count');
-   
-        for($i =1;  $i <= $who_learn_points_count; $i++){
-          $who_learn_temp = $request->input('who_learn_points_'. $i);
-          $who_learn = $who_learn . $who_learn_temp . ";";
-        }*/
         $courseFile = "";
         $courseThumbnailFile = "";
         if($request->file()){
@@ -206,7 +200,7 @@ class CourseController extends Controller
                     'name' => $name
                  ];
 
-                Mail::to($admin->email)->send(new mailAfterCourseCreation($data));
+                Mail::mailer('infosmtp')->to($admin->email)->send(new mailAfterCourseCreation($data));
                 $notification = new Notification; 
                 $notification->user = $admin->id;
                 $notification->notification = "Hi " .$admin->firstname ." ".$admin->lastname.", A new course has been created by the content creator ".$name." The following course has been added : ".$courseTitle;
@@ -221,7 +215,7 @@ class CourseController extends Controller
             'courseTitle' => $courseTitle
          ];
 
-         Mail::to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
+         Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterassigningCourse($datas));
          
          $notification = new Notification; 
          $notification->user = $instructorId;
@@ -822,7 +816,7 @@ class CourseController extends Controller
         }
         
         $topicAssignment->save();
-        return redirect('/view-assignments/' .$course_id);
+        return redirect('/view-assignments/?course_id=' .$course_id);
     }
 
     /**
@@ -965,7 +959,6 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
-
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);

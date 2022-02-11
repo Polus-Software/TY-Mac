@@ -68,7 +68,7 @@ class AuthController extends Controller
             'lastname'=> $request->lastname,
             ];
 
-            Mail::mailer('smtp')->to($email)->send(new SignupMail($details));
+            Mail::mailer('infosmtp')->to($email)->send(new SignupMail($details));
             foreach($admins as $admin) {
                 $data=[
                     'firstname'=> $request->firstname,
@@ -266,7 +266,7 @@ class AuthController extends Controller
                     'adminLastName' => $admin->lastname,
                     'email' => $email
                  ];
-                Mail::to($admin->email)->send(new MailAfterContactUsSubmission($details));
+                Mail::mailer('smtp')->to($admin->email)->send(new MailAfterContactUsSubmission($details));
                 $notification = new Notification; 
                 $notification->user = $admin->id;
                 $notification->notification = "Hi ".$admin->firstname." ". $admin->lastname." ,You have got a new query from the student ".$name;
@@ -294,6 +294,20 @@ class AuthController extends Controller
             }
             return response()->json(['status' => 'success', 'msg' => '', 'html' => $html]);
         }
-    }    
+    }
+    
+    public function readNotifications(Request $request) {
+        $user = Auth::user();
+
+        if($user) {
+            $userId = $user->id;
+            $notifications = Notification::where('user', $userId)->update(['is_read' => true]);
+
+            $newNotifications = Notification::where('user', $userId)->where('is_read', false)->get();
+            $notificationCount = count($newNotifications);
+        }
+
+        return response()->json(['status' => 'success', 'count' => $notificationCount]);
+    }
 }
 

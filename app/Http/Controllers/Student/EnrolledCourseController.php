@@ -266,6 +266,10 @@ class EnrolledCourseController extends Controller
                         $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('end_time', '<=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                         if(count($todaysLiveSessions) != 0) {
                             $liveId = "Over";
+                            $ls = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->get();
+                            if(count($ls)) {
+                                $overId = $liveSessions[0]->live_session_id;
+                            }
                         } else {
                             $cohort_batches = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                             if(count($cohort_batches) != 0) {
@@ -404,6 +408,8 @@ class EnrolledCourseController extends Controller
                 $contentId = $feedback->content_id;
                 $content = TopicContent::where('topic_content_id',  $contentId);
 
+                $sessionView = LiveSession::where('topic_id', $topicId);
+
                 $singleRec = array(
                     'content_id' => $contentId,
                     'content_title' => $content->value('topic_title'),
@@ -411,7 +417,8 @@ class EnrolledCourseController extends Controller
                     'topic_title' => $topic->value('topic_title'),
                     'student_id' => $feedback->value('student'),
                     'likes' => $feedback->value('positive'),
-                    'dislikes' => $feedback->value('negative')
+                    'dislikes' => $feedback->value('negative'),
+                    'sessionId' => $sessionView->value('live_session_id')
                 );
 
                 array_push($finalRec, $singleRec);
@@ -438,7 +445,7 @@ class EnrolledCourseController extends Controller
                 'student_profile_photo' => $student_profile_photo,
                 'question' => $question,
                 'reply' => $reply,
-                'hasReplied' => Carbon::parse($hasReplied)->diffForHumans(),
+                'hasReplied' => $hasReplied,
                 'date' => Carbon::parse($date)->diffForHumans(),
                 'replay_date' =>Carbon::parse($replay_date)->diffForHumans(),
             ));
@@ -499,8 +506,44 @@ class EnrolledCourseController extends Controller
                     'assignment_data' => $assignmentStatus
                 ));
             }   
+
+            $current_date = Carbon::now()->format('Y-m-d');
+            $progress = 0;
+            $totalSessions = LiveSession::where('course_id', $courseId)->count();
+            if($totalSessions != 0) {
+              $progressTracker = LiveSession::where('start_date', '<', $current_date)->count();
+              $progress = $progressTracker * 100 / $totalSessions; 
+            }
+
             $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
             $graph = $this->instructorGraph($courseId);
+
+            // Hours spent
+            $spentHours = 0;
+            $spentSessions = LiveSession::where('course_id', $courseId)->where('start_date', '<', $current_date)->get();
+            
+            foreach($spentSessions as $spentSession) {
+                $spentHours += intval((new Carbon($spentSession->start_time))->diff(new Carbon($spentSession->end_time))->format('%h'));
+            }
+
+            // Students joined
+
+            $studentsJoined = EnrolledCourse::where('course_id', $courseId)->count();
+            
+            //Likes and dislikes
+
+            $likesCount = 0;
+            $dislikesCount = 0;
+            $liveFeedbacks = StudentFeedbackCount::where('course_id', $courseId)->get();
+            foreach($liveFeedbacks as $liveFeedback) {
+                if($liveFeedback->positive == 1) {
+                    $likesCount += 1;
+                }
+                if($liveFeedback->negative == 1) {
+                    $dislikesCount += 1;
+                }
+            }
+            
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
                 'topicDetails' =>  $topicDetails,
@@ -513,7 +556,11 @@ class EnrolledCourseController extends Controller
                 'graph' => $graph,
                 'selectedBatch' => $selectedBatch,
                 'assignments' => $assignments,
-                'assignmentArr' => $assignmentArr
+                'assignmentArr' => $assignmentArr,
+                'likesCount' => $likesCount,
+                'dislikesCount' => $dislikesCount,
+                'studentsJoined' => $studentsJoined,
+                'spentHours' => $spentHours
             ]);
         }      
 
@@ -549,7 +596,7 @@ class EnrolledCourseController extends Controller
             'courseTitle' => $courseTitle
          ];
 
-         Mail::to($instructorEmail)->send(new InstructorMailAfterFeedback($details));
+         Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterFeedback($details));
 
         $notification = new Notification; 
         $notification->user = $assigned;
@@ -679,7 +726,7 @@ class EnrolledCourseController extends Controller
             'courseTitle' => $courseTitle
          ];
 
-         Mail::to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
+         Mail::mailer('infosmtp')->to($instructorEmail)->send(new MailAfterAssignmentSubmission($data));
 
          $notification = new Notification; 
          $notification->user = $instructorId;
@@ -829,7 +876,7 @@ class EnrolledCourseController extends Controller
         $updatedAt = $courseQA->updated_at->format('d M H:m');
         $courseQA->save();
 
-        Mail::to($studentEmail)->send(new MailAfterReplay($details));
+        Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterReplay($details));
 
         $notification = new Notification; 
         $notification->user = $studentId;
@@ -902,7 +949,7 @@ class EnrolledCourseController extends Controller
 
         $qa->save();
 
-        Mail::to($instructorEmail)->send(new MailAfterQuestion($data));
+        Mail::mailer('infosmtp')->to($instructorEmail)->send(new MailAfterQuestion($data));
 
         $notification = new Notification; 
         $notification->user = $instructor;
@@ -1044,7 +1091,7 @@ class EnrolledCourseController extends Controller
             'courseTitle' => $courseTitle
          ];
         
-         Mail::to($studentEmail)->send(new mailAfterAssignmentReview($details));
+         Mail::mailer('infosmtp')->to($studentEmail)->send(new mailAfterAssignmentReview($details));
          $notification = new Notification; 
          $notification->user = $sessionInstructor;
          $notification->notification = "Hello ".$studentName." ,Your assignment for the course ".$courseTitle." has been reviewed by the instructor. 

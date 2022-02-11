@@ -41,6 +41,7 @@ Route::get('/', function () {
     return view('homepage');
 })->name('home');
     Route::get('/signup', [AuthController::class, 'signUp'])->name('signup');
+    Route::post('/read-notifications', [AuthController::class, 'readNotifications'])->name('read-notifications');
     Route::post('/create-user', [AuthController::class, 'signupProcess'])->name('user.create');
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/user-login', [AuthController::class, 'loginProcess'])->name('user.login');

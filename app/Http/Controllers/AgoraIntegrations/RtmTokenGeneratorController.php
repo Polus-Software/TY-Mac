@@ -36,6 +36,8 @@ use Carbon\Carbon;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InstructorMailAfterLiveSessionScheduled;
+use App\Mail\RecommendationMail;
+use App\Mail\RecommendationMailInstructor;
 use App\Mail\MailAfterLiveSessionScheduled;
 use App\Mail\mailAfterCourseCompletion;
 
@@ -48,8 +50,10 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
-    const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+    // const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
+    // const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+    const appId = "0b40256a7d014ad981cf41e7b7d26910";
+    const appCertificate = "a163ae4afd894f059c7dfceecddcdafe";
 
 
     public function index(Request $request, $session) {
@@ -170,22 +174,23 @@ class RtmTokenGeneratorController extends Controller
         $sessionsArray = [];
         $slNo = 1;
         foreach($sessions as $session) {
-            
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
-            
+            $sesionTitle = $session->session_title;
+            $time = $session->start_date . ' - ' . $session->start_time . '-' . $session->end_time;
 
-            array_push($sessionsArray, array(
+            array_push($sessionsArray, array (
                 'slNo' => $slNo,
+                'id' => $session->live_session_id,
+                'session' => $sesionTitle,
                 'sessionCourse' => $sessionCourse,
-                'instructor' =>$instructor,
-                'batch' => $batch,
+                'time' => $time,
+                'batch' => $batch
             ));
 
             $slNo++;
         }
-        
         $instructors = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->get();
@@ -222,7 +227,7 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function saveSessionDetails(Request $request) {
-        
+
         $sessionCourse = $request->sessionCourse;
         $sessionBatch = $request->sessionBatch;
         $sessionInstructor = $request->sessionInstructor;
@@ -235,7 +240,6 @@ class RtmTokenGeneratorController extends Controller
         $courseTitle = Course::where('id', $sessionCourse)->value('course_title');
         
         $topics = Topic::where('course_id', $sessionCourse)->get();
-
         $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
         $batchname = $selectedBatchObj->value('batchname');
         $occurrences = $selectedBatchObj->value('occurrence');
@@ -246,7 +250,7 @@ class RtmTokenGeneratorController extends Controller
         $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
 
         $date = $startDate;
-
+        
         while($date <= $endDate) {
             if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
                 // Save schedules here
@@ -260,13 +264,10 @@ class RtmTokenGeneratorController extends Controller
                 $liveSession->start_time = $selectedBatchObj->value('start_time');
                 $liveSession->end_time = $selectedBatchObj->value('end_time');
                 $liveSession->save();
+                
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
 
-                $date = date('Y-m-d',strtotime($date . "+1 days"));
-                $topicsCounter++;
-            } else {
-                $date = date('Y-m-d',strtotime($date . "+1 days"));
-            }
-        }
+
                 $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
                 $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
                
@@ -280,7 +281,7 @@ class RtmTokenGeneratorController extends Controller
                     'sessionTitle'=> $topics[$topicsCounter]->topic_title
                  ];
                  
-                Mail::to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
+                Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
 
                 $notification = new Notification; 
                 $notification->user = $sessionInstructor;
@@ -304,7 +305,7 @@ class RtmTokenGeneratorController extends Controller
                     'endDate' => $batchEndDate,
                     ];
                 
-                    Mail::to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
+                    Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
                     
                     $notification = new Notification; 
                     $notification->user = $student->user_id;
@@ -312,6 +313,14 @@ class RtmTokenGeneratorController extends Controller
                     $notification->is_read = false;
                     $notification->save();
                 }
+
+
+                $topicsCounter++;
+            } else {
+                $date = date('Y-m-d',strtotime($date . "+1 days"));
+            }
+        }
+                
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
@@ -509,14 +518,14 @@ class RtmTokenGeneratorController extends Controller
                 $studentName = $user->firstname.' '.$user->lastname;
                 $studentEmail = $user->email;
                 $url = base_path() . "/enrolled-course/" . $courseId . "?feedback=true";
-
+                $courseTitle = Course::where('course_title', $courseId)->value('course_title');
                 $mailData = [
                     'courseTitle' => $courseTitle,
                     'studentName' => $studentName,
                     'url' => $url
                 ];
                
-                Mail::to($studentEmail)->send(new mailAfterCourseCompletion($mailData));
+                Mail::mailer('infosmtp')->to($studentEmail)->send(new mailAfterCourseCompletion($mailData));
                 
                 $notification = new Notification; 
                 $notification->user = $user->id;
@@ -531,6 +540,22 @@ class RtmTokenGeneratorController extends Controller
                 $attendance->update(['attendance_Status' => false ]);
             }
 
+            // Send recommendation mail
+            $instructor = AssignedCourse::where('course_id', $courseId)->value('user_id');
+            $instructorObj = User::where('id', $instructor);
+            $instructorName = $instructorObj->value('firstname') . ' ' . $instructorObj->value('lastname');
+
+            $topicTitle = LiveSession::where('live_session_id', $sessionId)->value('session_title');
+
+            $recDetails = [
+                'topic' => $topicTitle,
+                'studentName' => $user->firstname .' '. $user->lastname,
+                'instructorName' => $instructorName
+            ];
+            
+            Mail::mailer('infosmtp')->to($user->email)->send(new RecommendationMail($recDetails));
+            
+            Mail::mailer('infosmtp')->to($instructorObj->value('email'))->send(new RecommendationMailInstructor($recDetails));
             return response()->json(['status' => 'success', 'msg' => 'Student closed window', 'course_id' => $courseId]);
         }
     

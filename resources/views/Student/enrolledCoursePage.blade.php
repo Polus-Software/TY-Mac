@@ -264,6 +264,7 @@ small#assignment_table_batch {
 }
 
   </style>
+  <input type="hidden" id="userType" value="{{$userType}}"/>
   <div id="snackbar">Link copied.</div>
   <!-- instructor assignment modal -->
   <div class="modal fade" id="instructAssignModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -322,8 +323,8 @@ small#assignment_table_batch {
       </div>
       <div class="modal-body session-modal-body">
         <p class="session-text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        This is to confirm that both the parties (Instructor and student) have agreed upon the time of joining this session on proper notice. Please click on "Continue" if you wish to proceed to the session. 
+        Only clicking the continue button, an email will be sent to the respective student with the link for joining this session. All the best!
         </p>
       </div>
       <div class="modal-footer session-modal-footer">
@@ -505,7 +506,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">18</h1>
+                                        <h1 class="card-title">{{ $spentHours }}</h1>
                                         <p class="card-text">Hours spent</p>
                                     </div>
                                 </div>
@@ -513,7 +514,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">700</h1>
+                                        <h1 class="card-title">{{$studentsJoined}}</h1>
                                         <p class="card-text">Students joined</p>
                                     </div>
                                 </div>
@@ -521,7 +522,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">08</h1>
+                                        <h1 class="card-title">{{$likesCount}}</h1>
                                         <p class="card-text">Likes</p>
                                     </div>
                                 </div>
@@ -529,7 +530,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">180</h1>
+                                        <h1 class="card-title">{{$dislikesCount}}</h1>
                                         <p class="card-text">Dislikes</p>
                                     </div>
                                 </div>
@@ -611,7 +612,9 @@ small#assignment_table_batch {
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        @if($userType == 'instructor')
                                         <a id="copy-link" data-href="{{url('/')}}/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">Copy link to session</a>
+                                        @endif
                                         @endif
                                     </div>
                                 </div>
@@ -700,7 +703,7 @@ small#assignment_table_batch {
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                                <a href="/view-again/{{$recommendation['sessionId']}}" class="btn btn-primary w-100">View again</a>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -840,27 +843,39 @@ small#assignment_table_batch {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    @if($userType == "instructor" && !$qa['hasReplied'])
-                                                    <div class="row" id="replyTextArea_{{ $qa['id'] }}">
+                                                 
+                                                </div>
+                                            </div>
+                                            @if(!$qa['hasReplied'])
+                                            <div class="row ps-5">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
+                                                    @foreach($singleCourseDetails as $course)
+                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                    @endforeach
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                                                <p class="card-title text-left">
+                                                                    @foreach($singleCourseDetails as $course)
+                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at {{ $course['institute'] }}
+                                                                    @endforeach
+
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="replyTextArea_{{ $qa['id'] }}">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                             @csrf
                                                             <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
-                                                    @endif
+                                                        
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            @if($qa['hasReplied'])
-                                            <div class="row ps-5">
                                             @else
-                                            <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
-                                            @endif
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
-                                                    @foreach($singleCourseDetails as $course)
-                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    @endforeach
-                                                    <div class="card-body">
+                                            <!-- <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none"> -->
+                                            <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
@@ -882,7 +897,8 @@ small#assignment_table_batch {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                            @endif
+                                                
                                             </div>
                                             
                                         @endforeach
@@ -892,7 +908,7 @@ small#assignment_table_batch {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <!-- </div> -->
 
                     <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
 
@@ -1111,7 +1127,7 @@ small#assignment_table_batch {
                                                         </div>
                                                     @else
                                                     <div class="col-4 m-auto text-center">
-                                                        <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
+                                                        <button card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</button>
                                                         </div>
                                                     @endif
                                                 
@@ -1297,13 +1313,15 @@ small#assignment_table_batch {
     if(c == true || c == 'true') {
         document.getElementById('reviewButton').click();
     }
-    
-    document.getElementById('copy-link').addEventListener('click', function(e) {
+    if(document.body.contains(document.getElementById('copy_link'))) {
+        document.getElementById('copy-link').addEventListener('click', function(e) {
         navigator.clipboard.writeText(this.getAttribute('data-href'));
         var x = document.getElementById("snackbar");
         x.className = "show";
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     });
+    }
+    
 
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
@@ -1470,6 +1488,7 @@ for(index = 0;index < replyEleCount;index++) {
                 document.getElementById('replyContent_' + qaId).innerHTML = data.reply;
                 document.getElementById('updatedAt_' + qaId).innerHTML = data.updatedAt;
                 document.getElementById("replyTextArea_" + qaId).style.display = "none";
+                location.reload();
             }
         });
     });
