@@ -39,7 +39,7 @@
           <div class="col-12 col-lg-3 col-md-3 col-sm-6">
             <div class="card llp-countbox mb-3">
               <div class="card-body text-center">
-                <h1 class="card-title">180</h5>
+                <h1 class="card-title">{{$total_live_hours}}</h5>
                   <p class="card-text">Total Live Hours</p>
               </div>
             </div>
