@@ -67,7 +67,7 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-                <button type="submit" class="btn btn-secondary think-btn-secondary w-100 loginBtn"><span class="button">Create</span></button>
+                <button type="submit" class="btn think-btn-secondary w-100 loginBtn">Create</button>
               </div>
               <div class="form-group mx-0 text-center bottom-text">
               <p>
@@ -119,7 +119,7 @@
               <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
               </div>
               <div class="form-group mx-0 d-grid">
-              <button type="submit" class="btn btn-secondary loginBtn"><span class="button">Login</span></button>
+              <button type="submit" class="btn loginBtn think-btn-secondary">Login</button>
               <span class="login-error-message mt-2 text-center text-danger"></span>
               </div>
               <div class="form-group mx-0">
@@ -170,7 +170,7 @@
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0 d-grid">
-              <button type="submit" class="btn btn-secondary sendContactInfo">Submit</button>
+              <button type="submit" class="btn think-btn-secondary sendContactInfo">Submit</button>
               </div>
 
             </form>
@@ -200,7 +200,7 @@
                 <small id="question_error" style="color:red;"></small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
-                <button type="button" class="btn btn-dark" id="submitStudentQuestion">Submit</button>
+                <button type="button" class="btn think-btn-secondary" id="submitStudentQuestion">Submit</button>
               </div>
 
             </form>
@@ -241,7 +241,7 @@
               </div>
               <div class="form-group mx-0">
               @csrf
-                <button type="button" id="reviewSubmitBtn" class="btn btn-secondary think-btn-secondary sendContactInfo w-100">Submit</button>
+                <button type="button" id="reviewSubmitBtn" class="btn think-btn-secondary sendContactInfo w-100">Submit</button>
               </div>
           </div>
         </div>
@@ -286,7 +286,7 @@
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
-                <button type="submit" class="btn btn-secondary think-btn-secondary sendContactInfo w-100">Submit</button>
+                <button type="submit" class="btn think-btn-secondary sendContactInfo w-100">Submit</button>
               </div>
 
             </form>
