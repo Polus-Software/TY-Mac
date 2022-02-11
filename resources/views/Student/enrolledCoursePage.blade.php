@@ -380,26 +380,26 @@ small#assignment_table_batch {
                                     </span>
                                 </p>
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-12 col-sm-12 col-12 mb-3">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-12 mb-3">
                                         <div class="progress rounded-pill">
                                             <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                         <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_category'] }}
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12 text-center">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                         <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                         <p class="para-2">
                                             <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             @foreach($singleCourseDetails as $course)
@@ -852,7 +852,7 @@ small#assignment_table_batch {
                                                     @foreach($singleCourseDetails as $course)
                                                     <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                     @endforeach
-                                                    <div class="card-body" style="padding-left:7rem;">
+                                                    <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
@@ -875,7 +875,7 @@ small#assignment_table_batch {
                                                 </div>
                                             @else
                                             <!-- <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none"> -->
-                                            <div class="card-body">
+                                            <div class="card-body" style="padding-left: 7rem;">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
@@ -1060,7 +1060,7 @@ small#assignment_table_batch {
                                                     <div class="accordion-body">
                                                        @foreach($topicDetail['assignmentList'] as $assignment)
                                                        <div class="col-12 mb-3">
-                                                           <div class="card" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
+                                                           <div class="card assignmentCard" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
                                                                <div class="card-title p-3 bg-light border-bottom">
                                                                  Assignment: {{$assignment['assignment_title']}}</strong>
                                                                 </div>
@@ -1102,7 +1102,7 @@ small#assignment_table_batch {
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                                                     </div>
                                                                                                     <div class="col-12 text-end mt-4">
-                                                                                                        <a class="btn btn-sm btn-outline-secondary me-3">Cancel</a>
+                                                                                                        <a class="btn btn-sm btn-outline-secondary me-3 cancelAssignment">Cancel</a>
                                                                                                         <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
                                                                                                     </div>
                                                                                     </form>
@@ -1373,6 +1373,16 @@ document.getElementById('assign_completed').addEventListener('click', function(e
     document.getElementById('add_comment').addEventListener('click', function(e) {
         document.getElementById('modal_comment_div').style.display = "block";
         this.style.display = "none";
+    });
+
+    let cancelAssignmentEl = document.querySelector('.cancelAssignment');
+
+    cancelAssignmentEl.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log(e.currentTarget.closest('.assignmentCard'));
+        e.currentTarget.closest('.assignmentCard').style.display = 'none';
+        console.log(e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild);
+        e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild.style.display = 'block';
     });
 
     let startAssignment = document.getElementsByClassName('start_assignment');
