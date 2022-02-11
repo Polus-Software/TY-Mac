@@ -380,26 +380,26 @@ small#assignment_table_batch {
                                     </span>
                                 </p>
                                 <div class="row">
-                                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
+                                    <div class="col-lg-4 col-md-12 col-sm-12 col-12 mb-3">
                                         <div class="progress rounded-pill">
                                             <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-12">
                                         <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['course_category'] }}
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-3 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12 text-center">
                                         <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-4 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-4 col-12">
                                         <p class="para-2">
                                             <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             @foreach($singleCourseDetails as $course)
@@ -852,7 +852,7 @@ small#assignment_table_batch {
                                                     @foreach($singleCourseDetails as $course)
                                                     <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
                                                     @endforeach
-                                                    <div class="card-body">
+                                                    <div class="card-body" style="padding-left:7rem;">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
