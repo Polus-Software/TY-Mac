@@ -892,7 +892,8 @@ class CourseController extends Controller
         $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = Carbon::parse($request->input('cohortbatch_startdate'))->format('Y-m-d');
         $cohortbatch->end_date = Carbon::parse($request->input('cohortbatch_enddate'))->format('Y-m-d');
-        $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
+		$cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
+		$cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;
         $cohortbatch->time_zone = $request->input('cohortbatch_timezone');
@@ -985,6 +986,7 @@ class CourseController extends Controller
         $cohortbatch->course_id = $course_id;  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
         $cohortbatch->end_date = $request->input('cohortbatch_enddate');
+		$cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;

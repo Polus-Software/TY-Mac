@@ -232,14 +232,14 @@
 
       <div class="col-md-8">
         <div class="row border-bottom mb-4">
-          <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-start p-4">
+          <div class="col-lg-7 col-sm-6 col-6 d-flex justify-content-start p-4">
             @if(!!$searchTerm)
             <h3>Search results for "{{ $searchTerm }}"</h3>
             @else
             <h3>Courses For You</h3>
             @endif
           </div>
-          <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end p-4">
+          <div class="col-lg-5 col-sm-6 col-6 d-flex justify-content-end p-4">
             <select name="" id="" class="rounded">
               <option value="most-popular">Most Popular</option>
             </select>

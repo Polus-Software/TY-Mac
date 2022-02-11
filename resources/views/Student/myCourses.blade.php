@@ -172,8 +172,9 @@
                 <h3>My Courses</h3>
             </div>
             <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end">
-                <select name="" id="" class="rounded pe-4">
-                    <option value="most-popular">Course in progress</option>
+                <select name="" id="filter_courses" class="rounded pe-4" onchange="getcoursedata(this)">
+                    <option value="most-popular" {{ $filter_course == "most-popular" ? 'selected' : '' }}>Course in progress</option>
+					<option value="completed" {{ $filter_course == "completed" ? 'selected' : '' }}>Course Completed</option>
                 </select>
             </div>
         </div>
@@ -272,5 +273,15 @@
         document.getElementById('live').classList.add('active', 'show');
         document.querySelector('.think-tab-title').textContent = 'Current Live Classes';
     });
+	function getcoursedata(selectObject) {
+		var value = selectObject.value;  
+		const url = window.location.href.split('?')[0];
+		if(value == 'completed'){
+			window.location.href = url+'?courses=1';
+		}
+		else{
+			window.location.href = url;
+		}
+	}
 </script>
 @endpush

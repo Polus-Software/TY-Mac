@@ -174,15 +174,17 @@ class AuthController extends Controller
             //$students_registered = User::where('role_id', 2)->count();
             $liveSessions = LiveSession::all();
             $current_date = Carbon::now()->format('Y-m-d');
-            $backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
-           
+			$backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
+			$total_live_hours = 0;
             foreach($liveSessions as $session) {
                
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
 
                 $currentBatchStartDate = $batch->value('start_date');
-
+				if($currentBatchStartDate < $current_date){
+					$total_live_hours = $total_live_hours+$batch->value('duration');
+				}
                 if($currentBatchStartDate > $current_date) {
                     $session_title = $session->session_title;
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
@@ -226,6 +228,7 @@ class AuthController extends Controller
                 'instructor_count' => $instructor_count,
                 'registered_course_count' => $registered_course_count,
                 'students_registered' => $students_registered,
+				'total_live_hours' => $total_live_hours,
                 'upComingSessionDetails' => $upComingSessionDetails,
                 'recentSessionDetails' => $recentSessionDetails
             ]);
