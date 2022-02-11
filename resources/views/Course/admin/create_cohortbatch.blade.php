@@ -32,14 +32,14 @@
 
           
           <div class="col-12">
-            <label for="title">Title</label>
+            <label for="title">Days <small style="font-size:12px;color:#a3a3a3;">(Seperated by '-')</small></label>
             <input type="text" class="form-control" id="title" name="cohortbatch_title" value="">
             @if ($errors->has('cohortbatch_title'))
               <span class="text-danger">The batch title is required</span>
             @endif
           </div>
           <div class="col-12">
-            <label for="batchname">Batch Name</label>
+            <label for="batchname">Title</label>
             <input type="text" class="form-control" id="batchname" name="batchname" value="">
             @if ($errors->has('batchname'))
               <span class="text-danger">The batch name is required</span>
@@ -234,12 +234,11 @@
     el.addEventListener('change', (e) => {
       const currentItem = e.currentTarget;
         if(currentItem.checked) {
-          customValue.push(currentItem.value);
+          customValue.push(currentItem.value.trim());
         } else {
           if(customValue.indexOf(currentItem.value) != -1) {
             customValue.splice(customValue.indexOf(currentItem.value), 1);
           }
-
         }
         document.querySelector('#batch_name').value = customValue;
     });

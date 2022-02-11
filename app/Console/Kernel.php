@@ -14,9 +14,9 @@ use App\Models\LiveSession;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LiveSessionReminderMail;
 use App\Mail\AssignmentReminder;
+use App\Mail\LiveSessionReminderMailInstructor;
 use Carbon\Carbon;
 use App\Models\CustomTimezone;
-
 use App\Models\TopicAssignment;
 use App\Models\Assignment;
 
@@ -93,9 +93,17 @@ class Kernel extends ConsoleKernel
                                         'reminder' => '72 hours'
                                     ];
                                     
-                                    Mail::to($student->value('email'))->send(new LiveSessionReminderMail($details));
+                                    Mail::mailer('infosmtp')->to($student->value('email'))->send(new LiveSessionReminderMail($details));
                                     $session = LiveSession::where('live_session_id', $liveSession->live_session_id)->update(['first_notification_sent' => true]);
                                 }
+                                // Instructor Mail
+                                $iDetails = [
+                                    'instructorName' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                                    'sessionName' => $liveSession->session_title,
+                                    'course_name' => $course->value('course_title'),
+                                    'reminder' => '72 hours'
+                                ];
+                                Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderMailInstructor($details));
                             }
                         }
                         
@@ -136,9 +144,17 @@ class Kernel extends ConsoleKernel
                                             'reminder' => '8 hours'
                                         ];
                                         
-                                        Mail::to($student->value('email'))->send(new LiveSessionReminderMail($details));
+                                        Mail::mailer('infosmtp')->to($student->value('email'))->send(new LiveSessionReminderMail($details));
                                         $session = LiveSession::where('live_session_id', $liveSession->live_session_id)->update(['second_notification_sent' => true]);
                                     }
+
+                                    $iDetails = [
+                                        'instructorName' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                                        'sessionName' => $liveSession->session_title,
+                                        'course_name' => $course->value('course_title'),
+                                        'reminder' => '8 hours'
+                                    ];
+                                    Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderMailInstructor($details));
 
                                 }  
                             }
@@ -146,9 +162,6 @@ class Kernel extends ConsoleKernel
                     }
                 }
             }
-
-            
-
         })->everyThirtyMinutes();
 
         $schedule->call(function () {
@@ -187,7 +200,7 @@ class Kernel extends ConsoleKernel
                     ];
                     
                     if($assignmentFlag == true && $assignment->due_date == $oneDay) {
-                        Mail::to($student->value('email'))->send(new AssignmentReminder($details));
+                        Mail::mailer('infosmtp')->to($student->value('email'))->send(new AssignmentReminder($details));
                     }
                 }                   
             }

@@ -506,6 +506,7 @@ class AdminController extends Controller
         $admin->email = $request->input('email');
         $admin->password = Hash::make($request->input('password'));
         $admin->role_id = $userType;
+        $admin->timezone = "UTC";
         $admin->save();
         return redirect()->route('manage-admin');
     }

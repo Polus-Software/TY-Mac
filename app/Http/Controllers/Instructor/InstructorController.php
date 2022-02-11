@@ -82,6 +82,7 @@ class InstructorController extends Controller
        
         $instructor->signature = $signatureFileName;
         $instructor->role_id = $userType;
+        $instructor->timezone = "UTC";
         $instructor->save();
         return redirect()->route('manage-instructors');
     }

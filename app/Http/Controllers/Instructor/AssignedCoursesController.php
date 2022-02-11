@@ -41,6 +41,7 @@ class AssignedCoursesController extends Controller
          $enrolledCourses = AssignedCourse::where('user_id', $user->id)->get();
          foreach($enrolledCourses as $enrolledCourse){
            $nextCohort = "";
+           $bName = "";
            $courseId = $enrolledCourse->course_id;
            $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
            $description = Course::where('id', $enrolledCourse->course_id)->value('description');
@@ -81,13 +82,23 @@ class AssignedCoursesController extends Controller
                 $start_date =  $cohort_batches->start_date;
                 $start_time =  $startTime;
                 $end_time =  $endTime;
+
+                $batch = CohortBatch::where('id', $cohort_batches->batch_id);
                 
                 $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
                 $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                $bName = '(' . $batch->value("batchname") . ' [' . $batch->value("title") . '])';
               } else {
                 $nextCohort = "No live sessions scheduled";
               }
-           
+              $current_date = Carbon::now()->format('Y-m-d');
+              $progress = 0;
+              $totalSessions = LiveSession::where('course_id', $enrolledCourse->course_id)->count();
+              if($totalSessions != 0) {
+                $progressTracker = LiveSession::where('start_date', '<', $current_date)->count();
+                $progress = $progressTracker * 100 / $totalSessions; 
+              }
+              
            $enrolledCourseData = array(
              'course_id' => $courseId,
              'course_title' =>  $course_title,
@@ -97,6 +108,8 @@ class AssignedCoursesController extends Controller
              'course_image' => $course_image,
              'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
              'nextCohort' => $nextCohort,
+             'batchName' => $bName,
+             'progress' => $progress,
             //  'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
             //  'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
              'instructor_firstname' => $instructorfirstname,
@@ -115,7 +128,8 @@ class AssignedCoursesController extends Controller
                  $batchId = $session->batch_id;
                  $batch = CohortBatch::where('id', $batchId);
  
-                 $currentBatchStartDate = $batch->value('start_date');
+                //  $currentBatchStartDate = $batch->value('start_date');
+                 $currentBatchStartDate = $session->start_date;
  
                  if($currentBatchStartDate > $current_date) {
                      $session_title = $session->session_title;
@@ -135,8 +149,11 @@ class AssignedCoursesController extends Controller
                          'instructor' => $instructor,
                          'course_desc' => $courseDesc,
                          'course_diff' => $courseDiff,
+                         'course_id' => $session->course_id,
                          'enrolledCourses' => $enrolledCourses,
-                         'date' => $date
+                         'image' => $course->value('course_thumbnail_image'),
+                         'date' => $date,
+                         'session_id' => $session->live_session_id
                      ));
                  } elseif ($currentBatchStartDate == $current_date) {
                      $session_title = $session->session_title;
@@ -157,8 +174,10 @@ class AssignedCoursesController extends Controller
                          'course_desc' => $courseDesc,
                          'course_diff' => $courseDiff,
                          'instructor' => $instructor,
+                         'image' => $course->value('course_thumbnail_image'),
                          'enrolledCourses' => $enrolledCourses,
-                         'date' => $date
+                         'date' => $date,
+                         'session_id' => $session->live_session_id
                      ));
                  }
              }
@@ -260,6 +279,7 @@ class AssignedCoursesController extends Controller
 
         public function chooseCohort(Request $request){
 
+            $user = Auth::user();
             $singleCourseDetails =[];
             $course = Course::findOrFail($request->id);
             $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
@@ -268,19 +288,65 @@ class AssignedCoursesController extends Controller
             $instructorlastname = User::where('id', $assigned)->value('lastname');
            
             $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+
+            $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
+
+            $offsetHours = intval($offset[1] . $offset[2]);
+            $offsetMinutes = intval($offset[4] . $offset[5]);
+            
+            $date = new DateTime("now");
+            $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+
             foreach($batches as $batch){
+                if($offset[0] == "+") {
+                    $sTime = strtotime($batch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                    $eTime = strtotime($batch->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                } else {
+                    $sTime = strtotime($batch->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                    $eTime = strtotime($batch->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                }
+                        
+                $startTime = date("H:i A", $sTime);
+                $endTime = date("H:i A", $eTime);
+                
+
                 $singleCourseData =  array (
                 'batch_id' => $batch->id,
                 'batchname' => $batch->batchname,
                 'title' => $batch->title,
                 'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
-                'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
-                'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
-                'time_zone' => $batch->time_zone,
+                'start_time'=> $startTime,
+                'end_time' => $endTime,
+                'time_zone' => $time_zone
             );
             
             array_push($singleCourseDetails, $singleCourseData);
           }
+
+          $duration = $course->course_duration;
+          $hours = intval($duration);
+          $minutesDecimal = $duration - $hours;
+          $minutes = ($minutesDecimal/100) * 6000;
+    
+          $duration = $hours . 'h ' . $minutes . 'm';
+
+          $ratings = 0;
+          $ratingsSum = 0;
+          $ratingsCount = 0;
+
+          if($course->use_custom_ratings) {
+              $ratings = $course->course_rating;
+          } else {
+              $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+              foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                  $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                  $ratingsCount++;
+              }
+              if($ratingsCount != 0) {
+                  $ratings = intval($ratingsSum/$ratingsCount);
+              }
+          }
+          $studentCount = EnrolledCourse::where('course_id', $course->id)->count();
           $courseDetails = array (
             'course_id' => $course->id,
             'course_title' => $course->course_title,
@@ -290,7 +356,11 @@ class AssignedCoursesController extends Controller
             'instructor_firstname' => $instructorfirstname,
             'instructor_lastname' => $instructorlastname,
             'course_thumbnail_image' => $course->course_thumbnail_image,
-            'duration' => $course->course_duration
+            'rating' => $ratings,
+            'studentCount' => $studentCount,
+            'use_custom_ratings' => $course->use_custom_ratings,
+            'ratingsCount' => $ratingsCount,
+            'duration' => $duration
           );
          
             return view('Instructor.cohortSelection', [

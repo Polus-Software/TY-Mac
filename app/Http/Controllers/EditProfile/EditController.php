@@ -71,7 +71,7 @@ class EditController extends Controller
             'detail' => $detail
          ];
  
-         Mail::to($user->email)->send(new PersonalDetailsUpdatedMail($data));
+         Mail::mailer('smtp')->to($user->email)->send(new PersonalDetailsUpdatedMail($data));
 
          $notification = new Notification; 
          $notification->user = $user->id;
@@ -122,7 +122,7 @@ class EditController extends Controller
         Session::flush();
         Auth::logout();
 
-        Mail::to($StudentEmail)->send(new PersonalDetailsUpdatedMail($data));
+        Mail::mailer('infosmtp')->to($StudentEmail)->send(new PersonalDetailsUpdatedMail($data));
 
          $notification = new Notification; 
          $notification->user = $user->id;

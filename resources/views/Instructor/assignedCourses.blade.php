@@ -54,7 +54,7 @@
                                             @forelse($liveSessionDetails as $liveSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                                                 <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
+                                                    <img src="/storage/courseThumbnailImages/{{ $liveSessionDetail['image'] }}"
                                                         class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
@@ -70,15 +70,14 @@
                                                                         <p><i class="far fa-user pe-1"></i> {{ $liveSessionDetail['instructor'] }}</p>
                                                                     </div>
                                                                     <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> {{ $liveSessionDetail['course_diff'] }}</p>
+                                                                        <p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1"> {{ $liveSessionDetail['course_diff'] }}</p>
                                                                     </div>
                                                                 </div>
                                                             </li>
                                                         </ul>
-                                                        <div class="row bg-light">
+                                                        <div class="row">
                                                             <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Join now</a>
+                                                                <a href="/session-view/{{ $liveSessionDetail['session_id'] }}" class="card-link btn">Join now</a>
                                                             </div>
                                                         </div>
                                                         
@@ -120,7 +119,7 @@
                                           @forelse($upComingSessionDetails as $upComingSessionDetail)
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
                                                 <div class="card-1">
-                                                    <img src="courselist/Illustration/Mask Group 2.jpg"
+                                                    <img src="/storage/courseThumbnailImages/{{ $upComingSessionDetail['image'] }}"
                                                         class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>
@@ -136,15 +135,14 @@
                                                                         <p><i class="far fa-user pe-1"></i>{{ $upComingSessionDetail['instructor'] }}</p>
                                                                     </div>
                                                                     <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><i
-                                                                                class="far fa-user pe-1"></i> {{ $upComingSessionDetail['course_diff'] }}</p>
+                                                                        <p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1"> {{ $upComingSessionDetail['course_diff'] }}</p>
                                                                     </div>
                                                                 </div>
                                                             </li>
                                                         </ul>
-                                                        <div class="row bg-light">
+                                                        <div class="row">
                                                             <div class="text-center border-top">
-                                                                <a href="" class="card-link btn">Go to details</a>
+                                                                <a href="/enrolled-course/{{ $upComingSessionDetail['course_id'] }}" class="card-link btn w-100">Go to details</a>
                                                             </div>
                                                         </div>
                                                         
@@ -216,8 +214,8 @@
                                             <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                                 <div class="progress rounded-pill">
                                                     <div class="progress-bar rounded-pill text-end pe-2" role="progressbar"
-                                                        style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                                                        aria-valuemax="100">25%</div>
+                                                        style="width: {{ $singleEnrolledCourse['progress'] }}%;" aria-valuenow="{{ $singleEnrolledCourse['progress'] }}" aria-valuemin="0"
+                                                        aria-valuemax="100">{{ $singleEnrolledCourse['progress'] }}%</div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-12">
@@ -241,7 +239,7 @@
                                                
                                                 <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
                                                  <small> {{ $singleEnrolledCourse['nextCohort'] }}
-                                                    </small>
+                                                    </small><br><span style="font-size:12px;font-weight:600;">{{ $singleEnrolledCourse['batchName']}}</span>
                                                 </p>
                                                 
                                                 
