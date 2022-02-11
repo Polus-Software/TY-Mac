@@ -450,6 +450,17 @@ form i {
   top: -180px;
 }
 
+
+.think-rec-engine h3 {
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
+}
+
+.think-rec-engine p {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
 /* home page new styles ends */
 .think-way-title {
   font-size: 40px;

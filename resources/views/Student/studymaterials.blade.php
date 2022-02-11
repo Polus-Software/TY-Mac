@@ -43,7 +43,8 @@ a#ChromelessStatusBar\.Options-Small14 {
 @extends('Layouts.app')
 @section('content')
 <!-- sidebar -->
-<div class="container" style="height: 100vh;margin-top: 7rem;margin-bottom:12rem;">
+<section class="intro-section">
+<div class="container mb-3">
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
         <div class="flex-column flex-shrink-0 studymaterial_sidebar">
@@ -82,6 +83,7 @@ a#ChromelessStatusBar\.Options-Small14 {
     </div>
 </div>
 </div>
+</section>
 <script>
 
     let materialsEle = document.getElementsByClassName('study_materials');
