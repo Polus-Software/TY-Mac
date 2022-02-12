@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Hash;
 use Session;
 use App\Mail\PersonalDetailsUpdatedMail;
+use Redirect;
 
 
 class EditController extends Controller
@@ -97,16 +98,17 @@ class EditController extends Controller
 
     public function submitChangePasswordForm(Request $request)
     {
-        try{
-
-        
+        try{        
         $user = $request->validate([
             'currentPassword'=>'required',
             'newPassword' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|same:confirm_password',
             'confirm_password' =>'required',
         ]);
-
         $user = Auth::user();
+        if(!Hash::check($request->currentPassword, Auth::user()->password)) {
+            return Redirect::back()->with('message','Current password is wrong!');
+        }
+        
         $user->password = Hash::make($request->newPassword);
         $user->save();
 
@@ -114,7 +116,7 @@ class EditController extends Controller
         $StudentEmail = $user->email;
   
         $data= [
-           'userName' => $userName,
+           'studentName' => $userName,
            'detail' => 'password'
         ];
   
@@ -130,10 +132,10 @@ class EditController extends Controller
          $notification->is_read = false;
          $notification->save();
 
-        return redirect('/')->withSuccess('Your password has been changed!');
+         return redirect('/')->with('message', 'Your password has been changed! Please login again.');
 
     } catch (Exception $exception) {
-        return redirect('/')->withSuccess('Your password has been changed!');
+        return redirect('/')->with('message', 'Your password has been changed! Please login again.');
     }
 
     }

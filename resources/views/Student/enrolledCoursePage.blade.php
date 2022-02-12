@@ -236,6 +236,14 @@ small#assignment_table_batch {
   bottom: 30px;
   font-size: 17px;
 }
+/* by jibi starts */
+.status_btn{
+	position: absolute;
+    right: 7%;
+    background-color: #f5bc29 !important;
+    width: 6rem;
+}
+/* by jibi ends */
 
 #snackbar.show {
   visibility: visible;
@@ -486,9 +494,11 @@ small#assignment_table_batch {
                                 </button>
                             </div>
                         </div>
-                        <div class="border-top col-12 mt-4 py-4 text-center px-4">
-                            <a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
-                        </div>
+							@if($review_status)
+							<div class="border-top col-12 mt-4 py-4 text-center px-4">
+								<a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
+							</div>
+							@endif
                         @endif
                     </div>
 
@@ -696,6 +706,7 @@ small#assignment_table_batch {
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
+                        @if(!empty($recommendations))
                         @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3">
@@ -727,6 +738,9 @@ small#assignment_table_batch {
                                 </div>
                             </div>
                             @endforeach
+                            @else
+                            <x-nodatafound message="No recommendations for you yet!"  notype=""/>
+                            @endif
 
                             
                         </div>
@@ -846,7 +860,7 @@ small#assignment_table_batch {
                                                  
                                                 </div>
                                             </div>
-                                            @if(!$qa['hasReplied'])
+                                            @if(!$qa['hasReplied'] && $userType == 'instructor')
                                             <div class="row ps-5">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
                                                     @foreach($singleCourseDetails as $course)
@@ -870,11 +884,10 @@ small#assignment_table_batch {
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
-                                                        
                                                     </div>
                                                 </div>
-                                            @else
-                                            <!-- <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none"> -->
+                                            @elseif($qa['hasReplied'])
+                                            
                                             <div class="card-body" style="padding-left: 7rem;">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
@@ -907,8 +920,6 @@ small#assignment_table_batch {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <!-- </div> -->
 
                     <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
 
@@ -1045,11 +1056,11 @@ small#assignment_table_batch {
                                                 <button class="accordion-button collapsed plus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree_{{$slno}}" aria-expanded="false" aria-controls="collapseThree">
                                                 Session {{$slno}} - {{$topicDetail['topic_title']}}
                                                 @if($topicDetail['isAssignmentSubmitted'] == true && $topicDetail['isAssignmentCompleted'] == true)
-                                                <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Completed</span>
+                                                <span style="" class="badge pill text-dark status_btn">Completed</span>
                                                 @elseif($topicDetail['isAssignmentSubmitted'] == true)
-                                                <span style="position:absolute;left:45rem;background-color:#b8ffb0 !important;width:6rem;" class="badge pill text-dark">Submitted</span>
+                                                <span style="" class="badge pill text-dark status_btn">Submitted</span>
                                                 @else
-                                                <span style="position:absolute;left:45rem;background-color:#f5bc29 !important; width:6rem;" class="badge pill text-dark">Pending</span>
+                                                <span style="" class="badge pill text-dark status_btn">Pending</span>
                                                 @endif
                                                 </button>
                                                 </h2>
@@ -1313,15 +1324,15 @@ small#assignment_table_batch {
     if(c == true || c == 'true') {
         document.getElementById('reviewButton').click();
     }
-    if(document.body.contains(document.getElementById('copy_link'))) {
-        document.getElementById('copy-link').addEventListener('click', function(e) {
-        navigator.clipboard.writeText(this.getAttribute('data-href'));
-        var x = document.getElementById("snackbar");
-        x.className = "show";
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-    });
-    }
-    
+
+    if(document.getElementById('copy-link')){
+		document.getElementById('copy-link').addEventListener('click', function(e) {
+			navigator.clipboard.writeText(this.getAttribute('data-href'));
+			var x = document.getElementById("snackbar");
+			x.className = "show";
+			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+		});
+	}
 
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
