@@ -174,7 +174,7 @@
             <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end">
                 <select name="" id="filter_courses" class="rounded pe-4" onchange="getcoursedata(this)">
                     <option value="most-popular" {{ $filter_course == "most-popular" ? 'selected' : '' }}>Course in progress</option>
-					<option value="completed" {{ $filter_course == "completed" ? 'selected' : '' }}>Course Completed</option>
+					<option value="completed" {{ $filter_course == "completed" ? 'selected' : '' }}>Completed Courses</option>
                 </select>
             </div>
         </div>
@@ -237,10 +237,8 @@
                 </div>
                 @endforeach
                 @else
-                <div style="padding:5rem 0rem;" class="no_course_div">
-                    <h6 style="text-align:center;">You have not enrolled for any courses yet. Click below to check out our courses!</h6>
-                    <a type="button" class="btn btn-secondary mt-5" href="{{ route('student.courses.get') }}">Enroll now</a>
-                </div>
+					<x-nodatafound message="No courses to be shown!" notype="video" />
+                
                 @endif
             </div>
         </div>

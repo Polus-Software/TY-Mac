@@ -423,7 +423,17 @@ class CoursesCatalogController extends Controller
      $courses = $courses->get();
      if(count($courses)) {
            foreach($courses as $course) {
-
+				
+				$ratingsCount = 0;
+				if($course->use_custom_ratings) {
+					$ratings = $course->course_rating;
+				} 
+				else{
+					$generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+					foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+						$ratingsCount++;
+					}
+				}
                 $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');     
                 $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
                 $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -452,8 +462,12 @@ class CoursesCatalogController extends Controller
                         $html = $html . '<i class="far fa-star rateCourse"></i>';
                     }
                 } 
-
-                $html = $html . '(60)</div>';  
+				if($course->use_custom_ratings == false) {
+					$html = $html . '('.$ratingsCount.')</div>';  
+				} else {
+					$html = $html . '</div>'; 
+				}
+                
                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
                 $html = $html . '<img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">'. $courseCategory .'</div></div>';
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 

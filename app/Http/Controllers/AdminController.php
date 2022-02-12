@@ -315,15 +315,14 @@ class AdminController extends Controller
 			$ratings = 0;
             $ratingsSum = 0;
             $ratingsCount = 0;
-
             if($course->use_custom_ratings) {
                 $ratings = $course->course_rating;
             } else {
-                $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
-                foreach($generalCourseFeedbacks as $generalCourseFeedback) {
-                    $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
-                    $ratingsCount++;
-                }
+				$generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+				foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+					$ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+					$ratingsCount++;
+				}
                 if($ratingsCount != 0) {
                     $ratings = intval($ratingsSum/$ratingsCount);
                 }
@@ -340,7 +339,8 @@ class AdminController extends Controller
 				'use_custom_ratings' => $course->use_custom_ratings,
                 //'rating' => $course->course_rating,
 				'rating' => $ratings,
-                'duration' => $duration
+                'duration' => $duration,
+				'ratingsCount' => $ratingsCount
             );
             array_push($courseDetails, $courseData);
         }

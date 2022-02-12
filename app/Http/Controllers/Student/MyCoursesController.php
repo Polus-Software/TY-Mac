@@ -34,7 +34,7 @@ class MyCoursesController extends Controller
 			 $filter_course = 'most-popular';
 			 $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->where('progress','<', 100)->get();
 		 }
-        //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
+		 //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
         foreach($enrolledCourses as $enrolledCourse){
 
           $courseId = $enrolledCourse->course_id;

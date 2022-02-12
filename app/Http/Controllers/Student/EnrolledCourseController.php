@@ -396,8 +396,13 @@ class EnrolledCourseController extends Controller
         array_push($courseDetails, $singleCourseData);
 
         $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $user->id)->get();
-        
-        foreach($studentFeedbackCounts as $feedback) {
+		$total_review_count = count($studentFeedbackCounts);
+		
+		$review_status = true;
+		if($total_review_count > 0){
+			$review_status = false;
+		}
+		foreach($studentFeedbackCounts as $feedback) {
             if($feedback->negative == 1) {
                 $topicId = $feedback->topic_id;
                 $topic = Topic::where('topic_id',  $topicId);
@@ -457,7 +462,8 @@ class EnrolledCourseController extends Controller
                 'userType' => $userType,
                 'next_live_cohort' =>  $next_live_cohort,
                 'progress' => $progress,
-                'course_completion' => $course_completion
+                'course_completion' => $course_completion,
+				'review_status' => $review_status
             ]);
         }
         
@@ -704,36 +710,40 @@ class EnrolledCourseController extends Controller
         $user = Auth::user();
         $student_firstname = $user->firstname;
         $student_lastname = $user->lastname;
-
+		$course_completion = '';
         if($user){
 
-        $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
+			$courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
 
-        $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
-        $instructor = User::where('id', $assigned);
-        $instructorfirstname = $instructor->value('firstname');
-        $instructorlastname = $instructor->value('lastname');
-        $instructorSignature = $instructor->value('signature');
-        $date_of_issue = Carbon::now();
-
-                $singleCourseData =  array(
-                    'id' => $course->id,
-                    'course_title' => $course->course_title,
-                    'course_category' => $courseCategory,
-                    'instructor_firstname' => $instructorfirstname,
-                    'instructor_lastname' => $instructorlastname,
-                    'instructor_signature' => $instructorSignature,
-                    'student_firstname' =>$student_firstname,
-                    'student_lastname' =>$student_lastname,
-                    'date_of_issue' => Carbon::createFromFormat('Y-m-d H:i:s', $date_of_issue)->format('F d, Y'),
-                );
-                  
-                array_push($courseDetails, $singleCourseData);
-                $pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])
-                            ->setOption('enable-local-file-access', true)
-                            ->setOrientation('landscape')
-                            ->setOption('margin-top', 20);
-                return $pdf->stream($course->course_title.'Certificate.pdf');
+			$assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+			$instructor = User::where('id', $assigned);
+			$instructorfirstname = $instructor->value('firstname');
+			$instructorlastname = $instructor->value('lastname');
+			$instructorSignature = $instructor->value('signature');
+			$date_of_issue = Carbon::now();
+			$enrolledCourseObj = EnrolledCourse::where('user_id', $user->id);
+            if($enrolledCourseObj->value('course_completion_date') != null) {
+                $course_completion = Carbon::createFromFormat('Y-m-d H:i:s', $enrolledCourseObj->value('course_completion_date'))->format('F d, Y');
+            }
+			$singleCourseData =  array(
+				'id' => $course->id,
+				'course_title' => $course->course_title,
+				'course_category' => $courseCategory,
+				'instructor_firstname' => $instructorfirstname,
+				'instructor_lastname' => $instructorlastname,
+				'instructor_signature' => $instructorSignature,
+				'student_firstname' =>$student_firstname,
+				'student_lastname' =>$student_lastname,
+				'date_of_issue' => Carbon::createFromFormat('Y-m-d H:i:s', $date_of_issue)->format('F d, Y'),
+				'course_completion' => $course_completion
+			);
+					  
+			array_push($courseDetails, $singleCourseData);
+			$pdf = PDF::loadView('Student.certificate', ['courseDetails' => $courseDetails])
+						->setOption('enable-local-file-access', true)
+						->setOrientation('landscape')
+						->setOption('margin-top', 20);
+			return $pdf->stream($course->course_title.'Certificate.pdf');
         }
 
     }

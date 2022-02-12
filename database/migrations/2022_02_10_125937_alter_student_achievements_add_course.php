@@ -14,7 +14,7 @@ class AlterStudentAchievementsAddCourse extends Migration
     public function up()
     {
         Schema::table('student_achievements', function (Blueprint $table) {
-            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('course_id')->nullable();
             $table->foreign('course_id')->references('id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
         });
     }
