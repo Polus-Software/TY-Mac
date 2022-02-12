@@ -99,6 +99,7 @@
 <script>
   window.onload = function(){
     startdate = new dtsel.DTS('input[name="due-date"]', {
+      dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
     document.getElementById('add-ext-link-assign').addEventListener('click', function(event) {

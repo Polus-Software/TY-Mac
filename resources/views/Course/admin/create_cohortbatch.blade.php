@@ -197,9 +197,11 @@
 <script type="text/javascript" src="{{ asset('/assets/dtsel.js') }}"></script>
 <script>
   startdate = new dtsel.DTS('input[name="cohortbatch_startdate"]', {
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   enddate = new dtsel.DTS('input[name="cohortbatch_enddate"]', {
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {

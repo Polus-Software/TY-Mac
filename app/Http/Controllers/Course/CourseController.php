@@ -747,6 +747,7 @@ class CourseController extends Controller
         $courseStatus = DB::table('courses')->where('id', $request->course_id)->value('is_published');
       
         return view('Course.admin.edit_assignment', [
+            'course_id' => $request->course_id,
             'subTopics' => $subTopics,
             'assignment_details' => $assignment,
             'courseStatus' => $courseStatus
@@ -823,7 +824,6 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function updateAssignment(Request $request) {
-       
         $topicId =intval($request->input('assignment_topic_id'));
         $assignment_id = intval($request->input('assignment_id'));
         $course_id = $request->input('course_id');
@@ -832,8 +832,9 @@ class CourseController extends Controller
         
         $topicAssignment->assignment_title = $request->input('assignment_title');
         $topicAssignment->assignment_description = $request->input('assignment_description');
-        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
-
+        // $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d'); 
+        
+        $topicAssignment->due_date = Carbon::createFromFormat("m-d-Y", $request->input('due-date'))->format("Y-m-d");
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
@@ -844,7 +845,7 @@ class CourseController extends Controller
             $topicAssignment->document = $filename;
         }
         $topicAssignment->save();
-        return redirect('/view-assignments/' .$course_id);    
+        return redirect('/view-assignments/?course_id=' .$course_id);    
     }
 
     /**
