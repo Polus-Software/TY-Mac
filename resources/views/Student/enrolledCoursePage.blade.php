@@ -1374,16 +1374,19 @@ document.getElementById('assign_completed').addEventListener('click', function(e
         document.getElementById('modal_comment_div').style.display = "block";
         this.style.display = "none";
     });
-
+const userTypes = document.getElementById('userType').value;
+if(userTypes === 'student') {
     let cancelAssignmentEl = document.querySelector('.cancelAssignment');
 
-    cancelAssignmentEl.addEventListener('click', function(e) {
-        e.preventDefault();
-        console.log(e.currentTarget.closest('.assignmentCard'));
-        e.currentTarget.closest('.assignmentCard').style.display = 'none';
-        console.log(e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild);
-        e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild.style.display = 'block';
-    });
+cancelAssignmentEl.addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log(e.currentTarget.closest('.assignmentCard'));
+    e.currentTarget.closest('.assignmentCard').style.display = 'none';
+    console.log(e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild);
+    e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild.style.display = 'block';
+});
+}
+    
 
     let startAssignment = document.getElementsByClassName('start_assignment');
 
@@ -1611,7 +1614,7 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         }
     });
 </script>
-@elseif($userType == 'student')
+
 <script>
     google.charts.load('current', {
         'packages': ['bar']
