@@ -41,7 +41,10 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                 <h5 class="card-title pb-3 mb-0">
                                     {{$courseDetails['course_title']}}
                                 </h5>
-                                <p class="card-text think-text-color-grey"> {{$courseDetails['description']}}</p>
+                                <p class="card-text think-text-color-grey position-relative">
+                                <span class="think-truncated-text">
+                                    {{Str::limit($courseDetails['description'], 180, '...')}}
+                                </span></p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
                                     @for($i=1;$i<=5;$i++)
@@ -55,18 +58,18 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                             >@if($courseDetails['use_custom_ratings'] == false) ({{ $courseDetails['ratingsCount'] }}) @endif
                                             {{$courseDetails['studentCount']}} participants</small>
                                         </div>
-                                        <div class="col-sm-auto col-6 think-text-color-grey">
+                                        <div class="col-lg think-text-color-grey">
                                             <p><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
-                                                {{$courseDetails['course_category']}}
+                                            {{Str::limit($courseDetails['course_category'], 15, '...')}}
                                             </p>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-6 think-text-color-grey text-truncate">
-                                            <p class="fw-bold"><i class="far fa-user pe-1"></i>
+                                        <div class="col-6 col-lg-3 col-md-3 col-sm-6 text-center text-truncate think-text-color-grey">
+                                            <p class="fw-bold text-truncate"><i class="far fa-user pe-1"></i>
                                                 {{$courseDetails['instructor_firstname']}} {{$courseDetails['instructor_lastname']}}
                                             </p>
                                         </div>
-                                        <div class="col-sm-auto col-6 think-text-color-grey">
-                                            <p class="fw-bold"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">       
+                                        <div class="col ps-0 text-end think-text-color-grey">
+                                            <p class="fw-bold text-truncate"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">       
                                                 {{$courseDetails['course_difficulty']}}
                                             </p>
                                         </div>
