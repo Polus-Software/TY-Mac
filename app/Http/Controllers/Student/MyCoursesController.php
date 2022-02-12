@@ -130,7 +130,8 @@ class MyCoursesController extends Controller
                         'course_diff' => $courseDiff,
                         'course_thumbnail_image' => $courseThumbnailImage,
                         'enrolledCourses' => $enrolledCourses,
-                        'date' => $date
+                        'date' => $date,
+                        'course_id' => $session->course_id
                     ));
                 } elseif ($currentBatchStartDate == $current_date) {
                     $session_title = $session->session_title;
