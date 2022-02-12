@@ -61,12 +61,14 @@
           document.getElementById('publish-badge').classList.remove('bg-warning');
           document.getElementById('publish-badge').classList.add('bg-success');
           document.getElementById('edit_course').style.display = "none";
+          // document.getElementById('edit_course').style.opacity = 0.1;
         } else {
           document.getElementById('publish').innerHTML = "Publish";
           document.getElementById('publish-badge').innerHTML = "Draft"
           document.getElementById('publish-badge').classList.remove('bg-success');
           document.getElementById('publish-badge').classList.add('bg-warning');
           document.getElementById('edit_course').style.display = "block";
+          // document.getElementById('edit_course').style.opacity = 1;
         }
       });
     }

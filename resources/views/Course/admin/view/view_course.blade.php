@@ -83,9 +83,9 @@
 
 <script>
   // if(document.getElementById('publish').innerHTML == "Unpublish") {
-  //   document.getElementById('edit_course').style.display = "none";
+  //   document.getElementById('edit_course').style.opacity = 0.1;
   // } else {
-  //   document.getElementById('edit_course').style.display = "block";
+  //   document.getElementById('edit_course').style.opacity = 1;
   // }
   
   // let coursePoint = 2;

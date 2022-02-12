@@ -54,7 +54,7 @@ use App\Models\CustomTimezone;
             @endif
           </div>
           <label for="batch">Batch</label>
-          <input type="hidden" name="cohortbatch_batchname" id="batch_name" value="Daily">
+          <input type="hidden" name="cohortbatch_batchname" id="batch_name" value="{{$cohortbatch->occurrence}}">
           <div class="col-12">
             <div class="form-check">
             @if($cohortbatch->occurrence == "Daily")
@@ -287,12 +287,15 @@ use App\Models\CustomTimezone;
 <link rel="stylesheet" href="{{ asset('/assets/dtsel.css') }}">
 <script type="text/javascript" src="{{ asset('/assets/dtsel.js') }}"></script>
 <script>
+  let flag = 0;
   let selectedTimeZone = document.getElementById('cohortbatch_timezone').getAttribute('value');
   document.getElementById('cohortbatch_timezone').value = selectedTimeZone;
   startdate = new dtsel.DTS('input[name="cohortbatch_startdate"]', {
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   enddate = new dtsel.DTS('input[name="cohortbatch_enddate"]', {
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {
@@ -332,7 +335,6 @@ use App\Models\CustomTimezone;
           if(customValue.indexOf(currentItem.value) != -1) {
             customValue.splice(customValue.indexOf(currentItem.value), 1);
           }
-
         }
         document.querySelector('#batch_name').value = customValue;
     });

@@ -710,7 +710,8 @@ class AdminController extends Controller
 			'comment' => $comment,
 			'rating' => $rating,
 			'userType' => $userType,
-			'totalCount' => $totalCount
+			'totalCount' => $totalCount,
+            'start_from' => 0
         ]);
 	}
 	public function publishReview(Request $request){
