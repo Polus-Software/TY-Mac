@@ -22,21 +22,8 @@
     let token = document.getElementById('token').value;
     let uid = document.getElementById('uid').value;
 
-    let stopRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
-                      fetch(stopRecordPath , {
-                        method: 'PUT',
-                        headers: {
-                          'Accept': 'application/json',
-                          'Content-Type': 'application/json',
-                          'retryTimeout': 60,
-                          'x-agora-token':token,
-                          'x-agora-uid':uid
-                        },
-                      }).then((response) => response.json()).then((data) => {
 
-
-
-                        let getRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records";
+    let getRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records";
     fetch(getRecordPath, {
       method: 'GET',
       headers: {
@@ -60,14 +47,6 @@
           })(url);
         }
     });
-
-
-
-
-
-                      });
-    
-
       
     </script>
   </body>

@@ -5,8 +5,8 @@
         <div class="col-12 col-sm-6 col-lg-6 mx-auto ms-0">
           <h5 class="text-capitalize fw-bold">About Us</h5>
           <hr class="bg-white d-inline-block mb-4" style="width: 60px; height: 2px;">
-          <p class="lh-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem ex obcaecati blanditiis reprehenderit ab mollitia voluptatem consectetur?
+          <p class="lh-lg" style="font-weight:400;">
+          Our teaching format makes it easy and fun to learn any new skill! Tag along with us on this personalized learning experience.
           </p>          
         </div>
         <div class="col-12 col-sm-3 col-lg-3 mx-auto">
@@ -25,25 +25,6 @@
             <a href="#"><i class="fab fa-twitter"></i></a>
           </div>
         </div>
-        
-        <!-- <div class="col-12 col-sm-6 col-lg-6 mx-auto ms-0">
-          <h5 class="text-capitalize fw-bold">Social Media</h5>
-          <hr class="bg-white d-inline-block mb-4" style="width: 60px; height: 2px;">
-          <div class="col-12 footer-sm">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-6 mx-auto">
-          <h5 class="text-capitalize fw-bold">contact</h5>
-          <hr class="bg-white d-inline-block mb-4" style="width: 60px; height: 2px;">
-          <ul class="list-inline campany-list">
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-          </ul>
-        </div> -->
       </div>
     </div>
 

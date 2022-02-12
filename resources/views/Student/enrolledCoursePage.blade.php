@@ -272,6 +272,7 @@ small#assignment_table_batch {
 }
 
   </style>
+  <input type="hidden" id="userType" value="{{$userType}}"/>
   <div id="snackbar">Link copied.</div>
   <!-- instructor assignment modal -->
   <div class="modal fade" id="instructAssignModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -330,8 +331,8 @@ small#assignment_table_batch {
       </div>
       <div class="modal-body session-modal-body">
         <p class="session-text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        This is to confirm that both the parties (Instructor and student) have agreed upon the time of joining this session on proper notice. Please click on "Continue" if you wish to proceed to the session. 
+        Only clicking the continue button, an email will be sent to the respective student with the link for joining this session. All the best!
         </p>
       </div>
       <div class="modal-footer session-modal-footer">
@@ -387,7 +388,7 @@ small#assignment_table_batch {
                                     </span>
                                 </p>
                                 <div class="row">
-                                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-12 mb-3">
                                         <div class="progress rounded-pill">
                                             <div class="progress-bar rounded-pill text-end pe-2" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
                                         </div>
@@ -399,14 +400,14 @@ small#assignment_table_batch {
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-3 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                         <p class="para-1"><i class="far fa-user pe-1"></i>
                                             @foreach($singleCourseDetails as $course)
                                             {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }}
                                             @endforeach
                                         </p>
                                     </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-4 col-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                         <p class="para-2">
                                             <img class="me-1" src="/storage/icons/level__icon.svg" alt="Difficulty level">
                                             @foreach($singleCourseDetails as $course)
@@ -515,7 +516,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">18</h1>
+                                        <h1 class="card-title">{{ $spentHours }}</h1>
                                         <p class="card-text">Hours spent</p>
                                     </div>
                                 </div>
@@ -523,7 +524,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">700</h1>
+                                        <h1 class="card-title">{{$studentsJoined}}</h1>
                                         <p class="card-text">Students joined</p>
                                     </div>
                                 </div>
@@ -531,7 +532,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">08</h1>
+                                        <h1 class="card-title">{{$likesCount}}</h1>
                                         <p class="card-text">Likes</p>
                                     </div>
                                 </div>
@@ -539,7 +540,7 @@ small#assignment_table_batch {
                             <div class="col-sm-3">
                                 <div class="card llp-countbox">
                                     <div class="card-body text-center">
-                                        <h1 class="card-title">180</h1>
+                                        <h1 class="card-title">{{$dislikesCount}}</h1>
                                         <p class="card-text">Dislikes</p>
                                     </div>
                                 </div>
@@ -621,7 +622,9 @@ small#assignment_table_batch {
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
                                         <a style="background-color: #74648C;color: white;" type="button" class="btn" href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}"><i class="fas fa-eye pe-2"></i>View live session</a>
+                                        @if($userType == 'instructor')
                                         <a id="copy-link" data-href="{{url('/')}}/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">Copy link to session</a>
+                                        @endif
                                         @endif
                                     </div>
                                 </div>
@@ -703,6 +706,7 @@ small#assignment_table_batch {
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
+                        @if(!empty($recommendations))
                         @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3">
@@ -710,7 +714,7 @@ small#assignment_table_batch {
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                                <a href="/view-again/{{$recommendation['sessionId']}}" class="btn btn-primary w-100">View again</a>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -734,6 +738,9 @@ small#assignment_table_batch {
                                 </div>
                             </div>
                             @endforeach
+                            @else
+                            <x-nodatafound message="No recommendations for you yet!"  notype=""/>
+                            @endif
 
                             
                         </div>
@@ -850,27 +857,38 @@ small#assignment_table_batch {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    @if($userType == "instructor" && !$qa['hasReplied'])
-                                                    <div class="row" id="replyTextArea_{{ $qa['id'] }}">
+                                                 
+                                                </div>
+                                            </div>
+                                            @if(!$qa['hasReplied'] && $userType == 'instructor')
+                                            <div class="row ps-5">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
+                                                    @foreach($singleCourseDetails as $course)
+                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                    @endforeach
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                                                <p class="card-title text-left">
+                                                                    @foreach($singleCourseDetails as $course)
+                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at {{ $course['institute'] }}
+                                                                    @endforeach
+
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="replyTextArea_{{ $qa['id'] }}">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                             @csrf
                                                             <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
-                                                    @endif
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            @if($qa['hasReplied'])
-                                            <div class="row ps-5">
-                                            @else
-                                            <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
-                                            @endif
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
-                                                    @foreach($singleCourseDetails as $course)
-                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    @endforeach
-                                                    <div class="card-body">
+                                            @elseif($qa['hasReplied'])
+                                            
+                                            <div class="card-body" style="padding-left: 7rem;">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
@@ -892,7 +910,8 @@ small#assignment_table_batch {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                            @endif
+                                                
                                             </div>
                                             
                                         @endforeach
@@ -901,8 +920,6 @@ small#assignment_table_batch {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
                     <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
 
@@ -1054,7 +1071,7 @@ small#assignment_table_batch {
                                                     <div class="accordion-body">
                                                        @foreach($topicDetail['assignmentList'] as $assignment)
                                                        <div class="col-12 mb-3">
-                                                           <div class="card" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
+                                                           <div class="card assignmentCard" id="card_{{ $topicDetail['topic_id'] }}" style="display:none;">
                                                                <div class="card-title p-3 bg-light border-bottom">
                                                                  Assignment: {{$assignment['assignment_title']}}</strong>
                                                                 </div>
@@ -1096,7 +1113,7 @@ small#assignment_table_batch {
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                                                     </div>
                                                                                                     <div class="col-12 text-end mt-4">
-                                                                                                        <a class="btn btn-sm btn-outline-secondary me-3">Cancel</a>
+                                                                                                        <a class="btn btn-sm btn-outline-secondary me-3 cancelAssignment">Cancel</a>
                                                                                                         <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</a>
                                                                                                     </div>
                                                                                     </form>
@@ -1121,7 +1138,7 @@ small#assignment_table_batch {
                                                         </div>
                                                     @else
                                                     <div class="col-4 m-auto text-center">
-                                                        <a card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</a>
+                                                        <button card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</button>
                                                         </div>
                                                     @endif
                                                 
@@ -1307,6 +1324,7 @@ small#assignment_table_batch {
     if(c == true || c == 'true') {
         document.getElementById('reviewButton').click();
     }
+
     if(document.getElementById('copy-link')){
 		document.getElementById('copy-link').addEventListener('click', function(e) {
 			navigator.clipboard.writeText(this.getAttribute('data-href'));
@@ -1315,6 +1333,7 @@ small#assignment_table_batch {
 			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 		});
 	}
+
 var instructModal = document.getElementById('instructAssignModal')
 instructModal.addEventListener('show.bs.modal', function (event) {
   document.getElementById('modal_comment_div').style.display = "none";
@@ -1365,6 +1384,16 @@ document.getElementById('assign_completed').addEventListener('click', function(e
     document.getElementById('add_comment').addEventListener('click', function(e) {
         document.getElementById('modal_comment_div').style.display = "block";
         this.style.display = "none";
+    });
+
+    let cancelAssignmentEl = document.querySelector('.cancelAssignment');
+
+    cancelAssignmentEl.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log(e.currentTarget.closest('.assignmentCard'));
+        e.currentTarget.closest('.assignmentCard').style.display = 'none';
+        console.log(e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild);
+        e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild.style.display = 'block';
     });
 
     let startAssignment = document.getElementsByClassName('start_assignment');
@@ -1480,6 +1509,7 @@ for(index = 0;index < replyEleCount;index++) {
                 document.getElementById('replyContent_' + qaId).innerHTML = data.reply;
                 document.getElementById('updatedAt_' + qaId).innerHTML = data.updatedAt;
                 document.getElementById("replyTextArea_" + qaId).style.display = "none";
+                location.reload();
             }
         });
     });

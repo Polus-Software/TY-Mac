@@ -61,6 +61,7 @@ class CreatorController extends Controller
         $creator->email = $request->input('email');
         $creator->password = Hash::make($request->input('password'));
         $creator->role_id = $userType;
+        $creator->timezone = "UTC";
         $creator->save();
         return redirect()->route('manage-creators');
     }

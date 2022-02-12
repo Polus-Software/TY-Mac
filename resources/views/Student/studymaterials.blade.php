@@ -39,11 +39,24 @@ a#ChromelessStatusBar\.Options-Small14 {
     background-color: #f7c649;
     border-top: 1px solid #f7c649;
 }
+.backbtn {
+    font-size:12px !important;
+}
+.backbtn:hover {
+    background-color : transparent !important;
+    color: black !important;
+}
 </style>
 @extends('Layouts.app')
 @section('content')
 <!-- sidebar -->
-<div class="container" style="height: 100vh;margin-top: 7rem;margin-bottom:12rem;">
+<section class="intro-section">
+<div class="container mb-3">
+<div class="row mb-2">
+   <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+       <a href="/enrolled-course/{{$courseId}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+   </div>
+</div>
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
         <div class="flex-column flex-shrink-0 studymaterial_sidebar">
@@ -82,6 +95,7 @@ a#ChromelessStatusBar\.Options-Small14 {
     </div>
 </div>
 </div>
+</section>
 <script>
 
     let materialsEle = document.getElementsByClassName('study_materials');

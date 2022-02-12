@@ -10,6 +10,24 @@
   }
   @endphp
 <!-- navbar new  -->
+<style>
+  .notifications-body {
+    height: 10rem;
+    overflow: auto;
+  }
+  .notifications-body::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+.notifications-body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+}
+ 
+.notifications-body::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+    outline: 1px solid white;
+}
+  </style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
       <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
@@ -68,16 +86,18 @@
       </li>
       <li>
 
-          <button type="button" class="btn dropdown-toggle-split shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
-            <!-- <span class="visually-hidden">Toggle Dropdown</span> --><i class="fas fa-bell"></i><span class="notifications_count">{{ $notificationCount }}</span>
+          <button type="button" id="notif-button" class="btn dropdown-toggle-split shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+            <!-- <span class="visually-hidden">Toggle Dropdown</span> --><i class="fas fa-bell"></i><span id="notifications_count" class="notifications_count">{{ $notificationCount }}</span>
           </button>
           
           <ul id="notification_drop" class="dropdown-menu">
             <h6 class="p-2">Notifications</h6>
-            @foreach($notifications as $notification)
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="notification-item dropdown-item p-2" href="#"><i class="fas fa-dot-circle notification-dot"></i> <span>{{$notification->notification}}<span></a></li>
-            @endforeach
+            <div class="notifications-body">
+              @foreach($notifications as $notification)
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="notification-item dropdown-item p-2" href="#"><i class="fas fa-dot-circle notification-dot"></i> <span>{{$notification->notification}}<span></a></li>
+              @endforeach
+            </div>
           </ul>
 
       </li>
@@ -98,7 +118,19 @@
   </nav>
   @if(Auth::check()) 
   <script>
-    
+    document.getElementById('notif-button').addEventListener('click', function(e) {
+      let path = "{{ route('read-notifications') }}";
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        document.getElementById('notifications_count').innerHTML = data.count;
+      });
+    })
 document.getElementById('search-btn').addEventListener('click', function(e) {
   e.preventDefault();
   let searchTerm = document.getElementById('search-box').value;

@@ -13,17 +13,12 @@
       <main>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h3 class="titles">Add Sessions</h3>
-          
-              
-
-          <div class="btn-toolbar mb-2 mb-md-0">
-           
+            <div class="btn-toolbar mb-2 mb-md-0">
           </div>
         </div>
         <div class="row mt-4">
             <div class="col-lg-6 col-6 mb-4">
             <form>
-                  
                   <label for="session_course">Course</label>
                   <select class="form-control" id="session_course">
                       <option value="" disabled selected>Please select a course</option>
@@ -52,9 +47,11 @@
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
+                <th scope="col">Session</th>
                 <th scope="col">Course</th>
-                <th scope="col">Session Instructor</th>
+                <th scope="col">Date/Time</th>
                 <th scope="col">Batch</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody id="course_tbody">
@@ -62,10 +59,11 @@
               @foreach($sessions as $session)
               <tr>
                 <td scope="col">{{ $session['slNo'] }}</td>
+                <td scope="col">{{ $session['session'] }}</td>
                 <td scope="col">{{ $session['sessionCourse'] }}</td>
-                <td scope="col">{{ $session['instructor'] }}</td>
+                <td scope="col">{{ $session['time'] }}</td>
                 <td scope="col">{{ $session['batch'] }}</td>
-              
+                <td scope="col"><i id="{{ $session['id'] }}" class="fas fa-trash"></i></td>
               </tr>
               @endforeach
               @else
@@ -286,9 +284,8 @@
       },
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
-      //return false;
       if(data.status == 'success') {
-        // window.location.reload();
+        window.location.reload();
       }
     });
   });

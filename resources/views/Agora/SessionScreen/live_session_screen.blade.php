@@ -1587,12 +1587,11 @@ z-index: 100;
         duration: data.duration,
         courseWareList: [],
         listener: (evt, params) => {
-          if ( evt === 1 && params.type === "whiteboard") {
+          if (evt === 1 && document.getElementById('user_type').value == "instructor") {
           setTimeout(() => {
             appId = data.appId;
             roomId = data.roomid;
             token = data.token;
-            alert(token);
             uid = data.uid;
             let recordPath = "https://api.agora.io/edu/apps/"+data.appId+"/v2/rooms/"+data.roomid+"/records/states/1";
             fetch(recordPath, {
@@ -1753,7 +1752,21 @@ window.addEventListener("click", windowOnClick);
 toggleModal();
     
   } else {
-    location.replace("/assigned-courses");
+
+    let stopRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
+                      fetch(stopRecordPath , {
+                        method: 'PUT',
+                        headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                          'retryTimeout': 60,
+                          'x-agora-token':token,
+                          'x-agora-uid':uid
+                        },
+                      }).then((response) => response.json()).then((data) => {
+                        location.replace("/assigned-courses");
+                      });
+    
   }
 });
 
@@ -1789,7 +1802,6 @@ setInterval(function () {
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
         }
-        
       } else {
         document.getElementById('course_content_iframe').classList.add('nodisplay');
       }

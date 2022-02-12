@@ -44,11 +44,16 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                 <p class="card-text think-text-color-grey"> {{$courseDetails['description']}}</p>
                                 <div class="row">
                                     <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
+                                    @for($i=1;$i<=5;$i++)
+                                        @if($i <= $courseDetails['rating'])
                                             <i class="fas fa-star rateCourse"></i>
-                                            <i class="fas fa-star rateCourse"></i>
-                                            <i class="fas fa-star rateCourse"></i>
-                                            <i class="fas fa-star rateCourse"></i>
-                                            <i class="fas fa-star rateCourse"></i><small class="ms-1">(60 ratings) 100 participants</small>
+                                        @else
+                                            <i class="far fa-star rateCourse"></i>
+                                        @endif
+                                        @endfor
+                                            <small class="ms-1"
+                                            >@if($courseDetails['use_custom_ratings'] == false) ({{ $courseDetails['ratingsCount'] }}) @endif
+                                            {{$courseDetails['studentCount']}} participants</small>
                                         </div>
                                         <div class="col-sm-auto col-6 think-text-color-grey">
                                             <p><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
@@ -66,7 +71,7 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                             </p>
                                         </div>
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-6 think-text-color-grey">
-                                            <p class="fw-bold"><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}} h</p>
+                                            <p class="fw-bold"><i class="far fa-clock pe-1"></i>{{$courseDetails['duration']}}</p>
                                         </div>
                                        
                                     </div> 

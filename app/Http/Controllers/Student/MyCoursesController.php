@@ -34,7 +34,6 @@ class MyCoursesController extends Controller
 			 $filter_course = 'most-popular';
 			 $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->where('progress','<', 100)->get();
 		 }
-		 //$enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
         foreach($enrolledCourses as $enrolledCourse){
 
           $courseId = $enrolledCourse->course_id;
@@ -130,7 +129,8 @@ class MyCoursesController extends Controller
                         'course_diff' => $courseDiff,
                         'course_thumbnail_image' => $courseThumbnailImage,
                         'enrolledCourses' => $enrolledCourses,
-                        'date' => $date
+                        'date' => $date,
+                        'course_id' => $session->course_id
                     ));
                 } elseif ($currentBatchStartDate == $current_date) {
                     $session_title = $session->session_title;

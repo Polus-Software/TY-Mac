@@ -7,10 +7,15 @@ use App\Models\Course;
 use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Models\CourseCategory;
+use App\Models\CustomTimezone;
+use App\Models\User;
 use App\Models\LiveSession;
 use App\Models\EnrolledCourse;
 use Carbon\Carbon;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+use DateTime;
+use DateTimeZone;
 
 
 class CourseService {
@@ -119,9 +124,10 @@ class CourseService {
      * @param - courseId
      * @output - content data
      */
-    public static function getBatchDetails($id) {
+    public static function getBatchDetails($id, $userId) {
         $batchDetails = [];
         $batches = self::getCohortBatchesByCourse($id);
+        
         foreach($batches as $batch){
             $batchname = $batch->batchname;
             $batch_start_date = $batch->start_date;
@@ -130,18 +136,43 @@ class CourseService {
             $batch_end_date = $batch->end_date;
             $batch_time_zone = $batch->time_zone;
             
+            $date = new DateTime("now");
+            if($userId != "") {
+                $user = User::where('id', $userId);
+                $offset = CustomTimezone::where('name', $user->value('timezone'))->value('offset');
+                $time_zone = $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T');
+            } else {
+                $offset = CustomTimezone::where('name', 'UTC')->value('offset');
+                $time_zone = $date->setTimeZone(new DateTimeZone('UTC'))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone('UTC'))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone('UTC'))->format('T') . ")": $date->setTimeZone(new DateTimeZone('UTC'))->format('T');
+            }
+            
+                        
+            $offsetHours = intval($offset[1] . $offset[2]);
+            $offsetMinutes = intval($offset[4] . $offset[5]);
+                    
+            if($offset[0] == "+") {
+                $sTime = strtotime($batch_start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                $eTime = strtotime($batch_end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            } else {
+                $sTime = strtotime($batch_start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                $eTime = strtotime($batch_end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            }
+                    
+            $startTime = date("H:i A", $sTime);
+            $endTime = date("H:i A", $eTime);
+            
+            
             $liveSession = self::getLiveSessionDetails($batch->id);
             if(count($liveSession)) {
                $latest = $liveSession[0];               
                array_push($batchDetails, array(
                     'batchname' => $batchname,
-                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('M d'),
-                    'batch_start_time' => Carbon::createFromFormat('H:i:s',$batch_start_time)->format('h A'),
-                    'batch_end_time' => Carbon::createFromFormat('H:i:s',$batch_end_time)->format('h A'),
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('m/d/Y'),
+                    'batch_start_time' => $startTime,
+                    'batch_end_time' => $endTime,
                     'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
-                    'batch_time_zone' => $batch_time_zone,
-                    'latest' =>  $latest,
-                    
+                    'batch_time_zone' => $time_zone,
+                    'latest' =>  $latest
                 ));
             }
         }

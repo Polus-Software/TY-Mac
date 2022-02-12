@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="row mt-4">
-			<div class="d-flex justify-content-end">
+			<div class="d-flex justify-content-center">
           @if (count($courseDatas) > 0 )
           <table class="table llp-table">
             <thead>

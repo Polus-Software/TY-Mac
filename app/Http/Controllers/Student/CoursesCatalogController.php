@@ -14,6 +14,7 @@ use App\Models\CohortBatch;
 use App\Models\LiveSession;
 use App\Models\CourseCategory;
 use App\Models\EnrolledCourse;
+use App\Models\CustomTimezone;
 use App\Models\GeneralCourseFeedback;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
@@ -34,6 +35,8 @@ use App\Services\CourseService;
 use App\Services\UserService;
 use App\Mail\AdminMailAfterStudentEnrolling;
 use App\Models\Notification;
+use DateTime;
+use DateTimeZone;
 
 class CoursesCatalogController extends Controller
 {
@@ -114,7 +117,12 @@ class CoursesCatalogController extends Controller
         $singleCourseFeedbacks = [];
         $courseContents = [];
         $batchDetails = [];
-        $batchDetails = CourseService::getBatchDetails($id);
+        if(Auth::user()) {
+            $userId = Auth::user()->id;
+        } else {
+            $userId = "";
+        }
+        $batchDetails = CourseService::getBatchDetails($id, $userId);
         $courseContents = CourseService::getContentsData($id);
         $user = UserService::getCurrentUserInfo();
         $userType = "";
@@ -174,6 +182,7 @@ class CoursesCatalogController extends Controller
 
     public function registerCourse(Request $request){
 
+        $user = Auth::user();
         $singleCourseDetails =[];
         $course = Course::findOrFail($request->id);
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
@@ -182,28 +191,73 @@ class CoursesCatalogController extends Controller
         $instructorlastname = User::where('id', $assigned)->value('lastname');
        
         $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+
+        $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
+
+        $offsetHours = intval($offset[1] . $offset[2]);
+        $offsetMinutes = intval($offset[4] . $offset[5]);
+            
+        $date = new DateTime("now");
+        $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+
         foreach($batches as $batch){
             $available_count = $batch->students_count;
-           // if(!empty($available_count)){
-                $booked_slotes = DB::table('enrolled_courses')
-                                    ->where([['course_id','=',$course->id],['batch_id','=',$batch->id]])
-                                    ->get();
-                $booked_slotes_count = count($booked_slotes);
-                $available_count = $available_count-$booked_slotes_count;
-            //}
+            if($offset[0] == "+") {
+                $sTime = strtotime($batch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                $eTime = strtotime($batch->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            } else {
+                $sTime = strtotime($batch->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                $eTime = strtotime($batch->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            }
+                    
+            $startTime = date("H:i A", $sTime);
+            $endTime = date("H:i A", $eTime);
+
+            $booked_slotes = DB::table('enrolled_courses')
+                               ->where([['course_id','=',$course->id],['batch_id','=',$batch->id]])
+                               ->get();
+            $booked_slotes_count = count($booked_slotes);
+            $available_count = $available_count-$booked_slotes_count;
+            
             $singleCourseData =  array (
                 'batch_id' => $batch->id,
                 'batchname' => $batch->batchname,
                 'title' => $batch->title,
                 'start_date' => Carbon::createFromFormat('Y-m-d',$batch->start_date)->format('M d'),
-                'start_time'=> Carbon::createFromFormat('H:i:s',$batch->start_time)->format('h A'),
-                'end_time' => Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A'),
-                'time_zone' => $batch->time_zone,
+                'start_time'=> $startTime,
+                'end_time' => $endTime,
+                'time_zone' => $time_zone,
                 'available_count' => $available_count
             );
         
         array_push($singleCourseDetails, $singleCourseData);
       }
+
+      $duration = $course->course_duration;
+      $hours = intval($duration);
+      $minutesDecimal = $duration - $hours;
+      $minutes = ($minutesDecimal/100) * 6000;
+    
+      $duration = $hours . 'h ' . $minutes . 'm';
+
+      $ratings = 0;
+      $ratingsSum = 0;
+      $ratingsCount = 0;
+
+      if($course->use_custom_ratings) {
+          $ratings = $course->course_rating;
+      } else {
+          $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+          foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+              $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+              $ratingsCount++;
+          }
+          if($ratingsCount != 0) {
+              $ratings = intval($ratingsSum/$ratingsCount);
+          }
+      }
+      $studentCount = EnrolledCourse::where('course_id', $course->id)->count();
+
       $courseDetails = array (
         'course_id' => $course->id,
         'course_title' => $course->course_title,
@@ -213,7 +267,11 @@ class CoursesCatalogController extends Controller
         'instructor_firstname' => $instructorfirstname,
         'instructor_lastname' => $instructorlastname,
         'course_thumbnail_image' => $course->course_thumbnail_image,
-        'duration' => $course->course_duration
+        'rating' => $ratings,
+        'studentCount' => $studentCount,
+        'use_custom_ratings' => $course->use_custom_ratings,
+        'ratingsCount' => $ratingsCount,
+        'duration' => $duration
       );
      
         return view('Student.registerCourse', [
@@ -266,14 +324,14 @@ class CoursesCatalogController extends Controller
             'instructor_name' => $instructorName,
             'course' => $course_title
         ];
-        Mail::to($studentEmail)->send(new StudentMailAfterEnrolling($mailDetails));
+        Mail::mailer('infosmtp')->to($studentEmail)->send(new StudentMailAfterEnrolling($mailDetails));
 
         $data = [
             'instructor_name' => $instructorName,
             'course_title' => $course_title
         ];
 
-        Mail::to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
+        Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterEnrolling($data));
 
         foreach($admins as $admin) {
             $mailData=[
@@ -281,7 +339,7 @@ class CoursesCatalogController extends Controller
                 'adminLastName' => $admin->lastname,
                 'course_title' => $course_title
              ];
-            Mail::to($admin->email)->send(new AdminMailAfterStudentEnrolling($mailData));
+            Mail::mailer('infosmtp')->to($admin->email)->send(new AdminMailAfterStudentEnrolling($mailData));
             $notification = new Notification; 
             $notification->user = $admin->id;
             $notification->notification = "Hello ".$admin->firstname." " .$admin->lastname.", You have got a new student enrolled in your ".$course_title." course.";
@@ -563,7 +621,7 @@ class CoursesCatalogController extends Controller
                 'instructorName' => $instructorName
             ];
             
-            Mail::to($instructorEmail)->send(new InstructorMailAfterStudentConcern($details));
+            Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterStudentConcern($details));
 
             $notification = new Notification; 
             $notification->user =  $assigned;

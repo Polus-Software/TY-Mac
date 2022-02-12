@@ -42,7 +42,7 @@ class ForgotPasswordController extends Controller
       $details =[
          'token' => $token,
       ];
-        Mail::to($request->email)->send(new ForgotPasswordMail($details));
+        Mail::mailer('smtp')->to($request->email)->send(new ForgotPasswordMail($details));
 
         return redirect("/")->with('message', 'We have e-mailed your password reset link!');
       
@@ -61,7 +61,6 @@ class ForgotPasswordController extends Controller
 
    public function submitResetPasswordForm(Request $request)
    {
-     
         try{
       $request->validate([
          'email' => 'required|email|exists:users',
@@ -93,7 +92,7 @@ class ForgotPasswordController extends Controller
 
       DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
-      Mail::to($request->email)->send(new PersonalDetailsUpdatedMail($data));
+      Mail::mailer('smtp')->to($request->email)->send(new PersonalDetailsUpdatedMail($data));
 
          $notification = new Notification; 
          $notification->user = $userId;
@@ -101,11 +100,10 @@ class ForgotPasswordController extends Controller
          $notification->is_read = false;
          $notification->save();
          
-      return redirect('/')->withSuccess('Your password has been changed!');
-
+      return redirect('/')->with('message', 'Your password has been changed!');
      
    } catch (Exception $exception){
-      return redirect('/')->withSuccess('Your password has been changed!');
+      return redirect('/')->with('message', 'Your password has been changed!');
    }
 }
 
