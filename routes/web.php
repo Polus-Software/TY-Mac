@@ -163,6 +163,7 @@ Route::get('/', function () {
     Route::get('schedule-session', [RtmTokenGeneratorController::class, 'scheduleSession'])->name('schedule-session');
     Route::post('get-course-attributes', [RtmTokenGeneratorController::class, 'showCourseAttributes'])->name('get-course-attributes');
     Route::post('save-session-details', [RtmTokenGeneratorController::class, 'saveSessionDetails'])->name('save-session-details');
+    Route::post('delete-session', [RtmTokenGeneratorController::class, 'deleteSession'])->name('delete-session');
     Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
     Route::post('push-session-live-record', [RtmTokenGeneratorController::class, 'pushSessionLiveRecord'])->name('push-session-live-record');
     Route::post('stop-presenting', [RtmTokenGeneratorController::class, 'stopPresenting'])->name('stop-presenting');

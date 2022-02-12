@@ -44,7 +44,7 @@
                 @if($studentData['deleted_at']  == '')
                   <td class="align-middle text-center"><span class="badge rounded-pill bg-info text-dark">Active</span></td>
                 @else
-                  <td class="align-middle text-center"><span class="badge bg-warning text-dark">Inactive</span></td>
+                  <td class="align-middle text-center"><span id="publish-badge" class="badge bg-warning text-dark">Inactive</span></td>
                 @endif
                 <td class="align-middle text-center">
                 <a href="{{ route('view-student', ['student_id' => $studentData['id']]) }}" title="View student">

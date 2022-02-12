@@ -320,7 +320,6 @@ class RtmTokenGeneratorController extends Controller
                 $date = date('Y-m-d',strtotime($date . "+1 days"));
             }
         }
-                
 
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
@@ -1018,5 +1017,11 @@ class RtmTokenGeneratorController extends Controller
            'topic' => $topic,
            'course' => $course
         ]);
+    }
+
+    public function deleteSession(Request $request) {
+        $session = $request->sessionId;
+        $liveSession = LiveSession::where('live_session_id', $session)->delete();
+        return response()->json(['status' => 'success']);
     }
 }

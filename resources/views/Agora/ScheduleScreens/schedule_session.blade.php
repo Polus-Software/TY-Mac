@@ -63,7 +63,7 @@
                 <td scope="col">{{ $session['sessionCourse'] }}</td>
                 <td scope="col">{{ $session['time'] }}</td>
                 <td scope="col">{{ $session['batch'] }}</td>
-                <td scope="col"><i id="{{ $session['id'] }}" class="fas fa-trash"></i></td>
+                <td scope="col"><i id="{{ $session['id'] }}" class="fas fa-trash deleteSession" style="cursor:pointer;"></i></td>
               </tr>
               @endforeach
               @else
@@ -231,6 +231,27 @@
 <!-- Delete course modal ends here -->
 
 <script>
+
+  let delSessionEle = document.getElementsByClassName('deleteSession');
+  delSessLength = delSessionEle.length;
+
+  for(i=0;i<delSessLength;i++){
+    delSessionEle[i].addEventListener('click', function(e) {
+      let id = this.id;
+      let path = "{{ route('delete-session') }}?sessionId=" + id;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+        body: JSON.stringify({})
+      }).then((response) => response.json()).then((data) => {
+        location.reload();
+      });
+    });
+  }
   document.getElementById('save_course').addEventListener('click', (event) => {
     let courseTitle = document.getElementById('course_title').value;
     let courseDescription = document.getElementById('course_description').value;
@@ -408,5 +429,7 @@
     const modal = bootstrap.Modal.getInstance(truck_modal);
     modal.hide();
   }
+
+
 </script>
 @endsection('content')

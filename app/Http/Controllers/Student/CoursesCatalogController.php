@@ -523,7 +523,7 @@ class CoursesCatalogController extends Controller
 				if($course->use_custom_ratings == false) {
 					$html = $html . '('.$ratingsCount.')</div>';  
 				} else {
-					$html = $html . '</div>'; 
+					$html = $html . '(60)</div>'; 
 				}
                 
                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
@@ -625,8 +625,7 @@ class CoursesCatalogController extends Controller
 
             $notification = new Notification; 
             $notification->user =  $assigned;
-            $notification->notification = "Hi ".$instructorName.", You have got a new concern from a student.".$name."
-                                           Details as follows," .$message.".";
+            $notification->notification = "Hi ".$instructorName.", You have got a new concern from a student.".$name."Details as follows," .$message.".";
             $notification->is_read = false;
             $notification->save();
 
