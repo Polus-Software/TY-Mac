@@ -696,6 +696,7 @@ small#assignment_table_batch {
                         </div>
                         @if($userType == 'student')
                         <div class="row mt-3 mb-3">
+                        @if(!empty($recommendations))
                         @foreach($recommendations as $recommendation)
                             <div class="col-lg-6 mb-3">
                                 <div class="card card-3">
@@ -727,6 +728,9 @@ small#assignment_table_batch {
                                 </div>
                             </div>
                             @endforeach
+                            @else
+                            <x-nodatafound message="No recommendations for you yet!"  notype=""/>
+                            @endif
 
                             
                         </div>

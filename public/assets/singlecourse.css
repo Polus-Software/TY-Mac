@@ -129,7 +129,7 @@
     line-height: 1.62em;
 }
 .fa-twitter, .fa-linkedin-in, .fa-youtube{
-    color: #6E7687;
+    /* color: #6E7687; */
 }
 .fa-twitter:before, .fa-linkedin-in:before, .fa-youtube:before{
     padding-right:10px;
