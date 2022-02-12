@@ -814,6 +814,8 @@ small#assignment_table_batch {
                     </div>
                     <!-- Recommendations tab -->
 
+
+                    
                     <div class="tab-pane fade" id="v-pills-CohortQuestions" role="tabpanel" aria-labelledby="v-pills-CohortQuestions-tab">
                         <div class="row">
                             <div class="col-lg-12">
@@ -857,38 +859,27 @@ small#assignment_table_batch {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                 
-                                                </div>
-                                            </div>
-                                            @if(!$qa['hasReplied'] && $userType == 'instructor')
-                                            <div class="row ps-5">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
-                                                    @foreach($singleCourseDetails as $course)
-                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
-                                                    @endforeach
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-                                                                <p class="card-title text-left">
-                                                                    @foreach($singleCourseDetails as $course)
-                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at {{ $course['institute'] }}
-                                                                    @endforeach
-
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" id="replyTextArea_{{ $qa['id'] }}">
+                                                    @if($userType == "instructor" && !$qa['hasReplied'])
+                                                    <div class="row" id="replyTextArea_{{ $qa['id'] }}">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                             @csrf
                                                             <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
-                                                    </div>
+                                                    @endif
                                                 </div>
-                                            @elseif($qa['hasReplied'])
-                                            
-                                            <div class="card-body" style="padding-left: 7rem;">
+                                            </div>
+                                            @if($qa['hasReplied'])
+                                            <div class="row ps-5">
+                                            @else
+                                            <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none">
+                                            @endif
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
+                                                    @foreach($singleCourseDetails as $course)
+                                                    <img src="{{asset('/storage/images/'.$course['profile_photo'])}}" class="img-fluid rounded-circle mt-3" alt="..." style="width:40px; height:40px;">
+                                                    @endforeach
+                                                    <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
@@ -910,8 +901,7 @@ small#assignment_table_batch {
                                                             </div>
                                                         </div>
                                                     </div>
-                                            @endif
-                                                
+                                                </div>
                                             </div>
                                             
                                         @endforeach
@@ -920,6 +910,9 @@ small#assignment_table_batch {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
 
                     <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
 

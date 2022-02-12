@@ -262,27 +262,27 @@
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-            <form id="contactForm" class="form" method="POST" action="{{route('question')}}">
+            <form id="contactFormCourse" class="form" method="POST" action="{{route('question')}}">
               @csrf
               <input type="hidden" name="course_id" class="course_id" id="course_id">
               <div class="form-group mx-0">
                 <label for="name" class="name-label">Name</label>
-                <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
+                <input type="text" name="name" class="form-control" id="contactNameCourse" placeholder="Eg: Andrew Bernard">
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
                 <label for="email" class="email-label">Email</label>
-                <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
+                <input type="email" name="email" class="form-control" id="contactEmailCourse" placeholder="Eg: xyz@domainname.com">
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
                 <label for="phone" class="phone-label">Phone</label>
-                <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
+                <input type="tel" name="phone" class="form-control" id="contactPhoneCourse" placeholder="Eg: +1 202-555-0257">
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
                 <label for="message" class="message-label">Message</label>
-                <textarea type="tel" name="message" class="form-control autosize" id="contactMessage" placeholder="Type your message here"></textarea>
+                <textarea type="tel" name="message" class="form-control autosize" id="contactMessageCourse" placeholder="Type your message here"></textarea>
                 <small>Error message</small>
               </div>
               <div class="form-group mx-0">
@@ -489,6 +489,41 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
         removeError(contactMessage)
       }
     });
+</script>
+@elseif(Request::is('show-course/*'))
+<script>
+    const contactNameCourse = document.getElementById('contactNameCourse');
+    const contactEmailCourse = document.getElementById('contactEmailCourse');
+    const contactPhoneCourse = document.getElementById('contactPhoneCourse');
+    const contactMessageCourse = document.getElementById('contactMessageCourse');
+    document.querySelector('#contactFormCourse').addEventListener('submit', (e) => {
+      if (contactNameCourse.value === '') {
+        e.preventDefault();
+        showError(contactNameCourse, 'Name is required');
+      } else {
+        removeError(contactNameCourse)
+      }
+      if (contactEmailCourse.value === '') {
+        e.preventDefault();
+        showError(contactEmailCourse, 'Email is required');
+      } else {
+        removeError(contactEmailCourse)
+      }
+      if (contactPhoneCourse.value === '') {
+        e.preventDefault();
+        showError(contactPhoneCourse, 'Phone number is required');
+      } else {
+        removeError(contactPhoneCourse)
+      }
+      if (contactMessageCourse.value === '') {
+        e.preventDefault();
+        showError(contactMessageCourse, 'Message is required');
+      } else {
+        removeError(contactMessageCourse)
+      }
+    });
+
+    
 </script>
 @endif
 

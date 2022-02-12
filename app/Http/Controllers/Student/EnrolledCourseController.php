@@ -596,6 +596,15 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback->rating = $rating;
         $generalCourseFeedback->save();
 
+        $finalRating = 0;
+        $allRatings = GeneralCourseFeedback::where('course_id', $courseId)->get();
+
+        foreach($allRatings as $allRating) {
+            $finalRating += intval($allRating->rating);
+        }
+
+        $course = Course::find('id', $courseId)->update(['course_rating' => $finalRating]);
+        
         $details= [
             'studentName' => $studentName,
             'instructorName' => $instructorName,
