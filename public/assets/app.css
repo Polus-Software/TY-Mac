@@ -155,7 +155,7 @@ form i {
 
 /* home page new styles*/
 
-.btn-primary {
+.btn-primary, .btn-primary:active, .btn-primary:focus {
   color: var(--color-black);
   background-color: var(--color-primary);
   border-color: var(--color-primary);
