@@ -455,7 +455,7 @@ class CourseController extends Controller
                     if($course->is_published == 1)
                         $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-success text-dark">Published</span></td>';
                     else
-                        $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-warning text-dark">Draft</span></td>';
+                        $html = $html . '<td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark">Draft</span></td>';
                     $html = $html . '<td class="text-center align-middle"><a href="" title="View course"><i class="fas fa-eye"></i></a>';
                     $html = $html . '<a title="Delete course" data-bs-toggle="modal" data-bs-target="#delete_course_modal" data-bs-id="' . $course->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
                     $slNo = $slNo + 1;

@@ -54,8 +54,12 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                             <i class="far fa-star rateCourse"></i>
                                         @endif
                                         @endfor
-                                            <small class="ms-1"
-                                            >@if($courseDetails['use_custom_ratings'] == false) ({{ $courseDetails['ratingsCount'] }}) @endif
+                                            <small class="ms-1">
+                                            @if($courseDetails['use_custom_ratings'] == false) 
+                                                ({{ $courseDetails['ratingsCount'] }}) 
+                                            @else
+                                                (60)
+                                            @endif
                                             {{$courseDetails['studentCount']}} participants</small>
                                         </div>
                                         <div class="col-lg think-text-color-grey">

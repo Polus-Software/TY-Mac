@@ -82,11 +82,11 @@
 
 
 <script>
-  if(document.getElementById('publish').innerHTML == "Unpublish") {
-    document.getElementById('edit_course').style.display = "none";
-  } else {
-    document.getElementById('edit_course').style.display = "block";
-  }
+  // if(document.getElementById('publish').innerHTML == "Unpublish") {
+  //   document.getElementById('edit_course').style.display = "none";
+  // } else {
+  //   document.getElementById('edit_course').style.display = "block";
+  // }
   
   // let coursePoint = 2;
   // let descPoint = 2;
