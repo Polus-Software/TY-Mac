@@ -77,7 +77,9 @@
           </div>
           <div class="col-auto">|</div>
           <div class="col-auto">
-            <p>Upcoming Cohort: <strong>11/10/2021</strong></p>
+          @if(count($batchDetails))
+            <p>Upcoming Cohort: <strong>{{$batchDetails[0]['batch_start_date']}}</strong></p>
+          @endif
           </div>
         </div>
 
