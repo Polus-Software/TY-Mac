@@ -311,6 +311,7 @@ class AdminController extends Controller
             $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
             $instructorfirstname = User::where('id', $assigned)->value('firstname');
             $instructorlastname = User::where('id', $assigned)->value('lastname');
+
             $duration = $course->course_duration;
             $hours = intval($duration);
             $minutesDecimal = $duration - $hours;
@@ -329,6 +330,7 @@ class AdminController extends Controller
                     $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
                     $ratingsCount++;
                 }
+
                 if($ratingsCount != 0) {
                     $ratings = intval($ratingsSum/$ratingsCount);
                 }
@@ -342,10 +344,11 @@ class AdminController extends Controller
                 'course_difficulty' => $course->course_difficulty,
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
-				'use_custom_ratings' => $course->use_custom_ratings,
+				        'use_custom_ratings' => $course->use_custom_ratings,
                 //'rating' => $course->course_rating,
-				'rating' => $ratings,
-                'duration' => $duration
+				        'rating' => $ratings,
+                'duration' => $duration,
+				        'ratingsCount' => $ratingsCount
             );
             array_push($courseDetails, $courseData);
         }

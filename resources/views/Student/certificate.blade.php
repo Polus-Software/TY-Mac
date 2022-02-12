@@ -82,7 +82,7 @@
                   <div class="row">
                     <div class="col-lg-12">
                         <p class="card-text-1">Has successfully completed the {{$courseDetail['course_title']}} <br>
-                            online cohort on (course completion date)</p>
+                            online cohort on {{$courseDetail['course_completion']}}</p>
                     </div>
                   </div>
                   <div class="row">
