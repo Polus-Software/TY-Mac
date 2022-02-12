@@ -846,7 +846,7 @@ small#assignment_table_batch {
                                                  
                                                 </div>
                                             </div>
-                                            @if(!$qa['hasReplied'])
+                                            @if(!$qa['hasReplied'] && $userType == 'instructor')
                                             <div class="row ps-5">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center ps-5 pe-0">
                                                     @foreach($singleCourseDetails as $course)
@@ -870,11 +870,10 @@ small#assignment_table_batch {
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
-                                                        
                                                     </div>
                                                 </div>
-                                            @else
-                                            <!-- <div class="row ps-5" id="replyDiv_{{ $qa['id'] }}" style="display:none"> -->
+                                            @elseif($qa['hasReplied'])
+                                            
                                             <div class="card-body" style="padding-left: 7rem;">
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
@@ -907,8 +906,6 @@ small#assignment_table_batch {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <!-- </div> -->
 
                     <div class="tab-pane fade" id="v-pills-cohortInfo" role="tabpanel" aria-labelledby="v-pills-cohortInfo-tab">
 

@@ -125,14 +125,14 @@
                                                                     <p><i class="far fa-user pe-1"></i>{{ $upComingSessionDetail['instructor'] }}</p>
                                                                 </div>
                                                                 <div class="col-lg-6 col-sm-6 col-6">
-                                                                    <p class="text-end"><i class="far fa-user pe-1"></i> {{ $upComingSessionDetail['course_diff'] }}</p>
+                                                                    <p class="text-end"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error"> {{ $upComingSessionDetail['course_diff'] }}</p>
                                                                 </div>
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                    <div class="row bg-light">
+                                                    <div class="row">
                                                         <div class="text-center border-top">
-                                                            <a href="" class="card-link btn">Go to details</a>
+                                                            <a href="/enrolled-course/{{$upComingSessionDetail['course_id']}}" class="card-link btn w-100">Go to details</a>
                                                         </div>
                                                     </div>
 
