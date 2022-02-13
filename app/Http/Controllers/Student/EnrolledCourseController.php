@@ -602,12 +602,17 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback->save();
 
         $finalRating = 0;
+        $totalRatings = 0;
         $allRatings = GeneralCourseFeedback::where('course_id', $courseId)->get();
        
         foreach($allRatings as $allRating) {
             $finalRating += intval($allRating->rating);
+            $totalRatings += 1;
         }
-
+        if($totalRatings != 0) {
+            $finalRating = $finalRating / $totalRatings;
+        }
+        
         $course = Course::where('id', $courseId)->update(['course_rating' => $finalRating]);
         
         $details= [
