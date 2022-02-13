@@ -1384,9 +1384,7 @@ if(userTypes === 'student') {
 
 cancelAssignmentEl.addEventListener('click', function(e) {
     e.preventDefault();
-    console.log(e.currentTarget.closest('.assignmentCard'));
     e.currentTarget.closest('.assignmentCard').style.display = 'none';
-    console.log(e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild);
     e.currentTarget.closest('.assignmentCard').parentElement.nextElementSibling.firstElementChild.style.display = 'block';
 });
 }
@@ -1432,7 +1430,6 @@ cancelAssignmentEl.addEventListener('click', function(e) {
 
             finalRating = starRating;
             
-            console.log(finalRating);
             for (var i = 0; i < starRating; i++) {
                 stars[i].classList.add("active-stars");
             }
@@ -1451,13 +1448,13 @@ cancelAssignmentEl.addEventListener('click', function(e) {
     });
 
     document.getElementById('reviewSubmitBtn').addEventListener('click', (event) => {
-
         let courseId = document.getElementById('course_id').value;
         let userId = document.getElementById('user_id').value;
         let comment = document.getElementById('comment').value;
 
         let path = "{{ route('student.course.review.post') }}?course_id=" + courseId + "&user_id=" + userId + "&comment=" + comment + "&rating=" + finalRating;
-        //console.log(path);
+        
+        closeModal('reviewModal');
         fetch(path, {
             method: 'POST',
             headers: {
@@ -1468,8 +1465,7 @@ cancelAssignmentEl.addEventListener('click', function(e) {
             body: JSON.stringify({})
         }).then((response) => response.json()).then((data) => {
             if(data.status == 'success') {
-                closeModal('reviewModal');
-                // window.location.reload();
+                location.reload();
             }
         });
 

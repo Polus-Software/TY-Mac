@@ -233,7 +233,10 @@ class RtmTokenGeneratorController extends Controller
         $sessionInstructor = $request->sessionInstructor;
         $topicsCounter = 0;
 
-
+        $liveSessionExists = LiveSession::where('batch_id', $sessionBatch)->get();
+        if(count($liveSessionExists) > 0) {
+            return response()->json(['status' => 'error', 'message' => 'Sessions already scheduled for this batch!']);
+        }
         $instructor = User::where('id', $sessionInstructor);
         $instructorName = $instructor->value('firstname').' '.$instructorlastname = $instructor->value('lastname');
         $instructorEmail = $instructor->value('email');

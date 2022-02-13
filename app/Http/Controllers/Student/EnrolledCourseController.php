@@ -582,13 +582,13 @@ class EnrolledCourseController extends Controller
         $userId = $request->user_id;
         $comment = $request->input('comment');
         $rating = $request->input('rating');
-
         $assigned = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
         $instructorName = User::find($assigned)->firstname.' '.User::find($assigned)->lastname;
         $instructorEmail = User::find($assigned)->email;
         $studentName = User::find($userId)->firstname.' '.User::find($userId)->lastname;
-        $courseTitle = Course::find($courseId)->course_title;
+        $courseTitle = Course::where('id', $courseId)->value('course_title');
 
+       
         $generalCourseFeedback = new GeneralCourseFeedback;
         $generalCourseFeedback->user_id = $userId;
         $generalCourseFeedback->course_id = $courseId;
@@ -598,12 +598,12 @@ class EnrolledCourseController extends Controller
 
         $finalRating = 0;
         $allRatings = GeneralCourseFeedback::where('course_id', $courseId)->get();
-
+       
         foreach($allRatings as $allRating) {
             $finalRating += intval($allRating->rating);
         }
 
-        $course = Course::find('id', $courseId)->update(['course_rating' => $finalRating]);
+        $course = Course::where('id', $courseId)->update(['course_rating' => $finalRating]);
         
         $details= [
             'studentName' => $studentName,
