@@ -298,13 +298,15 @@ class CoursesCatalogController extends Controller
        $instructorEmail =  $instructor->value('email');
        $instructorName =  $instructor->value('firstname') .' '.$instructor->value('lastname');
     
-       $enrolledCourse = new EnrolledCourse;
-       $enrolledCourse->user_id = $userId;
-       $enrolledCourse->batch_id = $batchId;
-       $enrolledCourse->course_id = $courseId;
-       $enrolledCourse->progress = 0;
-       $enrolledCourse->save();
-
+       $alreadyEnrolled = EnrolledCourse::where('user_id', $userId)->where('course_id', $courseId)->get();
+       if(count($alreadyEnrolled) == 0) {
+        $enrolledCourse = new EnrolledCourse;
+        $enrolledCourse->user_id = $userId;
+        $enrolledCourse->batch_id = $batchId;
+        $enrolledCourse->course_id = $courseId;
+        $enrolledCourse->progress = 0;
+        $enrolledCourse->save();
+       
        $badgeId = AchievementBadge::where('title', 'Joinee')->value('id');
 
        $badgeAlreadyExists = StudentAchievement::where('student_id', $userId)->where('course_id', $courseId)->where('badge_id', $badgeId)->get();
@@ -358,12 +360,12 @@ class CoursesCatalogController extends Controller
         $notification->notification = "Great news! A new student just enrolled to the course - ". $course_title;
         $notification->is_read = false;
         $notification->save();
-
+    }
         return response()->json([
             'status' => 'success', 
             'message' => 'Enrolled successfully'
             ]);
-            
+        
        }catch (Exception $exception){
 
         return response()->json([

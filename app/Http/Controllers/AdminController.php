@@ -414,29 +414,33 @@ class AdminController extends Controller
         
         $slNo = 0;
         $html = "";
-
-        foreach($tracker as $data) {
-            $attendanceTimer = $data->attendance_time;
-            $percent = ($attendanceTimer * 100) / $totalSeconds; 
-
-            $hours = floor($attendanceTimer / 3600);
-            $minutes = floor(($attendanceTimer / 60) % 60);
-            $seconds = $attendanceTimer % 60;
-            $slNo = $slNo + 1;
-            $student = User::where('id', $data->student);
-            $studentFName = $student->value('firstname');
-            $studentLName = $student->value('lastname');
-            $html = $html . '<tr id=' . $data->id . '>';
-            $html = $html . '<td class="align-middle text-center">' . $slNo . '</td>';
-            $html = $html . '<td class="align-middle text-center">';
-            $html = $html . '<img src="/storage/images/' . $student->value('image') . '" class="rounded-circle" alt="" style="width:40px; height:40px;"></td>';    
-            $html = $html .  '<td class="align-middle">'. $studentFName .'</td>';
-            $html = $html .  '<td class="align-middle">' . $studentLName . '</td>';
-            $status = $data->attendance_Status == 1 ?  '<span class="badge rounded-pill bg-success text-dark" style="color:white !important;">Present</span>' : '<span class="badge rounded-pill bg-danger text-dark" style="color:white !important;">Absent</span>';
-            
-            $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
-            $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';
-            $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>';           
+        
+        if(count($tracker)) {
+            foreach($tracker as $data) {
+                $attendanceTimer = $data->attendance_time;
+                $percent = ($attendanceTimer * 100) / $totalSeconds; 
+    
+                $hours = floor($attendanceTimer / 3600);
+                $minutes = floor(($attendanceTimer / 60) % 60);
+                $seconds = $attendanceTimer % 60;
+                $slNo = $slNo + 1;
+                $student = User::where('id', $data->student);
+                $studentFName = $student->value('firstname');
+                $studentLName = $student->value('lastname');
+                $html = $html . '<tr id=' . $data->id . '>';
+                $html = $html . '<td class="align-middle text-center">' . $slNo . '</td>';
+                $html = $html . '<td class="align-middle text-center">';
+                $html = $html . '<img src="/storage/images/' . $student->value('image') . '" class="rounded-circle" alt="" style="width:40px; height:40px;"></td>';    
+                $html = $html .  '<td class="align-middle">'. $studentFName .'</td>';
+                $html = $html .  '<td class="align-middle">' . $studentLName . '</td>';
+                $status = $data->attendance_Status == 1 ?  '<span class="badge rounded-pill bg-success text-dark" style="color:white !important;">Present</span>' : '<span class="badge rounded-pill bg-danger text-dark" style="color:white !important;">Absent</span>';
+                
+                $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
+                $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';
+                $html = $html .  '<td class="align-middle text-center">'. $status .'</td></tr>';           
+            } 
+        } else {
+            $html = '<tr><td colspan="7" class="align-middle text-center"><h6>No data to be shown.</h6></td></tr>';
         }
         
         return response()->json(['status' => 'success', 'msg' => 'Batches retrieved', 'html' => $html]);

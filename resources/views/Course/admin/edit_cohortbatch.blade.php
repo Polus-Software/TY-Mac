@@ -291,11 +291,11 @@ use App\Models\CustomTimezone;
   let selectedTimeZone = document.getElementById('cohortbatch_timezone').getAttribute('value');
   document.getElementById('cohortbatch_timezone').value = selectedTimeZone;
   startdate = new dtsel.DTS('input[name="cohortbatch_startdate"]', {
-    dateFormat: "mm-dd-yyyy",
+    dateFormat: "yyyy-mm-dd",
     paddingX: 15, paddingY: 15
   });
   enddate = new dtsel.DTS('input[name="cohortbatch_enddate"]', {
-    dateFormat: "mm-dd-yyyy",
+    dateFormat: "yyyy-mm-dd",
     paddingX: 15, paddingY: 15
   });
   starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {

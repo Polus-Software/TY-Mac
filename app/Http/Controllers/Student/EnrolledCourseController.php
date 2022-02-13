@@ -352,6 +352,7 @@ class EnrolledCourseController extends Controller
                 $isAssignmentSubmitted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->count() ? true : false;
                 $isAssignmentCompleted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->where('is_submitted', true)->where('is_completed', true)->count() ? true : false;
                 $isAssignmentStarted = Assignment::where('topic_id', $topicId)->where('student_id', $user->id)->count() ? true : false;
+                $isAssignmentAssigned = TopicAssignment::where('topic_id', $topicId)->count() ? true : false;
 
                 array_push($topicDetails, array(
                     'liveSessions' => $liveSessions,
@@ -367,9 +368,10 @@ class EnrolledCourseController extends Controller
                     'topic_title' =>$topic_title,
                     'topic_content' => $topicContents,
                     'assignmentList'=> $assignmentList,
-                    'isAssignmentSubmitted' => $isAssignmentSubmitted,
                     'isAssignmentCompleted' => $isAssignmentCompleted,
-                    'isAssignmentStarted' => $isAssignmentStarted
+                    'isAssignmentStarted' => $isAssignmentStarted,
+                    'isAssignmentAssigned' => $isAssignmentAssigned,
+                    'isAssignmentSubmitted' => $isAssignmentSubmitted
                 ));
             }
             
@@ -457,6 +459,8 @@ class EnrolledCourseController extends Controller
         }
         
         $progress = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId)->value('progress');
+        $generalCourseFeedback = GeneralCourseFeedback::where('course_id', $courseId)->where('user_id', $user->id)->get();
+        $feedbackCount = count($generalCourseFeedback);
         if($userType === 'student') {
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
@@ -470,7 +474,8 @@ class EnrolledCourseController extends Controller
                 'next_live_cohort' =>  $next_live_cohort,
                 'progress' => $progress,
                 'course_completion' => $course_completion,
-				'review_status' => $review_status
+				'review_status' => $review_status,
+                'feedbackCount' => $feedbackCount
             ]);
         }
         
@@ -582,13 +587,13 @@ class EnrolledCourseController extends Controller
         $userId = $request->user_id;
         $comment = $request->input('comment');
         $rating = $request->input('rating');
-
         $assigned = DB::table('assigned_courses')->where('course_id', $courseId)->value('user_id');
         $instructorName = User::find($assigned)->firstname.' '.User::find($assigned)->lastname;
         $instructorEmail = User::find($assigned)->email;
         $studentName = User::find($userId)->firstname.' '.User::find($userId)->lastname;
-        $courseTitle = Course::find($courseId)->course_title;
+        $courseTitle = Course::where('id', $courseId)->value('course_title');
 
+       
         $generalCourseFeedback = new GeneralCourseFeedback;
         $generalCourseFeedback->user_id = $userId;
         $generalCourseFeedback->course_id = $courseId;
@@ -598,12 +603,12 @@ class EnrolledCourseController extends Controller
 
         $finalRating = 0;
         $allRatings = GeneralCourseFeedback::where('course_id', $courseId)->get();
-
+       
         foreach($allRatings as $allRating) {
             $finalRating += intval($allRating->rating);
         }
 
-        $course = Course::find('id', $courseId)->update(['course_rating' => $finalRating]);
+        $course = Course::where('id', $courseId)->update(['course_rating' => $finalRating]);
         
         $details= [
             'studentName' => $studentName,
@@ -698,7 +703,10 @@ class EnrolledCourseController extends Controller
 
     public function submitAssignment(Request $request){
         try{
-
+            $validatedData = $request->validate([
+                'assignment_comment' => 'required',
+                'assignment_upload' => 'required'
+            ]);
         $user = Auth::user();
         $userId = $user->id;
         $studentName = $user->firstname.' '.$user->lastname;
@@ -708,6 +716,7 @@ class EnrolledCourseController extends Controller
         $file = $request->assignment_upload;
         
         $assignementFile = $file->getClientOriginalName();
+            
         $file->storeAs('assignmentAnswers', $assignementFile,'public');
 
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
