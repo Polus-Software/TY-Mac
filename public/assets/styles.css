@@ -327,3 +327,8 @@ a.navbar-brand {
 .think-tertiary-color {
     color: var(--color-tertiary) !important; 
  }
+
+.think-carousel-home .card-1 .card-img-top, 
+#course_view_section .card-1 .card-img-top {
+    height: 185px;
+}
