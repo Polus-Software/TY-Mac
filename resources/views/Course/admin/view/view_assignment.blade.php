@@ -16,7 +16,7 @@
       <div class="py-4">
           <ul class="nav nav-tabs llp-tabs">
    <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('view-assignments', $course_id) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
+    <a class="nav-link active" aria-current="page" href="{{ route('view-assignments', [ 'course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">Assignment list</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{{ route('create-assignment', [ 'course_id' => $course_id]) }}" style="text-decoration:none; color:inherit;">New Assignment</a>
