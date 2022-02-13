@@ -106,8 +106,7 @@ class MyCoursesController extends Controller
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
 
-                $currentBatchStartDate = $batch->value('start_date');
-
+                $currentBatchStartDate = $session->start_date;
                 if($currentBatchStartDate > $current_date) {
                     $session_title = $session->session_title;
                     $course = Course::where('id', $session->course_id);
@@ -154,11 +153,11 @@ class MyCoursesController extends Controller
                         'course_thumbnail_image' => $courseThumbnailImage,
                         'instructor' => $instructor,
                         'enrolledCourses' => $enrolledCourses,
-                        'date' => $date
+                        'date' => $date,
+                        'id' => $session->live_session_id
                     ));
                 }
             }
-            
       return view('Student.myCourses', [
         'singleEnrolledCourseData' => $singleEnrolledCourseData,
         'upComingSessionDetails' => $upComingSessionDetails,

@@ -496,8 +496,10 @@ small#assignment_table_batch {
                         </div>
 							@if($review_status)
 							<div class="border-top col-12 mt-4 py-4 text-center px-4">
+                            @if($feedbackCount == 0)
 								<a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
-							</div>
+                                @endif
+                            </div>
 							@endif
                         @endif
                     </div>
@@ -750,6 +752,7 @@ small#assignment_table_batch {
                         <div class="row mt-3 mb-3">
                             
                             <div class="accordion" id="accordionExample">
+                                @if(!empty($recommendations))
                                 @foreach($studentsEnrolled as $student)
                                 <div class="accordion-item border-0 bg-light">
                                     <h2 class="accordion-header" id="headingOne">
@@ -806,6 +809,9 @@ small#assignment_table_batch {
                                         </div>
                                     </div>
                                 </div>@endforeach
+                                @else
+                                <x-nodatafound message="No recommendations yet!"  notype=""/>
+                                @endif
                             </div>
                         </div>
                         @endif
@@ -835,7 +841,7 @@ small#assignment_table_batch {
                                        
                                                                                         
                                         <div class="row">
-
+                                        @if(!empty($qas))
                                         @foreach($qas as $qa)
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
                                             @foreach($singleCourseDetails as $course)
@@ -905,6 +911,9 @@ small#assignment_table_batch {
                                             </div>
                                             
                                         @endforeach
+                                        @else
+                                        <x-nodatafound message="No questions have been asked yet!"  notype=""/>
+                                        @endif
                                             
                                         </div>   
                                     </div>
@@ -966,13 +975,13 @@ small#assignment_table_batch {
                                             </p>
                                         </div>
                                         <div class="d-flex justify-content-center">
-                                            <p><a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                            <p><a style="color:black;" href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorTwitter']}}
                                             @endforeach" target="_blank"><i class="fab fa-twitter pe-2"></i></a>
-                                                <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                                <a style="color:black;" href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorLinkedin']}}
                                             @endforeach" target="_blank"><i class="fab fa-linkedin-in pe-2"></i></a>
-                                                <a href="@foreach($singleCourseDetails as $singleCourseDetail)
+                                                <a style="color:black;" href="@foreach($singleCourseDetails as $singleCourseDetail)
                                         {{$singleCourseDetail['instructorYoutube']}}
                                             @endforeach" target="_blank"><i class="fab fa-youtube"></i></a>
                                             </p>
@@ -1052,13 +1061,14 @@ small#assignment_table_batch {
                                                 <span style="" class="badge pill text-dark status_btn">Completed</span>
                                                 @elseif($topicDetail['isAssignmentSubmitted'] == true)
                                                 <span style="" class="badge pill text-dark status_btn">Submitted</span>
+                                                @elseif(!$topicDetail['isAssignmentAssigned'] == true)
+                                                <span style="background-color:#ffebb9 !important;" class="badge pill text-dark status_btn">Not Assigned</span>
                                                 @else
                                                 <span style="" class="badge pill text-dark status_btn">Pending</span>
                                                 @endif
                                                 </button>
                                                 </h2>
                                                
-                                            
                                                
                                                 <div id="collapseThree_{{$slno}}" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
@@ -1092,16 +1102,24 @@ small#assignment_table_batch {
                                                                             
                                                                                 <div class="llpcard-inner bg-light mt-3 mb-3 p-3">
                                                                                     <h5 class="card-title">Type your comment here</h5>
-                                                                                    <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form">
+                                                                                    <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form assignmentForm">
                                                                                     @csrf
                                                                                         <input type="hidden" name="assignment_id"  id ="assignment_id" value="{{ $assignment['id'] }}" />
                                                                                         <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                        <small>Error message</small>
+                                                                                        @if ($errors->has('assignment_comment'))
+                                                                                                            <span class="text-danger">{{ $errors->first('assignment_comment') }}</span>
+                                                                                                            @endif
                                                                                             <div class="card card-body mb-3" style="background-color: transparent;background-clip: border-box;border: none;"> 
                                                                                                 <div class="row p-2 flex-fill bd-highlight">
                                                                                                     <div class="col-lg-3">Attach File:</div>
                                                                                                         <div class="col-lg-6 col-12"><label>Upload from device</label>
                                                                                                             <input class="form-control" type="file" name="assignment_upload">
                                                                                                             <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx,</small>
+                                                                                                            <small>Error message</small>
+                                                                                                            @if ($errors->has('assignment_upload'))
+                                                                                                            <span class="text-danger">{{ $errors->first('assignment_upload') }}</span>
+                                                                                                            @endif
                                                                                                         </div>
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
                                                                                                     </div>
@@ -1403,7 +1421,8 @@ cancelAssignmentEl.addEventListener('click', function(e) {
             this.style.display = "none";
 
 
-            let assignmentId = document.getElementById('assignment_id').value;
+            // let assignmentId = document.getElementById('assignment_id').value;
+            let assignmentId = this.getAttribute('card-id');
             let path = "{{ route('start.assignment.post') }}?assignment_id=" + assignmentId;
         
             fetch(path, {

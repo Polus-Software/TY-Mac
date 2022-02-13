@@ -35,7 +35,7 @@ class CourseService {
      * @output - course details
      */
     public static function getCourseInfo(int $courseId) {
-        return Course::findOrFail($courseId)->first();
+        return Course::where('id', $courseId);
     }
 
     /**
@@ -229,20 +229,20 @@ class CourseService {
     public static function getsingleCourseDetails(int $courseId) {
         $singleCourseDetails= [];
         $course = self::getCourseInfo($courseId);
-        $courseCategory = self::getCategoryName($course->category);
-        $duration = self::convertTime($course->course_duration);
-        $assigned = self::getInstructorByCourse($course->id);
+        $courseCategory = self::getCategoryName($course->value('category'));
+        $duration = self::convertTime($course->value('course_duration'));
+        $assigned = self::getInstructorByCourse($course->value('id'));
         $instructorInfo = UserService::getUserInfo($assigned);
-        $short_description = explode(";",$course->short_description);
-        $course_details_points = $course->course_details_points;
+        $short_description = explode(";",$course->value('short_description'));
+        $course_details_points = $course->value('course_details_points');
         $singleCourseData =  array (
-            'id' => $course->id,
-            'course_title' => $course->course_title,
+            'id' => $course->value('id'),
+            'course_title' => $course->value('course_title'),
             'course_category' => $courseCategory,
-            'description' => $course->description,
-            'course_difficulty' => $course->course_difficulty,
-            'course_details' => $course->course_details,
-            'course_image' => $course->course_image,
+            'description' => $course->value('description'),
+            'course_difficulty' => $course->value('course_difficulty'),
+            'course_details' => $course->value('course_details'),
+            'course_image' => $course->value('course_image'),
             'instructorId' => $assigned,
             'instructor_firstname' => $instructorInfo->firstname,
             'instructor_lastname' => $instructorInfo->lastname,
