@@ -253,7 +253,6 @@ class RtmTokenGeneratorController extends Controller
         $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
 
         $date = $startDate;
-        
         while($date <= $endDate) {
             if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
                 // Save schedules here
@@ -323,7 +322,7 @@ class RtmTokenGeneratorController extends Controller
                 $date = date('Y-m-d',strtotime($date . "+1 days"));
             }
         }
-
+        
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
 

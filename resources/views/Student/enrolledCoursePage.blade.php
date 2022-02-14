@@ -1638,9 +1638,9 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
     google.charts.load('current', {
         'packages': ['bar']
     });
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChartFirst);
 
-    function drawChart() {
+    function drawChartFirst() {
         var data = google.visualization.arrayToDataTable([
             ['Sub content', 'Likes', 'Dislikes'],
             <?php
