@@ -30,6 +30,7 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'retryTimeout': 60, 
+        'mode': 'no-cors',
         'x-agora-token':token,
         'x-agora-uid':uid
       },

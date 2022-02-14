@@ -1587,7 +1587,7 @@ z-index: 100;
         duration: data.duration,
         courseWareList: [],
         listener: (evt, params) => {
-          if (evt === 1 && document.getElementById('user_type').value == "instructor") {
+          if (evt === 1 && data.rolename == "Instructor") {
           setTimeout(() => {
             appId = data.appId;
             roomId = data.roomid;
@@ -1598,6 +1598,7 @@ z-index: 100;
                     method: 'PUT',
                     headers: {
                       'Accept': 'application/json',
+                      'mode': 'no-cors',
                       'Content-Type': 'application/json',
                       'retryTimeout': 60,
                       'x-agora-token':data.token,
@@ -1698,6 +1699,7 @@ window.addEventListener("beforeunload", function (e) {
                           'Accept': 'application/json',
                           'Content-Type': 'application/json',
                           'retryTimeout': 60,
+                          'mode': 'no-cors',
                           'x-agora-token':token,
                           'x-agora-uid': uid,
                           "X-CSRF-Token": document.querySelector('input[name=_token]').value
@@ -1760,6 +1762,7 @@ toggleModal();
                           'Accept': 'application/json',
                           'Content-Type': 'application/json',
                           'retryTimeout': 60,
+                          'mode': 'no-cors',
                           'x-agora-token':token,
                           'x-agora-uid':uid
                         },
