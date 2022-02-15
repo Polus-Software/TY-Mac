@@ -54,7 +54,7 @@ class CourseController extends Controller
                 'instructor_firstname' => $instructorfirstname,
                 'instructor_lastname' => $instructorlastname,
                 'courseStatus' => $courseStatus,
-                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m-d-Y'),
+                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y'),
                
               );
               array_push($courseDetails, $courseData);
@@ -447,12 +447,15 @@ class CourseController extends Controller
                 $courses = Course::all();
 
                 foreach($courses as $course) {
+                    $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+                    $instructorfirstname = User::where('id', $assigned)->value('firstname');
+                    $instructorlastname = User::where('id', $assigned)->value('lastname');
                     $categoryName = CourseCategory::where('id', $course->category)->value('category_name');
                     $html = $html . '<tr id="' . $course->id .'">';
                     $html = $html . '<th class="align-middle" scope="row">' . $slNo .'</th>';
                     $html = $html . '<td class="align-middle">' . $course->course_title . '</td>';
-                    $html = $html . '<td class="align-middle">' . $categoryName . '</td>';
-                    $html = $html . '<td class="align-middle">' . $course->updated_at . '</td>';
+                    $html = $html . '<td class="align-middle">' . $instructorfirstname .' '. $instructorlastname . '</td>';
+                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat('Y-m-d H:i:s', $course->updated_at)->format('m/d/Y') . '</td>';
                     if($course->is_published == 1)
                         $html = $html . '<td style="vertical-align: middle;"><span class="badge bg-success text-dark">Published</span></td>';
                     else

@@ -607,7 +607,7 @@ class AdminController extends Controller
                         $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
                         $html = $html . '<td class="align-middle" colspan="2">' . $admin->firstname . ' ' . $admin->lastname . '</td>';
                         $html = $html . '<td class="align-middle">' . $admin->email . '</th>';
-                        $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $admin->created_at)->format("F d, Y") . '</td>';
+                        $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $admin->created_at)->format("m/d/Y") . '</td>';
                         $html = $html . '<td class="text-center align-middle"><a href="" title="View admin"><i class="fas fa-eye"></i></a>';
                         $html = $html . '<a  href="" title="Edit admin"><i class="fas fa-pen"></i></a>';
                         $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_admin_modal" data-bs-id="' . $admin->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';

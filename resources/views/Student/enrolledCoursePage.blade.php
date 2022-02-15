@@ -494,14 +494,12 @@ small#assignment_table_batch {
                                 </button>
                             </div>
                         </div>
-							@if($review_status)
 							<div class="border-top col-12 mt-4 py-4 text-center px-4">
                             @if($feedbackCount == 0)
 								<a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
-                                @endif
+                            @endif
                             </div>
 							@endif
-                        @endif
                     </div>
 
                 </div>
