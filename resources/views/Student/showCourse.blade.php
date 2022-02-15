@@ -27,7 +27,7 @@
 <header class="ty-mac-header-bg d-flex align-items-center mt-3">
   <div class="container">
     <div class="row mt-5">
-      <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 pt-4">
+      <div class="col-lg-6 col-md-12 order-2 order-lg-1 p-3 pt-4 think-align-middle">
 
         <div class="text-content-wrapper w-100 text-lg-start">
           <p class="mb-2">@foreach($singleCourseDetails as $singleCourseDetail)

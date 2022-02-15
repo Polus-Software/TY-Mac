@@ -332,3 +332,12 @@ a.navbar-brand {
 #course_view_section .card-1 .card-img-top {
     height: 185px;
 }
+.think-align-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+ }
+ a.notification-item.dropdown-item.p-2 {
+    display: flex;
+}
+ 

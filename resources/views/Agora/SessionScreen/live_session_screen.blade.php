@@ -1588,12 +1588,12 @@ z-index: 100;
         courseWareList: [],
         listener: (evt, params) => {
           if (evt === 1 && data.rolename == "Instructor") {
-          setTimeout(() => {
             appId = data.appId;
             roomId = data.roomid;
             token = data.token;
             uid = data.uid;
-            let recordPath = "https://api.agora.io/edu/apps/"+data.appId+"/v2/rooms/"+data.roomid+"/records/states/1";
+          setTimeout(() => {
+            let recordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/1";
             fetch(recordPath, {
                     method: 'PUT',
                     headers: {

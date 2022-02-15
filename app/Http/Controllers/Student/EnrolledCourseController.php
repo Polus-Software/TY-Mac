@@ -633,8 +633,7 @@ class EnrolledCourseController extends Controller
 
         $notification = new Notification; 
         $notification->user = $assigned;
-        $notification->notification = "Hi ".$instructorName."
-                                      You have new feedback from your student ".$studentName." on your course ".$courseTitle.".";
+        $notification->notification = "Hi ".$instructorName.", You have new feedback from your student ".$studentName." on your course ".$courseTitle.".";
         $notification->is_read = false;
         $notification->save();
 
