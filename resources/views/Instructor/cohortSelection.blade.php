@@ -56,11 +56,11 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                         @endfor
                                             <small class="ms-1">
                                             @if($courseDetails['use_custom_ratings'] == false) 
-                                                ({{ $courseDetails['ratingsCount'] }}) 
+                                                ({{ $courseDetails['ratingsCount'] }}) {{$courseDetails['studentCount']}} participants
                                             @else
-                                                (60)
+                                                (10) 10 participants
                                             @endif
-                                            {{$courseDetails['studentCount']}} participants</small>
+                                            </small>
                                         </div>
                                         <div class="col-lg think-text-color-grey">
                                             <p><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">

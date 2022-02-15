@@ -16,7 +16,7 @@ class AddColumnsToAssignmentsTable extends Migration
         Schema::table('assignments', function (Blueprint $table) {
             $table->unsignedBigInteger('topic_assignment_id');
             $table->foreign('topic_assignment_id')->references('id')->on('topic_assignments')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('assignment_answer');
+            $table->string('assignment_answer', 2000);
             
         });
     }

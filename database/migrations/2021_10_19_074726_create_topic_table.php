@@ -15,10 +15,10 @@ class CreateTopicTable extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id('topic_id');
-            $table->string('topic_title');
+            $table->string('topic_title', 2000);
             $table->unsignedBigInteger('course_id');
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('description');
+            $table->string('description', 2000);
             $table->timestamps();
         });
     }

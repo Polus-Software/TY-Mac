@@ -648,6 +648,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Models\\CustomTimezone' => __DIR__ . '/../..' . '/app/Models/CustomTimezone.php',
         'App\\Models\\EnrolledCourse' => __DIR__ . '/../..' . '/app/Models/EnrolledCourse.php',
         'App\\Models\\Filter' => __DIR__ . '/../..' . '/app/Models/Filter.php',
+        'App\\Models\\GeneralChat' => __DIR__ . '/../..' . '/app/Models/GeneralChat.php',
         'App\\Models\\GeneralCourseFeedback' => __DIR__ . '/../..' . '/app/Models/GeneralCourseFeedback.php',
         'App\\Models\\GeneralLiveSessionFeedback' => __DIR__ . '/../..' . '/app/Models/GeneralLiveSessionFeedback.php',
         'App\\Models\\GeneralSetting' => __DIR__ . '/../..' . '/app/Models/GeneralSetting.php',

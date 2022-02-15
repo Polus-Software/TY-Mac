@@ -160,6 +160,7 @@ window.onload = function(event) {
     linkCountHiddenEl.value = parseInt(linkCountHiddenEl.value)+1;
     e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateExternalLinkHTML(topicNum, contentCount, linkCountHiddenEl.value));
     externallink_count++;
+    e.target.style.display = "none";
     });
     const removeContentContainerEl = createNewElement('div', ['col-lg-1', 'text-end']);
     const removeContentLinkEl = createNewElement('a');

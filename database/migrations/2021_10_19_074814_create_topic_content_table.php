@@ -17,8 +17,8 @@ class CreateTopicContentTable extends Migration
             $table->id('topic_content_id');
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('topic_id')->on('topics')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('topic_title');
-            $table->string('description');
+            $table->string('topic_title', 2000);
+            $table->string('description', 2000);
             $table->string('content_type');
             $table->string('document');
             $table->timestamps();

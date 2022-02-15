@@ -19,7 +19,7 @@ class CreateChatLogTable extends Migration
             $table->foreign('student_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('instructor_id');
             $table->foreign('instructor_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('message');
+            $table->string('message', 2000);
             $table->boolean('isFromInstructor');
             $table->timestamps();
         });

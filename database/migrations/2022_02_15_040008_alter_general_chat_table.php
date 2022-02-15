@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTopicsAssignmentTable extends Migration
+class AlterGeneralChatTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AlterTopicsAssignmentTable extends Migration
      */
     public function up()
     {
-        Schema::table('topic_assignments', function (Blueprint $table) {
-            $table->string('external_link', 2000)->nullable();
+        Schema::table('instructor_student_chat', function (Blueprint $table) {
+            $table->unsignedBigInteger('sender')->nullable();
+            $table->foreign('sender')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

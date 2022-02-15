@@ -619,7 +619,7 @@ small#assignment_table_batch {
                                         <span class="text-muted" style="font-size:14px;">No sessions scheduled</span>
                                         @endif
                                         @elseif($topicDetail['liveId'] == "Over")
-                                        <a style="color: #6E7687;" type="button" class="btn" href="/view-again/{{ $topicDetail['overId'] }}"><i class="fas fa-undo pe-2"></i>View again</a>
+                                        <a style="color: #6E7687;background-color: #F8F7FC;" type="button" class="btn" href="/view-again/{{ $topicDetail['overId'] }}"><i class="fas fa-undo pe-2"></i>View again</a>
                                         @elseif($topicDetail['liveId'] == "Wait")
                                         <span class="text-muted" style="font-size:14px;text-decoration:underline;">Instructor yet to join, please be patient.</span>
                                         @else
@@ -693,9 +693,25 @@ small#assignment_table_batch {
                         <div class="card card-2">
                             <div class="card-body">
                         <div class="row border-bottom">
+                        @if($userType == 'student')
+                            <div class="col-lg-10">
+                        @else
                             <div class="col-lg-6">
+                        @endif
                                 <h5 class="heading-1">{{($userType == 'student') ? 'Recommended Topics to Review' : 'Personalized Recommendations'}}</h5>
                             </div>
+                            
+                            @if($userType == 'student')
+                            <div class="col-lg-2">
+                            <button data-student="{{$studentId}}" data-instructor={{$instructorId}} id="contact-instructor" class="btn btn-secondary" style="
+                                font-size: 12px;
+                                color: white;
+                                position: absolute;
+                                top: 10px;
+                            ">Contact instructor</button>
+                             </div>
+                            @endif
+                           
                             @if($userType == 'instructor')
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mb-2">
                             <form class="mb-2 mb-lg-0 mt-lg-0 d-flex mt-3 col-md-9 col-sm-9 col-6">
@@ -752,19 +768,20 @@ small#assignment_table_batch {
                         <div class="row mt-3 mb-3">
                             
                             <div class="accordion" id="accordionExample">
-                                @if(!empty($recommendations))
+                            @if(count($studentsEnrolled))
                                 @foreach($studentsEnrolled as $student)
                                 <div class="accordion-item border-0 bg-light">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a href="#" class="btn btn-outline-secondary text-dark ms-auto"><i class="fas fa-comments pe-2"></i>Message</a>
+                                        <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message</a>
                                     </button>
                                        
                                     </h2>
                                     <div id="collapseOne_{{ $student->id }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body bg-white ps-5 pe-5">
                                             <div class="row mt-3 mb-3">
+                                            @if(!empty($recommendations))
                                                 @foreach($recommendations as $recommendation)
                                                 @if($recommendation['student_id'] == $student->user_id)
                                                 <div class="col-lg-6 mb-3">
@@ -805,13 +822,17 @@ small#assignment_table_batch {
                                                 </div>
                                                 @endif
                                                 @endforeach
+                                                @else
+                                <x-nodatafound message="No recommendations yet!"  notype=""/>
+                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 </div>@endforeach
                                 @else
-                                <x-nodatafound message="No recommendations yet!"  notype=""/>
+                                <x-nodatafound message="No data to show!"  notype=""/>
                                 @endif
+                                
                             </div>
                         </div>
                         @endif
@@ -1014,6 +1035,7 @@ small#assignment_table_batch {
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @if(count($assignmentArr) != 0)
                                                 @foreach($assignmentArr as $assignment)
                                                 <tr>
                                                     
@@ -1032,6 +1054,11 @@ small#assignment_table_batch {
                                                     @endforeach
                                                 </tr>
                                                 @endforeach
+                                                @else
+                                                 <tr>
+                                                     <td colspan="6" style="text-align:center;">No data to be shown!</td>
+                                                </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                         
@@ -1140,16 +1167,16 @@ small#assignment_table_batch {
                                                     </div>
                                                     @if($topicDetail['isAssignmentSubmitted'] == true && $topicDetail['isAssignmentCompleted'] == true)
                                                     <div class="col-12 m-auto text-center">
-                                                        <h3>Assignment Completed</h3>
+                                                        <p>This assignment was sbmitted and reviewed by the instructor. Greatjob!</p>
                                                         </div>
                                                     @elseif($topicDetail['isAssignmentSubmitted'] == true)
                                                         
                                                     <div class="col-12 m-auto text-center">
-                                                        <h3>Assignment Submitted</h3>
+                                                        <h3>Your assignment is under review. Please be patient.</h3>
                                                         </div>
                                                     @else
                                                     <div class="col-4 m-auto text-center">
-                                                        <button card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</button>
+                                                        <button style="color: white;font-weight: 500;" card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</button>
                                                         </div>
                                                     @endif
                                                 
@@ -1420,10 +1447,8 @@ cancelAssignmentEl.addEventListener('click', function(e) {
             document.getElementById('card_' + card).style.display = "block";
             this.style.display = "none";
 
-
-            // let assignmentId = document.getElementById('assignment_id').value;
-            let assignmentId = this.getAttribute('card-id');
-            let path = "{{ route('start.assignment.post') }}?assignment_id=" + assignmentId;
+            let topicId = this.getAttribute('card-id');
+            let path = "{{ route('start.assignment.post') }}?topic_id=" + topicId;
         
             fetch(path, {
                 method: 'POST',
@@ -1669,5 +1694,23 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 </script>
+<script>
+    let messageBtn = document.getElementsByClassName('messageStudent');
+
+    let msgBtnLength = messageBtn.length;
+
+    for(i=0;i<msgBtnLength;i++) {
+        messageBtn[i].addEventListener('click', function(e) {
+            location.replace('/instructor-chat/?student=' + this.getAttribute('data-student') + '&instructor=' + this.getAttribute('data-instructor'));
+        })
+    }
+    </script>
+@else
+<script>
+    document.getElementById('contact-instructor').addEventListener('click', function(e) {
+        location.replace('/instructor-chat/?student=' + this.getAttribute('data-student') + '&instructor=' + this.getAttribute('data-instructor'));
+    });
+</script>
 @endif
+
 @endpush

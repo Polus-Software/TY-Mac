@@ -14,7 +14,7 @@ class AlterAssignmentTableAddComment extends Migration
     public function up()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->string('comment')->nullable();
+            $table->string('comment', 2000)->nullable();
         });
     }
 

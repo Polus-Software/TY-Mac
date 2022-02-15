@@ -35,8 +35,8 @@
             </ul>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
-          <a class="btn btn-outline-secondary" href="{{route('admin.viewall')}}">Cancel</a>
-            <a class="btn btn-primary" href="{{route('edit-student', ['student_id' => $student_id])}}">Edit student</a>
+          <a class="btn think-btn-secondary-outline" href="{{route('admin.viewall')}}">Cancel</a>
+            <a class="btn btn-secondary think-btn-secondary" href="{{route('edit-student', ['student_id' => $student_id])}}">Edit student</a>
           </div>
           </section>
       </main>

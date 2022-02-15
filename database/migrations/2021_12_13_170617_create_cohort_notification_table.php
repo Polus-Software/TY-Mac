@@ -15,7 +15,7 @@ class CreateCohortNotificationTable extends Migration
     {
         Schema::create('cohort_notification', function (Blueprint $table) {
             $table->id('id');
-            $table->string('description');
+            $table->string('description', 2000);
             $table->timestamps();
         });
     }

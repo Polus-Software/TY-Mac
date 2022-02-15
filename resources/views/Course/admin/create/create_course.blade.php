@@ -108,9 +108,9 @@
           <div class="col-md-6">
             <label for="duration">Class Duration in hours</label>            
             @if(isset($course_details['duration']))
-            <input type="number" class="form-control" id="duration" name="course_duration" value="{{ $course_details['duration'] }}">
+            <input type="text" class="form-control" id="duration" name="course_duration" value="{{ $course_details['duration'] }}">
             @else
-            <input type="number" class="form-control" id="duration" name="course_duration" value="{{ old('course_duration') ? old('course_duration') : '1' }}">
+            <input type="text" class="form-control" id="duration" name="course_duration" value="{{ old('course_duration') ? old('course_duration') : '1' }}">
             @endif
             @if ($errors->has('course_duration'))
               <span class="text-danger">{{ $errors->first('course_duration') }}</span>

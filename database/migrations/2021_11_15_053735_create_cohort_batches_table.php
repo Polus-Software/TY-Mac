@@ -15,7 +15,7 @@ class CreateCohortBatchesTable extends Migration
     {
         Schema::create('cohort_batches', function (Blueprint $table) {
             $table->id();
-            $table->string('batchname');
+            $table->string('batchname', 2000);
             $table->unsignedBigInteger('course_id');
             $table->foreign('course_id')->references('id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->date('start_date');

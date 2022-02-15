@@ -30,12 +30,21 @@
   </style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
+    @if(Auth::check())  
+    @if(Auth::user()->role_id == Config::get('common.ROLE_ID_ADMIN') || Auth::user()->role_id == Config::get('common.ROLE_NAME_CONTENT_CREATOR'))
+      <a class="navbar-brand" href="/dashboard"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
+    @else
       <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
+    @endif
+    @else
+      <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
+    @endif
+      
       <button class="navbar-toggler nav-bar-light bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      @if(Auth::check())  
+      @if(Auth::check() && (Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != Config::get('common.ROLE_NAME_CONTENT_CREATOR')))  
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 w-xl-75 w-100 mx-xl-4 mx-lg-2 mx-0">
         @csrf
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
@@ -48,7 +57,7 @@
     
     <ul class="navbar-nav mx-0 think-custom-nav-1">
     @if (Auth::check())
-      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR'))      
+      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR') && Auth::user()->role_id !== Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id !== Config::get('common.ROLE_NAME_CONTENT_CREATOR'))      
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
@@ -76,13 +85,15 @@
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
         @else
+        @if(Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != Config::get('common.ROLE_NAME_CONTENT_CREATOR'))
         <li class="nav-item {{ (request()->is('my-courses')) ? 'active': '' }}">
           <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
         @endif
+        @endif
         <li class="nav-item">
         <a class="nav-link" href="{{ route('edituser') }}">
-        <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
+        <img src="{{ asset('/storage/images/'.Auth::user()->image ) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;">{{Auth::user()->firstname}}</a>
       </li>
       <li>
 

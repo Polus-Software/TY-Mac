@@ -21,7 +21,7 @@ use App\Models\CustomTimezone;
         <input id="course_id" name="course_id" type="hidden" value="{{$cohortbatch->course_id}}">
         <input type="hidden" name="cohort_batch_id" value="{{$cohortbatch->id}}">
           <div class="py-4">
-          <h3>Cohort Overview - </h3>
+          <h3>Cohort Overview</h3>
           <hr class="my-4">
         </div>
           <div class="col-12">
@@ -328,17 +328,21 @@ use App\Models\CustomTimezone;
   });
   cohortbatchdayList.forEach((el) => {
     el.addEventListener('change', (e) => {
-      const currentItem = e.currentTarget;
+      let batchDays = document.getElementsByClassName('cohortbatchday');
+      let batchDaysLength = batchDays.length;
+      document.querySelector('#batch_name').value = "";
+      for(i=0;i<batchDaysLength;i++) {
+        const currentItem = batchDays[i];
         if(currentItem.checked) {
-          customValue.push(currentItem.value);
-        } else {
-          if(customValue.indexOf(currentItem.value) != -1) {
-            customValue.splice(customValue.indexOf(currentItem.value), 1);
-          }
+            document.querySelector('#batch_name').value += currentItem.value + ',';          
         }
-        document.querySelector('#batch_name').value = customValue;
+      } 
+      let batchName = document.querySelector('#batch_name').value;
+      batchName = batchName.substring(0, batchName.length - 1);
+      document.querySelector('#batch_name').value = batchName;
     });
-  })
+  });
+  
 
 </script>
 

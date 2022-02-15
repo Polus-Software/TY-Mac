@@ -82,33 +82,10 @@
 
 
 <script>
-  // if(document.getElementById('publish').innerHTML == "Unpublish") {
-  //   document.getElementById('edit_course').style.opacity = 0.1;
-  // } else {
-  //   document.getElementById('edit_course').style.opacity = 1;
-  // }
-  
-  // let coursePoint = 2;
-  // let descPoint = 2;
-  // document.getElementById('add-more-who-learn').addEventListener('click', (event) =>{
-
-  // var input = document.createElement("INPUT");
-  // input.setAttribute("name", "who_learn_points_" + coursePoint);
-  // document.getElementById('who_learn_points_count').value = coursePoint;
-  // coursePoint++;
-  // document.getElementById("add-points").appendChild(input);
-   
-  // });
-
-  // document.getElementById('add-more-what-learn').addEventListener('click', (event) =>{
-
-  // var inputElement = document.createElement("INPUT");
-  // inputElement.setAttribute("name", "what_learn_" + descPoint);
-  // document.getElementById('what_learn_points_count').value = descPoint;
-  // descPoint++;
-  // document.getElementById("add-more-points").appendChild(inputElement);
-
-   
-  // });
+  if(document.getElementById('publish').innerHTML == "Unpublish") {
+    document.getElementById('edit_course').style.display = "none";
+  } else {
+    document.getElementById('edit_course').style.display = "block";
+  }
 </script>
 @endsection('content')

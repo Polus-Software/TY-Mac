@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddMoreColumnsToCourses extends Migration
+class AlterCourseTableToAddStudentRatings extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,9 @@ class AddMoreColumnsToCourses extends Migration
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->text('short_description', 2000);
-            $table->text('course_details', 2000)->nullable();
-            $table->text('course_details_points', 2000);
-            $table->string('course_image');
+            $table->integer('students_ratings')->default(0)->nullable();
+            $table->integer('enrollments')->default(0)->nullable();
+            $table->integer('ratings_count')->default(0)->nullable();
         });
     }
 
@@ -28,7 +27,7 @@ class AddMoreColumnsToCourses extends Migration
      */
     public function down()
     {
-        Schema::table('courses', function (Blueprint $table) {
+        Schema::table('add_student_ratings', function (Blueprint $table) {
             //
         });
     }

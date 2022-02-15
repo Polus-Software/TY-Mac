@@ -15,6 +15,7 @@ use App\Models\EnrolledCourse;
 use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Models\LiveSession;
+use App\Models\GeneralCourseFeedback;
 use App\Models\CohortBatch;
 use Illuminate\Support\Facades\Storage;
 use Response;
@@ -96,7 +97,7 @@ class AssignedCoursesController extends Controller
               $totalSessions = LiveSession::where('course_id', $enrolledCourse->course_id)->count();
               if($totalSessions != 0) {
                 $progressTracker = LiveSession::where('start_date', '<', $current_date)->count();
-                $progress = $progressTracker * 100 / $totalSessions; 
+                $progress = round($progressTracker * 100 / $totalSessions, 0); 
               }
               
            $enrolledCourseData = array(
@@ -110,8 +111,6 @@ class AssignedCoursesController extends Controller
              'nextCohort' => $nextCohort,
              'batchName' => $bName,
              'progress' => $progress,
-            //  'start_time' =>Carbon::createFromFormat('H:i:s',$start_time)->format('h A'),
-            //  'end_time' =>Carbon::createFromFormat('H:i:s',$end_time)->format('h A'),
              'instructor_firstname' => $instructorfirstname,
              'instructor_lastname' => $instructorlastname,
            );
@@ -132,53 +131,56 @@ class AssignedCoursesController extends Controller
                  $currentBatchStartDate = $session->start_date;
  
                  if($currentBatchStartDate > $current_date) {
-                     $session_title = $session->session_title;
-                     $course = Course::where('id', $session->course_id);
-                     $courseDesc = $course->value('description');
-                     $courseDiff = $course->value('course_difficulty');
-                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
-                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
- 
-                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
-                     $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
-                     $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
-                     
-                     $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
-                     array_push($upComingSessionDetails, array(
-                         'session_title'=>  $session_title,
-                         'instructor' => $instructor,
-                         'course_desc' => $courseDesc,
-                         'course_diff' => $courseDiff,
-                         'course_id' => $session->course_id,
-                         'enrolledCourses' => $enrolledCourses,
-                         'image' => $course->value('course_thumbnail_image'),
-                         'date' => $date,
-                         'session_id' => $session->live_session_id
-                     ));
+                        $session_title = $session->session_title;
+                        $course = Course::where('id', $session->course_id);
+                        $courseDesc = $course->value('description');
+                        $courseDiff = $course->value('course_difficulty');
+                        $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                        $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+    
+                        $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                        $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                        $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                        
+                        $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                        array_push($upComingSessionDetails, array(
+                            'session_title'=>  $session_title,
+                            'instructor' => $instructor,
+                            'course_desc' => $courseDesc,
+                            'course_diff' => $courseDiff,
+                            'course_id' => $session->course_id,
+                            'enrolledCourses' => $enrolledCourses,
+                            'image' => $course->value('course_thumbnail_image'),
+                            'date' => $date,
+                            'session_id' => $session->live_session_id
+                        ));
                  } elseif ($currentBatchStartDate == $current_date) {
-                     $session_title = $session->session_title;
+                    //  ->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))
+                    if($session->start_time <= Carbon::now()->addMinutes(30)->format('H:i:s') && $session->end_time >= Carbon::now()->format('H:i:s')) {
+                        $session_title = $session->session_title;
  
-                     $course = Course::where('id', $session->course_id);
-                     $courseDesc = $course->value('description');
-                     $courseDiff = $course->value('course_difficulty');
-                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
-                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
- 
-                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
-                     $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
-                     $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
-                     
-                     $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
-                     array_push($liveSessionDetails, array(
-                         'session_title'=>  $session_title,
-                         'course_desc' => $courseDesc,
-                         'course_diff' => $courseDiff,
-                         'instructor' => $instructor,
-                         'image' => $course->value('course_thumbnail_image'),
-                         'enrolledCourses' => $enrolledCourses,
-                         'date' => $date,
-                         'session_id' => $session->live_session_id
-                     ));
+                        $course = Course::where('id', $session->course_id);
+                        $courseDesc = $course->value('description');
+                        $courseDiff = $course->value('course_difficulty');
+                        $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                        $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+    
+                        $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                        $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                        $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                        
+                        $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                        array_push($liveSessionDetails, array(
+                            'session_title'=>  $session_title,
+                            'course_desc' => $courseDesc,
+                            'course_diff' => $courseDiff,
+                            'instructor' => $instructor,
+                            'image' => $course->value('course_thumbnail_image'),
+                            'enrolledCourses' => $enrolledCourses,
+                            'date' => $date,
+                            'session_id' => $session->live_session_id
+                        ));
+                    }
                  }
              }
        return view('Instructor.assignedCourses', [

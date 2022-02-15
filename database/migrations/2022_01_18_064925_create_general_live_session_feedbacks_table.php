@@ -18,7 +18,7 @@ class CreateGeneralLiveSessionFeedbacksTable extends Migration
             $table->integer('question_1')->nullable();
             $table->integer('question_2')->nullable();
             $table->integer('question_3')->nullable();
-            $table->string('other_feedback')->nullable();
+            $table->string('other_feedback', 2000)->nullable();
             $table->unsignedBigInteger('live_session')->nullable();
             $table->foreign('live_session')->references('live_session_id')->on('live_sessions')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('student')->nullable();

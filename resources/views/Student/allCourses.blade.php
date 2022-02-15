@@ -240,8 +240,10 @@
             @endif
           </div>
           <div class="col-lg-5 col-sm-6 col-6 d-flex justify-content-end p-4">
-            <select name="" id="" class="rounded">
-              <option value="most-popular">Most Popular</option>
+            <select name="" id="all_course_drop" class="rounded">
+              <option value="" disabled selected>Sort</option>
+              <option value="most_popular">Most Popular</option>
+              <option value="most_reviewed">Most Reviewed</option>
             </select>
           </div>
         </div>
@@ -307,6 +309,22 @@
         });
       });
     }
+
+    document.getElementById('all_course_drop').addEventListener('change', function(e) {
+      let filterValue = this.value;
+      let path = "{{ route('course-drop-down')}}?filterValue=" + filterValue;
+        fetch(path, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+          },
+          body: JSON.stringify({})
+        }).then((response) => response.json()).then((data) => {
+          document.getElementById('course_view_section').innerHTML = data.html;
+        });
+    })
   }
 </script>
 @endpush
