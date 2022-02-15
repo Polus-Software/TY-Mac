@@ -56,11 +56,11 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
                                         @endfor
                                             <small class="ms-1">
                                             @if($courseDetails['use_custom_ratings'] == false) 
-                                                ({{ $courseDetails['ratingsCount'] }}) 
+                                                ({{ $courseDetails['ratingsCount'] }}) {{$courseDetails['studentCount']}} participants
                                             @else
-                                                (60)
+                                                (10) 10 participants
                                             @endif
-                                            {{$courseDetails['studentCount']}} participants</small>
+                                            </small>
                                         </div>
                                         <div class="col-lg think-text-color-grey">
                                             <p><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
@@ -105,7 +105,11 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
             @if($singleCourseDetail['available_count'] > 0)
                 @php ($active_class = 'active')
             @endif
-            <div class="card-2 text-center {{$active_class}}" style="width: auto;">
+            @if ($loop->first)
+            <div class="card-2 text-center active active-batch" style="width: auto;">
+            @else
+                <div class="card-2 text-center {{$active_class}}" style="width: auto;">
+            @endif
                <input type="hidden" id="batch_id" value="{{$singleCourseDetail['batch_id']}}">
                     <div class="card-body">
                         <i class="far fa-calendar-alt pb-3"></i>

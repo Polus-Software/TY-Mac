@@ -33,27 +33,27 @@
           <div class="row d-flex justify-content-end">
             <div class="col-md-3">
               <label>Institute</label>
-              <p>{{$instructorDetails['instructor_institute']}}</p>
+              <p>{{$instructorDetails['instructor_institute'] == "" ? 'None' : $instructorDetails['instructor_institute']}}</p>
             </div>
             <div class="col-md-3">
               <label>Designation</label>
-              <p>{{$instructorDetails['instructor_designation']}}</p>
+              <p>{{$instructorDetails['instructor_designation'] == "" ? 'None' : $instructorDetails['instructor_designation']}}</p>
             </div>
 
             <div class="col-md-4">
               <label>Twitter Link</label>
-              <p>{{$instructorDetails['instructor_twitter_social']}}</p>
+              <p>{{$instructorDetails['instructor_twitter_social'] == "" ? 'None' : $instructorDetails['instructor_twitter_social']}}</p>
             </div>
           </div>
           <div class="row d-flex justify-content-start mt-3">
             <div class="col-md-4">
               <label>LinkedIn Link</label>
-              <p>{{$instructorDetails['instructor_linkedin_social']}}</p>
+              <p>{{$instructorDetails['instructor_linkedin_social'] == "" ? 'None' : $instructorDetails['instructor_linkedin_social']}}</p>
             </div>
 
             <div class="col-md-6">
               <label>Youtube Link</label>
-              <p>{{$instructorDetails['instructor_youtube_social']}}</p>
+              <p>{{$instructorDetails['instructor_youtube_social'] == "" ? 'None' : $instructorDetails['instructor_youtube_social']}}</p>
             </div>
 
             <div class="col-md-12">
@@ -76,9 +76,13 @@
           <div class="col-12">
             <label>Assigned courses</label>
             <ul>
+              @if(count($assigned_courses) != 0)
                 @foreach($assigned_courses as $assigned_course)
                 <li>{{ $assigned_course->course_title }}</li>
                 @endforeach
+              @else
+                  <p>None</p>
+              @endif
             </ul>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">

@@ -120,6 +120,7 @@ Route::get('/', function () {
     Route::post('/save-threshold', [AdminController::class, 'saveThreshold'])->name('save-threshold');
     Route::get('/view-student', [AdminController::class, 'viewStudent'])->name('view-student');
     Route::get('/edit-student', [AdminController::class, 'editStudent'])->name('edit-student');
+    Route::post('/reactivate-student', [AdminController::class, 'reactivateStudent'])->name('reactivate-student');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('update-student');
     Route::get('/course-search', [AdminController::class, 'courseSearch'])->name('course-search');
     Route::get('/manage-admin', [AdminController::class, 'viewAllAdmin'])->name('manage-admin');
@@ -198,11 +199,15 @@ Route::get('/', function () {
     Route::post('/reply-to-student', [EnrolledCourseController::class, 'replyToStudent'])->name('reply.to.student');
     Route::post('/ask-question', [EnrolledCourseController::class, 'askQuestion'])->name('ask.question');
     Route::get('/study-materials', [EnrolledCourseController::class, 'studyMaterials'])->name('study.materials');
+    Route::get('/instructor-chat', [EnrolledCourseController::class, 'instructorChatView'])->name('instructor-chat');
+    Route::post('/get-general-chat', [EnrolledCourseController::class, 'getGeneralChat'])->name('get-general-chat');
+    Route::post('/save-general-chat', [EnrolledCourseController::class, 'saveGeneralChat'])->name('save-general-chat');
     Route::post('/get-individual-student-chart', [EnrolledCourseController::class, 'getIndividualStudentChart'])->name('get-individual-student-chart');
     Route::post('/get-instructor-assignment-modal', [EnrolledCourseController::class, 'getAssignmentModal'])->name('get-instructor-assignment-modal');
     Route::post('/complete-assignment', [EnrolledCourseController::class, 'completeAssignment'])->name('complete-assignment');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
+    Route::post('/course-drop-down', [CoursesCatalogController::class, 'courseDropDown'])->name('course-drop-down');
     Route::get('/my-courses', [MyCoursesController::class, 'showMyCourses'])->name('my-courses');
     Route::get('/assigned-courses', [AssignedCoursesController::class, 'viewAssignedCourses'])->name('assigned-courses');
     Route::get('/student-list/{course}', [AssignedCoursesController::class, 'viewStudentList'])->name('student-list');

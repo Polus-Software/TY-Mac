@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\User;
 use App\Models\AssignedCourse;
 use App\Models\UserType;
+use App\Models\GeneralChat;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -475,7 +476,9 @@ class EnrolledCourseController extends Controller
                 'progress' => $progress,
                 'course_completion' => $course_completion,
 				'review_status' => $review_status,
-                'feedbackCount' => $feedbackCount
+                'feedbackCount' => $feedbackCount,
+                'instructorId' => $assigned,
+                'studentId' => $user->id
             ]);
         }
         
@@ -523,7 +526,7 @@ class EnrolledCourseController extends Controller
             $totalSessions = LiveSession::where('course_id', $courseId)->count();
             if($totalSessions != 0) {
               $progressTracker = LiveSession::where('start_date', '<', $current_date)->count();
-              $progress = $progressTracker * 100 / $totalSessions; 
+              $progress = round($progressTracker * 100 / $totalSessions, 0); 
             }
 
             $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
@@ -571,7 +574,9 @@ class EnrolledCourseController extends Controller
                 'likesCount' => $likesCount,
                 'dislikesCount' => $dislikesCount,
                 'studentsJoined' => $studentsJoined,
-                'spentHours' => $spentHours
+                'spentHours' => $spentHours,
+                'instructorId' => $user->id,
+                'courseId' => $courseId
             ]);
         }      
 
@@ -613,7 +618,10 @@ class EnrolledCourseController extends Controller
             $finalRating = $finalRating / $totalRatings;
         }
         
-        $course = Course::where('id', $courseId)->update(['course_rating' => $finalRating]);
+        $course = Course::where('id', $courseId);
+        $exRatingsCount = $course->value('ratings_count');
+        $exRatingsCount += 1;
+        $course = $course->update(['students_ratings' => $finalRating, 'ratings_count' => $exRatingsCount]);
         
         $details= [
             'studentName' => $studentName,
@@ -678,24 +686,24 @@ class EnrolledCourseController extends Controller
         $user = Auth::user();
         $userId = $user->id;
 
-        $assignmentId = $request->assignment_id;
+        $topicId = $request->topic_id;
         $assignments = Assignment::where('student_id' , $userId)
-                                  ->where('topic_assignment_id', $assignmentId)->get();
+                                  ->where('topic_id', $topicId)->get();
                                           
         if(count($assignments) == 0){
 
-        $topicAssignment = TopicAssignment::where('id', $assignmentId);
+        $topicAssignment = TopicAssignment::where('topic_id', $topicId);
         $courseId = $topicAssignment->value('course_id');
         $instructorId = $topicAssignment->value('instructor_id');
         $topicId = $topicAssignment->value('topic_id');
-
         $assignment = new Assignment;
 
-        $assignment->topic_assignment_id = $assignmentId;
+        $assignment->topic_assignment_id = $topicAssignment->value('id');
         $assignment->student_id = $userId;
         $assignment->course_id = $courseId;
         $assignment->instructor_id = $instructorId;
         $assignment->topic_id = $topicId;
+        $assignment->assignment_answer = "None";
         $assignment->is_submitted = false;
         $assignment->save();
         }
@@ -1133,5 +1141,84 @@ class EnrolledCourseController extends Controller
          $notification->save();
         return response()->json(['status' => 'success']);
 
+    }
+
+    public function instructorChatView(Request $request) {
+        $user = Auth::user();
+
+        $studentId = $request->student;
+        $instructorId = $request->instructor;
+
+        $course = AssignedCourse::where('user_id', $instructorId);
+        $courseId = $course->value('course_id');
+
+        return view('Student.studentInstructorChat',[
+            'courseId' => $courseId,
+            'studentId' => $studentId,
+            'instructorId' => $instructorId
+        ]);
+    }
+
+    public function getGeneralChat(Request $request) {
+        $html = "";
+        $user = Auth::user();
+        
+        $courseId = $request->courseId;
+        $studentId = $request->studentId;
+        $instructorId = $request->instructorId;
+
+        $chats = GeneralChat::where('course_id', $courseId)->where('student', $studentId)->where('instructor', $instructorId)->get();
+
+        foreach($chats as $chat) {
+            if($chat->sender == $chat->student) {
+                $sender = $chat->student_name;
+                if($user->id == $chat->student) {
+                    $sameUser = "same_user";
+                } else {
+                    $sameUser = "";
+                }
+                
+            } elseif($chat->sender == $chat->instructor) {
+                $sender = $chat->instructor_name;
+                if($user->id == $chat->instructor) {
+                    $sameUser = "same_user";
+                } else {
+                    $sameUser = "";
+                }
+            }
+            $html = $html . "<p class='chat-message-body ". $sameUser ."'><b class='participant-name'>". $sender .": </b><span class='participant-msg'>" . $chat->message . "</span></p>";
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function saveGeneralChat(Request $request) {
+
+        $user = Auth::user();
+        $loggedInId = $user->id;
+
+        $courseId = $request->courseId;
+        $studentId = $request->studentId;
+        $instructorId = $request->instructorId;
+        $message = $request->message;
+        
+        $generalChat = new GeneralChat;
+        $generalChat->course_id = $courseId;
+        $generalChat->student = $studentId;
+        $generalChat->instructor = $instructorId;
+        $studentName = User::where('id', $studentId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
+        $generalChat->student_name = $studentName;
+        $instName = User::where('id', $instructorId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
+        $generalChat->instructor_name = $instName;
+        $generalChat->message = $message;
+        if($loggedInId == $studentId) {
+            $generalChat->sender = $studentId;
+        } else {
+            $generalChat->sender = $instructorId;
+        }
+
+        $generalChat->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Successfully sent!']);
     }
 }

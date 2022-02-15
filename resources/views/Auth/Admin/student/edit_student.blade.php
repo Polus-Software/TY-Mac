@@ -59,6 +59,9 @@
             </ul>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+          @if($deactivated)
+            <a class="btn btn-outline-secondary" id="reactivate" data-id="{{$student_id}}">Re-activate</a>
+          @endif
           <a class="btn btn-outline-secondary" href="{{route('admin.viewall')}}">Cancel</a>
           <button type="submit" class="btn btn-primary">Update</button>
           </div>
@@ -72,6 +75,22 @@
 @endsection('content')
 @push('child-scripts')
   <script>
+    document.getElementById('reactivate').addEventListener('click', function(e) {
+      let studentId = document.getElementById('reactivate').getAttribute('data-id');
+      let path = "{{ route('reactivate-student') }}?student=" + studentId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        if(data.status == "success") {
+          this.style.display = "none";
+        }
+      });
+    });
   function makeid(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-?';

@@ -15,7 +15,7 @@
                             @if($course['use_custom_ratings'] == false) 
                                 ({{ $course['ratingsCount'] }})
                             @else
-                                (60)
+                                (10)
 							              @endif
                         </div>
                         <div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">

@@ -16,7 +16,7 @@
         <div class="py-4"><h3 class="titles">Reviews</h3></div>
 		<div class="row">
 			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3">
-				<form action="{{ route('admin.manager_reviews_filter') }}" enctype="multipart/form-data" method="GET" class="d-flex filter_table">
+				<form action="{{ route('admin.manager_reviews_filter') }}" enctype="multipart/form-data" method="GET" class="d-flex filter_table bg-light">
 					@csrf
 					<div class="col-md-4 m-lg-1">
 						<input type="text" name="course" class="form-control" placeholder="Course" value="{{$course}}">
@@ -58,21 +58,21 @@
 					@if($totalCount > 0)
 					@foreach($userfeedbacks as $userfeedback)
 					<tr id="{{$userfeedback['id'] }}">
-						<td>{{ $slno }}</td>
-						<td id="username_{{$userfeedback['id'] }}">{{$userfeedback['user_name'] }}</td>
-						<td>{{$userfeedback['course_name'] }}</td>
+						<td class="align-middle">{{ $slno }}</td>
+						<td class="align-middle" id="username_{{$userfeedback['id'] }}">{{$userfeedback['user_name'] }}</td>
+						<td class="align-middle">{{$userfeedback['course_name'] }}</td>
 						<td class="align-middle text-center">{{$userfeedback['rating'] }}</td>
-						<td >{{$userfeedback['firstpart'] }}@if($userfeedback['secondpart'] != '')<span class="more_content closed" id="more_content_{{$userfeedback['id'] }}">{{$userfeedback['secondpart'] }}</span><span id="dot_text_{{$userfeedback['id'] }}" class="dot_text">...</span><span class="dots closed" id="dots_{{$userfeedback['id'] }}" onclick='show_more({{$userfeedback['id'] }})'> More</span>
+						<td class="align-middle">{{$userfeedback['firstpart'] }}@if($userfeedback['secondpart'] != '')<span class="more_content closed" id="more_content_{{$userfeedback['id'] }}">{{$userfeedback['secondpart'] }}</span><span id="dot_text_{{$userfeedback['id'] }}" class="dot_text">...</span><span class="dots closed" id="dots_{{$userfeedback['id'] }}" onclick='show_more({{$userfeedback['id'] }})'> More</span>
 							@endif	
 						</td>
-						<td>
+						<td class="align-middle">
 							@if($userfeedback['is_moderated'] == 1)
 								<span class="badge rounded-pill bg-info text-dark bg-success" id="publish-badge-{{$userfeedback['id'] }}">Published</span>
 							@else
 								<span class="badge rounded-pill text-dark bg-warning" id="publish-badge-{{$userfeedback['id'] }}">Draft</span>
 							@endif
 						</td>
-						<td>
+						<td class="align-middle">
 							@if($userfeedback['is_moderated'] == 1)
 								<a class="btn btn-primary d-block unpublish_btn" id="Publish_{{$userfeedback['id'] }}" data-moderated="{{$userfeedback['is_moderated']}}" data-id="{{$userfeedback['id'] }}" onClick="update_review_status('{{$userfeedback['id'] }}');" data-bs-toggle="modal" data-bs-target="#confirm_modal_unpublish">Unpublish</a>
 							@else

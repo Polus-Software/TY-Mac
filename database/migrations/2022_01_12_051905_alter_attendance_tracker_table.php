@@ -14,7 +14,7 @@ class AlterAttendanceTrackerTable extends Migration
     public function up()
     {
         Schema::table('attendance_tracker', function (Blueprint $table) {
-            $table->integer('attendance_time')->nullable();
+            $table->integer('attendance_time', 2000)->nullable();
         });
     }
 

@@ -15,7 +15,7 @@ class CreateLiveSessionTable extends Migration
     {
         Schema::create('live_sessions', function (Blueprint $table) {
             $table->id('live_session_id');
-            $table->string('session_title');
+            $table->string('session_title', 2000);
             $table->unsignedBigInteger('course_id');
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('topic_id');

@@ -25,6 +25,9 @@ use Session;
 use Hash;
 use Carbon\Carbon;
 use Config;
+use App\Models\CustomTimezone;
+use DateTime;
+use DateTimeZone;
 
 class AuthController extends Controller
 {
@@ -133,14 +136,14 @@ class AuthController extends Controller
             if ($userType == Config::get('common.ROLE_NAME_STUDENT')) {
                 $redirectTo = '/';
             }
-            if ($userType == Config::get('common.ROLE_NAME_INSTRUCTOR')) {
-                $redirectTo = 'assigned-courses';
-            }
-            if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
-                $redirectTo = 'dashboard';
-            }
             if($request->redirect != ''){
                 $redirectTo = $request->redirect;
+            }  
+            if ($userType == Config::get('common.ROLE_NAME_INSTRUCTOR')) {
+                $redirectTo = '/assigned-courses';
+            }
+            if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
+                $redirectTo = '/dashboard';
             }
             return response()->json([
                 'status' => 'success',
@@ -180,8 +183,24 @@ class AuthController extends Controller
                
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
-
-                $currentBatchStartDate = $batch->value('start_date');
+                //Timezone change 
+                $offset = CustomTimezone::where('name', $batch->value('time_zone'))->value('offset');
+                        
+                $offsetHours = intval($offset[1] . $offset[2]);
+                $offsetMinutes = intval($offset[4] . $offset[5]);
+                    
+                if($offset[0] == "+") {
+                    $sTime = strtotime($session->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                    $eTime = strtotime($session->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                } else {
+                    $sTime = strtotime($session->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                    $eTime = strtotime($session->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                }
+                    
+                $start_time = date("H:i A", $sTime);
+                $end_time = date("H:i A", $eTime);
+                                    
+                $currentBatchStartDate = $session->start_date;
 				if($currentBatchStartDate < $current_date){
 					$total_live_hours = $total_live_hours+$batch->value('duration');
 				}
@@ -190,12 +209,10 @@ class AuthController extends Controller
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
                   
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
-
-                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
-                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
-                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
-                    
-                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    $start_date = Carbon::createFromFormat('Y-m-d', $currentBatchStartDate)->format('m/d/Y');
+                    $date = new DateTime("now");
+                    $time_zone = $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T'); 
+                    $date = $start_date . ', ' . $start_time . ' ' . $time_zone . ' - ' . $end_time . ' ' . $time_zone;
                     array_push($upComingSessionDetails, array(
                         'session_title'=>  $session_title,
                         'instructor' => $instructor,
@@ -209,12 +226,16 @@ class AuthController extends Controller
                     $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
 
-                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
-                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
-                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
-                    
-                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
-                    array_push($recentSessionDetails, array(
+                    $start_date = Carbon::createFromFormat('Y-m-d', $currentBatchStartDate)->format('m/d/Y');
+                    $date = new DateTime("now");
+                    $time_zone = $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T'); 
+                    $date = $start_date . ', ' . $start_time . ' ' . $time_zone . ' - ' . $end_time . ' ' . $time_zone;
+                    // $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                    // $start_time = Carbon::createFromFormat('H:i:s',$session->start_time)->format('h A');
+                   
+                    // $end_time = Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A');
+                    // $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    array_push($recentSessionDetails, array (
                         'session_title'=>  $session_title,
                         'instructor' => $instructor,
                         'enrolledCourses' => $enrolledCourses,
@@ -222,7 +243,6 @@ class AuthController extends Controller
                     ));
                 }
             }
-
             return view('Auth.Dashboard', [
                 'userType' => $userType,
                 'instructor_count' => $instructor_count,

@@ -32,6 +32,7 @@ use App\Models\SingleSessionPushRecord;
 use App\Models\SingleSession;
 use App\Models\SingleSessionUser;
 use App\Models\SingleSessionChat;
+use App\Models\CustomTimezone;
 use Carbon\Carbon;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
@@ -148,7 +149,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '99' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '099' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
@@ -174,11 +175,33 @@ class RtmTokenGeneratorController extends Controller
         $sessionsArray = [];
         $slNo = 1;
         foreach($sessions as $session) {
+            $batchId = $session->batch_id;
+            $cohortBatch = CohortBatch::where('id', $batchId);
+            $cohortTimezone = $cohortBatch->value('time_zone');
+
+            // Time zone
+            $offset = CustomTimezone::where('name', $cohortTimezone)->value('offset');
+                        
+            $offsetHours = intval($offset[1] . $offset[2]);
+            $offsetMinutes = intval($offset[4] . $offset[5]);
+                        
+            if($offset[0] == "+") {
+                $sTime = strtotime($session->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                $eTime = strtotime($session->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            } else {
+                $sTime = strtotime($session->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                $eTime = strtotime($session->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            }
+                        
+            $startTime = date("H:i A", $sTime);
+            $endTime = date("H:i A", $eTime);
+            $date = new DateTime("now");
+            $time_zone = $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T');
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
             $sesionTitle = $session->session_title;
-            $time = $session->start_date . ' - ' . $session->start_time . '-' . $session->end_time;
+            $time = Carbon::createFromFormat('Y-m-d',$session->start_date)->format('m/d/Y') . ' - ' . $startTime . '-' . $endTime . ' ' . $time_zone;
 
             array_push($sessionsArray, array (
                 'slNo' => $slNo,
@@ -246,82 +269,159 @@ class RtmTokenGeneratorController extends Controller
         $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
         $batchname = $selectedBatchObj->value('batchname');
         $occurrences = $selectedBatchObj->value('occurrence');
-        $occArr = explode(',', $occurrences);
-
-        $startDate = $selectedBatchObj->value('start_date');
-        $endDate = $selectedBatchObj->value('end_date');
-        $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
-
-        $date = $startDate;
-        while($date <= $endDate) {
-            if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
-                // Save schedules here
-                $liveSession = new LiveSession;
-                $liveSession->course_id = $sessionCourse;
-                $liveSession->topic_id = $topics[$topicsCounter]->topic_id;
-                $liveSession->session_title = 'Session ' . ($topicsCounter + 1) . ": " . $topics[$topicsCounter]->topic_title;
-                $liveSession->batch_id = $sessionBatch;
-                $liveSession->instructor = $sessionInstructor;
-                $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
-                $liveSession->start_time = $selectedBatchObj->value('start_time');
-                $liveSession->end_time = $selectedBatchObj->value('end_time');
-                $liveSession->save();
-                
-                $date = date('Y-m-d',strtotime($date . "+1 days"));
-
-
-                $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
-                $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
-               
-                $details=[
-                    'courseTitle' => $courseTitle,
-                    'instructorName'=> $instructorName,
-                    'batchname' =>$batchname,
-                    'startDate' => $batchStartDate,
-                    'endDate' => $batchEndDate,
-                    'startTime' => $batchStartTime,
-                    'sessionTitle'=> $topics[$topicsCounter]->topic_title
-                 ];
-                 
-                Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
-
-                $notification = new Notification; 
-                $notification->user = $sessionInstructor;
-                $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for".
-                                               $batchStartDate.".";
-                $notification->is_read = false;
-                $notification->save();
-
-                $students = EnrolledCourse::where('batch_id', $sessionBatch)->get();
-               
-                foreach($students as $student){
+        if($occurrences == "Daily") {
+            $startDate = $selectedBatchObj->value('start_date');
+            $endDate = $selectedBatchObj->value('end_date');
+            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
+            $date = $startDate;
+            
+            while($date <= $endDate) {
+                if(isset($topics[$topicsCounter])) {
+                    // Save schedules here
+                    $liveSession = new LiveSession;
+                    $liveSession->course_id = $sessionCourse;
+                    $liveSession->topic_id = $topics[$topicsCounter]->topic_id;
+                    $liveSession->session_title = 'Session ' . ($topicsCounter + 1) . ": " . $topics[$topicsCounter]->topic_title;
+                    $liveSession->batch_id = $sessionBatch;
+                    $liveSession->instructor = $sessionInstructor;
+                    $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
+                    $liveSession->start_time = $selectedBatchObj->value('start_time');
+                    $liveSession->end_time = $selectedBatchObj->value('end_time');
+                    $liveSession->save();
+                    $date = date('Y-m-d',strtotime($date . "+1 days"));
+    
+    
+                    $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
+                    $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
                    
-                    $studentName = User::find($student->user_id)->firstname.' '.User::find($student->user_id)->lastname;
-                    $studentEmail = User::find($student->user_id)->email;
-                   
-                    $data = [
-                    'courseTitle' => $courseTitle,
-                    'instructorName'=> $instructorName,
-                    'studentName' => $studentName,
-                    'startDate' => $batchStartDate,
-                    'endDate' => $batchEndDate,
-                    ];
-                
-                    Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
-                    
+                    $details=[
+                        'courseTitle' => $courseTitle,
+                        'instructorName'=> $instructorName,
+                        'batchname' =>$batchname,
+                        'startDate' => $batchStartDate,
+                        'endDate' => $batchEndDate,
+                        'startTime' => $batchStartTime,
+                        'sessionTitle'=> $topics[$topicsCounter]->topic_title
+                     ];
+                     
+                    Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
+    
                     $notification = new Notification; 
-                    $notification->user = $student->user_id;
-                    $notification->notification = "Dear ".$studentName." , Thank you for your interest in ".$courseTitle.". Live sessions for".$courseTitle." have been scheduled from ". $batchStartDate." to " .$batchEndDate.". We're excited to have you join our live session.";
+                    $notification->user = $sessionInstructor;
+                    $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for".
+                                                   $batchStartDate.".";
                     $notification->is_read = false;
                     $notification->save();
+    
+                    $students = EnrolledCourse::where('batch_id', $sessionBatch)->get();
+                   
+                    foreach($students as $student){
+                       
+                        $studentName = User::find($student->user_id)->firstname.' '.User::find($student->user_id)->lastname;
+                        $studentEmail = User::find($student->user_id)->email;
+                       
+                        $data = [
+                            'courseTitle' => $courseTitle,
+                            'instructorName'=> $instructorName,
+                            'studentName' => $studentName,
+                            'startDate' => $batchStartDate,
+                            'endDate' => $batchEndDate,
+                        ];
+                    
+                        Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
+                        
+                        $notification = new Notification; 
+                        $notification->user = $student->user_id;
+                        $notification->notification = "Dear ".$studentName." , Thank you for your interest in ".$courseTitle.". Live sessions for".$courseTitle." have been scheduled from ". $batchStartDate." to " .$batchEndDate.". We're excited to have you join our live session.";
+                        $notification->is_read = false;
+                        $notification->save();
+                    }
+    
+    
+                    $topicsCounter++;
+                } else {
+                    $date = date('Y-m-d',strtotime($date . "+1 days"));
+                } 
+            }
+        } else {
+            $occArr = explode(',', $occurrences);
+
+            $startDate = $selectedBatchObj->value('start_date');
+            $endDate = $selectedBatchObj->value('end_date');
+            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
+    
+            $date = $startDate;
+            while($date <= $endDate) {
+                if(in_array(Carbon::createFromFormat('Y-m-d',$date)->format('l'), $occArr) && isset($topics[$topicsCounter])) {
+                    // Save schedules here
+                    $liveSession = new LiveSession;
+                    $liveSession->course_id = $sessionCourse;
+                    $liveSession->topic_id = $topics[$topicsCounter]->topic_id;
+                    $liveSession->session_title = 'Session ' . ($topicsCounter + 1) . ": " . $topics[$topicsCounter]->topic_title;
+                    $liveSession->batch_id = $sessionBatch;
+                    $liveSession->instructor = $sessionInstructor;
+                    $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
+                    $liveSession->start_time = $selectedBatchObj->value('start_time');
+                    $liveSession->end_time = $selectedBatchObj->value('end_time');
+                    $liveSession->save();
+                    
+                    $date = date('Y-m-d',strtotime($date . "+1 days"));
+    
+    
+                    $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
+                    $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
+                   
+                    $details=[
+                        'courseTitle' => $courseTitle,
+                        'instructorName'=> $instructorName,
+                        'batchname' =>$batchname,
+                        'startDate' => $batchStartDate,
+                        'endDate' => $batchEndDate,
+                        'startTime' => $batchStartTime,
+                        'sessionTitle'=> $topics[$topicsCounter]->topic_title
+                     ];
+                     
+                    Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
+    
+                    $notification = new Notification; 
+                    $notification->user = $sessionInstructor;
+                    $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for".
+                                                   $batchStartDate.".";
+                    $notification->is_read = false;
+                    $notification->save();
+    
+                    $students = EnrolledCourse::where('batch_id', $sessionBatch)->get();
+                   
+                    foreach($students as $student){
+                       
+                        $studentName = User::find($student->user_id)->firstname.' '.User::find($student->user_id)->lastname;
+                        $studentEmail = User::find($student->user_id)->email;
+                       
+                        $data = [
+                        'courseTitle' => $courseTitle,
+                        'instructorName'=> $instructorName,
+                        'studentName' => $studentName,
+                        'startDate' => $batchStartDate,
+                        'endDate' => $batchEndDate,
+                        ];
+                    
+                        Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
+                        
+                        $notification = new Notification; 
+                        $notification->user = $student->user_id;
+                        $notification->notification = "Dear ".$studentName." , Thank you for your interest in ".$courseTitle.". Live sessions for".$courseTitle." have been scheduled from ". $batchStartDate." to " .$batchEndDate.". We're excited to have you join our live session.";
+                        $notification->is_read = false;
+                        $notification->save();
+                    }
+    
+    
+                    $topicsCounter++;
+                } else {
+                    $date = date('Y-m-d',strtotime($date . "+1 days"));
                 }
-
-
-                $topicsCounter++;
-            } else {
-                $date = date('Y-m-d',strtotime($date . "+1 days"));
             }
         }
+        
         
         return response()->json(['status' => 'success', 'message' => 'Added successfully']);
     }
@@ -1001,7 +1101,7 @@ class RtmTokenGeneratorController extends Controller
         $courseId = $liveSession->value('course_id');
         $topic = Topic::where('topic_id', $topicId)->value('topic_title');
         $course = Course::where('id', $courseId)->value('course_title');
-        $session = "99" . $session;
+        $session = "099" . $session;
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         $expireTimeInSeconds = 1800;

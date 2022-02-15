@@ -19,7 +19,7 @@ class CreateLiveSessionChatsTable extends Migration
             $table->foreign('live_session')->references('live_session_id')->on('live_sessions')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('student')->nullable();
             $table->foreign('student')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('message');
+            $table->string('message', 2000);
             $table->string('user_name');
             $table->timestamps();
         });

@@ -28,16 +28,25 @@
         <div class="col-12">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="assignment_title" value="{{$assignment_details['assignment_title']}}">
+            @if ($errors->has('assignment_title'))
+              <span class="text-danger">{{ $errors->first('assignment_title') }}</span>
+            @endif
           </div>
           <div class="col-12">
             <label for="description">Assignment</label>
             <textarea type="text" class="form-control" id="description" name="assignment_description">{{$assignment_details['assignment_description']}}</textarea>
+            @if ($errors->has('assignment_description'))
+              <span class="text-danger">{{ $errors->first('assignment_description') }}</span>
+            @endif
           </div>
           <div class="row bd-highlight pt-3">
           <div class="col-11">
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">
           <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
+          @if ($errors->has('document'))
+            <span class="text-danger">{{ $errors->first('document') }}</span>
+          @endif
           <!-- <input type="file" class="form-control" id="document" name="document"> -->
           <!-- <a href="" class="btn btn-sm btn-outline-dark"></a> -->
           <!-- <div class="vr me-2 ms-2"></div> -->
@@ -66,7 +75,9 @@
             <option value="{{$subTopic->topic_id}}" {{ ($subTopic->topic_id == $assignment_details['topic_id']) ? 'selected' :''}}>{{$subTopic->topic_title}}</option>
             @endforeach
             </select>
-            
+            @if ($errors->has('assignment_topic_id'))
+            <span class="text-danger">{{ $errors->first('assignment_topic_id') }}</span>
+          @endif
           </div>
           <div class="col-md-6">
             <label for="due-date">Assignment due date</label>
@@ -74,6 +85,9 @@
             <input type="text" class="form-control" placeholder="due-date" id="due-date" aria-label="due-date"  name="due-date" aria-describedby="due-date-icon" value="{{$assignment_details['due_date']}}">
             <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
           </div>
+          @if ($errors->has('due-date'))
+            <span class="text-danger">{{ $errors->first('due-date') }}</span>
+          @endif
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
           <button class="btn btn-primary" type="submit">Update assignment</button>

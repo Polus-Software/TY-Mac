@@ -1,6 +1,11 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+<style>
+#deactivate {
+  cursor: pointer;
+}
+</style>
 <!-- container -->
 <div class="container-fluid llp-container">
   <div class="row">
@@ -50,7 +55,7 @@
                 <a href="{{ route('view-student', ['student_id' => $studentData['id']]) }}" title="View student">
                   <i class="fas fa-eye"></i>
                   </a>                  
-                  <a title="Deactivate student" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
+                  <a title="Deactivate student" id="deactivate" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-student="{{ $studentData['id'] }}">
                   <i class="fas fa-trash-alt"></i>
                   </a>
                 </td>
@@ -91,7 +96,7 @@
           <div class="mb-3">
             <p>
             <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
-            Do you really want to delete this student? </p>
+            Do you really want to deactivate this student? </p>
           </div>
           <input type="hidden" name="studentId" id="studentId">
         </div>

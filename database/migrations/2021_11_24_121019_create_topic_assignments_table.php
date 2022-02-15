@@ -21,8 +21,8 @@ class CreateTopicAssignmentsTable extends Migration
             $table->foreign('topic_id')->references('topic_id')->on('topics')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('instructor_id');
             $table->foreign('instructor_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('assignment_title');
-            $table->string('assignment_description');
+            $table->string('assignment_title', 2000);
+            $table->string('assignment_description', 2000);
             $table->string('document')->nullable();
             $table->boolean('is_published')->default(1);
             $table->timestamps();

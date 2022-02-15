@@ -142,24 +142,28 @@ class CreatorController extends Controller
         if ($userId) {
             $creator = User::find($userId);
             if ($creator) {
-                $creator->delete();
+                $creator->forceDelete();
 
                 $creators = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->where('deleted_at', '=', NULL)
                 ->get();
-
-                foreach($creators as $creator) {
-                    $html = $html . '<tr id="' . $creator->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
-                    $html = $html . '<td class="align-middle">' . $creator->email . '</th>';
-                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $creator->created_at)->format("F d, Y") . '</td>';
-                    $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i></a>';
-                    $html = $html . '<a  href="" title="Edit instructor"><i class="fas fa-pen"></i></a>';
-                    $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
-                    $slNo = $slNo + 1;
+                if(count($creators)) {
+                    foreach($creators as $creator) {
+                        $html = $html . '<tr id="' . $creator->id .'">';
+                        $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
+                        $html = $html . '<td class="align-middle" colspan="2">' . $creator->firstname . ' ' . $creator->lastname . '</td>';
+                        $html = $html . '<td class="align-middle">' . $creator->email . '</th>';
+                        $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $creator->created_at)->format("F d, Y") . '</td>';
+                        $html = $html . '<td class="text-center align-middle"><a href="" title="View instructor"><i class="fas fa-eye"></i></a>';
+                        $html = $html . '<a  href="" title="Edit instructor"><i class="fas fa-pen"></i></a>';
+                        $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_instructor_modal" data-bs-id="' . $creator->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
+                        $slNo = $slNo + 1;
+                    }
+                } else {
+                    $html = $html . '<tr><td colspan="5"><h6 style="text-align:center;">No creators added.</h6></td></tr>';
                 }
+                
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
         }

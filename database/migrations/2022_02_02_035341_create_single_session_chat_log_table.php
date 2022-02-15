@@ -19,7 +19,7 @@ class CreateSingleSessionChatLogTable extends Migration
             $table->foreign('session')->references('id')->on('1_on_1_sessions')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('sender');
             $table->foreign('sender')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('message');
+            $table->string('message', 2000);
             $table->timestamps();
         });
     }

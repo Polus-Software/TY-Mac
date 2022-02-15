@@ -43,10 +43,10 @@
               <label for="threshold">Threshold (In %) :</label>
               <input id="threshold" type="text" class="form-control mt-3" value="{{ $rec }}"/>
               <div class="info-text mt-2">
-                  <small><i class="fa fa-info-circle"></i> Threshold percentage is used to determine which contents under a subtopic
-                are to be recommended to a student. If the percentage of the number of dislikes given by a student to contents within a subtopic out of 
-              all the contents in the subtopic, exceeds the threshold value, then all the contents are recommended to the student. If the percentage is less than 
-            the threshold, then only the contents that received the negative feedbacks are recommended to that particular student.</thead> </small>
+                  <small><i class="fa fa-info-circle"></i> If a live session topic has 5 subcontents and a students gives 3 negative and 2 positive
+                votes out of the 5, then the percentage of negative votes is calculated and compared with the recommendation threshold value. If it is less than
+               the threshold value, then only the subcontents with the negative votes are recommended. If the percentage is higher than threshold then all the subcontents
+               in that live session are recommended to the student. the same goes for the instructor as well.</thead> </small>
               </div>
               
             </div>
@@ -61,12 +61,19 @@
                 <h3 class="titles">Feedback survey questions</h3>
             </div>
             <div class="form-group">
-              <label for="question_1">Question 1</label>
-              <textarea id="question_1" type="text" class="form-control mt-3">{{ $f1Question }}</textarea>
-              <label for="question_2">Question 2</label>
-              <textarea id="question_2" type="text" class="form-control mt-3">{{ $f2Question }}</textarea>
-              <label for="question_3">Question 3</label>
-              <textarea id="question_3" type="text" class="form-control mt-3">{{ $f3Question }}</textarea>
+              <div class="mb-3">
+                <label for="question_1">Question 1</label>
+                <textarea id="question_1" type="text" class="form-control mt-3">{{ $f1Question }}</textarea>
+              </div>
+              <div class="mb-3">
+                <label for="question_2">Question 2</label>
+                <textarea id="question_2" type="text" class="form-control mt-3">{{ $f2Question }}</textarea>
+              </div>
+              <div class="">
+                <label for="question_3">Question 3</label>
+                <textarea id="question_3" type="text" class="form-control mt-3">{{ $f3Question }}</textarea>
+              </div>
+              
               <!-- <button class="btn btn-secondary mt-3" id="survey-questions-save">Save</button>
               <label style="color:green;" id="survey-success-msg"></label> -->
             </div>

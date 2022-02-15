@@ -14,7 +14,7 @@ class AddExternalLinkToTopicContents extends Migration
     public function up()
     {
         Schema::table('topic_contents', function (Blueprint $table) {
-            $table->text('external_link');
+            $table->text('external_link', 2000);
         });
     }
 

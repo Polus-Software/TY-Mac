@@ -33,7 +33,7 @@
             </thead>
             <tbody id="creator_tbody">
               @php ($slno = 0)
-              @if(!empty($creators))
+              @if(count($creators))
               @foreach ($creators as $creator)
               @php ($slno = $slno + 1)
               <tr id="{{$creator->id}}">

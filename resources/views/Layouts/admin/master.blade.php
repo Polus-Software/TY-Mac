@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/assets/admin.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/paginator.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/styles.css') }}">
+    <link rel="icon" href="{{ asset('/assets/favicon.png') }}">
     <title>TY-Mac</title>
 </head>
 

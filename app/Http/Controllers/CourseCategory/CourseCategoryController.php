@@ -104,17 +104,22 @@ class CourseCategoryController extends Controller
         if ($courseCategoryId) {
             $courseCategory = CourseCategory::find($courseCategoryId);
             if ($courseCategory) {
-                $courseCategory->delete();
+                $courseCategory->forceDelete();
                 $courseCategories = CourseCategory::all();
-                foreach($courseCategories as $courseCategory) {
-                    $html = $html . '<tr id="' . $courseCategory->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $courseCategory->category_name . '</td>';
-                    $html = $html . '<td class="align-middle text-center"><a title="View course category" data-bs-toggle="modal" data-bs-target="#view_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-eye"></i></a>';
-                    $html = $html . '<a title="Edit course category" data-bs-toggle="modal" data-bs-target="#edit_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-pen"></i></a>';
-                    $html = $html . '<a title="Delete course category" data-bs-toggle="modal" data-bs-target="#delete_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
-                    $slNo = $slNo + 1;
+                if($courseCategories->count()) {
+                    foreach($courseCategories as $courseCategory) {
+                        $html = $html . '<tr id="' . $courseCategory->id .'">';
+                        $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
+                        $html = $html . '<td class="align-middle" colspan="2">' . $courseCategory->category_name . '</td>';
+                        $html = $html . '<td class="align-middle text-center"><a title="View course category" data-bs-toggle="modal" data-bs-target="#view_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-eye"></i></a>';
+                        $html = $html . '<a title="Edit course category" data-bs-toggle="modal" data-bs-target="#edit_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-pen"></i></a>';
+                        $html = $html . '<a title="Delete course category" data-bs-toggle="modal" data-bs-target="#delete_category_modal" data-bs-id="' . $courseCategory->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
+                        $slNo = $slNo + 1;
+                    }
+                } else {
+                    $html = $html . '<tr><td colspan="3"><h6 style="text-align:center;">No admins added.</h6></td></tr>';
                 }
+                
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
         }

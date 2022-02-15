@@ -44,10 +44,18 @@ class CoursesCatalogController extends Controller
         $courseDetails = [];
         $allCourseCategory = CourseCategory::all();
         $courses = Course::where('is_published', true)->get();
-
+        $loggedInUserRole = Auth::user();
+        if($loggedInUserRole) {
+            $uRole = $loggedInUserRole->role_id;
+            $loggedInUserType = UserType::where('id', $uRole)->value('user_role');
+            if ($loggedInUserType == Config::get('common.ROLE_NAME_ADMIN') || $loggedInUserType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
+                return redirect('/dashboard');
+            }
+        }
+        
         $filters = Filter::all();
         $userType =  UserType::where('user_role', Config::get('common.ROLE_NAME_INSTRUCTOR'))->value('id');
-
+        
         $instructors = User::where('role_id', $userType)->get();
 
         foreach($courses as $course)
@@ -128,6 +136,9 @@ class CoursesCatalogController extends Controller
         $userType = "";
         if($user){
             $userType =  UserService::getRoleName($user->role_id);
+        }
+        if ($userType == Config::get('common.ROLE_NAME_ADMIN') || $userType == Config::get('common.ROLE_NAME_CONTENT_CREATOR')) {
+            return redirect('dashboard');
         }
         if($userType == "student") {
             $enrollment = CourseService::getEnrolledCourseInfo($user->id, $id);
@@ -361,6 +372,11 @@ class CoursesCatalogController extends Controller
         $notification->is_read = false;
         $notification->save();
     }
+
+        $courseObj = Course::where('id', $courseId);
+        $enrollmentsCount = $courseObj->value('enrollments');
+        $courseObj = $courseObj->update(['enrollments' => $enrollmentsCount + 1]);
+
         return response()->json([
             'status' => 'success', 
             'message' => 'Enrolled successfully'
@@ -511,12 +527,31 @@ class CoursesCatalogController extends Controller
                 } else {
                     $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="'. $course->course_title .'"><div class="card-body pb-0 fs-14">';
                 }
+
+                // ratings
+
+                $ratings = 0;
+                $ratingsSum = 0;
+                $ratingsCount = 0;
+
+                if($course->use_custom_ratings) {
+                    $ratings = $course->course_rating;
+                } else {
+                    $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                    foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                        $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                        $ratingsCount++;
+                    }
+                    if($ratingsCount != 0) {
+                        $ratings = intval($ratingsSum/$ratingsCount);
+                    }
+                }
                 
                 $html = $html . '<h5 class="card-title text-center text-truncate fs-16 fw-bold">'. $course->course_title .'</h5>';
                 $html = $html . '<p class="card-text text-sm-start text-truncate">'. $course->description .'</p>';
                 $html = $html . '<div class="row mb-3"><div class="col-lg-6 col-sm-6 col-6">';
                 for($i=1;$i<=5;$i++) {
-                    if($i <= $course->course_rating) {
+                    if($i <= $ratings) {
                         $html = $html . '<i class="fas fa-star rateCourse"></i>';
                     } else {
                         $html = $html . '<i class="far fa-star rateCourse"></i>';
@@ -525,7 +560,7 @@ class CoursesCatalogController extends Controller
 				if($course->use_custom_ratings == false) {
 					$html = $html . '('.$ratingsCount.')</div>';  
 				} else {
-					$html = $html . '(60)</div>'; 
+					$html = $html . '(10)</div>'; 
 				}
                 
                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
@@ -547,6 +582,102 @@ class CoursesCatalogController extends Controller
         'html' => $html
      ]);
     
+    }
+
+    public function courseDropDown(Request $request) {
+        $html = "";
+        $filterValue = $request->filterValue;
+        if($filterValue == "most_popular") {
+            $courses = Course::where('is_published', true)->orderBy('enrollments', 'DESC')->get();
+        } elseif ($filterValue == "most_reviewed") {
+            $courses = Course::where('is_published', true)->orderBy('ratings_count', 'DESC')->get();
+        }
+
+        if(count($courses)) {
+            foreach($courses as $course) {
+                 
+                 $ratingsCount = 0;
+                 if($course->use_custom_ratings) {
+                     $ratings = $course->course_rating;
+                 } 
+                 else{
+                     $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                     foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                         $ratingsCount++;
+                     }
+                 }
+                 $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');     
+                 $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
+                 $instructorfirstname = User::where('id', $assigned)->value('firstname');
+                 $instructorlastname = User::where('id', $assigned)->value('lastname');
+                 
+                 $duration = $course->course_duration;
+                 $hours = intval($duration);
+                 $minutesDecimal = $duration - $hours;
+                 $minutes = ($minutesDecimal/100) * 6000;
+     
+                 $duration = $hours . 'h ' . $minutes . 'm';
+                 $html = $html . '<div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4"><div class="card-1">';
+                 if(!$course->course_thumbnail_image) {
+                     $html = $html . '<img src="/storage/courseThumbnailImages/defaultImage.png" class="card-img-top" alt="'. $course->course_title .'"><div class="card-body pb-0 fs-14">';
+                 } else {
+                     $html = $html . '<img src="/storage/courseThumbnailImages/'. $course->course_thumbnail_image .'" class="card-img-top" alt="'. $course->course_title .'"><div class="card-body pb-0 fs-14">';
+                 }
+ 
+                 // ratings
+ 
+                 $ratings = 0;
+                 $ratingsSum = 0;
+                 $ratingsCount = 0;
+ 
+                 if($course->use_custom_ratings) {
+                     $ratings = $course->course_rating;
+                 } else {
+                     $generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+                     foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+                         $ratingsSum = $ratingsSum + $generalCourseFeedback->rating;
+                         $ratingsCount++;
+                     }
+                     if($ratingsCount != 0) {
+                         $ratings = intval($ratingsSum/$ratingsCount);
+                     }
+                 }
+                 
+                 $html = $html . '<h5 class="card-title text-center text-truncate fs-16 fw-bold">'. $course->course_title .'</h5>';
+                 $html = $html . '<p class="card-text text-sm-start text-truncate">'. $course->description .'</p>';
+                 $html = $html . '<div class="row mb-3"><div class="col-lg-6 col-sm-6 col-6">';
+                 for($i=1;$i<=5;$i++) {
+                     if($i <= $ratings) {
+                         $html = $html . '<i class="fas fa-star rateCourse"></i>';
+                     } else {
+                         $html = $html . '<i class="far fa-star rateCourse"></i>';
+                     }
+                 } 
+                 if($course->use_custom_ratings == false) {
+                     $html = $html . '('.$ratingsCount.')</div>';  
+                 } else {
+                     $html = $html . '(10)</div>'; 
+                 }
+                 
+                 $html = $html . '<div class="col-lg-6 col-sm-6 col-6 tech d-flex justify-content-end">';  
+                 $html = $html . '<img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">'. $courseCategory .'</div></div>';
+                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
+                 $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
+                 $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
+                 $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1">'. $course->course_difficulty .'</p></div></div></li></ul>';
+                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
+                 $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Go to details</a>'; 
+                 $html = $html . '</div></div></div></div></div>';        
+             }
+         } else {
+             $html = '<div class="think-nodata-box px-4 py-5 my-5 text-center mh-100"><img class="mb-3" src="/storage/icons/no_data_available.svg" alt="No courses to be shown!"><h4 class="fw-bold">No courses to be shown!</h4></div>';
+         }
+
+         return response()->json([
+            'status' => 'success', 
+            'message' => 'submitted successfully',
+            'html' => $html
+         ]);
     }
 
     public static function getAllCourses() {

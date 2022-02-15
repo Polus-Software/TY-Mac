@@ -70,6 +70,7 @@ return array(
     'App\\Models\\CustomTimezone' => $baseDir . '/app/Models/CustomTimezone.php',
     'App\\Models\\EnrolledCourse' => $baseDir . '/app/Models/EnrolledCourse.php',
     'App\\Models\\Filter' => $baseDir . '/app/Models/Filter.php',
+    'App\\Models\\GeneralChat' => $baseDir . '/app/Models/GeneralChat.php',
     'App\\Models\\GeneralCourseFeedback' => $baseDir . '/app/Models/GeneralCourseFeedback.php',
     'App\\Models\\GeneralLiveSessionFeedback' => $baseDir . '/app/Models/GeneralLiveSessionFeedback.php',
     'App\\Models\\GeneralSetting' => $baseDir . '/app/Models/GeneralSetting.php',

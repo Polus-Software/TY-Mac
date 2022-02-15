@@ -74,7 +74,7 @@
           <div class="col-md-6">
             <label for="due-date" class="mb-2">Assignment due date</label>
             <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon" value="{{old('due-date')}}">
+            <input type="text" class="form-control" placeholder="Ex: 12/25/2021" id="due-date" name="due-date" aria-label="due-date" aria-describedby="due-date-icon" value="{{old('due-date')}}" autocomplete="off">
             <span class="input-group-text" id="due-date-icon"><i class="fas fa-calendar-alt"></i></span>
           </div>
           @if ($errors->has('due-date'))
@@ -100,6 +100,7 @@
   window.onload = function(){
     startdate = new dtsel.DTS('input[name="due-date"]', {
       dateFormat: "mm-dd-yyyy",
+      direction: 'BOTTOM',
     paddingX: 15, paddingY: 15
   });
     document.getElementById('add-ext-link-assign').addEventListener('click', function(event) {

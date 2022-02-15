@@ -16,10 +16,10 @@ class AddMoreColumnsToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('designation')->nullable();
             $table->string('institute')->nullable();
-            $table->string('description0', 2550)->nullable();
-            $table->string('twitter_social')->nullable();
-            $table->string('linkedIn_social')->nullable();
-            $table->string('youtube_social')->nullable();
+            $table->string('description', 2550)->nullable();
+            $table->string('twitter_social', 2000)->nullable();
+            $table->string('linkedIn_social', 2000)->nullable();
+            $table->string('youtube_social', 2000)->nullable();
 
         });
     }

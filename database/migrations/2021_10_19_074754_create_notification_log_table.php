@@ -24,7 +24,7 @@ class CreateNotificationLogTable extends Migration
             $table->unsignedBigInteger('instructor_id');
             $table->foreign('instructor_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('is_sent');
-            $table->string('notification_content');
+            $table->string('notification_content', 2000);
             $table->timestamps();
         });
     }

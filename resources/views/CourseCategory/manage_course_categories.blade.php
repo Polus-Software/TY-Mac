@@ -81,6 +81,7 @@
           <div class="mb-3">
             <label for="course_category" class="col-form-label">Course Category Name</label>
             <input type="text" class="form-control" id="course_category"></input>
+            <p id="save_course_category_error" style="color:red;display:none;">Enter the category</p>
           </div>
         </form>
       </div>
@@ -133,6 +134,7 @@
           <div class="mb-3">
             <label for="course_category" class="col-form-label">Course Category Name</label>
             <input type="text" class="form-control" id="edit_category_name"></input>
+            <p id="update_course_category_error" style="color:red;display:none;">Enter the category</p>
           </div>
         </form>
       </div>
@@ -178,6 +180,12 @@
 <script>
   document.getElementById('save_category').addEventListener('click', (event) => {
     let categoryName = document.getElementById('course_category').value;
+    if(categoryName == "") {
+        document.getElementById('save_course_category_error').style.display = "block";
+        return false;
+    } else {
+      document.getElementById('save_course_category_error').style.display = "none";
+    }
     let path = "{{ route('add-course-category') }}?category_name=" + categoryName;
     fetch(path, {
       method: 'POST',
@@ -236,7 +244,12 @@
   document.getElementById('update_category_btn').addEventListener('click', (event) => {
     var categoryId = document.getElementById('update_category_btn').getAttribute('category_id');
     var newCategoryName = document.getElementById('edit_category_name').value;
-
+    if(newCategoryName == "") {
+        document.getElementById('update_course_category_error').style.display = "block";
+        return false;
+    } else {
+      document.getElementById('update_course_category_error').style.display = "none";
+    }
     let path = "{{ route('update-course-category') }}?category_id=" + categoryId + "&new_category_name=" + newCategoryName;
     fetch(path, {
       method: 'POST',

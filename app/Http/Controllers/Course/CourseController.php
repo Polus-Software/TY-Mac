@@ -119,8 +119,9 @@ class CourseController extends Controller
             'course_duration' =>'required',
             'course_rating' =>'required',
             'what_learn_1' =>'required',
-            'course_image' =>'required| mimes:jpeg,jpg,png,.svg| max:500000',
-            'course_thumbnail_image' =>'required| mimes:jpeg,jpg,png,.svg| max:100000',
+            'who_learn_points' => 'required',
+            'course_image' =>'required| mimes:jpeg,jpg,png,.svg| max:50000',
+            'course_thumbnail_image' =>'required| mimes:jpeg,jpg,png,.svg| max:10000',
             //'course_image' =>'required| dimensions:width=604,height=287| mimes:jpeg,jpg,png,.svg| max:500000',
             //'course_thumbnail_image' =>'required| dimensions:width=395,height=186| mimes:jpeg,jpg,png,.svg| max:100000',
         ]);
@@ -477,6 +478,15 @@ class CourseController extends Controller
     }
 
     public function saveSubTopic(Request $request) {
+        $validate_array = [];
+        for($i = 1; $i<= $request->topic_count; $i++) {
+            $validate_array['topic_title'. $i] = 'required';
+            for($j=1; $j <= $request->input('content_count_topic_' .$i);$j++){
+                $validate_array['content_title_'.$i.'_'. $j] = 'required';
+            }
+        }
+        
+        $this->validate($request, $validate_array );
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
@@ -539,13 +549,13 @@ class CourseController extends Controller
                     }
                 }
             }
-        }
-        else{
+        } else {
             for($i = 1; $i<= $topic_count; $i++) {
-                $request->validate([
-                    'topic_title' . $i => 'required',
-                    'content_count_topic_'.$i => 'required'
-                ]);
+                // $request->validate([
+                //     'topic_title' . $i => 'required',
+                //     'content_count_topic_'.$i => 'required'
+                // ]);
+                
                 $topic = new Topic;
                 $topic->topic_title = $request->input('topic_title'.$i);
                 $topic->course_id = $course_id;
@@ -553,6 +563,10 @@ class CourseController extends Controller
                 $topic->save();
                 $content_count = $request->input('content_count_topic_'.$i);            
                 for($j = 1; $j<=$content_count; $j++) {
+                    // $request->validate([
+                    //     'content_title_'.$i.'_'.$j => 'required',
+                    //     'content_upload['.$i.']['.$j.']' => 'required'
+                    // ]);
                     $external_links = $extension = $TopicFileName = '';
                     if($request->file() && !empty($request->content_upload[$i][$j])){
                         $subtopicFile = $request->content_upload[$i][$j];
@@ -790,7 +804,6 @@ class CourseController extends Controller
             'assignment_title'=>'required',
             'assignment_description' => 'required',
             'document' =>'required',
-            //'difficulty' => 'required',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -803,8 +816,8 @@ class CourseController extends Controller
         $topicAssignment = new TopicAssignment;
         $topicAssignment->assignment_title= $request->input('assignment_title');
         $topicAssignment->assignment_description= $request->input('assignment_description');
-        $topicAssignment->due_date = Carbon::parse($request->input('due-date'))->format('Y-m-d');
-       
+        $topicAssignment->due_date = Carbon::createFromFormat('m-d-Y', $request->input('due-date'))->format('Y-m-d');
+        
         $topicAssignment->topic_id = $topicId;
         $topicAssignment->course_id = $course_id ;
         $topicAssignment->instructor_id = $instructorId;
@@ -824,6 +837,12 @@ class CourseController extends Controller
      * Saving assignments to db
      */
     public function updateAssignment(Request $request) {
+        $request->validate([
+            'assignment_title'=>'required',
+            'assignment_description' => 'required',
+            'due-date' =>'required',
+            'assignment_topic_id' =>'required'
+        ]);
         $topicId =intval($request->input('assignment_topic_id'));
         $assignment_id = intval($request->input('assignment_id'));
         $course_id = $request->input('course_id');
@@ -872,6 +891,23 @@ class CourseController extends Controller
 
     public function saveCohortBatch(Request $request) {
         
+        $validatedData = $request->validate([
+            'cohortbatch_title'=>'required',
+            'batchname' => 'required',
+            'cohortbatch_startdate' =>'required',
+            'cohortbatch_enddate' => 'required|after_or_equal:cohortbatch_startdate',
+            'cohortbatch_starttime' =>'required',
+            'cohortbatch_endtime' =>'required|after:cohortbatch_starttime',
+            'cohortbatch_timezone' =>'required',
+            'students_count' =>'required',  
+            'cohortbatch_batchname' => 'required'
+        ],
+        [
+         'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date',
+         'cohortbatch_endtime.after'=> 'Time should be after start time',
+        ]
+     );
+
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -893,7 +929,8 @@ class CourseController extends Controller
         $cohortbatch->course_id = $request->input('course_id');  
         $cohortbatch->start_date = Carbon::parse($request->input('cohortbatch_startdate'))->format('Y-m-d');
         $cohortbatch->end_date = Carbon::parse($request->input('cohortbatch_enddate'))->format('Y-m-d');
-		$cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
+        $cohortbatch->duration = (new Carbon($request->input('cohortbatch_starttime')))->diff(new Carbon($request->input('cohortbatch_endtime')))->format('%h');
+		// $cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
 		$cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;
@@ -961,6 +998,23 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
+        $validatedData = $request->validate([
+            'cohortbatch_title'=>'required',
+            'batchname' => 'required',
+            'cohortbatch_startdate' =>'required',
+            'cohortbatch_enddate' => 'required|after_or_equal:cohortbatch_startdate',
+            'cohortbatch_starttime' =>'required',
+            'cohortbatch_endtime' =>'required|after:cohortbatch_starttime',
+            'cohortbatch_timezone' =>'required',
+            'students_count' =>'required',  
+            'cohortbatch_batchname' => 'required'
+        ],
+        [
+            'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date',
+            'cohortbatch_endtime.after'=> 'Time should be after start time',
+        ]
+     );
+
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -987,7 +1041,8 @@ class CourseController extends Controller
         $cohortbatch->course_id = $course_id;  
         $cohortbatch->start_date = $request->input('cohortbatch_startdate');
         $cohortbatch->end_date = $request->input('cohortbatch_enddate');
-		$cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
+        $cohortbatch->duration = (new Carbon($request->input('cohortbatch_starttime')))->diff(new Carbon($request->input('cohortbatch_endtime')))->format('%h');
+		// $cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');
         $cohortbatch->start_time = $startTime;
         $cohortbatch->end_time = $endTime;

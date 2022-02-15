@@ -33,7 +33,7 @@
             </thead>
             <tbody id="admin_tbody">
               @php ($slno = 0)
-              @if(!empty($admins))
+              @if(count($admins))
               @foreach ($admins as $admin)
               @php ($slno = $slno + 1)
               <tr id="{{$admin->id}}">
@@ -48,9 +48,11 @@
                   <a href="{{ route('edit-admin', ['admin_id' => $admin->id]) }}" title="Edit admin">
                     <i class="fas fa-pen"></i>
                   </a>
+                  @if($userId != $admin->id)
                   <a href="#" title="Delete admin" data-bs-toggle="modal" data-bs-target="#delete_admin_modal" data-bs-id="{{$admin->id}}">
                     <i class="fas fa-trash-alt"></i>
                   </a>
+                  @endif
                 </td>
               </tr>
               @endforeach

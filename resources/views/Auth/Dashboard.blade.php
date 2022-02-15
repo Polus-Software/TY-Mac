@@ -1,6 +1,7 @@
 @extends('Layouts.admin.master')
 @section('content')
-@include('Layouts.admin.header')
+<!-- @include('Layouts.admin.header') -->
+@extends('header')
 <!-- container -->
 <div class="container-fluid llp-container">
   <div class="row">
@@ -72,9 +73,6 @@
                     <td>{{$upComingSessionDetail['instructor']}}</td>
                     <td>{{$upComingSessionDetail['enrolledCourses']}}</td>
                     <td>{{$upComingSessionDetail['date']}}</td>
-                    
-                    
-                    <td class="text-center"><i class="fas fa-ellipsis-v"></i></td>
                   </tr>
                  @endforeach
                   @else

@@ -32,7 +32,7 @@
 
           
           <div class="col-12">
-            <label for="title">Days <small style="font-size:12px;color:#a3a3a3;">(Seperated by '-')</small></label>
+            <label for="title">Days <small style="font-size:12px;color:#a3a3a3;">(Ex: MON - WED - FRI)</small></label>
             <input type="text" class="form-control" id="title" name="cohortbatch_title" value="">
             @if ($errors->has('cohortbatch_title'))
               <span class="text-danger">The batch title is required</span>

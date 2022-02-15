@@ -1,5 +1,6 @@
 <!-- sidebar -->
 <div class="bg-light d-flex flex-column justify-content-between flex-shrink-0 llp-sidebar">
+
   <ul class="nav nav-pills flex-column mb-auto mt-5">
     <li class="nav-item">
       <a class="nav-link link-dark" href="">
@@ -7,7 +8,7 @@
         @if($courseStatus == 0)
         <span id="publish-badge" class="badge bg-warning text-dark">Draft</span>
         @else
-        <span class="badge bg-success text-dark">Published</span>
+        <span id="publish-badge" class="badge bg-success text-dark">Published</span>
         @endif
       </a>
     </li>

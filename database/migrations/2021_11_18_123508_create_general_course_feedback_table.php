@@ -20,8 +20,8 @@ class CreateGeneralCourseFeedbackTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('rating');
-            $table->text('comment');
-            $table->boolean('is_moderated')->default(1);
+            $table->text('comment', 2000);
+            $table->boolean('is_moderated')->default(0);
             $table->timestamps();
         });
     }

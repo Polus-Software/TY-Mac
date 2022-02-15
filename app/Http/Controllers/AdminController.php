@@ -82,6 +82,9 @@ class AdminController extends Controller
             $userType =  UserType::find($user->role_id)->user_role;
             if ($studentId) {
                 $student = User::where('id', $studentId);
+                if($student->count() == 0) {
+                    $student = User::withTrashed()->where('id', $studentId);
+                }
                 $enrolled_courses = DB::table('enrolled_courses')
                     ->join('courses', 'enrolled_courses.course_id', '=', 'courses.id')
                     ->where('enrolled_courses.user_id', $studentId)
@@ -111,9 +114,16 @@ class AdminController extends Controller
         try {
             $studentId = $request->input('student_id');
             $user = Auth::user();
+            $deactivated = false;
+            
             $userType =  UserType::find($user->role_id)->user_role;
             if ($studentId) {
                 $student = User::where('id', $studentId);
+                if($student->count() == 0) {
+                    $student = User::withTrashed()->where('id', $studentId);
+                    $deactivated = $student->value('deleted_at') == null ? false : true; 
+                }
+                
                 $enrolled_courses = DB::table('enrolled_courses')
                     ->join('courses', 'enrolled_courses.course_id', '=', 'courses.id')
                     ->where('enrolled_courses.user_id', $studentId)
@@ -131,7 +141,8 @@ class AdminController extends Controller
                 'student_id' => $studentId,
                 'studentDetails' => $data,
                 'userType' => $userType,
-                'enrolled_courses' => $enrolled_courses
+                'enrolled_courses' => $enrolled_courses,
+                'deactivated' => $deactivated
             ]);
         } catch (Exception $exception) {
             return ($exception->getMessage());
@@ -461,7 +472,8 @@ class AdminController extends Controller
         
         return view('Auth.Admin.manage_admin', [
             'admins' => $admins,
-            'userType' => $userTypeLoggedIn
+            'userType' => $userTypeLoggedIn,
+            'userId' => $user->id
         ]);
         }else{
             return redirect('/403');
@@ -583,24 +595,28 @@ class AdminController extends Controller
         if ($userId) {
             $admin = User::find($userId);
             if ($admin) {
-                $admin->delete();
+                $admin->forceDelete();
 
                 $admins = DB::table('users')
                 ->where('role_id', '=', $userType)
                 ->where('deleted_at', '=', NULL)
                 ->get();
-
-                foreach($admins as $admin) {
-                    $html = $html . '<tr id="' . $admin->id .'">';
-                    $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                    $html = $html . '<td class="align-middle" colspan="2">' . $admin->firstname . ' ' . $admin->lastname . '</td>';
-                    $html = $html . '<td class="align-middle">' . $admin->email . '</th>';
-                    $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $admin->created_at)->format("F d, Y") . '</td>';
-                    $html = $html . '<td class="text-center align-middle"><a href="" title="View admin"><i class="fas fa-eye"></i></a>';
-                    $html = $html . '<a  href="" title="Edit admin"><i class="fas fa-pen"></i></a>';
-                    $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_admin_modal" data-bs-id="' . $admin->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
-                    $slNo = $slNo + 1;
+                if(count($admins)) {
+                    foreach($admins as $admin) {
+                        $html = $html . '<tr id="' . $admin->id .'">';
+                        $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
+                        $html = $html . '<td class="align-middle" colspan="2">' . $admin->firstname . ' ' . $admin->lastname . '</td>';
+                        $html = $html . '<td class="align-middle">' . $admin->email . '</th>';
+                        $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $admin->created_at)->format("F d, Y") . '</td>';
+                        $html = $html . '<td class="text-center align-middle"><a href="" title="View admin"><i class="fas fa-eye"></i></a>';
+                        $html = $html . '<a  href="" title="Edit admin"><i class="fas fa-pen"></i></a>';
+                        $html = $html . '<a data-bs-toggle="modal" data-bs-target="#delete_admin_modal" data-bs-id="' . $admin->id . '"><i class="fas fa-trash-alt"></i></a></td></tr>';
+                        $slNo = $slNo + 1;
+                    }
+                } else {
+                    $html = $html . '<tr><td colspan="5"><h6 style="text-align:center;">No admins added.</h6></td></tr>';
                 }
+                
                 return response()->json(['status' => 'success', 'message' => 'Updated successfully', 'html' => $html]);
             }
         }
@@ -649,7 +665,7 @@ class AdminController extends Controller
         $feedbackObj = collect($userfeedbacks);
         $userfeedbacks = $this->paginate($feedbackObj, 10);
 		$userfeedbacks->withPath('');
-		//var_dump($userfeedbacks);
+        
 		return view('Auth.Admin.view_reviews', [
             'userfeedbacks' => $userfeedbacks,
 			'userType' => $userType,
@@ -733,5 +749,15 @@ class AdminController extends Controller
         }
 	}
 	/* by jibi for getting user reviews ends */
+
+    public function reactivateStudent(Request $request) {
+        $student = $request->student;
+        if($student) {
+            User::withTrashed()->where('id', $student)->restore();
+            return response()->json(['status' => 'success', 'message' => 'Reactivated']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Some error']);
+        }
+    }
 
 }
