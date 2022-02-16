@@ -905,8 +905,8 @@ class RtmTokenGeneratorController extends Controller
                 $singleSessionUser = SingleSessionUser::where('student', $userId)->where('instructor', $instructor)->update(['student_present' => true]);
             } else {
                 $userId = $student;
-
                 $singleSession = SingleSession::where('topic_content_id', $topicId)->where('student', $student)->get();
+                
                 if(count($singleSession) == 0) {
                     $singleSession = new SingleSession;
                     $singleSession->topic_content_id = $topicId;
@@ -915,16 +915,19 @@ class RtmTokenGeneratorController extends Controller
                     $singleSession->save();
                 }
                 
-                $singleSessionUser = SingleSessionUser::where('session', $singleSession[0]->id)->get();
+                    
+               
+                
+                $singleSessionUser = SingleSessionUser::where('session', $singleSession->id)->get();
                 if(count($singleSessionUser) == 0) {
                     $singleSessionUser = new SingleSessionUser;
-                    $singleSessionUser->session = $singleSession[0]->id;
+                    $singleSessionUser->session = $singleSession->id;
                     $singleSessionUser->student = $userId;
                     $singleSessionUser->instructor = $userObj->id;
                     $singleSessionUser->instructor_present = true;
                     $singleSessionUser->save();
                 } else {
-                    $singleSessionUser = SingleSessionUser::where('session', $singleSession[0]->id)->update(['instructor_present' => true]); 
+                    $singleSessionUser = SingleSessionUser::where('session', $singleSession->id)->update(['instructor_present' => true]); 
                 }
             }
             

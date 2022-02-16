@@ -788,7 +788,7 @@ small#assignment_table_batch {
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">1-on-1 Session</button>
+                                                                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['content_id']}}">1-on-1 Session</button>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                    <button type="button" class="btn btn-outline-secondary text-dark w-100" data-bs-toggle="modal" data-bs-target="#chartModal" data-bs-student-id="{{$recommendation['student_id']}}"  data-bs-topic-id="{{$recommendation['topic_id']}}">Chart</button>
