@@ -24,7 +24,7 @@
  </ul>
 </div> 
     <div class="row">
-          @foreach($assignments as $assignment)
+          @forelse($assignments as $assignment)
           <div class="col-12 mb-3">
             <div class="card">
               <div class="card-header text-capitalize">
@@ -49,7 +49,9 @@
               </div>
             </div>
           </div>
-          @endforeach
+          @empty
+          <x-nodatafound message="No data to show!"  notype=""/>
+          @endforelse
         </div>
       </main>
     </div>

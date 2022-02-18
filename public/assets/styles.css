@@ -95,7 +95,7 @@
 .think-btn-secondary:focus,
 .think-btn-secondary:active,
 .think-btn-secondary:focus-visible {
-    border: none !important;
+    /* border: none !important; */
     color: var(--color-white) !important;
     background: var(--color-secondary);
 }
@@ -142,6 +142,12 @@
     font-weight: bold;
     cursor: pointer;
 }
+.think-btn-tertiary:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+}
+
 .think-btn-tertiary-outline {
     text-decoration: none !important;
     display: inline-block;
@@ -332,6 +338,15 @@ a.navbar-brand {
 #course_view_section .card-1 .card-img-top {
     height: 185px;
 }
+
+.think-img-thumb-container {
+    max-height: 220px;
+}
+
+.think-img-thumb-container img{
+    object-fit: cover;
+}
+
 .think-align-middle {
     display: flex;
     flex-direction: column;
@@ -339,5 +354,29 @@ a.navbar-brand {
  }
  a.notification-item.dropdown-item.p-2 {
     display: flex;
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236E7687'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+.btn-check:focus + .btn, .btn:focus {
+    box-shadow: none !important;
+}
+.btn-check:focus + .btn-secondary, .btn-secondary:focus {
+    box-shadow: none !important;
+}  
+.think-img-thumb-container {
+    max-height: 220px;
+}
+.think-img-thumb-container img{
+    object-fit: cover;
+}
+.think-btn-transparent {
+    border: 1px solid #d1d0d0;
+    background-color: transparent;
+}
+.think-btn-transparent:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
 }
  

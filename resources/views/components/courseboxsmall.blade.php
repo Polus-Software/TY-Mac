@@ -28,10 +28,10 @@
                           <div class="row">
                             <div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>{{ $course['duration'] }}</div>
                             <div class="col item-2 px-0 text-center">
-                              <p><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
+                              <p class="think-text-color-grey fw-bold"><i class="far fa-user pe-1"></i>{{ $course['instructor_firstname'] ." ". $course['instructor_lastname']}}</p>
                             </div>
                             <div class="col-auto item-3 px-0 d-flex">
-                              <p class="text-end"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
+                              <p class="think-text-color-grey fw-bold text-end"><img class="me-1" src="/storage/icons/level__icon.svg" alt="error">{{ $course['course_difficulty'] }}</p>
                             </div>
                           </div>
                         </li>

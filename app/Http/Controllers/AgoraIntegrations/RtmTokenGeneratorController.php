@@ -118,6 +118,12 @@ class RtmTokenGeneratorController extends Controller
         $totalSeconds = $timeDiff;
 
         $sessionTitle = $sessionObj->value('session_title');
+
+        if(strlen($sessionTitle) > 60) {
+            $sessionTitle = substr($sessionTitle, 0, 55) . '..';
+        } else {
+            $sessionTitle = $sessionTitle;
+        }
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         
@@ -520,8 +526,8 @@ class RtmTokenGeneratorController extends Controller
 
         $contentId = $request->content_id;
         $type = $request->type;
-
-        $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId)->get();
+        $user = Auth::user();
+        $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId)->where('student', $user->id)->get();
         if(count($feedbackCountExists)) {
             $feedbackCountExists = StudentFeedbackCount::where('content_id', $contentId);
             if($type == "positive") {
@@ -537,13 +543,17 @@ class RtmTokenGeneratorController extends Controller
             $topicId = $content->value('topic_id');
             $topic = Topic::where('topic_id', $topicId);
             $courseId = $topic->value('course_id');
-
             $user = Auth::user();
+
+            $enrolledCourse = EnrolledCourse::where('user_id', $user->id)->where('course_id', $courseId);
+            $batchId = $enrolledCourse->value('batch_id');
+
             $student =  $user->id;
             $feedbackCount->content_id = $contentId;
             $feedbackCount->topic_id = $topicId;
             $feedbackCount->course_id = $courseId;
             $feedbackCount->student = $student;
+            $feedbackCount->batch_id = $batchId;
             if($type == "positive") {
                 $feedbackCount->positive = 1;
                 $feedbackCount->negative = 0;
@@ -881,6 +891,7 @@ class RtmTokenGeneratorController extends Controller
     }
 
     public function createRecommendationSession(Request $request, $student, $topic) {
+        
         $userObj = Auth::user();
         $batchId = $request->batchId;
         $topicId = $topic;
@@ -905,9 +916,9 @@ class RtmTokenGeneratorController extends Controller
                 $singleSessionUser = SingleSessionUser::where('student', $userId)->where('instructor', $instructor)->update(['student_present' => true]);
             } else {
                 $userId = $student;
-                $singleSession = SingleSession::where('topic_content_id', $topicId)->where('student', $student)->get();
+                $singleSession = SingleSession::where('topic_content_id', $topicId)->where('student', $student);
                 
-                if(count($singleSession) == 0) {
+                if($singleSession->count() == 0) {
                     $singleSession = new SingleSession;
                     $singleSession->topic_content_id = $topicId;
                     $singleSession->student = $student;
@@ -915,19 +926,17 @@ class RtmTokenGeneratorController extends Controller
                     $singleSession->save();
                 }
                 
-                    
-               
                 
-                $singleSessionUser = SingleSessionUser::where('session', $singleSession->id)->get();
+                $singleSessionUser = SingleSessionUser::where('session', $singleSession->value('id'))->get();
                 if(count($singleSessionUser) == 0) {
                     $singleSessionUser = new SingleSessionUser;
-                    $singleSessionUser->session = $singleSession->id;
+                    $singleSessionUser->session = $singleSession->value('id');
                     $singleSessionUser->student = $userId;
                     $singleSessionUser->instructor = $userObj->id;
                     $singleSessionUser->instructor_present = true;
                     $singleSessionUser->save();
                 } else {
-                    $singleSessionUser = SingleSessionUser::where('session', $singleSession->id)->update(['instructor_present' => true]); 
+                    $singleSessionUser = SingleSessionUser::where('session', $singleSession->value('id'))->update(['instructor_present' => true]); 
                 }
             }
             
@@ -955,7 +964,14 @@ class RtmTokenGeneratorController extends Controller
         
         $session = $topic . '010' . $user;
         
-        $sessionTitle = Topic::where('topic_id', $topic)->value('topic_title');
+        $sessionTitle = TopicContent::where('topic_content_id', $topic)->value('topic_title');
+
+        if(strlen($sessionTitle) > 60) {
+            $sessionTitle = substr($sessionTitle, 0, 55) . '..';
+        } else {
+            $sessionTitle = $sessionTitle;
+        }
+
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         
@@ -975,7 +991,8 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '101' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
+        
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => strval('101' . $session), 'channel' => $sessionTitle, 'role' => $role , 'duration' => $expireTimeInSeconds]);
     
     }
 

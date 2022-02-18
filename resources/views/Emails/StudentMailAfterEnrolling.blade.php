@@ -2,7 +2,7 @@
 
 
 <h1>Hello, {{$mailDetails['firstname']}} {{$mailDetails['lastname']}}</h1>
-Welcome to the {{ $mailDetails['course'] }} course!
+<p>Welcome to the {{ $mailDetails['course'] }} course!</p>
 
 To access your course content & course schedule, please login into ThinkLit.com.
 

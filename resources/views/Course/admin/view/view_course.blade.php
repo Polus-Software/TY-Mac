@@ -60,13 +60,13 @@
           <div class="col-12">
             <label>Course image</label>
             <div style="margin-top:15px;">
-                <img src="{{ asset('/storage/courseImages/'.$course_details['image']) }}" alt="" style="width:320px; height:240px;">
+                <img src="{{ asset('/storage/courseImages/'.$course_details['image']) }}" alt="Course image" class="img-thumbnail" style="width:600px; height:285px;">
             </div>
           </div>
           <div class="col-12">
             <label>Course thumbnail image</label>
             <div style="margin-top:15px;">
-                <img src="{{ asset('/storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500px; height:300px;">
+                <img src="{{ asset('/storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="Course thumbnail image" class="img-thumbnail" style="width:395px; height:186px;">
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">

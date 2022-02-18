@@ -29,13 +29,13 @@
             <div class="col-6">
                 <label for="batch">Batch</label>
                 <select class="form-control mt-2" id="batch" name="batch">
-                    <option value>Select a Batch</option>
+                    <option value>Select a batch</option>
                 </select>
             </div>
             <div class="col-6">
                 <label for="live_session">Live session</label>
                 <select class="form-control mt-2" id="live_session" name="live_session">
-                    <option value>Select a Session</option>
+                    <option value>Select a session</option>
                 </select>
             </div>
             <div class="col-3 mt-5">
@@ -167,7 +167,7 @@ document.getElementById('batch').addEventListener('change', function(event) {
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
         if(data.status == "success") {
-            let html = '<option value>Select a batch</option>';
+            let html = '<option value>Select a session</option>';
             for(i=0;i<data.sessions.length;i++) {
                 html = html + '<option value="' + data.sessions[i].live_session_id + '">' + data.sessions[i].session_title + '</option>';
             }

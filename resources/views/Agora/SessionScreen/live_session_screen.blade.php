@@ -293,7 +293,7 @@ svg.svg-img.prefix-more.can-hover {
     background-color: #74648c;
     color: white !important;
     position: relative;
-    right: -31.5rem;
+    /* right: -31.5rem; */
 }
 .course_contents.in_progress {
   color: #6E7687 !important;
@@ -1246,7 +1246,7 @@ body {
     <hr>
     <p class="notif-text think-color-dark margin-top-18 think-fs--16">{{ $topic_title }}</p>
     @csrf
-    <table style="height:7rem;">
+    <table style="height:7rem;width:100%;">
     @php
     $slNo = 0;
     @endphp
@@ -1255,7 +1255,7 @@ body {
     <tr class="course_contents_tr">
       <td class="content_title_td" id="content_title_td_{{ $content->topic_content_id }}"><i style="margin-right:10px;" class="thumbs far fa-circle"></i>
         <span class="content_title_text" id="content_title_{{ $content->topic_content_id }}">{{ $content->topic_title }}</span></td>
-          <td>
+          <td align="right">
           @if ($loop->first)
             <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
                Start
@@ -1797,14 +1797,15 @@ setInterval(function () {
     }).then((response) => response.json()).then((data) => {
       if(userType == 'student') {
         if(data.presentingContentId) {
-        if(presentingFlag != data.presentingContentId) {
+        if(presentingFlag != data.presentingContentId && $(".big-class-teacher").length) {
+        // if(document.getElementById('course_content_iframe').getElementsByClassName('big-class-teacher')[0].length) {
           document.getElementById('thumbs_' + data.presentingContentId).style.color = "#000";
           presentingFlag = data.presentingContentId;
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
-        }
+        } 
       } else {
         document.getElementById('course_content_iframe').classList.add('nodisplay');
       }
@@ -1839,18 +1840,25 @@ for(index = 0; index < length;index++) {
       if(document.getElementById('user_type').value == "Instructor") {
         document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
       }
-      if(extension == "pdf") {
-        $('#course_content_iframe').appendTo('.big-class-teacher');
-        document.getElementById('course_content_iframe').classList.remove('nodisplay');
-        let docUrl = this.getAttribute('href');
-        document.getElementById('course_content_iframe').setAttribute('src', docUrl);
-        
-      } else if (extension == "pptx") {
+      if (extension == "pptx" || extension == "ppt") {
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');
         let docUrl = this.getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+        this.classList.add('in_progress');
+        this.innerHTML = "In progress";
+        this.removeAttribute('href');
+        for(i=0; i<document.getElementsByClassName('content_title_td').length;i++) {
+          document.getElementsByClassName('content_title_td')[i].classList.remove('active');
+        }
+        document.getElementById('content_title_td_' + topicContentId).classList.add('active');
+      } else {
+        $('#course_content_iframe').appendTo('.big-class-teacher');
+        document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        document.getElementById('close_content').classList.remove('nodisplay');
+        let docUrl = this.getAttribute('href');
+        document.getElementById('course_content_iframe').setAttribute('src', docUrl);
         this.classList.add('in_progress');
         this.innerHTML = "In progress";
         this.removeAttribute('href');

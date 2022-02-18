@@ -80,6 +80,7 @@ class AdminController extends Controller
             $studentId = $request->input('student_id');
             $user = Auth::user();
             $userType =  UserType::find($user->role_id)->user_role;
+            $studentCourseDetails = [];
             if ($studentId) {
                 $student = User::where('id', $studentId);
                 if($student->count() == 0) {
@@ -89,6 +90,14 @@ class AdminController extends Controller
                     ->join('courses', 'enrolled_courses.course_id', '=', 'courses.id')
                     ->where('enrolled_courses.user_id', $studentId)
                     ->get();
+                    foreach($enrolled_courses as $cou) {
+                        $batchId = $cou->batch_id;
+                        $batchname = CohortBatch::where('id', $batchId)->value('batchname');
+                        array_push($studentCourseDetails, array (
+                            'enrolled_course' => $cou,
+                            'batch' => $batchname
+                        ));
+                    }
                 if ($student) {
                     $data = [
                         'id' => $student->value('id'),
@@ -102,7 +111,7 @@ class AdminController extends Controller
                 'student_id' => $studentId,
                 'studentDetails' => $data,
                 'userType' => $userType,
-                'enrolled_courses' => $enrolled_courses
+                'enrolled_courses' => $studentCourseDetails
             ]);
         } catch (Exception $exception) {
             return ($exception->getMessage());
@@ -346,6 +355,7 @@ class AdminController extends Controller
                     $ratings = intval($ratingsSum/$ratingsCount);
                 }
             }
+            $ratings = $course->course_rating;
             $courseData =  array (
                 'id' => $course->id,
                 'course_title' => $course->course_title,

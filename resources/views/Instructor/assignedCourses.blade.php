@@ -49,46 +49,25 @@
                         <div class="col-lg-12">
                             <div id="liveCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
+                                    @forelse($liveSessionDetails as $liveSessionDetail)
+                                    @if($loop->first)
                                     <div class="carousel-item active">
+                                    <div class="row">
+                                    @endif
+                                    <x-courseboxlive :course="$liveSessionDetail" cardtype="live" page="assigned"></x-courseboxlive>
+                                            @if(($loop->iteration % 3 == 0) && (!$loop->last))
+                                        </div>
+                                        </div>
+                                        <div class="carousel-item">
                                         <div class="row">
-                                            @forelse($liveSessionDetails as $liveSessionDetail)
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
-                                                <div class="card-1">
-                                                    <img src="/storage/courseThumbnailImages/{{ $liveSessionDetail['image'] }}"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">{{ $liveSessionDetail['session_title'] }}</h5>
-                                                        <p class="card-text text-sm-start position-relative">
-                                                            <span class="think-truncated-text">
-                                                                {{Str::limit($liveSessionDetail['course_desc'], 180, '...')}}
-                                                            </span>
-                                                        </p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i> {{ $liveSessionDetail['instructor'] }}</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1"> {{ $liveSessionDetail['course_diff'] }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row">
-                                                            <div class="text-center border-top">
-                                                                <a href="/session-view/{{ $liveSessionDetail['session_id'] }}" class="card-link btn">Join now</a>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        @endif
+                                        @if($loop->last)
+                                        </div>
+                                        </div>
+                                        @endif
                                             @empty
                                                 <x-nodatafound message="No live classes at the moment!"  notype="video" />
                                             @endforelse
-                                        </div>
-                                    </div>
                                 </div>
                                 
                                     <button class="carousel-control-prev" type="button" data-bs-target="#liveCarousel"
@@ -113,42 +92,22 @@
                         <div class="col-lg-12">
                             <div id="upcomingCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
+                                    @forelse($upComingSessionDetails as $upComingSessionDetail)
+                                    @if($loop->first)
                                     <div class="carousel-item active">
-                                        <div class="row">
-                                            
-                                          @forelse($upComingSessionDetails as $upComingSessionDetail)
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
-                                                <div class="card-1">
-                                                    <img src="/storage/courseThumbnailImages/{{ $upComingSessionDetail['image'] }}"
-                                                        class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">{{ $upComingSessionDetail['session_title'] }}</h5>
-                                                        <p class="card-text text-sm-start position-relative">
-                                                            <span class="think-truncated-text">
-                                                                {{Str::limit($upComingSessionDetail['course_desc'], 180, '...')}}
-                                                            </span>
-                                                        </p>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p><i class="far fa-user pe-1"></i>{{ $upComingSessionDetail['instructor'] }}</p>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-sm-6 col-6">
-                                                                        <p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1"> {{ $upComingSessionDetail['course_diff'] }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="row">
-                                                            <div class="text-center border-top">
-                                                                <a href="/enrolled-course/{{ $upComingSessionDetail['course_id'] }}" class="card-link btn w-100">Go to details</a>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
+                                    <div class="row">
+                                    @endif
+                                            <x-courseboxlive :course="$upComingSessionDetail" cardtype="upcoming" page="assigned"></x-courseboxlive>
+                                            @if(($loop->iteration % 3 == 0) && (!$loop->last))
                                             </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                            <div class="row">
+                                            @endif
+                                            @if($loop->last)
+                                            </div>
+                                            </div>
+                                            @endif
                                             @empty
                                                 <x-nodatafound message="No upcoming classes at the moment!"  notype="video" />
                                             @endforelse                                            
@@ -195,7 +154,7 @@
                     @foreach ($singleEnrolledCourseData as $singleEnrolledCourse)
                         <div class="card-2 mb-3 mt-4" data-id="{{ $singleEnrolledCourse['course_id'] }}">
                             <div class="row g-0">
-                                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                <div class="col-lg-4 col-md-12 col-sm-12 col-12 think-img-thumb-container">
                                     <img src="{{ asset('/storage/courseImages/' . $singleEnrolledCourse['course_image']) }}"
                                         class="img-fluid coursepicture col-md-12 col-sm-12 col-12 h-100"
                                         alt="coursepicture">
@@ -211,7 +170,7 @@
                                         </span>
                                         </p>
                                         <div class="row">
-                                            <div class="col-lg-5 col-md-12 col-sm-12 col-12 mb-3">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-12 mb-3">
                                                 <div class="progress rounded-pill">
                                                     <div class="progress-bar rounded-pill text-end pe-2" role="progressbar"
                                                         style="width: {{ $singleEnrolledCourse['progress'] }}%;" aria-valuenow="{{ $singleEnrolledCourse['progress'] }}" aria-valuemin="0"
@@ -219,18 +178,18 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                                                <p class="para-1"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
+                                                <p class="para-1 text-truncate"><img class="me-1" src="/storage/icons/category__icon.svg" alt="error">
                                                     {{ $singleEnrolledCourse['category_name'] }}
                                                 </p>
                                             </div>
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-12">
-                                                <p class="para-1"><i class="far fa-user pe-1"></i>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                                <p class="para-1 text-truncate think-text-color-grey fw-bold"><i class="far fa-user pe-1"></i>
                                                     {{ $singleEnrolledCourse['instructor_firstname'] }}
                                                     {{ $singleEnrolledCourse['instructor_lastname'] }}
                                                 </p>
                                             </div>
-                                            <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                                                <p class="para-2"><i class="far fa-user pe-1"></i>
+                                            <div class="col-lg col-md-3 col-sm-4 col-12 d-flex justify-content-end">
+                                                <p class="para-2 text-truncate think-text-color-grey fw-bold"><i class="far fa-user pe-1"></i>
                                                     {{ $singleEnrolledCourse['course_difficulty'] }}
                                                 </p>
                                             </div>

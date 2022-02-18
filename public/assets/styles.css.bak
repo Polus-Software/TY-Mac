@@ -1,0 +1,358 @@
+:root {
+    --color-white: #fff;
+    --color-black: #000;
+    --font-primary: "Roboto", sans-serif;
+    --font-secondary: "Lato", sans-serif;
+    --color-primary: #f5bc29;
+    --color-secondary: #2c3443;
+    --color-tertiary: #af7e00;
+    --text-primary: var(--color-black);
+    --text-secondary: #737373;
+    --text-tertiary: #474747;
+    --color-grey: #6e7687;
+    --color-primary-light: #fffdf7;
+    --color-grey-bg: #F8F7FC;
+}
+[type=button], [type=reset], [type=submit], button {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+/* overriding boostrap btn class */
+.btn {
+    border-radius: 0.31rem;
+}
+.modal-header {
+    padding: 3rem 3rem 0 3rem;
+}
+.modal-body {
+    padding: 0 3rem 3rem 3rem;
+}
+/* Written for style all modal labels */
+.modal .form-group > label {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-secondary);
+    margin-bottom: 5px;
+}
+/* Utilities */
+.think-text-color-grey {
+    color: var(--color-grey);
+}
+.think-modal-max-w-600 {
+    max-width: 600px;
+}
+.think-modal-close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+}
+.think-text-secondary-color {
+    color: var(--text-secondary);
+}
+.fs-18 {
+    font-size: 1.1rem;
+}
+.fs-16 {
+    font-size: 1rem;
+}
+.fs-14 {
+    font-size: 0.9rem !important;
+}
+.think-mt-75 {
+    margin-top: 75px;
+}
+.think-mb-75 {
+    margin-bottom: 75px;
+}
+.h-32 {
+    height: 32px;
+}
+.think-px-25 {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+.bg-yellow {
+    background-color: var(--color-primary) !important;
+}
+.think-bg-sidebar {
+    background-color: #F8F7FC !important;
+}
+.think-color-primary {
+    color: var(--color-primary);
+}
+.think-btn-secondary {
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    background: var(--color-secondary);
+    font-size: 1rem !important;
+    border: none;
+    color: var(--color-white);
+}
+
+.think-btn-secondary:focus,
+.think-btn-secondary:active,
+.think-btn-secondary:focus-visible {
+    border: none !important;
+    color: var(--color-white) !important;
+    background: var(--color-secondary);
+}
+.think-btn-secondary:active:focus {
+    box-shadow: none;
+}
+.think-btn-secondary:hover {
+    background: var(--color-white);
+    color: var(--color-secondary) !important;
+    border: 1px solid var(--color-secondary);
+}
+.think-btn-secondary-outline {
+    text-decoration: none !important;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border: 1px solid var(--color-secondary);
+    font-size: 1rem !important;
+    background-color: var(--color-white) !important;
+}
+.think-btn-secondary-outline:focus,
+.think-btn-secondary-outline:hover,
+.think-btn-secondary-outline:active,
+.think-btn-secondary-outline:focus-visible {
+    outline: 0;
+    box-shadow: none;
+    color: #2c3443 !important;
+    /* border: none; */
+}
+.think-btn-secondary-outline:hover {
+    background: var(--color-secondary) !important;
+    color: var(--color-white) !important;
+}
+/* Tertiary Button */
+.think-btn-tertiary {
+    display: inline-block;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    color: var(--color-black);
+    background-color: var(--color-white);
+    font-size: 1rem;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+.think-btn-tertiary-outline {
+    text-decoration: none !important;
+    display: inline-block;
+    min-height: 38px;
+    padding-left: 25px;
+    padding-right: 25px;
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+    font-size: 1rem !important;
+    background-color: transparent !important;
+    cursor: pointer;
+}
+.think-btn-tertiary-outline:hover {
+    color: var(--color-secondary);
+    background-color: var(--color-white) !important;
+}
+.think-btn-tertiary-outline:focus {
+    outline: 0;
+    box-shadow: none;
+}
+/* In this class, I have written for adjusting the basic height of 38px of buttons. Some button has 48px height*/
+.think-h-48 {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+.think-horizontal-card {
+    border-radius: 20px;
+    box-shadow: 0px 1px 8px #00000029;
+    background: #ffffff;
+}
+/*  */
+.hr-line {
+    background-color: #d5d5d5;
+}
+
+/*  */
+body {
+    font-family: var(--font-primary) !important;
+}
+
+a.navbar-brand {
+    top: -5px;
+    position: relative;
+}
+.think-navbar .navbar-nav .nav-link {
+    color: var(--text-tertiary);
+    font-weight: 700;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.think-custom-nav-1 > li {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+    width: max-content;
+    font-size: 14px;
+}
+.think-navbar .think-custom-nav-1 .nav-item.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -23px;
+    height: 3px;
+    background-color: var(--color-primary);
+}
+.navbar-brand > img {
+    height: 40px;
+}
+.think-personalized-way-text {
+    position: relative;
+}
+.think-personalized-way-underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -24px;
+}
+
+.think-services-underline,
+.think-courses-underline,
+.think-testimonial-underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -30px;
+}
+
+.dotted-decoaration {
+    text-align: end;
+    padding-right: 178px;
+    margin-bottom: -54px;
+    position: relative;
+    z-index: 2;
+}
+.dotted-decoaration > img {
+    width: 150px;
+}
+.card-1 {
+    max-width: 396px;
+    box-shadow: 0 1px 8px #d4d4d4;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* BOOTSTRAP CLASS OVERRIDING */
+.carousel-control-next,
+.carousel-control-prev {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 4%;
+    background: 0 0;
+    border: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+}
+.bg-dark {
+    background-color: var(--color-black) !important;
+}
+.card-body {
+    padding: 1rem 1.25rem;
+}
+/*  */
+.far.fa-star.rateCourse,
+.fas.fa-star.rateCourse {
+    color: var(--color-primary) !important;
+}
+.think-w-14_5 {
+    width: 14.5px;
+}
+
+#changePasswordForm .form-group label,
+#editUserForm .form-group label {
+	margin-bottom: 5px;
+}
+
+#notification_drop {
+    left: -17em;
+    width: 20em;
+}
+
+.notification-dot {
+    color: #f5bc29;
+    margin-right: 15px;
+}
+
+.notification-item {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: 100%;
+    font-size: 13px;
+}
+
+.notifications_count {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    font-size: 12px;
+    background: #f5bc29;
+    padding: 0px 6px;
+    border-radius: 50%;
+    }
+    
+    
+    
+.btn.dropdown-toggle-split.shadow-none > i { font-size: 16px;}
+
+
+
+.think-text-color-grey {
+    color: var(--color-grey);
+}
+
+.think-horizontal-card {
+	border-radius: 20px;
+	box-shadow: 0px 1px 8px #00000029;
+	background: #FFFFFF;
+}
+
+.think-tertiary-color {
+    color: var(--color-tertiary) !important; 
+ }
+
+.think-carousel-home .card-1 .card-img-top, 
+#course_view_section .card-1 .card-img-top {
+    height: 185px;
+}
+.think-align-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+ }
+ a.notification-item.dropdown-item.p-2 {
+    display: flex;
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236E7687'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+.btn-check:focus + .btn, .btn:focus {
+    box-shadow: none !important;
+}
+.btn-check:focus + .btn-secondary, .btn-secondary:focus {
+    box-shadow: none !important;
+}  
+.think-img-thumb-container {
+    max-height: 220px;
+}
+.think-img-thumb-container img{
+    object-fit: cover;
+}
+ 

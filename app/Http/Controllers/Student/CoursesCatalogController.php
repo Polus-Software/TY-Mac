@@ -84,7 +84,7 @@ class CoursesCatalogController extends Controller
                     $ratings = intval($ratingsSum/$ratingsCount);
                 }
             }
-            
+            $ratings = $course->course_rating;
             $duration = $hours . 'h ' . $minutes . 'm';
             
             $courseData =  array (
@@ -125,8 +125,11 @@ class CoursesCatalogController extends Controller
         $singleCourseFeedbacks = [];
         $courseContents = [];
         $batchDetails = [];
+        $completedFlag = false;
         if(Auth::user()) {
             $userId = Auth::user()->id;
+            $progress = EnrolledCourse::where('user_id', $userId)->where('course_id', $id)->value('progress');
+            $completedFlag = $progress == 100 || $progress == "100" ? true : false;
         } else {
             $userId = "";
         }
@@ -144,6 +147,7 @@ class CoursesCatalogController extends Controller
             $enrollment = CourseService::getEnrolledCourseInfo($user->id, $id);
             $enrolledFlag = (count($enrollment) != 0) ? true : false;
         }
+        
         $singleCourseFeedbacks = CourseService::getSingleCourseFeedback($id);
         $singleCourseDetails = CourseService::getsingleCourseDetails($id);
         $cohort_full = CourseService::isCohortFull($id);
@@ -155,7 +159,8 @@ class CoursesCatalogController extends Controller
             'userType' => $userType,
             'enrolledFlag' => $enrolledFlag,
             'currenturl' => $currentURL,
-            'cohort_full_status' => $cohort_full
+            'cohort_full_status' => $cohort_full,
+            'completedFlag' => $completedFlag
         ]);
     }
 
@@ -196,6 +201,10 @@ class CoursesCatalogController extends Controller
         $user = Auth::user();
         $singleCourseDetails =[];
         $course = Course::findOrFail($request->id);
+        $alreadyEnrolled = EnrolledCourse::where('user_id', $user->id)->where('course_id', $request->id)->get();
+        if(count($alreadyEnrolled) > 0) {
+            return redirect()->route('student.course.enrolled', [$request->id]);
+        }
         $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -267,6 +276,7 @@ class CoursesCatalogController extends Controller
               $ratings = intval($ratingsSum/$ratingsCount);
           }
       }
+      $ratings = $course->course_rating;
       $studentCount = EnrolledCourse::where('course_id', $course->id)->count();
 
       $courseDetails = array (
@@ -500,16 +510,16 @@ class CoursesCatalogController extends Controller
      if(count($courses)) {
            foreach($courses as $course) {
 				
-				$ratingsCount = 0;
-				if($course->use_custom_ratings) {
-					$ratings = $course->course_rating;
-				} 
-				else{
-					$generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
-					foreach($generalCourseFeedbacks as $generalCourseFeedback) {
-						$ratingsCount++;
-					}
-				}
+				// $ratingsCount = 0;
+				// if($course->use_custom_ratings) {
+				// 	$ratings = $course->course_rating;
+				// } 
+				// else{
+				// 	$generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
+				// 	foreach($generalCourseFeedbacks as $generalCourseFeedback) {
+				// 		$ratingsCount++;
+				// 	}
+				// }
                 $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');     
                 $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
                 $instructorfirstname = User::where('id', $assigned)->value('firstname');
@@ -546,7 +556,7 @@ class CoursesCatalogController extends Controller
                         $ratings = intval($ratingsSum/$ratingsCount);
                     }
                 }
-                
+                $ratings = $course->course_rating;
                 $html = $html . '<h5 class="card-title text-center text-truncate fs-16 fw-bold">'. $course->course_title .'</h5>';
                 $html = $html . '<p class="card-text text-sm-start text-truncate">'. $course->description .'</p>';
                 $html = $html . '<div class="row mb-3"><div class="col-lg-6 col-sm-6 col-6">';
@@ -567,8 +577,8 @@ class CoursesCatalogController extends Controller
                 $html = $html . '<img class="me-1 think-w-14_5" src="/storage/icons/category__icon.svg" alt="error">'. $courseCategory .'</div></div>';
                 $html = $html . '<ul class="list-group list-group-flush"><li class="list-group-item"><div class="row">'; 
                 $html = $html . '<div class="col-auto item-1 px-0"><i class="far fa-clock pe-1"></i>'. $duration .'</div>';
-                $html = $html . '<div class="col item-2 px-0 text-center"><p><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
-                $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="text-end"><img src="/storage/icons/level__icon.svg" class="me-1">'. $course->course_difficulty .'</p></div></div></li></ul>';
+                $html = $html . '<div class="col item-2 px-0 text-center"><p class="think-text-color-grey fw-bold"><i class="far fa-user pe-1"></i>'. $instructorfirstname .' '. $instructorlastname .'</p></div>';
+                $html = $html . '<div class="col-auto item-3 px-0 d-flex"><p class="think-text-color-grey fw-bold text-end"><img src="/storage/icons/level__icon.svg" class="me-1">'. $course->course_difficulty .'</p></div></div></li></ul>';
                 $html = $html . '<div class="row py-2"><div class="text-center border-top">'; 
                 $html = $html . '<a href="/show-course/' . $course->id . '" class="card-link btn d-inline-block w-100 px-0">Go to details</a>'; 
                 $html = $html . '</div></div></div></div></div>';        
@@ -642,7 +652,7 @@ class CoursesCatalogController extends Controller
                          $ratings = intval($ratingsSum/$ratingsCount);
                      }
                  }
-                 
+                 $ratings = $course->course_rating;
                  $html = $html . '<h5 class="card-title text-center text-truncate fs-16 fw-bold">'. $course->course_title .'</h5>';
                  $html = $html . '<p class="card-text text-sm-start text-truncate">'. $course->description .'</p>';
                  $html = $html . '<div class="row mb-3"><div class="col-lg-6 col-sm-6 col-6">';
@@ -712,7 +722,7 @@ class CoursesCatalogController extends Controller
                     $ratings = intval($ratingsSum/$ratingsCount);
                 }
             }
-
+            $ratings = $course->course_rating;
             $duration = $hours . 'h ' . $minutes . 'm';
        
             $courseData =  array (
