@@ -41,14 +41,14 @@ use App\Models\CustomTimezone;
          
           <div class="col-md-6">
             <label for="level">Start date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly value="{{$cohortbatch->start_date}}">
+            <input type="text" class="form-control" id="title" name="cohortbatch_startdate" readonly value="{{date('m-d-Y', strtotime($cohortbatch->start_date))}}">
             @if ($errors->has('cohortbatch_startdate'))
               <span class="text-danger">The batch start date is required</span>
             @endif
           </div>
           <div class="col-md-6">
           <label for="level">End date</label>
-            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" readonly value="{{$cohortbatch->end_date}}">
+            <input type="text" class="form-control" id="title" name="cohortbatch_enddate" readonly value="{{date('m-d-Y', strtotime($cohortbatch->end_date))}}">
             @if ($errors->has('cohortbatch_enddate'))
               <span class="text-danger">The batch end date is required</span>
             @endif
@@ -291,11 +291,11 @@ use App\Models\CustomTimezone;
   let selectedTimeZone = document.getElementById('cohortbatch_timezone').getAttribute('value');
   document.getElementById('cohortbatch_timezone').value = selectedTimeZone;
   startdate = new dtsel.DTS('input[name="cohortbatch_startdate"]', {
-    dateFormat: "yyyy-mm-dd",
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   enddate = new dtsel.DTS('input[name="cohortbatch_enddate"]', {
-    dateFormat: "yyyy-mm-dd",
+    dateFormat: "mm-dd-yyyy",
     paddingX: 15, paddingY: 15
   });
   starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {

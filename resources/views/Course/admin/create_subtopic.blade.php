@@ -53,8 +53,8 @@
 <script>
 window.onload = function(event) {
   let sub_topic_count = 1;
-  let content_count = 1;
-  let externallink_count = 1;
+  let content_count = 0;
+  let externallink_count = 0;
 
   const createNewElement = (el, classLists = [], attribs = {}, text ='') => {
     let tempEl ;

@@ -134,7 +134,7 @@ class CourseController extends Controller
         $courseDuration = $request->input('course_duration');
         $course_rating = $request->input('course_rating');
         $use_custom_ratings = $request->input('use_custom_ratings') == "on" ? true : false;
-       
+        
         $what_learn = "";
         $what_learn_points_count = $request->input('what_learn_points_count');
  
@@ -379,19 +379,6 @@ class CourseController extends Controller
                 }
                 $whoLearnDescription = $request->input('who_learn_description');
                 $who_learn = $request->input('who_learn_points');
-                //$who_learn_points_count = $request->input('who_learn_points_count');
-
-                //for($i = 1;  $i <= $who_learn_points_count; $i++){
-                    
-                    //$who_learn_temp = $request->input('who_learn_points_'. $i);
-                    //if($who_learn_temp != null) {
-                        //if($i == $what_learn_points_count) {
-                            //$who_learn = $who_learn . $who_learn_temp;
-                        //} else {
-                            //$who_learn = $who_learn . $who_learn_temp . ";";
-                        //}
-                    //}
-               // }
                 
                 
                 $user = Auth::user();
@@ -406,7 +393,11 @@ class CourseController extends Controller
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
                 $course->instructor_id = $instructor;
-                $course->course_rating = $course_rating;
+                if($use_custom_ratings) {
+                    $course->course_rating = $course_rating;
+                } else {
+                    $course->course_rating = $course->students_ratings;
+                }
                 $course->use_custom_ratings = $use_custom_ratings;
 
                 if($request->file()) {
@@ -481,20 +472,20 @@ class CourseController extends Controller
     }
 
     public function saveSubTopic(Request $request) {
-        $validate_array = [];
-        for($i = 1; $i<= $request->topic_count; $i++) {
-            $validate_array['topic_title'. $i] = 'required';
-            for($j=1; $j <= $request->input('content_count_topic_' .$i);$j++){
-                $validate_array['content_title_'.$i.'_'. $j] = 'required';
-            }
-        }
         
-        $this->validate($request, $validate_array );
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
         
         if(isset($request->topic_id) && !empty($request->topic_id)){
+            $validate_array = [];
+            for($i = 1; $i<= $request->topic_count; $i++) {
+                $validate_array['topic_title'. $i] = 'required';
+                for($j=0; $j < $request->input('content_count_topic_' .$i);$j++){
+                    $validate_array['content_title_'.$i.'_'. $j] = 'required';
+                }
+            }
+            $this->validate($request, $validate_array);
             for($i = 1; $i<= $topic_count; $i++) {
                 $updateDetails = [
                     'topic_title' => $request->input('topic_title'.$i),
@@ -553,6 +544,14 @@ class CourseController extends Controller
                 }
             }
         } else {
+            $validate_array = [];
+            for($i = 1; $i<= $request->topic_count; $i++) {
+                $validate_array['topic_title'. $i] = 'required';
+                for($j=1; $j <= $request->input('content_count_topic_' .$i);$j++){
+                    $validate_array['content_title_'.$i.'_'. $j] = 'required';
+                }
+            }
+            $this->validate($request, $validate_array);
             for($i = 1; $i<= $topic_count; $i++) {
                 // $request->validate([
                 //     'topic_title' . $i => 'required',
@@ -827,8 +826,18 @@ class CourseController extends Controller
         $topicAssignment->external_link = $externalLink;
 
         if($request->file()){
-            $filename = $request->document->getClientOriginalName();
-            $request->document->storeAs('assignmentAttachments',$filename,'public');
+            $timestamp = time();
+            $doc = $request->document;
+
+            $tFileName = $_FILES['document']['name'];
+            $dotPos = strpos($tFileName,'.');
+            $name = substr($tFileName, 0, $dotPos - 1);
+            $ext = substr($tFileName, $dotPos + 1, strlen($tFileName));
+            $filename = $name . $timestamp . '.' . $ext;
+
+            // $filename = $request->document->getClientOriginalName() . $timestamp;
+            $destinationPath = public_path().'/storage/assignmentAttachments';
+            $doc->move($destinationPath,$filename);
             $topicAssignment->document = $filename;
         }
         
@@ -862,8 +871,18 @@ class CourseController extends Controller
         $topicAssignment->instructor_id = $instructorId;
 
         if($request->file()){
-            $filename = $request->document->getClientOriginalName();
-            $request->document->storeAs('assignmentAttachments',$filename,'public');
+            $timestamp = time();
+            $doc = $request->document;
+
+            $tFileName = $_FILES['document']['name'];
+            $dotPos = strpos($tFileName,'.');
+            $name = substr($tFileName, 0, $dotPos - 1);
+            $ext = substr($tFileName, $dotPos + 1, strlen($tFileName));
+            $filename = $name . $timestamp . '.' . $ext;
+
+            // $filename = $request->document->getClientOriginalName() . $timestamp;
+            $destinationPath = public_path().'/storage/assignmentAttachments';
+            $doc->move($destinationPath,$filename);
             $topicAssignment->document = $filename;
         }
         $topicAssignment->save();
@@ -1042,8 +1061,9 @@ class CourseController extends Controller
         $cohortbatch->batchname = $request->input('batchname');
   
         $cohortbatch->course_id = $course_id;  
-        $cohortbatch->start_date = $request->input('cohortbatch_startdate');
-        $cohortbatch->end_date = $request->input('cohortbatch_enddate');
+        
+        $cohortbatch->start_date = Carbon::createFromFormat('m-d-Y', $request->input('cohortbatch_startdate'))->format('Y-m-d');
+        $cohortbatch->end_date = Carbon::createFromFormat('m-d-Y', $request->input('cohortbatch_enddate'))->format('Y-m-d');
         $cohortbatch->duration = (new Carbon($request->input('cohortbatch_starttime')))->diff(new Carbon($request->input('cohortbatch_endtime')))->format('%h');
 		// $cohortbatch->duration = round((strtotime($request->input('cohortbatch_enddate')) - strtotime($request->input('cohortbatch_startdate')))/3600, 1);
         $cohortbatch->occurrence = $request->input('cohortbatch_batchname');

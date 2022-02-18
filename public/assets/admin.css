@@ -352,3 +352,10 @@ a.add_external_link:hover,
     margin-right: 20px;
     cursor: pointer;
  }
+ .think-nodata-box {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+}
+.think-nodata-box img {
+  height: 120px;
+}

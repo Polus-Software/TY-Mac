@@ -30,7 +30,7 @@ use App\Models\CustomTimezone;
 
         <div class="row">
           @php ($slno = 0) @endphp
-          @foreach($cohortbatches as $cohortbatch)
+          @forelse($cohortbatches as $cohortbatch)
           @php ($slno = $slno + 1) @endphp
           <div class="col-12 mb-3">
             <div class="card">
@@ -96,7 +96,9 @@ use App\Models\CustomTimezone;
               </div>
             </div>
           </div>
-          @endforeach
+          @empty
+          <x-nodatafound message="No data to show!"  notype=""/>
+          @endforelse
         </div>
       </main>
       <!-- main ends -->

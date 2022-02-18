@@ -53,9 +53,13 @@
           <div class="col-12">
             <label>Enrolled courses</label>
             <ul>
+              @if(count($enrolled_courses) != 0)
                 @foreach($enrolled_courses as $enrolled_course)
                 <li>{{ $enrolled_course->course_title }}</li>
                 @endforeach
+              @else
+                <li style="list-style:none;margin-left:-2rem;">No data</li>
+              @endif
             </ul>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
@@ -75,7 +79,8 @@
 @endsection('content')
 @push('child-scripts')
   <script>
-    document.getElementById('reactivate').addEventListener('click', function(e) {
+    if(document.getElementById('reactivate')) {
+      document.getElementById('reactivate').addEventListener('click', function(e) {
       let studentId = document.getElementById('reactivate').getAttribute('data-id');
       let path = "{{ route('reactivate-student') }}?student=" + studentId;
       fetch(path, {
@@ -91,6 +96,8 @@
         }
       });
     });
+    }
+    
   function makeid(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-?';

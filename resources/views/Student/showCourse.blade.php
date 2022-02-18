@@ -96,7 +96,12 @@
           @else
           <div class="col-md-auto">
             @if($enrolledFlag == true)
-              <h6 class="m-0 think-color-primary">Already enrolled!</h6>
+                @if($completedFlag == true)
+                  <h6 class="m-0 think-color-primary">Course completed!</h6>
+                @else
+                  <h6 class="m-0 think-color-primary">Already enrolled!</h6>
+                @endif
+              
             @else
               <h6 class="m-0 think-color-primary">Cohort is full!</h6>
             @endif

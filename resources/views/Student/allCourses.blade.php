@@ -27,14 +27,15 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-        <div class="think-filters-sidebar filter m-4 pt-2 p-4">
-          <h6>Filter</h6>
+        <div class="think-filters-sidebar filter m-4 p-4">
+          <h6 class="fs-16">Filter</h6>
+          <hr class="mb-2" style="background: #b7b7b7;">
           <div class="accordion" id="accordionPanelsStayOpenExample">
             @foreach($filters as $filter)
             @if($filter->filter_name == Config::get('common.FILTER_NAME_CATEGORY') && $filter->is_enabled == true)
-            <div class="accordion-item filter-item">
+              <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                <button class="accordion-button filter-button pb-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                   <h6>{{$filter->filter_name}}</h6>
                 </button>
               </h2>
@@ -59,7 +60,7 @@
             @if($filter->filter_name == Config::get('common.FILTER_NAME_DIFFICULTY') && $filter->is_enabled == true)
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                <button class="accordion-button filter-button pb-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                   <h6>Learning Levels</h6>
                 </button>
               </h2>
@@ -93,7 +94,7 @@
             @if($filter->filter_name == Config::get('common.FILTER_NAME_RATINGS') && $filter->is_enabled == true)
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                <button class="accordion-button filter-button pb-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
                   <h6>Ratings</h6>
                 </button>
               </h2>
@@ -168,7 +169,7 @@
             @if($filter->filter_name == Config::get('common.FILTER_NAME_DURATION') && $filter->is_enabled == true)
             <div class="accordion-item filter-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                <button class="accordion-button filter-button pb-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
                   <h6>Course Duration</h6>
                 </button>
               </h2>
@@ -205,9 +206,9 @@
 
             @foreach($filters as $filter)
             @if($filter->filter_name == Config::get('common.FILTER_NAME_INSTRUCTOR') && $filter->is_enabled == true)
-            <div class="accordion-item filter-item">
+            <div class="accordion-item filter-item" style="border-bottom: none !important;">
               <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                <button class="accordion-button filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+                <button class="accordion-button filter-button pb-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
                   <h6>Instructors</h6>
                 </button>
               </h2>

@@ -29,9 +29,13 @@
           <div class="col-12">
             <label>Enrolled courses</label>
             <ul>
+              @if(count($enrolled_courses) != 0)
                 @foreach($enrolled_courses as $enrolled_course)
-                <li>{{ $enrolled_course->course_title }}</li>
+                <li>{{ $enrolled_course['enrolled_course']->course_title }} (Batch: {{ $enrolled_course['batch'] }})</li>
                 @endforeach
+              @else
+                <li style="list-style:none;margin-left:-2rem;">No data</li>
+              @endif
             </ul>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">

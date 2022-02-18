@@ -32,7 +32,7 @@
               </h5>
               <div class="card-body">
               @php ($slno = 0)
-                @foreach($courseContents as $courseContent)
+                @forelse($courseContents as $courseContent)
                 @php ($slno = $slno + 1)
                 <ul class="list-group list-group-flush border-bottom pb-3">
                 
@@ -47,8 +47,9 @@
                       <a class="btn btn-sm btn-outline-dark" href="{{ route('delete-subtopics', ['topic' => $courseContent['topic_id']]) }}">Delete</a>
                     </div>
                 </ul>
-                
-              @endforeach 
+              @empty
+              <x-nodatafound message="No data to show!"  notype=""/>  
+              @endforelse 
              
               </div>
               

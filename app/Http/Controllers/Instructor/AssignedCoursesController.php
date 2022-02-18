@@ -178,7 +178,8 @@ class AssignedCoursesController extends Controller
                             'image' => $course->value('course_thumbnail_image'),
                             'enrolledCourses' => $enrolledCourses,
                             'date' => $date,
-                            'session_id' => $session->live_session_id
+                            'session_id' => $session->live_session_id,
+                            'id' => $session->live_session_id
                         ));
                     }
                  }
@@ -348,6 +349,7 @@ class AssignedCoursesController extends Controller
                   $ratings = intval($ratingsSum/$ratingsCount);
               }
           }
+          $ratings = $course->course_rating;
           $studentCount = EnrolledCourse::where('course_id', $course->id)->count();
           $courseDetails = array (
             'course_id' => $course->id,

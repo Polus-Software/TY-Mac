@@ -196,9 +196,9 @@
             <label>Course image</label>
             <div class="row">
               @if(isset($course_details['image']))
-              <div class="col-4"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="..."></div>
+              <div class="col-12"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="Course image"  style="width:600px; height:285px;"></div>
               @else
-              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
+              <div class="col-12"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="Course image"  style="width:600px; height:285px;"></div>
               <div class="col">
                 <p>Important guidelines: <b>600x285</b> pixels</p>
                 <p>Image must be less than <b>500kb</b> </p>
@@ -220,9 +220,9 @@
             <label>Course thumbnail image</label>
             <div class="row">
             @if(isset($course_details['thumbnail']))
-            <img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="" style="width:500; height:400px;">
+            <div class="col-12"><img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" class="img-thumbnail no-image-border" alt="Course thumbnail image" style="width:395px; height:186px;"></div>
             @else
-              <div class="col-4"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="..."></div>
+            <div class="col-12"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="Course thumbnail image" style="width:395px; height:186px;"></div>
               <div class="col">
                 <p>Important guidelines: <b>395x186 pixels</b></p>
                 <p>Image must be less than <b>100kb</b> </p>

@@ -98,7 +98,10 @@
       <li>
 
           <button type="button" id="notif-button" class="btn dropdown-toggle-split shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
-            <!-- <span class="visually-hidden">Toggle Dropdown</span> --><i class="fas fa-bell"></i><span id="notifications_count" class="notifications_count">{{ $notificationCount }}</span>
+            <!-- <span class="visually-hidden">Toggle Dropdown</span> --><i class="fas fa-bell"></i>
+            @if($notificationCount != 0)
+              <span id="notifications_count" class="notifications_count">{{ $notificationCount }}</span>
+            @endif
           </button>
           
           <ul id="notification_drop" class="dropdown-menu">
@@ -139,7 +142,7 @@
           "X-CSRF-Token": document.querySelector('input[name=_token]').value
         },
       }).then((response) => response.json()).then((data) => {
-        document.getElementById('notifications_count').innerHTML = data.count;
+        document.getElementById('notifications_count').style.display = "none";
       });
     })
 document.getElementById('search-btn').addEventListener('click', function(e) {

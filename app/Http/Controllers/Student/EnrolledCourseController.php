@@ -46,7 +46,6 @@ class EnrolledCourseController extends Controller
 {
 
     public function afterEnrollView(Request $request, $courseId) {
-        
         $selectedBatch = $request->batchId;
         
         $courseDetails =[];
@@ -530,11 +529,11 @@ class EnrolledCourseController extends Controller
             }
 
             $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
-            $graph = $this->instructorGraph($courseId);
+            $graph = $this->instructorGraph($courseId, $selectedBatch);
 
             // Hours spent
             $spentHours = 0;
-            $spentSessions = LiveSession::where('course_id', $courseId)->where('start_date', '<', $current_date)->get();
+            $spentSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $selectedBatch)->where('start_date', '<', $current_date)->get();
             
             foreach($spentSessions as $spentSession) {
                 $spentHours += intval((new Carbon($spentSession->start_time))->diff(new Carbon($spentSession->end_time))->format('%h'));
@@ -542,13 +541,13 @@ class EnrolledCourseController extends Controller
 
             // Students joined
 
-            $studentsJoined = EnrolledCourse::where('course_id', $courseId)->count();
+            $studentsJoined = EnrolledCourse::where('course_id', $courseId)->where('batch_id', $selectedBatch)->count();
             
             //Likes and dislikes
 
             $likesCount = 0;
             $dislikesCount = 0;
-            $liveFeedbacks = StudentFeedbackCount::where('course_id', $courseId)->get();
+            $liveFeedbacks = StudentFeedbackCount::where('course_id', $courseId)->where('batch_id', $selectedBatch)->get();
             foreach($liveFeedbacks as $liveFeedback) {
                 if($liveFeedback->positive == 1) {
                     $likesCount += 1;
@@ -621,7 +620,12 @@ class EnrolledCourseController extends Controller
         $course = Course::where('id', $courseId);
         $exRatingsCount = $course->value('ratings_count');
         $exRatingsCount += 1;
-        $course = $course->update(['students_ratings' => $finalRating, 'ratings_count' => $exRatingsCount]);
+        if($course->value('use_custom_ratings') == true) {
+            $course = $course->update(['students_ratings' => $finalRating, 'ratings_count' => $exRatingsCount]);
+        } else {
+            $course = $course->update(['course_rating' => $finalRating, 'students_ratings' => $finalRating, 'ratings_count' => $exRatingsCount]);
+        }
+        
         
         $details= [
             'studentName' => $studentName,
@@ -725,11 +729,18 @@ class EnrolledCourseController extends Controller
         $topic_assignment_id = $request->assignment_id;
         $comment = $request->input('assignment_comment');
         
+        $timestamp = time();
         $file = $request->assignment_upload;
+        $tFileName = $_FILES['assignment_upload']['name'];
+        $dotPos = strpos($tFileName,'.');
+        $name = substr($tFileName, 0, $dotPos - 1);
+        $ext = substr($tFileName, $dotPos + 1, strlen($tFileName));
+        $assignementFile = $name . $timestamp . '.' . $ext;
         
-        $assignementFile = $file->getClientOriginalName();
-            
-        $file->storeAs('assignmentAnswers', $assignementFile,'public');
+        // $file->storeAs('assignmentAnswers', $assignementFile,'public');
+
+        $destinationPath = public_path().'/storage/assignmentAnswers';
+        $file->move($destinationPath,$assignementFile);
 
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
         $courseId = $topicAssignment->value('course_id');
@@ -864,7 +875,7 @@ class EnrolledCourseController extends Controller
         return $finalRecommendation;
     }
 
-    public function instructorGraph($courseId) {
+    public function instructorGraph($courseId, $selectedBatch) {
         
         $topics = Topic::where('course_id', $courseId)->get();
         $allTopics = [];
@@ -872,7 +883,7 @@ class EnrolledCourseController extends Controller
             $positiveCount = 0;
             $negativeCount = 0;
             
-            $feedbackCounts = StudentFeedbackCount::where('topic_id', $topic->topic_id)->get();
+            $feedbackCounts = StudentFeedbackCount::where('topic_id', $topic->topic_id)->where('batch_id', $selectedBatch)->get();
             foreach($feedbackCounts as $feedback) {
                 if($feedback->positive > $feedback->negative) {
                     $positiveCount++;
@@ -1147,14 +1158,14 @@ class EnrolledCourseController extends Controller
 
         $studentId = $request->student;
         $instructorId = $request->instructor;
-
-        $course = AssignedCourse::where('user_id', $instructorId);
-        $courseId = $course->value('course_id');
+        $courseId = $request->course;
+        $batch = $request->batch;
 
         return view('Student.studentInstructorChat',[
             'courseId' => $courseId,
             'studentId' => $studentId,
-            'instructorId' => $instructorId
+            'instructorId' => $instructorId,
+            'batch' => $batch
         ]);
     }
 
