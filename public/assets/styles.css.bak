@@ -24,10 +24,13 @@
 }
 .modal-header {
     padding: 3rem 3rem 0 3rem;
+    /* padding: 1rem 3rem 0 3rem; */
 }
 .modal-body {
     padding: 0 3rem 3rem 3rem;
+    /* padding: 2rem 3rem 1rem 3rem; */
 }
+
 /* Written for style all modal labels */
 .modal .form-group > label {
     font-family: "Roboto", sans-serif;
@@ -95,7 +98,7 @@
 .think-btn-secondary:focus,
 .think-btn-secondary:active,
 .think-btn-secondary:focus-visible {
-    border: none !important;
+    /* border: none !important; */
     color: var(--color-white) !important;
     background: var(--color-secondary);
 }
@@ -142,6 +145,12 @@
     font-weight: bold;
     cursor: pointer;
 }
+.think-btn-tertiary:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+}
+
 .think-btn-tertiary-outline {
     text-decoration: none !important;
     display: inline-block;
@@ -332,6 +341,15 @@ a.navbar-brand {
 #course_view_section .card-1 .card-img-top {
     height: 185px;
 }
+
+.think-img-thumb-container {
+    max-height: 220px;
+}
+
+.think-img-thumb-container img{
+    object-fit: cover;
+}
+
 .think-align-middle {
     display: flex;
     flex-direction: column;
@@ -354,5 +372,14 @@ a.navbar-brand {
 }
 .think-img-thumb-container img{
     object-fit: cover;
+}
+.think-btn-transparent {
+    border: 1px solid #d1d0d0;
+    background-color: transparent;
+}
+.think-btn-transparent:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
 }
  

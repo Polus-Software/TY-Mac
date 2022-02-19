@@ -209,8 +209,9 @@ class CoursesCatalogController extends Controller
         $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
         $instructorlastname = User::where('id', $assigned)->value('lastname');
-       
-        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
+
+        $current_date = Carbon::now()->format('Y-m-d');
+        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->where('start_date', '>=', $current_date)->get();
 
         $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
 
@@ -450,12 +451,16 @@ class CoursesCatalogController extends Controller
         $levelsArr = explode(",", $levels);
         foreach($levelsArr as $level) {
            $levelPair = explode('=', $level);
+           
             if($levelPair[1] == "all") {
                 $courses = $courses->where('course_difficulty', 'beginner')->orWhere('course_difficulty', 'intermediate')->orWhere('course_difficulty', 'advanced');
                 break;
             }
             if($levelsFlag == 0) {
-                $courses = $courses->where('course_difficulty', $levelPair[1]);
+                if($categoryFlag == 1) {
+                    $courses = $courses->where('course_difficulty', $levelPair[1]);
+                    dd($courses->count());
+                }
                 $levelsFlag = 1;
             } else {
                 $courses = $courses->orWhere('course_difficulty', $levelPair[1]);

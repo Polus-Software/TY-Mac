@@ -282,11 +282,11 @@
 <div id="delete_course_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="padding: 1rem 3rem 0 3rem !important;">
         <h5 class="modal-title">Delete course</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding: 1rem 0rem 0rem 0rem !important;">
         <table class="table table-borderless">
           <!-- <tr>
             <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
@@ -302,7 +302,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="confirm_course_delete" class="btn btn-danger">Delete</button>
+        <button type="button" id="confirm_course_delete" class="btn btn-secondary think-btn-secondary">Delete</button>
       </div>
     </div>
   </div>

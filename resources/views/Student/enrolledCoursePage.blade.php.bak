@@ -1,3 +1,4 @@
+@php use App\Models\GeneralChat; @endphp
 @extends('Layouts.app')
 @section('content')
 <style>
@@ -90,10 +91,7 @@
 .not_completed .card-body{
     padding:100px 0;
 }
-#reviewButton{
-    border: 1px solid #d1d0d0;
-    padding: 6px 25px;
-}
+
 .card-text-1-certificate{
     text-align: center;
     font-family: 'Roboto', sans-serif;
@@ -212,7 +210,7 @@ small#assignment_table_batch {
 }
 #copy-link{
     position: absolute;
-    top: 8.5rem;
+    top: 10.5rem;
     color: #6c757d;
     font-size: 13px;
     cursor: pointer;
@@ -503,7 +501,7 @@ small#assignment_table_batch {
                         </div>
 							<div class="border-top col-12 mt-4 py-4 text-center px-4">
                             @if($feedbackCount == 0)
-								<a class="bg-transparent btn btn-dark text-black w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
+								<a class="btn think-btn-transparent w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
                             @endif
                             </div>
 							@endif
@@ -713,7 +711,7 @@ small#assignment_table_batch {
                                 color: white;
                                 position: absolute;
                                 top: 10px;
-                            ">Contact instructor</button>
+                            ">Contact instructor({{$generalChat}})</button>
                              </div>
                             @endif
                            
@@ -779,7 +777,9 @@ small#assignment_table_batch {
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message</a>
+                                        <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message
+                                            ({{$generalCount = GeneralChat::where('student', $student->id)->where('instructor', $instructorId)->where('course_id', $courseId)->where('read_by_instructor', false)->count();}})
+                                        </a>
                                     </button>
                                        
                                     </h2>
@@ -1179,13 +1179,10 @@ small#assignment_table_batch {
                                                                                     </div>
                                                                                 </div>       
                                                                             </div>   
-                                                    <div class="col-4 m-auto text-center">
-                                                        <button style="color: white;font-weight: 500;" card-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-dark me-3 start_assignment" href="">Start Assignment</button>
-                                                    </div>
-                                                    @endif
-
-
-                                                                            <!-- </div> -->
+                                                                            <div class="col-12 d-flex justify-content-center">
+                                                                                <button card-id="{{ $topicDetail['topic_id'] }}" class="btn think-btn-secondary start_assignment" href="">Start Assignment</button>
+                                                                            </div>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                 </div>

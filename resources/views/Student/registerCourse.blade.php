@@ -43,6 +43,7 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
         </div>
     </div>
     <div class="row">
+        @if(!empty($singleCourseDetails))
         @foreach($singleCourseDetails as $singleCourseDetail)
             @php ($active_class = 'inactive')
         <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-4">
@@ -73,6 +74,9 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
             </div>
         </div>
         @endforeach
+        @else
+        <x-nodatafound message="All batches have started!"  notype="" />
+        @endif
     </div>
     <div class="row mt-4 mb-4">
         <div class="buttons d-flex justify-content-end mt-2">

@@ -346,7 +346,18 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
       } else {
         removeError(checkbox)
       }
-
+      if(password.value.length < 5) { 
+        e.preventDefault();
+        showError(password, 'Minimum 5 characters required');
+      }
+      if(password.value.length > 12) { 
+        e.preventDefault();
+        showError(password, 'Maximum 12 characters allowed');
+      }
+      if(!password.value.match(/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/)) {
+        e.preventDefault();
+        showError(password, 'The password should contain atleast one special character, number and alphabets.');
+      }
     });
     const form = document.getElementById('signupForm');
     const firstname = document.getElementById('firstName');

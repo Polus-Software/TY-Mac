@@ -99,7 +99,7 @@ class MyCoursesController extends Controller
           );
         array_push($singleEnrolledCourseData, $enrolledCourseData);
 
-            $liveSessions = LiveSession::where('course_id', $courseId)->get();
+            $liveSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $enrolledCourse->batch_id)->get();
             $current_date = Carbon::now()->format('Y-m-d');
            
             foreach($liveSessions as $session) {

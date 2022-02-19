@@ -5,6 +5,12 @@
 #deactivate {
   cursor: pointer;
 }
+.modal-header {
+    padding: 1rem 3rem 0 3rem;
+}
+.modal-body {
+    padding: 2rem 3rem 1rem 3rem;
+}
 </style>
 <!-- container -->
 <div class="container-fluid llp-container">
@@ -38,7 +44,7 @@
               @if(!empty($studentDatas))
               @foreach($studentDatas as $studentData)
               <tr id="{{$studentData['id'] }}">
-                <td>{{ $slno }}</td>
+                <td><b>{{ $slno }}</b></td>
                 <td class="align-middle text-center">
                 <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
                 </td>
@@ -102,7 +108,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger delete" id="deleteButton">Delete</button>
+          <button type="button" class="btn btn-secondary think-btn-secondary delete" id="deleteButton">Deactivate</button>
         </div>
       </form>
     </div>

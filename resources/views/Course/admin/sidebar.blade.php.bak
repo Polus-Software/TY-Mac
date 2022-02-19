@@ -1,7 +1,7 @@
 <!-- sidebar -->
 <div class="bg-light d-flex flex-column justify-content-between flex-shrink-0 llp-sidebar">
 
-  <ul class="nav nav-pills flex-column mb-auto mt-3">
+  <ul class="nav nav-pills flex-column mb-auto mt-5">
     <li class="nav-item">
       <a class="nav-link link-dark" href="">
         Status:

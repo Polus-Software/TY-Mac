@@ -96,6 +96,8 @@ return array(
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\Services\\CourseService' => $baseDir . '/app/Services/CourseService.php',
     'App\\Services\\UserService' => $baseDir . '/app/Services/UserService.php',
+    'App\\View\\Components\\Courseboxlive' => $baseDir . '/app/View/Components/Courseboxlive.php',
+    'App\\View\\Components\\Courseboxmd' => $baseDir . '/app/View/Components/Courseboxmd.php',
     'App\\View\\Components\\Courseboxsmall' => $baseDir . '/app/View/Components/Courseboxsmall.php',
     'App\\View\\Components\\Nodatafound' => $baseDir . '/app/View/Components/Nodatafound.php',
     'Asm89\\Stack\\Cors' => $vendorDir . '/asm89/stack-cors/src/Cors.php',

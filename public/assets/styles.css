@@ -28,6 +28,7 @@
 .modal-body {
     padding: 0 3rem 3rem 3rem;
 }
+
 /* Written for style all modal labels */
 .modal .form-group > label {
     font-family: "Roboto", sans-serif;
@@ -88,7 +89,7 @@
     padding-right: 25px;
     background: var(--color-secondary);
     font-size: 1rem !important;
-    border: none;
+    border: 1px solid var(--color-secondary);
     color: var(--color-white);
 }
 

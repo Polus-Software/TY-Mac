@@ -31,7 +31,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
     <div class="container">
     @if(Auth::check())  
-    @if(Auth::user()->role_id == Config::get('common.ROLE_ID_ADMIN') || Auth::user()->role_id == Config::get('common.ROLE_NAME_CONTENT_CREATOR'))
+    
+    @if(Auth::user()->role_id == Config::get('common.ROLE_ID_ADMIN') || Auth::user()->role_id == 4)
       <a class="navbar-brand" href="/dashboard"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
     @else
       <a class="navbar-brand" href="/"><img src="/storage/logo/ty_mac__vector.svg"></img></a>
@@ -44,7 +45,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      @if(Auth::check() && (Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != Config::get('common.ROLE_NAME_CONTENT_CREATOR')))  
+      @if(Auth::check() && (Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != 4))  
       <form class="mb-2 mb-lg-0 mt-lg-0 d-flex me-auto mt-3 w-xl-75 w-100 mx-xl-4 mx-lg-2 mx-0">
         @csrf
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
@@ -57,7 +58,7 @@
     
     <ul class="navbar-nav mx-0 think-custom-nav-1">
     @if (Auth::check())
-      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR') && Auth::user()->role_id !== Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id !== Config::get('common.ROLE_NAME_CONTENT_CREATOR'))      
+      @if(Auth::user()->role_id !== Config::get('common.ROLE_ID_INSTRUCTOR') && Auth::user()->role_id !== Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id !== 4)      
         <li class="nav-item {{ (request()->is('/')) ? 'active': '' }}">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
@@ -85,7 +86,7 @@
           <a class="nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a>
         </li>
         @else
-        @if(Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != Config::get('common.ROLE_NAME_CONTENT_CREATOR'))
+        @if(Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != 4)
         <li class="nav-item {{ (request()->is('my-courses')) ? 'active': '' }}">
           <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
         </li>
