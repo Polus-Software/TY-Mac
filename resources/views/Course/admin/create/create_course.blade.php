@@ -169,7 +169,7 @@
             <button type="button" class="btn btn-secondary btn-sm mt-3" id="add-more-what-learn">Add section</button>
           </div>
           <div class="col-12">
-            <label for="who-course">Who is this course is for?</label><br>
+            <label for="who-course">Who is this course for?</label><br>
             
             <!-- <label for="who-course-description">Description</label>            
             @if(isset($course_details['short_description']))
@@ -182,7 +182,6 @@
               <span class="text-danger mb-3">This field is required</span><br>
             @endif -->
             
-            <label for="who-course-points mt-2">Points</label>
             @if(isset($course_details['course_details_points']))
             <textarea class="form-control mb-3" name="who_learn_points" rows="4">{{ $course_details['course_details_points'] }}</textarea>
             @else

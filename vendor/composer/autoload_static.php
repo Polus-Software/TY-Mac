@@ -674,6 +674,8 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Services\\CourseService' => __DIR__ . '/../..' . '/app/Services/CourseService.php',
         'App\\Services\\UserService' => __DIR__ . '/../..' . '/app/Services/UserService.php',
+        'App\\View\\Components\\Courseboxlive' => __DIR__ . '/../..' . '/app/View/Components/Courseboxlive.php',
+        'App\\View\\Components\\Courseboxmd' => __DIR__ . '/../..' . '/app/View/Components/Courseboxmd.php',
         'App\\View\\Components\\Courseboxsmall' => __DIR__ . '/../..' . '/app/View/Components/Courseboxsmall.php',
         'App\\View\\Components\\Nodatafound' => __DIR__ . '/../..' . '/app/View/Components/Nodatafound.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Cors.php',

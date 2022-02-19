@@ -1,6 +1,14 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+<style>
+.modal-header {
+  padding: 1rem 3rem 0 3rem;
+}
+.modal-body {
+  padding: 1rem 0rem 0rem 0rem !important;
+}
+</style>
 <!-- container -->
 <div class="container-fluid llp-container">
   <div class="row">

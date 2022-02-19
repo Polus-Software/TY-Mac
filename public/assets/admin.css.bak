@@ -21,7 +21,7 @@ body {
 }
 
 .llp-container {
-    margin-top: 66px;
+    margin-top: 56px;
 }
 
 .llp-countbox {
@@ -41,9 +41,9 @@ body {
     color: var(--main-link-color);
 }
 
-/* .llp-sidebar {
+.llp-sidebar {
     height: 100vh;
-} */
+}
 
 .llp-sidebar .nav-link svg {
     color: var(--main-title-color);
@@ -169,7 +169,7 @@ body {
 }
 
 .btn-bottom-container {
-    /* bottom: 85px; */
+    bottom: 85px;
     padding: 15px;
 }
 
@@ -197,7 +197,7 @@ body {
 	position:fixed;
 }
 .left_sidebar .d-flex{
-	height: calc(100vh - 66px);
+	height: calc(100vh - 56px);
     overflow-y: auto;
 }
 .left_sidebar .nav-item i{
@@ -220,9 +220,9 @@ body {
 	padding:12px 40px;
 	display:flex;
 }
-/* .left_sidebar .mt-5{
+.left_sidebar .mt-5{
 	margin-top:4rem!important;
-} */
+}
 .right_card_block .card{
 	border:0;
 }

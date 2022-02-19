@@ -1,3 +1,4 @@
+@php use App\Models\GeneralChat; @endphp
 @extends('Layouts.app')
 @section('content')
 <style>
@@ -209,7 +210,7 @@ small#assignment_table_batch {
 }
 #copy-link{
     position: absolute;
-    top: 8.5rem;
+    top: 10.5rem;
     color: #6c757d;
     font-size: 13px;
     cursor: pointer;
@@ -710,7 +711,7 @@ small#assignment_table_batch {
                                 color: white;
                                 position: absolute;
                                 top: 10px;
-                            ">Contact instructor</button>
+                            ">Contact instructor({{$generalChat}})</button>
                              </div>
                             @endif
                            
@@ -776,7 +777,9 @@ small#assignment_table_batch {
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
                                         <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
-                                        <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message</a>
+                                        <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message
+                                            ({{$generalCount = GeneralChat::where('student', $student->id)->where('instructor', $instructorId)->where('course_id', $courseId)->where('read_by_instructor', false)->count();}})
+                                        </a>
                                     </button>
                                        
                                     </h2>
@@ -1215,9 +1218,9 @@ small#assignment_table_batch {
                                         <div class="row earned-badges pt-5 pb-5 d-flex mb-3">
                                         @if(!empty($achievedBadgeDetails))
                                         @foreach($achievedBadgeDetails as $achievedBadgeDetail)
-                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                                <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="badge" class="ms-3">  
-                                                <p class="col-lg-12 badges ps-2 m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
+                                            <div class="col-lg-2 col-md-3 col-sm-3 col-3 text-center">
+                                                <img src="{{ asset('/storage/achievementBadges/'.$achievedBadgeDetail['badge_image']) }}" alt="{{$achievedBadgeDetail['badge_name']}}" class="d-block mx-auto">  
+                                                <p class="badges m-0"> {{$achievedBadgeDetail['badge_name']}}</p>
                                                 <small> {{$achievedBadgeDetail['badge_created_at']}}</small>
                                             </div>
                                         @endforeach
@@ -1227,11 +1230,11 @@ small#assignment_table_batch {
                                         </div>
 
                                 <h5 class="card-title border-bottom pt-2 pb-2">Upcoming Badges</h5>
-                                <div class="row pt-5 pb-5 d-flex justify-content-start ps-3">
+                                <div class="row pt-5 pb-5 d-flex mb-3">
                                     @foreach($upcoming as $upcomingBadge)
-                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                                        <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="">
-                                        <p class="col-lg-12 badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
+                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3 text-center">
+                                        <img src="{{ asset('/storage/achievementBadges/'.$upcomingBadge['badge_image']) }}" alt="{{ $upcomingBadge['badge_name'] }}" class="d-block mx-auto">
+                                        <p class="badges m-0">{{ $upcomingBadge['badge_name'] }}</p>
                                         
                                     </div>
                                     @endforeach
@@ -1239,15 +1242,17 @@ small#assignment_table_batch {
 
                                 <h5 class="card-title border-bottom pt-2 pb-2 mb-4">Badge List</h5>
                                 @foreach($badgesDetails as $badgesData)
-                                <div class="row d-flex justify-content-start ps-3 mb-3 mt-3">
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-4">
+                                <div class="row d-flex my-5">
+                                    <div class="col-lg-2 col-md-3 col-sm-3 col-3 text-center">
                                         <img src="{{ asset('/storage/achievementBadges/'.$badgesData['badge_image']) }}" alt="">
                                         <p class="col-lg-12 badges m-0 card-title">{{ $badgesData['badge_name'] }}</p>
                                         
                                     </div>
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
-                                        <p class="badges">{{ $badgesData['badge_name'] }}</p>
-                                        <p>{{ $badgesData['badge_description'] }}</p>
+                                    <div class="col-lg-10 col-md-9 col-sm-9 col-9 d-flex align-items-center ps-5">
+                                        <ul class="list-unstyled">
+                                            <li class="badges fw-bold">{{ $badgesData['badge_name'] }}</li>
+                                            <li>{{ $badgesData['badge_description'] }}</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 @endforeach

@@ -25,6 +25,7 @@
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
+                <th scope="col">Avatar</th>
                 <th scope="col" colspan="2">Name</th>
                 <th scope="col">E-mail ID</th>
                 <th scope="col">Admin Added On</th>
@@ -38,6 +39,9 @@
               @php ($slno = $slno + 1)
               <tr id="{{$admin->id}}">
                 <th class="align-middle" scope="row">{{  ($admins->currentpage() -1) * $admins->perpage() + $slno }}</th>
+                <td class="align-middle">
+                  <img src="{{ asset('/storage/images/'. $admin->image) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
+                </td>
                 <td class="align-middle" colspan="2">{{$admin->firstname}} {{$admin->lastname}}</td>
                 <td class="align-middle">{{$admin->email}} </td>
                 <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $admin->created_at)->format('m/d/Y')}}</td>

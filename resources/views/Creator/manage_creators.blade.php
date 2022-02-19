@@ -1,6 +1,14 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+<style>
+  .modal-header {
+  padding: 1rem 3rem 0 3rem;
+}
+.modal-body {
+  padding: 1rem 0rem 0rem 0rem !important;
+}
+</style>
 <!-- container -->
 <div class="container-fluid llp-container">
   <div class="row">
@@ -25,6 +33,7 @@
             <thead>
               <tr>
                 <th scope="col">Slno.</th>
+                <th scope="col">Avatar</th>
                 <th scope="col" colspan="2">Name</th>
                 <th scope="col">E-mail ID</th>
                 <th scope="col">Content Creator Added On</th>
@@ -38,6 +47,9 @@
               @php ($slno = $slno + 1)
               <tr id="{{$creator->id}}">
                 <th class="align-middle" scope="row">{{  ($creators->currentpage() -1) * $creators->perpage() + $slno }}</th>
+                <td class="align-middle">
+                  <img src="{{ asset('/storage/images/'.$creator->image) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
+                </td>
                 <td class="align-middle" colspan="2">{{$creator->firstname}} {{$creator->lastname}}</td>
                 <td class="align-middle">{{$creator->email}} </td>
                 <td class="align-middle">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $creator->created_at)->format('m/d/Y')}}</td>
@@ -203,7 +215,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="confirm_creator_delete" class="btn btn-danger">Delete</button>
+        <button type="button" id="confirm_creator_delete" class="btn btn-secondary think-btn-secondary">Delete</button>
       </div>
     </div>
   </div>

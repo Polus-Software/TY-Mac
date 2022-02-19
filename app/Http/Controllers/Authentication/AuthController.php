@@ -45,7 +45,7 @@ class AuthController extends Controller
         try {
             $userType = UserType::where('user_role', 'Student')->value('id');
             $user_type = UserType::where('user_role', 'Admin')->value('id');
-        
+            
             $request->validate([
                 'firstname' => 'required',
                 'lastname' => 'required',
@@ -54,7 +54,6 @@ class AuthController extends Controller
                 'password_confirmation' =>'required',
                 'privacy_policy' =>'accepted'
             ]);
-
             $admins = User::where('role_id', $user_type)->get();
             $user = new User;
             $user->firstname = $request->firstname;
@@ -64,7 +63,7 @@ class AuthController extends Controller
             $user->role_id = $userType;
             $user->timezone = "UTC";
             $user->save();
-        
+
             $email= $request->email;
             $details =[
             'firstname'=> $request->firstname,

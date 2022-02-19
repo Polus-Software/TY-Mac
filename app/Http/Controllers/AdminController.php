@@ -454,7 +454,7 @@ class AdminController extends Controller
                 $html = $html . '<img src="/storage/images/' . $student->value('image') . '" class="rounded-circle" alt="" style="width:40px; height:40px;"></td>';    
                 $html = $html .  '<td class="align-middle">'. $studentFName .'</td>';
                 $html = $html .  '<td class="align-middle">' . $studentLName . '</td>';
-                $status = $data->attendance_Status == 1 ?  '<span class="badge rounded-pill bg-success text-dark" style="color:white !important;">Present</span>' : '<span class="badge rounded-pill bg-danger text-dark" style="color:white !important;">Absent</span>';
+                $status = $data->attendance_Status == 1 ?  '<span class="badge rounded-pill bg-success text-dark" style="color:#008000d1!important;">Present</span>' : '<span class="badge rounded-pill bg-danger text-dark" style="color:white !important;">Absent</span>';
                 
                 $html = $html .  '<td class="align-middle text-center">' . $hours . ':' . $minutes . ':' . $seconds . '</td>';
                 $html = $html .  '<td class="align-middle text-center">' . round($percent,2) . '%</td>';

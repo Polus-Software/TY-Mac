@@ -431,8 +431,12 @@ class EnrolledCourseController extends Controller
                 array_push($finalRec, $singleRec);
             }
         }
+        if($userType === 'instructor') {
+            $qas = CourseQA::where('course_id', $courseId)->where('batch_id', $selectedBatch)->orderBy('created_at', 'desc')->get();
+        } else {
+            $qas = CourseQA::where('course_id', $courseId)->orderBy('created_at', 'desc')->get();
+        }
         
-        $qas = CourseQA::where('course_id', $courseId)->orderBy('created_at', 'desc')->get();
         
         foreach($qas as $qa) {
             $student = User::where('id', $qa->student);
@@ -462,6 +466,7 @@ class EnrolledCourseController extends Controller
         $generalCourseFeedback = GeneralCourseFeedback::where('course_id', $courseId)->where('user_id', $user->id)->get();
         $feedbackCount = count($generalCourseFeedback);
         if($userType === 'student') {
+            $generalChat = GeneralChat::where('student', $user->id)->where('course_id', $courseId)->where('read', false)->count();
             return view('Student.enrolledCoursePage',[
                 'singleCourseDetails' => $courseDetails,
                 'topicDetails' =>  $topicDetails,
@@ -477,7 +482,8 @@ class EnrolledCourseController extends Controller
 				'review_status' => $review_status,
                 'feedbackCount' => $feedbackCount,
                 'instructorId' => $assigned,
-                'studentId' => $user->id
+                'studentId' => $user->id,
+                'generalChat' => $generalChat
             ]);
         }
         
@@ -498,6 +504,9 @@ class EnrolledCourseController extends Controller
                     $studentAssignment = Assignment::where('student_id' , $student->id)->where('topic_assignment_id', $assignment->id)->get();
                     if(count($studentAssignment) == 0) {
                         $status = "Pending";  
+                    } elseif($studentAssignment[0]->is_submitted == false) {
+                        $status = "Pending";
+                        $stuAssignment = $studentAssignment[0]->assignment_id;
                     } elseif($studentAssignment[0]->is_completed == true) {
                         $status = "Completed";
                         $stuAssignment = $studentAssignment[0]->assignment_id;
@@ -533,7 +542,8 @@ class EnrolledCourseController extends Controller
 
             // Hours spent
             $spentHours = 0;
-            $spentSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $selectedBatch)->where('start_date', '<', $current_date)->get();
+            
+            $spentSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $selectedBatch)->where('start_date', '<=', $current_date)->where('end_time', '<=', Carbon::now()->format('H:i:s'))->get();
             
             foreach($spentSessions as $spentSession) {
                 $spentHours += intval((new Carbon($spentSession->start_time))->diff(new Carbon($spentSession->end_time))->format('%h'));
@@ -974,6 +984,8 @@ class EnrolledCourseController extends Controller
         if($user) {
             $student = User::where('id', $user->id)->value('id');
             
+            $enrolledCourse = EnrolledCourse::where('user_id', $user->id)->where('course_id', $course_id);
+            $batch = $enrolledCourse->value('batch_id');
             
             $badgeId = AchievementBadge::where('title', 'Q&A')->value('id');
             $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('course_id', $course_id)->where('badge_id', $badgeId)->count();
@@ -997,6 +1009,7 @@ class EnrolledCourseController extends Controller
         $qa->instructor = $instructor;
         $qa->question = $question;
         $qa->has_replied = false;
+        $qa->batch_id = $batch;
 
         $qa->save();
 
@@ -1160,7 +1173,12 @@ class EnrolledCourseController extends Controller
         $instructorId = $request->instructor;
         $courseId = $request->course;
         $batch = $request->batch;
-
+        if($user->id == $studentId) {
+            $chats = GeneralChat::where('course_id', $courseId)->where('student', $studentId)->where('instructor', $instructorId)->update(['read' => true]);
+        } else if($user->id == $instructorId) {
+            $chats = GeneralChat::where('course_id', $courseId)->where('student', $studentId)->where('instructor', $instructorId)->update(['read_by_instructor' => true]);
+        }
+        
         return view('Student.studentInstructorChat',[
             'courseId' => $courseId,
             'studentId' => $studentId,
@@ -1198,7 +1216,7 @@ class EnrolledCourseController extends Controller
             }
             $html = $html . "<p class='chat-message-body ". $sameUser ."'><b class='participant-name'>". $sender .": </b><span class='participant-msg'>" . $chat->message . "</span></p>";
         }
-
+        
         return response()->json(['html' => $html]);
     }
 
@@ -1215,6 +1233,14 @@ class EnrolledCourseController extends Controller
         $generalChat = new GeneralChat;
         $generalChat->course_id = $courseId;
         $generalChat->student = $studentId;
+        if($loggedInId == $studentId) {
+            $generalChat->read = true;
+            $generalChat->read_by_instructor = false;
+        } else if($loggedInId == $instructorId) {
+            $generalChat->read = false;
+            $generalChat->read_by_instructor = true;
+        }
+        
         $generalChat->instructor = $instructorId;
         $studentName = User::where('id', $studentId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
         $generalChat->student_name = $studentName;

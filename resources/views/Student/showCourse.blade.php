@@ -176,7 +176,7 @@
           </div>
         </div>
         <!-- course content end-->
-        <!-- Who is this course is for -->
+        <!-- Who is this course for -->
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body p-4">

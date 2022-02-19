@@ -155,22 +155,11 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '099' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '909' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
-    public function buildTokenStudent(Request $request) {
-        $user = Auth::user()->id;
-        $role = self::RoleAttendee;
-        $expireTimeInSeconds = 3600;
-        $currentTimestamp = (new DateTime("now", new DateTimeZone('UTC')))->getTimestamp();
-        $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
-        $token = AccessToken::init(self::appId, self::appCertificate, $user, "");
-        $Privileges = AccessToken::Privileges;
-        $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
-        $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => 'Instructor', 'roomid' => strval(rand(101, 500)), 'channel' => 'Live Session', 'role' => $role , 'duration' => $expireTimeInSeconds]);
-    }
+    
 
     public function scheduleSession(Request $request) {
         $userType = UserType::where('user_role', 'instructor')->value('id');
