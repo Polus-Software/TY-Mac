@@ -155,7 +155,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '909' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '9101' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
@@ -1004,7 +1004,7 @@ class RtmTokenGeneratorController extends Controller
 
         $isScreenShared = $singleSession->value('is_screen_shared');
 
-        $docUrl = public_path() . "\storage\content_documents\\" . TopicContent::where('topic_content_id', $topic)->value('document');
+        $docUrl = public_path() . "\storage\study_material\\" . TopicContent::where('topic_content_id', $topic)->value('document');
        
         return response()->json(['screenShare' => $isScreenShared, 'is_presenting' => $pushRecord, 'docUrl' => $docUrl]);
     }
@@ -1110,7 +1110,7 @@ class RtmTokenGeneratorController extends Controller
         $courseId = $liveSession->value('course_id');
         $topic = Topic::where('topic_id', $topicId)->value('topic_title');
         $course = Course::where('id', $courseId)->value('course_title');
-        $session = "099" . $session;
+        $session = "9101" . $session;
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         $expireTimeInSeconds = 1800;

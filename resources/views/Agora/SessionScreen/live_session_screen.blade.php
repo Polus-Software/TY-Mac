@@ -1227,7 +1227,7 @@ body {
     @csrf
     <p class="notif-text think-color-dark margin-top-18 think-fs--16 ">{{ $topic_title }}</p>
     @foreach($contents as $content)
-    <div href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
+    <div href="{{ url('/') }}/storage/study_material/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
     @endforeach
   </div>
 
@@ -1257,11 +1257,11 @@ body {
         <span class="content_title_text" id="content_title_{{ $content->topic_content_id }}">{{ $content->topic_title }}</span></td>
           <td align="right">
           @if ($loop->first)
-            <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/study_material/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
                Start
             </button>
           @else 
-            <button data-topic-number="{{ $slNo }}" class="course_contents not_started" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            <button data-topic-number="{{ $slNo }}" class="course_contents not_started" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/study_material/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
                Not yet started
             </button>
           @endif
@@ -1803,8 +1803,14 @@ setInterval(function () {
           presentingFlag = data.presentingContentId;
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        let extension = get_url_extension(document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href'));
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
-        document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+        if(extension == "ppt" || extension == "pptx" || extension == "doc" || extension == "docx") {
+          document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+        } else {
+          document.getElementById('course_content_iframe').setAttribute('src', docUrl);
+        }
+        
         } 
       } else {
         document.getElementById('course_content_iframe').classList.add('nodisplay');
@@ -1840,7 +1846,7 @@ for(index = 0; index < length;index++) {
       if(document.getElementById('user_type').value == "Instructor") {
         document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
       }
-      if (extension == "pptx" || extension == "ppt") {
+      if (extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx") {
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');

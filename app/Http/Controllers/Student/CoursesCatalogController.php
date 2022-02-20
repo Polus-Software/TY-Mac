@@ -420,53 +420,86 @@ class CoursesCatalogController extends Controller
      $courses = DB::table('courses')->where('is_published', true);
      
      if($instructors) {
+        $i = 0;
+        $instructorIds = "";
         $instructorsArr = explode(",", $instructors);
-        
+        $count = count($instructorsArr);
         foreach($instructorsArr as $instructor) {
-           $instructorPair = explode('=', $instructor);
-           
-           if($instructorFlag == 0) {
-               $courses = $courses->where('instructor_id', $instructorPair[1]);
-               $instructorFlag = 1;
+           $i++;
+           if($i == $count) {
+               $instructorPair = explode('=', $instructor);
+               $instructorIds .= $instructorPair[1];
            } else {
-               $courses = $courses->orWhere('instructor_id', $instructorPair[1]);
+               $instructorPair = explode('=', $instructor);
+               $instructorIds .= $instructorPair[1] . ',';
            }
         }
+
+        $includedInstructors = explode(',', $instructorIds);
+        $courses = $courses->whereIn('instructor_id', $includedInstructors);
     }
 
      if($categories) {
+         $i = 0;
+         $categoryIds = "";
          $categoriesArr = explode(",", $categories);
+         $count = count($categoriesArr);
          foreach($categoriesArr as $category) {
-            $categoryPair = explode('=', $category);
-            if($categoryFlag == 0) {
-                $courses = $courses->where('category', $categoryPair[1]);
-                $categoryFlag = 1;
+            $i++;
+            if($i == $count) {
+                $categoryPair = explode('=', $category);
+                $categoryIds .= $categoryPair[1];
             } else {
-                $courses = $courses->orWhere('category', $categoryPair[1]);
+                $categoryPair = explode('=', $category);
+                $categoryIds .= $categoryPair[1] . ',';
             }
          }
+
+         $includedCategories = explode(',', $categoryIds);
+         $courses = $courses->whereIn('category', $includedCategories);
      }
 
      if($levels) {
+        $i = 0;
+        $levelIds = "";
         $levelsArr = explode(",", $levels);
+        $count = count($levelsArr);
         foreach($levelsArr as $level) {
-           $levelPair = explode('=', $level);
-           
-            if($levelPair[1] == "all") {
-                $courses = $courses->where('course_difficulty', 'beginner')->orWhere('course_difficulty', 'intermediate')->orWhere('course_difficulty', 'advanced');
-                break;
-            }
-            if($levelsFlag == 0) {
-                if($categoryFlag == 1) {
-                    $courses = $courses->where('course_difficulty', $levelPair[1]);
-                    dd($courses->count());
-                }
-                $levelsFlag = 1;
-            } else {
-                $courses = $courses->orWhere('course_difficulty', $levelPair[1]);
-            }
+           $i++;
+           if($i == $count) {
+               $levelPair = explode('=', $level);
+               $levelIds .= $levelPair[1];
+           } else {
+               $levelPair = explode('=', $level);
+               $levelIds .= $levelPair[1] . ',';
+           }
         }
+
+        $includedLevels = explode(',', $levelIds);
+        $courses = $courses->whereIn('course_difficulty', $includedLevels);
     }
+
+    // if($ratings) {
+    //     $i = 0;
+    //     $ratingIds = "";
+    //     $ratingsArr = explode(",", $ratings);
+    //     $count = count($ratingsArr);
+    //     foreach($ratingsArr as $rating) {
+    //        $i++;
+    //        if($i == $count) {
+    //            $ratingPair = explode('=', $rating);
+    //            $ratingIds .= $ratingPair[1];
+    //        } else {
+    //            $ratingPair = explode('=', $rating);
+    //            $ratingIds .= $ratingPair[1] . ',';
+    //        }
+    //     }
+
+    //     $includedRatings = explode(',', $ratingIds);
+    //     $courses = $courses->whereIn('course_rating', $includedRatings);
+    // }
+
+    
 
     if($ratings) {
         $ratingsArr = explode(",", $ratings);
@@ -500,9 +533,9 @@ class CoursesCatalogController extends Controller
                 if($durationPair[1] == "less_than_1") {
                     $courses = $courses->orWhere('course_duration', '<', 1);
                 } else if($durationPair[1] == "less_than_2") {
-                    $courses = $courses->orWhere('course_duration', '<', 2);
+                    $courses = $courses->orWhere('course_duration', '<=', 2);
                 } else if($durationPair[1] == "less_than_5") {
-                    $courses = $courses->orWhere('course_duration', '<', 5);
+                    $courses = $courses->orWhere('course_duration', '<=', 5);
                 } else if($durationPair[1] == "greater_than_5") {
                     $courses = $courses->orWhere('course_duration', '>', 5);
                 }  
@@ -515,16 +548,6 @@ class CoursesCatalogController extends Controller
      if(count($courses)) {
            foreach($courses as $course) {
 				
-				// $ratingsCount = 0;
-				// if($course->use_custom_ratings) {
-				// 	$ratings = $course->course_rating;
-				// } 
-				// else{
-				// 	$generalCourseFeedbacks = GeneralCourseFeedback::where('course_id', $course->id)->get();
-				// 	foreach($generalCourseFeedbacks as $generalCourseFeedback) {
-				// 		$ratingsCount++;
-				// 	}
-				// }
                 $courseCategory = CourseCategory::where('id', $course->category)->value('category_name');     
                 $assigned = DB::table('assigned_courses')->where('course_id', $course->id)->value('user_id');
                 $instructorfirstname = User::where('id', $assigned)->value('firstname');

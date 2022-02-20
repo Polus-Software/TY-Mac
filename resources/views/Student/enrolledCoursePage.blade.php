@@ -414,37 +414,22 @@ small#assignment_table_batch {
 
                                         </p>
                                     </div>
-                                    <div class="row">
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-12">
                                             <p class="duration"><i class="far fa-clock pe-1"></i>
                                                 Next Live Class: - <small>{{$next_live_cohort}}</small>
 
                                             </p>
-                                            @foreach($singleCourseDetails as $course)
-                                            <!-- <a href="{{ route('generate-certificate', $course['id']) }}" class="btn p-0 mb-3">Download certificate<i class="fas fa-download ps-3"></i></a> -->
-                                            @endforeach
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-12">
-                                             
-                                               
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6 text-end">
-                                            @if($userType == 'instructor')
-                                            <input type="hidden" id="batch_id" value="{{ $selectedBatch }}">
-                                            @endif
-                                            <input type="hidden" id="course_id" value="{{$course['id']}}">
-                                            <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
+                                        @if($userType == 'instructor')
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-end">
+                                            <a href="/choose-cohort?id={{$course['id']}}" id="batch-selection">Back</a>
                                         </div>
-                                    </div>
-                                    @if($userType == 'instructor')
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <a style="font-size:12px;color:#6a6a6a;background-color:transparent;" href="/choose-cohort?id={{$course['id']}}" class="btn btn-secondary" id="batch-selection">Go back</a>
-                                        </div>                               
-                                    </div>
-                                    @endif
-                                </div>
+                                        @endif
+                                        @if($userType == 'instructor')
+                                        <input type="hidden" id="batch_id" value="{{ $selectedBatch }}">
+                                        @endif
+                                        <input type="hidden" id="course_id" value="{{$course['id']}}">
+                                        <input type="hidden" id="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                             </div>
                         </div>
                     </div>
@@ -1571,7 +1556,7 @@ for(index = 0;index < replyEleCount;index++) {
                 document.getElementById('replyContent_' + qaId).innerHTML = data.reply;
                 document.getElementById('updatedAt_' + qaId).innerHTML = data.updatedAt;
                 document.getElementById("replyTextArea_" + qaId).style.display = "none";
-                location.reload();
+                window.location.href += "&qa=true";
             }
         });
     });
