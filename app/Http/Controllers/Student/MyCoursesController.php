@@ -129,12 +129,13 @@ class MyCoursesController extends Controller
                         'course_thumbnail_image' => $courseThumbnailImage,
                         'enrolledCourses' => $enrolledCourses,
                         'date' => $date,
-                        'course_id' => $session->course_id
+                        'course_id' => $session->course_id,
+                        'batchId' => $session->batch_id
                     ));
                   
                     
                 } elseif ($currentBatchStartDate == $current_date) {
-                  if($session->start_time <= Carbon::now()->format('H:i:s') && $session->end_time >= Carbon::now()->format('H:i:s')) {
+                  if($session->start_time <= Carbon::now()->addMinutes(10)->format('H:i:s') && $session->end_time >= Carbon::now()->format('H:i:s')) {
                     if($session->is_instructor_present) {
                       $session_title = $session->session_title;
                       $course = Course::where('id', $session->course_id);
@@ -157,7 +158,8 @@ class MyCoursesController extends Controller
                           'instructor' => $instructor,
                           'enrolledCourses' => $enrolledCourses,
                           'date' => $date,
-                          'id' => $session->live_session_id
+                          'id' => $session->live_session_id,
+                          'batchId' => $session->batch_id
                       ));
                     }
                   }

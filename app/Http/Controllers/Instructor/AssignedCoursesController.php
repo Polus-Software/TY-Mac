@@ -152,7 +152,8 @@ class AssignedCoursesController extends Controller
                             'enrolledCourses' => $enrolledCourses,
                             'image' => $course->value('course_thumbnail_image'),
                             'date' => $date,
-                            'session_id' => $session->live_session_id
+                            'session_id' => $session->live_session_id,
+                            'batchId' => $session->batch_id
                         ));
                  } elseif ($currentBatchStartDate == $current_date) {
                     //  ->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))
@@ -179,7 +180,8 @@ class AssignedCoursesController extends Controller
                             'enrolledCourses' => $enrolledCourses,
                             'date' => $date,
                             'session_id' => $session->live_session_id,
-                            'id' => $session->live_session_id
+                            'id' => $session->live_session_id,
+                            'batchId' => $session->batch_id
                         ));
                     }
                  }

@@ -901,7 +901,7 @@ small#assignment_table_batch {
                                                             <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                                                                 <p class="card-title text-left">
                                                                     @foreach($singleCourseDetails as $course)
-                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;{{ $course['designation'] }} at {{ $course['institute'] }}
+                                                                    {{ $course['instructor_firstname'] }} {{ $course['instructor_lastname'] }} &nbsp;<span class="d-block fs-14 fst-italic fw-normal text-muted text-truncate">{{ $course['designation'] }} at {{ $course['institute'] }}</span>
                                                                     @endforeach
 
                                                                 </p>
@@ -1139,8 +1139,8 @@ small#assignment_table_batch {
                                                                                     <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form assignmentForm">
                                                                                     @csrf
                                                                                         <input type="hidden" name="assignment_id"  id ="assignment_id" value="{{ $assignment['id'] }}" />
-                                                                                        <textarea style="height: 110px;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
-                                                                                        <small>Error message</small>
+                                                                                        <textarea style="height: 110px;" class="form-control assignmentStudentComment" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                        <small class="text-danger"></small>
                                                                                         @if ($errors->has('assignment_comment'))
                                                                                                             <span class="text-danger">{{ $errors->first('assignment_comment') }}</span>
                                                                                                             @endif
@@ -1148,10 +1148,11 @@ small#assignment_table_batch {
                                                                                                 <div class="row p-2 flex-fill bd-highlight">
                                                                                                     <div class="col-lg-3">Attach File:</div>
                                                                                                         <div class="col-lg-6 col-12"><label>Upload from device</label>
-                                                                                                            <input class="form-control" type="file" name="assignment_upload">
+                                                                                                            <input class="form-control assignmentStudentFile" type="file" name="assignment_upload">
                                                                                                             <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small>
+                                                                                                            <small class="text-danger d-inline-block"></small>
                                                                                                             @if ($errors->has('assignment_upload'))
-                                                                                                            <span class="text-danger">{{ $errors->first('assignment_upload') }}</span>
+                                                                                                            <span class="text-danger d-inline-block">{{ $errors->first('assignment_upload') }}</span>
                                                                                                             @endif
                                                                                                         </div>
                                                                                             <!-- <div class="col-lg-3 pt-4"><a class="btn btn-sm btn-outline-secondary" style="height: 37px;line-height: 27px;">Add external link</a></div> -->
@@ -1724,5 +1725,26 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
     });
 </script>
 @endif
-
+<script>
+    document.querySelector('.assignmentForm').addEventListener('submit', (e) => {
+        const commentEl = document.querySelector('.assignmentStudentComment');
+        const commentErrorEl = commentEl.nextElementSibling;
+        const studentFileEl = document.querySelector('.assignmentStudentFile');
+        const fileErrorEl = studentFileEl.nextElementSibling.nextElementSibling;
+        if (commentEl.value === '') {
+            e.preventDefault();
+            commentErrorEl.innerText = 'The assignment comment field is required.';
+            return false;
+        } else {
+            commentErrorEl.innerText = '';
+        }
+        if (studentFileEl.value === '') {
+            e.preventDefault();
+            fileErrorEl.innerText = 'The assignment attached file field is required.';
+            return false;
+        } else {
+            fileErrorEl.innerText = '';
+        }
+    });
+</script>
 @endpush
