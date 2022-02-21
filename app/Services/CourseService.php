@@ -142,8 +142,8 @@ class CourseService {
                 $offset = CustomTimezone::where('name', $user->value('timezone'))->value('offset');
                 $time_zone = $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->value('timezone')))->format('T');
             } else {
-                $offset = CustomTimezone::where('name', 'UTC')->value('offset');
-                $time_zone = $date->setTimeZone(new DateTimeZone('UTC'))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone('UTC'))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone('UTC'))->format('T') . ")": $date->setTimeZone(new DateTimeZone('UTC'))->format('T');
+                $offset = CustomTimezone::where('name', $batch_time_zone)->value('offset');
+                $time_zone = $date->setTimeZone(new DateTimeZone($batch_time_zone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch_time_zone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch_time_zone))->format('T') . ")" : $date->setTimeZone(new DateTimeZone($batch_time_zone))->format('T');
             }
             
                         

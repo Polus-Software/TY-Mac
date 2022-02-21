@@ -30,9 +30,9 @@
             <div class="row">
                 <div class="text-center border-top">
                     @if($cardtype !== 'live')
-                    <a href="/enrolled-course/{{ $course['course_id'] }}" class="card-link btn w-100">Go to details</a>
+                    <a href="/enrolled-course/{{ $course['course_id'] }}?batchId={{ $course['batchId'] }}" class="card-link btn w-100">Go to details</a>
                     @else
-                    <a href="/session-view/{{ $course['id'] }}" class="card-link btn">Join now</a>
+                    <a href="/session-view/{{ $course['id'] }}?batchId={{ $course['batchId'] }}" class="card-link btn">Join now</a>
                     @endif
                 </div>
             </div>

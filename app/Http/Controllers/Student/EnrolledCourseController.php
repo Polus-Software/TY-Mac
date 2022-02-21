@@ -253,7 +253,7 @@ class EnrolledCourseController extends Controller
                     if($userType == 'instructor') {
                         $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                     } else {
-                        $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
+                        $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->addMinutes(10)->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                     }
                     
                     if(count($todaysLiveSessions) != 0) {
