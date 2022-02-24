@@ -170,6 +170,17 @@ class CourseController extends Controller
         $course->category = $courseCategory;
         $course->course_difficulty = $courseDifficulty;
         $course->course_duration = $courseDuration;
+        $duration_filter_label = "";
+        if($courseDuration < 1) {
+            $duration_filter_label = "less_than_1";
+        } else if($courseDuration >= 1 && $courseDuration < 2) {
+            $duration_filter_label = "less_than_2";
+        } else if($courseDuration >= 2.5 && $courseDuration < 5) {
+            $duration_filter_label = "less_than_5";
+        } else if($courseDuration >= 5) {
+            $duration_filter_label = "greater_than_5";
+        }
+        $course->duration_filter_label = $duration_filter_label;
         $course->short_description = $what_learn;
         $course->course_details = $whoLearnDescription;
         $course->course_details_points = $request->input('who_learn_points');
@@ -390,6 +401,17 @@ class CourseController extends Controller
                 $course->course_difficulty = $difficulty;
                 $course->short_description = $what_learn ;
                 $course->course_duration = $courseDuration;
+                $duration_filter_label = "";
+                if($courseDuration < 1) {
+                    $duration_filter_label = "less_than_1";
+                } else if($courseDuration >= 1 && $courseDuration < 2) {
+                    $duration_filter_label = "less_than_2";
+                } else if($courseDuration >= 2.5 && $courseDuration < 5) {
+                    $duration_filter_label = "less_than_5";
+                } else if($courseDuration >= 5) {
+                    $duration_filter_label = "greater_than_5";
+                }
+                $course->duration_filter_label = $duration_filter_label;
                 $course->course_details = $whoLearnDescription;
                 $course->course_details_points = $who_learn;
                 $course->instructor_id = $instructor;

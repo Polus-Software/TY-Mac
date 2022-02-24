@@ -52,7 +52,7 @@
         <table class="table llp-table">
             <thead>
               <tr>
-                <th scope="col">Slno.</th>
+                <th scope="col">#</th>
                 <th scope="col">Topic Title</th>
                 <th scope="col">Topic Description</th>
                 <th scope="col">Add assignment</th>

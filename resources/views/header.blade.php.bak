@@ -117,7 +117,7 @@
 
       </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#confirm_logout_modal" data-bs-id="">Logout</a>
         </li>
         @else                
         <li class="nav-item">
@@ -165,3 +165,25 @@ document.getElementById("search-box").addEventListener("keyup", function(e) {
     </script>
     @endif
   <!-- navbar new ends -->
+  <!-- Delete admin Modal-->
+<div id="confirm_logout_modal" class="modal fade llp-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm logout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <p class="mt-5">
+        <i class="fas fa-exclamation-triangle text-danger fs-4"></i>
+        Do you really want to logout from the application?
+      </p>
+      </div>
+      <div class="modal-footer">
+        <a href="" class="btn think-btn-secondary-outline">Cancel</a>
+        <a href="{{ route('logout') }}" class="btn think-btn-secondary">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete modal ends -->

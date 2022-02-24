@@ -50,6 +50,7 @@ return array(
     'App\\Mail\\MailAfterLiveSessionScheduled' => $baseDir . '/app/Mail/MailAfterLiveSessionScheduled.php',
     'App\\Mail\\MailAfterQuestion' => $baseDir . '/app/Mail/MailAfterQuestion.php',
     'App\\Mail\\MailAfterReplay' => $baseDir . '/app/Mail/MailAfterReplay.php',
+    'App\\Mail\\OneOnOneMail' => $baseDir . '/app/Mail/OneOnOneMail.php',
     'App\\Mail\\PersonalDetailsUpdatedMail' => $baseDir . '/app/Mail/PersonalDetailsUpdatedMail.php',
     'App\\Mail\\RecommendationMail' => $baseDir . '/app/Mail/RecommendationMail.php',
     'App\\Mail\\RecommendationMailInstructor' => $baseDir . '/app/Mail/RecommendationMailInstructor.php',

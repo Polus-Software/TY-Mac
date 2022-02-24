@@ -67,14 +67,14 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
-                <label for="creator_password" class="col-form-label">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating a new password."></i></label>
+                <label for="creator_password" class="col-form-label">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for creating a new password."></i></label>
                 <input type="password" class="form-control has-validation" id="creator_password" name="password"></input>
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                
                 @else
                 <div class="col-12"> 
-                <label>Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
+                <label>Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for reseting the existing password."></i></label>
                 <input type="password" class="form-control" value="" name="password" id="creator_password" placeholder=" Enter password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>

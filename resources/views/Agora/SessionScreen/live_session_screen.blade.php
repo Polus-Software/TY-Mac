@@ -365,6 +365,11 @@ font-size: 14px;
 	color: #fff !important;
 	border: 1px solid #74648C !important;
 }
+.think-btn-secondary-outline-live.like-button.active {
+	background-color: #74648C !important;
+	color: #fff !important;
+	border: 1px solid #74648C !important;
+}
 .think-btn-secondary-outline-live.dislike-button {
   background-color: #fff !important;
 	color: #868E96 !important;
@@ -372,6 +377,11 @@ font-size: 14px;
   border-radius: 10px;
 }
 .think-btn-secondary-outline-live.dislike-button:hover {
+	background-color: #ffefef !important;
+	color: #a00 !important;
+	border: 1px solid #ffefef !important;
+}
+.think-btn-secondary-outline-live.dislike-button.active {
 	background-color: #ffefef !important;
 	color: #a00 !important;
 	border: 1px solid #ffefef !important;
@@ -1170,22 +1180,23 @@ body {
       </button> 
       <script>
         document.getElementById('positive').addEventListener('click', function(event) {
-  let content = this.getAttribute('data-id');
-  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=positive";
-    fetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-      },
-      body: JSON.stringify({})
-    }).then((response) => response.json()).then((data) => {
-      document.getElementById('negative').classList.remove('pulsate');
-      document.getElementById('positive').classList.remove('pulsate');
-
-    });
-});
+          let content = this.getAttribute('data-id');
+          let session = document.getElementById('live_session_id').value;
+          let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=positive" + "&session=" + session;
+            fetch(path, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRF-Token": document.querySelector('input[name=_token]').value
+              },
+              body: JSON.stringify({})
+            }).then((response) => response.json()).then((data) => {
+              document.getElementById('negative').classList.remove('pulsate');
+              document.getElementById('positive').classList.remove('pulsate');
+              document.getElementById('positive').classList.add('active');
+            });
+        });
         </script>
       <button class="think-btn-secondary-outline-live dislike-button" id="negative" data-id="">
         <i style="margin-right:10px;" class="fas fa-thumbs-down">
@@ -1195,7 +1206,8 @@ body {
         document.getElementById('negative').addEventListener('click', function(event) {
   
   let content = this.getAttribute('data-id');
-  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negative";
+  let session = document.getElementById('live_session_id').value;
+  let path = "{{ route('push-feedbacks') }}?content_id=" + content + "&type=negative" + "&session=" + session;
     fetch(path, {
       method: 'POST',
       headers: {
@@ -1206,6 +1218,7 @@ body {
       body: JSON.stringify({})
     }).then((response) => response.json()).then((data) => {
         document.getElementById('negative').classList.remove('pulsate');
+        document.getElementById('negative').classList.add('active');
         document.getElementById('positive').classList.remove('pulsate');
         
     });
@@ -1592,24 +1605,7 @@ z-index: 100;
             roomId = data.roomid;
             token = data.token;
             uid = data.uid;
-          setTimeout(() => {
-            let recordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/1";
-            fetch(recordPath, {
-                    method: 'PUT',
-                    headers: {
-                      'Accept': 'application/json',
-                      'mode': 'no-cors',
-                      'Content-Type': 'application/json',
-                      'retryTimeout': 60,
-                      'x-agora-token':data.token,
-                      'x-agora-uid':data.uid,
-                      "X-CSRF-Token": document.querySelector('input[name=_token]').value
-                    },
-                  }).then((response) => response.json()).then((data) => {
-                 
-                  });
-          }, 10000);
-        }
+          }
         }
       }
     )
@@ -1724,8 +1720,25 @@ $(document).on('click', '.btn:contains("Finish")', function() {
     $('#back_to_course_div').removeClass('nodisplay');
     $('#btnOpenClose').removeClass('nodisplay');
     $('#exit_session').removeClass('nodisplay');
-});
 
+    setTimeout(() => {
+            let recordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/1";
+            fetch(recordPath, {
+                    method: 'PUT',
+                    headers: {
+                      'Accept': 'application/json',
+                      'mode': 'no-cors',
+                      'Content-Type': 'application/json',
+                      'retryTimeout': 60,
+                      'x-agora-token':token,
+                      'x-agora-uid':uid,
+                      "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                    },
+                  }).then((response) => response.json()).then((data) => {
+                 
+                  });
+          }, 10000);
+});
 
 
 document.getElementById('back_to_course').addEventListener('click', function(e) {
@@ -1807,8 +1820,8 @@ setInterval(function () {
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
         if(extension == "ppt" || extension == "pptx" || extension == "doc" || extension == "docx") {
           document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
-        } else {
-          document.getElementById('course_content_iframe').setAttribute('src', docUrl);
+        } else if(extension == "pdf") {
+          document.getElementById('course_content_iframe').setAttribute('src', docUrl + '#toolbar=0');
         }
         
         } 
@@ -1820,8 +1833,10 @@ setInterval(function () {
       if(data.content_id != null && data.flag == 0) {
       document.getElementById('positive').setAttribute('data-id', data.content_id);
       document.getElementById('positive').classList.add('pulsate');
+      document.getElementById('positive').classList.remove('active');
       document.getElementById('negative').setAttribute('data-id', data.content_id);
       document.getElementById('negative').classList.add('pulsate');
+      document.getElementById('negative').classList.remove('active');
       }
     });
   }, 2000);
@@ -1841,6 +1856,8 @@ for(index = 0; index < length;index++) {
   
     contentEle[index].addEventListener('click', function(event) {
       let topicContentId = this.getAttribute('data-id');
+      let contentOrder = this.getAttribute('data-topic-number');
+      let startSecond = document.getElementsByClassName('big-class-teacher')[0].getElementsByTagName('video')[0].currentTime;
       if(!this.classList.contains('not_started')) {
       let extension = get_url_extension(this.getAttribute('href'));
       if(document.getElementById('user_type').value == "Instructor") {
@@ -1874,7 +1891,7 @@ for(index = 0; index < length;index++) {
         document.getElementById('content_title_td_' + topicContentId).classList.add('active');
       }
       
-      let path = "{{ route('push-live-record') }}?content_id=" + topicContentId;
+      let path = "{{ route('push-live-record') }}?content_id=" + topicContentId + "&contentOrder=" + contentOrder + "&timestamp=" + startSecond;
       document.getElementById('close_content').classList.remove('nodisplay');
       document.getElementById('close_content').setAttribute('content-id', topicContentId);
       fetch(path, {

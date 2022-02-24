@@ -227,12 +227,7 @@
 @endpush
 @push('child-scripts')
 <script>
-document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
+
 
     var elements = document.getElementsByClassName('card-2');
     var length = elements.length;

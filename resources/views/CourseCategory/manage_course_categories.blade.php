@@ -32,7 +32,7 @@
           <table class="table llp-table">
             <thead>
               <tr>
-                <th scope="col">Slno.</th>
+                <th scope="col">#</th>
                 <th scope="col" colspan="2">Course Category</th>
                 <th scope="col" colspan="3" class="text-center">Actions</th>
               </tr>

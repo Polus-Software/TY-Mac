@@ -34,7 +34,7 @@
           </div>
           <div class="col-12">
             <label for="description">Assignment</label>
-            <textarea type="text" class="form-control" id="description" name="assignment_description">{{$assignment_details['assignment_description']}}</textarea>
+            <textarea type="text" class="form-control autosize" id="description" name="assignment_description">{{$assignment_details['assignment_description']}}</textarea>
             @if ($errors->has('assignment_description'))
               <span class="text-danger">{{ $errors->first('assignment_description') }}</span>
             @endif
@@ -43,7 +43,7 @@
           <div class="col-11">
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">
-          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx (Max upload size : 2MB)</small><br>
           @if ($errors->has('document'))
             <span class="text-danger">{{ $errors->first('document') }}</span>
           @endif
@@ -68,7 +68,7 @@
     </div>
   </div> -->
           <div class="col-md-6">
-            <label for="choose-sub-topic">Choose sub topic</label>
+            <label for="choose-sub-topic">Choose topic</label>
             <select type="text" class="form-select" id="choose-sub-topic" name="assignment_topic_id">
             <option selected>Select...</option>
             @foreach ($subTopics as $subTopic)

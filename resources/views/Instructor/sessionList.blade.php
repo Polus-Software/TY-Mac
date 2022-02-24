@@ -17,7 +17,7 @@
       <table class="table llp-table">
             <thead>
               <tr>
-                <th scope="col">Slno.</th>
+                <th scope="col">#</th>
                 <th scope="col">Session Title</th>
                 <th scope="col">Session Instructor</th>
                 <th scope="col">Batch</th>

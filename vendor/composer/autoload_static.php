@@ -628,6 +628,7 @@ class ComposerStaticInitb9a382fffa8d50d848f38cbc21996c01
         'App\\Mail\\MailAfterLiveSessionScheduled' => __DIR__ . '/../..' . '/app/Mail/MailAfterLiveSessionScheduled.php',
         'App\\Mail\\MailAfterQuestion' => __DIR__ . '/../..' . '/app/Mail/MailAfterQuestion.php',
         'App\\Mail\\MailAfterReplay' => __DIR__ . '/../..' . '/app/Mail/MailAfterReplay.php',
+        'App\\Mail\\OneOnOneMail' => __DIR__ . '/../..' . '/app/Mail/OneOnOneMail.php',
         'App\\Mail\\PersonalDetailsUpdatedMail' => __DIR__ . '/../..' . '/app/Mail/PersonalDetailsUpdatedMail.php',
         'App\\Mail\\RecommendationMail' => __DIR__ . '/../..' . '/app/Mail/RecommendationMail.php',
         'App\\Mail\\RecommendationMailInstructor' => __DIR__ . '/../..' . '/app/Mail/RecommendationMailInstructor.php',

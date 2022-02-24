@@ -93,9 +93,9 @@
               <div class="col-md-6">
                 <label for="twitter-link">Twitter Link</label>
                 @if(!!$isEdit)
-                <input type="text" class="form-control" value="{{$instructorDetails['instructor_twitter_social']}}" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
+                <input type="url" class="form-control" value="{{$instructorDetails['instructor_twitter_social']}}" name="twitter_social" id="twitter_social" placeholder="Enter twitter link">
                 @else
-                <input type="text" class="form-control" name="twitter_social" id="twitter_social" placeholder="Enter twitter link" value="{{old('twitter_social')}}">
+                <input type="url" class="form-control" name="twitter_social" id="twitter_social" placeholder="Enter twitter link" value="{{old('twitter_social')}}">
                 @endif
                 @if ($errors->has('twitter_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('twitter_social') }}</div>
@@ -105,9 +105,9 @@
               <div class="col-md-6">
                 <label for="linkedin-link">LinkedIn Link</label>
                 @if(!!$isEdit)
-                <input type="text" class="form-control" value="{{$instructorDetails['instructor_linkedin_social']}}" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
+                <input type="url" class="form-control" value="{{$instructorDetails['instructor_linkedin_social']}}" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link">
                 @else
-                <input type="text" class="form-control" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link" value="{{old('linkedin_social')}}">
+                <input type="url" class="form-control" name="linkedin_social" id="linkedin_social" placeholder="Enter linkedin link" value="{{old('linkedin_social')}}">
                 @endif
                 @if ($errors->has('linkedin_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('linkedin_social') }}</div>
@@ -117,9 +117,9 @@
               <div class="col-md-6">
                 <label for="youtube-link">YouTube Link</label>
                 @if(!!$isEdit)
-                <input type="text" class="form-control" value="{{$instructorDetails['instructor_youtube_social']}}" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
+                <input type="url" class="form-control" value="{{$instructorDetails['instructor_youtube_social']}}" name="youtube_social" id="youtube_social" placeholder="Enter youtube link">
                 @else
-                <input type="text" class="form-control" name="youtube_social" id="youtube_social" placeholder="Enter youtube link" value="{{old('youtube_social')}}">
+                <input type="url" class="form-control" name="youtube_social" id="youtube_social" placeholder="Enter youtube link" value="{{old('youtube_social')}}">
                 @endif
                 @if ($errors->has('youtube_social'))
                 <div class="invalid-feedback d-block">{{ $errors->first('youtube_social') }}</div>
@@ -139,12 +139,12 @@
               <div class="col-md-12">
                 
                 @if(!!$isEdit)
-                <label for="password">Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for reseting the existing password."></i></label>
+                <label for="password">Reset Password<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for reseting the existing password."></i></label>
                 <input type="password" class="form-control" value="" name="password" id="instructor_password" placeholder="Enter password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-none text-decoration-none text-secondary" id="generate_password">Generate password</button>
                 @else
-                <label for="password">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This filed is for creating password."></i></label>
+                <label for="password">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for creating password."></i></label>
                 <input type="password" class="form-control has-validation" id="instructor_password" name="password">
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>
                 <button type="button" class="btn btn-link shadow-non text-decoration-none text-secondary" id="generate_password">Generate password</button>

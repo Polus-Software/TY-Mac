@@ -79,12 +79,12 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
 @push('child-scripts')
 <script>
 document.getElementsByClassName('card-2')[0].classList.add('active-batch');
-    document.getElementById('search-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  let searchTerm = document.getElementById('search-box').value;
-  let path = "/course-search?search=" + searchTerm;
-  window.location = '/course-search?search=' + searchTerm;
-});
+//     document.getElementById('search-btn').addEventListener('click', function(e) {
+//   e.preventDefault();
+//   let searchTerm = document.getElementById('search-box').value;
+//   let path = "/course-search?search=" + searchTerm;
+//   window.location = '/course-search?search=' + searchTerm;
+// });
 
     let cards = document.getElementsByClassName('card-2');
     for(var index = 0; index < cards.length; index++) {
