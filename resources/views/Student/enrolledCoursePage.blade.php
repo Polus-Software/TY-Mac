@@ -587,7 +587,7 @@ small#assignment_table_batch {
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                     @if($userType == 'student')
-                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}">Go to study materials</a>
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}" style="white-space:nowrap;">Go to course materials</a>
                                     @endif
                                     </div>
                                 </div>
@@ -645,7 +645,7 @@ small#assignment_table_batch {
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <a href="#" class="btn btn-primary w-100">View again</a>
+                                                <a href="/view-again/{{$recommendation['sessionId']}}?recommendation=true&content={{ $recommendation['content_id'] }}" class="btn btn-primary w-100">View again</a>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -720,7 +720,7 @@ small#assignment_table_batch {
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <a href="/view-again/{{$recommendation['sessionId']}}" class="btn btn-primary w-100">View again</a>
+                                                <a href="/view-again/{{$recommendation['sessionId']}}?recommendation=true&content={{ $recommendation['content_id'] }}" class="btn btn-primary w-100">View again</a>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -880,7 +880,7 @@ small#assignment_table_batch {
                                                     <div class="row" id="replyTextArea_{{ $qa['id'] }}">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                             @csrf
-                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control" placeholder="Type your reply.."></textarea>
+                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control autosize" placeholder="Type your reply.."></textarea>
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
@@ -1149,7 +1149,7 @@ small#assignment_table_batch {
                                                                                                     <div class="col-lg-3">Attach File:</div>
                                                                                                         <div class="col-lg-6 col-12"><label>Upload from device</label>
                                                                                                             <input class="form-control assignmentStudentFile" type="file" name="assignment_upload">
-                                                                                                            <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small>
+                                                                                                            <small class="fst-italic">Supported File Formats are: pdf, doc, docx</small>
                                                                                                             <small class="text-danger d-inline-block"></small>
                                                                                                             @if ($errors->has('assignment_upload'))
                                                                                                             <span class="text-danger d-inline-block">{{ $errors->first('assignment_upload') }}</span>

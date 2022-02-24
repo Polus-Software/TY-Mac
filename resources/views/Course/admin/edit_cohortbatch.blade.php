@@ -198,7 +198,7 @@ use App\Models\CustomTimezone;
             </div>
           </div>
           @endif
-          <div class="col-lg-3 col-md-3 col-sm-4 col-9">
+          <div class="col-lg-4 col-md-4 col-sm-5 col-10">
             <label for="duration">Start time</label>
             @php 
              
@@ -225,25 +225,15 @@ use App\Models\CustomTimezone;
               <span class="text-danger">The batch start time is required</span>
             @endif
           </div>
-          <div class="col-lg-1 col-md-1 col-sm-2 col-3">
-            <select name="" id="" class="form-control mt-4">
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-4 col-9">
+         
+          <div class="col-lg-4 col-md-4 col-sm-5 col-10">
             <label for="duration">End time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly value="{{$endTime}}">
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
           </div>
-          <div class="col-lg-1 col-md-1 col-sm-2 col-3">
-            <select name="" id="" class="form-control mt-4">
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
+          
           <div class="col-md-4">
             <label for="duration">Timezone</label>
             <select id="cohortbatch_timezone" name="cohortbatch_timezone" class="form-control" checked value="{{$cohortbatch->time_zone}}">
@@ -254,15 +244,15 @@ use App\Models\CustomTimezone;
               <span class="text-danger">The time zone is required</span>
             @endif
           </div>
-          <div class="col-md-3">
-            <label for="students_count">No. of students</label>
+          <div class="col-md-4">
+            <label for="students_count">Number of students allowed to enroll in a Cohort</label>
             <input type="text" class="form-control" id="students_count" name="students_count" value="{{$cohortbatch->students_count}}">
             @if ($errors->has('students_count'))
               <span class="text-danger">Number of students in the batch is required</span>
             @endif
           </div>
           <div class="col-12">
-            <label for="description">Notification</label>
+            <label for="description">Send an email reminder to students</label>
             
             @foreach($notifications as $notification)
             <div class="form-check">

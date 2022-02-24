@@ -181,15 +181,16 @@
             @if($loop->first)
             <div class="carousel-item active">
               <div class="row">
-                @elseif($loop->iteration % 4 == 0)
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="row">
-                @endif
+            @endif
                 <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4">
                   <x-Courseboxsmall :course="$course" />
                 </div>
+                @if(($loop->iteration % 3 == 0) && (!$loop->last))
+                  </div>
+                </div>
+                <div class="carousel-item">
+              <div class="row">
+                @endif
                 @if($loop->last)
               </div>
             </div>

@@ -16,7 +16,7 @@
           <table class="table llp-table">
             <thead>
               <tr>
-                <th scope="col">Slno.</th>
+                <th scope="col">#</th>
                 <th scope="col">Student Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">image</th>

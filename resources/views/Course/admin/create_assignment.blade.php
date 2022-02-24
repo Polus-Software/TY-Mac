@@ -43,7 +43,7 @@
           <div class="col-11">
           <label class="mb-2">Attach file</label>  
           <input type="file" class="form-control" id="document" name="document" placeholder="Upload from device">
-          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx (Max upload size : 2MB)</small><br>
           @if ($errors->has('document'))
             <span class="text-danger">{{ $errors->first('document') }}</span>
           @endif

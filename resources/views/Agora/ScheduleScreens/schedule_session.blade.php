@@ -90,7 +90,7 @@
           <table class="table llp-table">
             <thead>
               <tr>
-                <th scope="col">Slno.</th>
+                <th scope="col">#</th>
                 <th scope="col">Session</th>
                 <th scope="col">Course</th>
                 <th scope="col">Date/Time</th>

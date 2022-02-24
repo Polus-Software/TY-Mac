@@ -459,6 +459,28 @@ class CoursesCatalogController extends Controller
          $courses = $courses->whereIn('category', $includedCategories);
      }
 
+     if($ratings) {
+        $i = 0;
+        $ratingIds = "";
+        $ratingsArr = explode(",", $ratings);
+        $count = count($ratingsArr);
+        foreach($ratingsArr as $rating) {
+           $i++;
+           if($i == $count) {
+               $ratingPair = explode('=', $rating);
+               $ratingIds .= $ratingPair[1];
+           } else {
+               $ratingPair = explode('=', $rating);
+               $ratingIds .= $ratingPair[1] . ',';
+           }
+        }
+
+        $includedRatings = explode(',', $ratingIds);
+        $min = min($includedRatings);
+        $courses = $courses->where('course_rating', '>=', $min);
+    }
+
+
      if($levels) {
         $i = 0;
         $levelIds = "";
@@ -479,68 +501,57 @@ class CoursesCatalogController extends Controller
         $courses = $courses->whereIn('course_difficulty', $includedLevels);
     }
 
-    // if($ratings) {
-    //     $i = 0;
-    //     $ratingIds = "";
-    //     $ratingsArr = explode(",", $ratings);
-    //     $count = count($ratingsArr);
-    //     foreach($ratingsArr as $rating) {
-    //        $i++;
-    //        if($i == $count) {
-    //            $ratingPair = explode('=', $rating);
-    //            $ratingIds .= $ratingPair[1];
-    //        } else {
-    //            $ratingPair = explode('=', $rating);
-    //            $ratingIds .= $ratingPair[1] . ',';
-    //        }
-    //     }
-
-    //     $includedRatings = explode(',', $ratingIds);
-    //     $courses = $courses->whereIn('course_rating', $includedRatings);
-    // }
-
-    
-
-    if($ratings) {
-        $ratingsArr = explode(",", $ratings);
-        foreach($ratingsArr as $rating) {
-           $ratingPair = explode('=', $rating);
-            if($ratingsFlag == 0) {
-                $courses = $courses->where('course_rating', '>=' , $ratingPair[1]);
-                $ratingsFlag = 1;
-            } else {
-                $courses = $courses->orWhere('course_rating', '>=' , $ratingPair[1]);
-            }
-        }
-    }
-
+ 
     if($duration) {
-        $durationArr = explode(",", $duration);
-        foreach($durationArr as $durationFil) {
-            $durationPair = explode('=', $durationFil);
-            if($durationFlag == 0) {
-                $durationFlag = 1;
-                if($durationPair[1] == "less_than_1") {
-                    $courses = $courses->where('course_duration', '<', 1);
-                } else if($durationPair[1] == "less_than_2") {
-                    $courses = $courses->where('course_duration', '<', 2);
-                } else if($durationPair[1] == "less_than_5") {
-                    $courses = $courses->where('course_duration', '<', 5);
-                } else if($durationPair[1] == "greater_than_5") {
-                    $courses = $courses->where('course_duration', '>', 5);
-                }  
-            } else {
-                if($durationPair[1] == "less_than_1") {
-                    $courses = $courses->orWhere('course_duration', '<', 1);
-                } else if($durationPair[1] == "less_than_2") {
-                    $courses = $courses->orWhere('course_duration', '<=', 2);
-                } else if($durationPair[1] == "less_than_5") {
-                    $courses = $courses->orWhere('course_duration', '<=', 5);
-                } else if($durationPair[1] == "greater_than_5") {
-                    $courses = $courses->orWhere('course_duration', '>', 5);
-                }  
-            }
+        $i = 0;
+        $durationIds = "";
+        $durationsArr = explode(",", $duration);
+        $count = count($durationsArr);
+        foreach($durationsArr as $dur) {
+           $i++;
+           if($i == $count) {
+               $durationPair = explode('=', $dur);
+               $durationIds .= $durationPair[1];
+           } else {
+               $durationPair = explode('=', $dur);
+               $durationIds .= $durationPair[1] . ',';
+           }
         }
+    
+        $includedDurations = explode(',', $durationIds);
+        $courses = $courses->whereIn('duration_filter_label', $includedDurations);
+        // $less_than_1 = false;
+        // $less_than_2 = false;
+        // $less_than_5 = false;
+        // $greater_than_5 = false;
+        // if(in_array("less_than_1", $includedDurations)) {
+        //     $courses = $courses->where('course_duration', '<', 1);
+        //     $less_than_1 = true;
+        // }
+        // if(in_array("less_than_2", $includedDurations)) {
+        //     if ($less_than_1 == false) {
+        //         $courses = $courses->where('course_duration', '<', 2.5)->where('course_duration', '>=', 1);
+        //     } else {
+        //         $courses = $courses->orWhere('course_duration', '<', 2.5)->where('course_duration', '>=', 1);
+        //     }
+        //     $less_than_2 = true;
+        // }
+        // if(in_array("less_than_5", $includedDurations)) {
+        //     if ($less_than_1 == false && $less_than_2 == false) {
+        //         $courses = $courses->where('course_duration', '<', 5)->where('course_duration', '>=', 2.5);
+        //     } else {
+        //         $courses = $courses->orWhere('course_duration', '<', 5)->where('course_duration', '>=', 2.5);
+        //     } 
+        //     $less_than_5 = true;
+        // }
+        // if(in_array("greater_than_5", $includedDurations)) {
+        //     if ($less_than_1 == false && $less_than_2 == false && $less_than_5 == false) {
+        //         $courses = $courses->where('course_duration', '>=', 5);
+        //     } else {
+        //         $courses = $courses->orWhere('course_duration', '>=', 5);
+        //     } 
+        //     $greater_than_5 = true;
+        // }
     }
 
 
@@ -625,7 +636,9 @@ class CoursesCatalogController extends Controller
     public function courseDropDown(Request $request) {
         $html = "";
         $filterValue = $request->filterValue;
-        if($filterValue == "most_popular") {
+        if($filterValue == "all") {
+            $courses = Course::where('is_published', true)->get();
+        } elseif ($filterValue == "most_popular") {
             $courses = Course::where('is_published', true)->orderBy('enrollments', 'DESC')->get();
         } elseif ($filterValue == "most_reviewed") {
             $courses = Course::where('is_published', true)->orderBy('ratings_count', 'DESC')->get();

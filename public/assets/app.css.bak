@@ -333,17 +333,6 @@ form i {
   font-weight: 700;
 }
 
-@media screen and (max-width: 480px) {
-  .welcome-text { font-size: 1rem; }
-  .welcome-text::before {
-    content: none !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .intros { text-align: center !important;}
-}
-
 .welcome-text::before {
   display: inline-block;
   content: "";
@@ -358,19 +347,11 @@ form i {
   font-size: 3.4rem;
   color: var(--text-primary);
 }
-@media screen and (max-width: 480px) {
-  .display-2--intro { font-size: 1.8rem !important; }
-}
 
 .think-title-home {
   font-size: 3.25rem;
   font-family: var(--font-secondary);
   color: var(--text-primary);
-}
-@media screen and (max-width: 480px) {
-  .think-title-home {
-    font-size: 1.8rem !important;
-  }
 }
 
 .think-feature-box h2 {
@@ -473,11 +454,6 @@ form i {
 .think-rec-engine h3 {
   font-family: var(--font-secondary);
   font-size: 2.5rem;
-}
-@media screen and (max-width: 480px) {
-  .think-rec-engine h3 {
-    font-size: 1.4rem;
-  }
 }
 
 .think-rec-engine p {

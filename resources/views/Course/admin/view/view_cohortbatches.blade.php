@@ -80,7 +80,23 @@ use App\Models\CustomTimezone;
              $date = new DateTime("now");
            @endphp
                       <div class="col-lg-10">
-                        <p>{{$cohortbatch->occurrence}}</p>
+                        @php
+                           $occStr = "";
+                           $index = 0;
+                           $occurrence = $cohortbatch->occurrence;
+                           $occArr = explode(',', $occurrence);
+                           $occArrCount = count($occArr);
+                           foreach($occArr as $occ) {
+                             $index++;
+                             if($index == $occArrCount) {
+                              $occStr .= $occ;
+                             } else {
+                              $occStr .= $occ .', ';
+                             }
+                             
+                           }
+                        @endphp
+                        <p>{{$occStr}}</p>
                         <p>{{\Carbon\Carbon::createFromFormat('H:i:s',$startTime)->format('h:i A')}} - {{\Carbon\Carbon::createFromFormat('H:i:s',$endTime)->format('h:i A')}} | {{ $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T')[0] == "-" ? "(UTC " . $offset . ")" : $date->setTimeZone(new DateTimeZone($cohortbatch->time_zone))->format('T') }}</p>
 
                       </div>

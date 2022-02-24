@@ -58,7 +58,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
                     <th scope="col">Instructor</th>
-                    <th scope="col">Participants</th>
+                    <th class="text-center" scope="col">Participants</th>
                     <th scope="col">Date/Time</th>
                   </tr>
                 </thead>
@@ -71,7 +71,7 @@
                     <td>{{$slno}}</td>
                     <td>{{$upComingSessionDetail['session_title']}}</td>
                     <td>{{$upComingSessionDetail['instructor']}}</td>
-                    <td>{{$upComingSessionDetail['enrolledCourses']}}</td>
+                    <td class="text-center">{{$upComingSessionDetail['enrolledCourses']}}</td>
                     <td>{{$upComingSessionDetail['date']}}</td>
                   </tr>
                  @endforeach
@@ -96,7 +96,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Instructor</th>
-                <th scope="col">Participants</th>
+                <th class="text-center" scope="col">Participants</th>
                 <th scope="col">Date/Time</th>
               </tr>
             </thead>
@@ -109,7 +109,7 @@
                 <td>{{ $slno }}</td>
                 <td>{{$recentSessionDetail['session_title']}}</td>
                 <td>{{$recentSessionDetail['instructor']}}</td>
-                <td>{{$recentSessionDetail['enrolledCourses']}}</td>
+                <td class="text-center">{{$recentSessionDetail['enrolledCourses']}}</td>
                 <td>{{$recentSessionDetail['date']}}</td>
               </tr>
            @endforeach

@@ -1179,11 +1179,13 @@ class EnrolledCourseController extends Controller
             $chats = GeneralChat::where('course_id', $courseId)->where('student', $studentId)->where('instructor', $instructorId)->update(['read_by_instructor' => true]);
         }
         
+        $userRole = $user->role_id;
         return view('Student.studentInstructorChat',[
             'courseId' => $courseId,
             'studentId' => $studentId,
             'instructorId' => $instructorId,
-            'batch' => $batch
+            'batch' => $batch,
+            'role' => $userRole
         ]);
     }
 

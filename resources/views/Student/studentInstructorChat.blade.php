@@ -98,7 +98,12 @@ a#ChromelessStatusBar\.Options-Small14 {
 <div class="container mb-3">
 <div class="row mb-2">
    <div class="col-lg-2 col-md-2 col-sm-2 col-12">
+       @if($role == 2 || $role == "2")
+       <a href="/enrolled-course/{{$courseId}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+       @else
        <a href="/enrolled-course/{{$courseId}}?batchId={{$batch}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+       @endif 
+       
    </div>
 </div>
 <div class="row">

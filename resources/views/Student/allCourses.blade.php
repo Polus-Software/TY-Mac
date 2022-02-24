@@ -101,9 +101,9 @@
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse" aria-labelledby="panelsStayOpen-headingThree">
                 <div class="accordion-body">
                   <div class="form-check">
-                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="radio" name="flexRadioDefault" value="5">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                      <i class="fas fa-star filter-star"></i>
+                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="checkbox" value="5" id="5rating">
+                    <label class="form-check-label" for="5rating">
+                    <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
@@ -111,10 +111,11 @@
                       (5 stars)
                     </label>
                   </div>
+                    
 
                   <div class="form-check">
-                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="radio" name="flexRadioDefault" value="4">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="checkbox" name="4rating" id="4rating" value="4">
+                    <label class="form-check-label" for="4rating">
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
@@ -125,8 +126,8 @@
                   </div>
 
                   <div class="form-check">
-                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="radio" name="flexRadioDefault" value="3">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="checkbox" name="3rating" id="3rating" value="3">
+                    <label class="form-check-label" for="3rating">
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
@@ -137,8 +138,8 @@
                   </div>
 
                   <div class="form-check">
-                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="radio" name="flexRadioDefault" value="2">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="checkbox" name="2rating" id="2rating" value="2">
+                    <label class="form-check-label" for="2rating">
                       <i class="fas fa-star filter-star"></i>
                       <i class="fas fa-star filter-star"></i>
                       <i class="far fa-star filter-no-star"></i>
@@ -149,8 +150,8 @@
                   </div>
 
                   <div class="form-check">
-                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="radio" name="flexRadioDefault" value="1">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                    <input class="form-check-input rating_filter filter_option" filtertype="rating" type="checkbox" name="1rating" id="1rating" value="1">
+                    <label class="form-check-label" for="1rating">
                       <i class="fas fa-star filter-star"></i>
                       <i class="far fa-star filter-no-star"></i>
                       <i class="far fa-star filter-no-star"></i>
@@ -243,6 +244,7 @@
           <div class="col-lg-5 col-sm-6 col-6 d-flex justify-content-end p-4">
             <select name="" id="all_course_drop" class="rounded">
               <option value="" disabled selected>Sort</option>
+              <option value="all">All</option>
               <option value="most_popular">Most Popular</option>
               <option value="most_reviewed">Most Reviewed</option>
             </select>

@@ -1208,7 +1208,7 @@ body {
     @csrf
     <p class="notif-text think-color-dark margin-top-18 think-fs--16 ">{{ $topic_title }}</p>
     @foreach($contents as $content)
-    <div href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
+    <div href="{{ url('/') }}/storage/study_material/{{ $content->document }}" id="thumbs_{{ $content->topic_content_id }}" class="think-content-styles"><i id="thumbs_i_{{ $content->topic_content_id }}" style="margin-right:10px;" class="thumbs far fa-circle"></i>{{ $content->topic_title }}</div>
     @endforeach
   </div>
 
@@ -1238,11 +1238,11 @@ body {
         <span class="content_title_text" id="content_title_{{ $content->topic_content_id }}">Click on start to open content..</span></td>
           <td>
           @if ($loop->first)
-            <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            <button data-topic-number="{{ $slNo }}" class="course_contents" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/study_material/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
                Start
             </button>
           @else 
-            <button data-topic-number="{{ $slNo }}" class="course_contents not_started" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/content_documents/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
+            <button data-topic-number="{{ $slNo }}" class="course_contents not_started" id="course_contents_{{ $content->topic_content_id }}" href="{{ url('/') }}/storage/study_material/{{ $content->document }}" data-id="{{ $content->topic_content_id }}">
                Not yet started
             </button>
           @endif
@@ -1797,9 +1797,9 @@ for(index = 0; index < length;index++) {
         $('#course_content_iframe').appendTo('.teacher-1v1');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         let docUrl = this.getAttribute('href');
-        document.getElementById('course_content_iframe').setAttribute('src', docUrl);
+        document.getElementById('course_content_iframe').setAttribute('src', docUrl + '#toolbar=0');
         
-      } else if (extension == "pptx") {
+      } else if (extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx") {
         $('#course_content_iframe').appendTo('.teacher-1v1');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');

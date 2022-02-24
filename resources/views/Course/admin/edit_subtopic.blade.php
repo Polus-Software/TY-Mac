@@ -70,7 +70,7 @@
 									<div class="col-lg-5 col-12">
 										<label>Upload from device</label>
 										<input class="form-control" type="file" name="content_upload[1][{{$key}}]">
-										<small class="fst-italic">Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx</small>
+										<small class="fst-italic">Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx (Max upload size : 2MB)</small>
 									</div>
 									<div class="col-lg-3 pt-4">
 										<a class="btn btn-sm btn-outline-secondary add_external_link">Add external link</a>
@@ -85,7 +85,7 @@
             </div>
 						<div class="row">
 							<div class="col-12">
-								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content" id="add_content_for_topic">Add content for topic</a>
+								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content" id="add_content_for_topic">Add content for subtopic</a>
 								<a class="btn btn-sm btn-outline-secondary upload_audio">Upload audio/video</a>
 							</div>
 						</div>
@@ -190,7 +190,7 @@ window.onload = function(event) {
     ]);
     const rowEl = createNewElement('div', ['row']);
     const colEl = createNewElement('div', ['col-12']);
-    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for topic');
+    const addContentbtnEl = createNewElement('a', ['btn', 'btn-sm','me-2', 'btn-outline-secondary', `btn-sub-content`],[], 'Add content for subtopic');
     addContentbtnEl.addEventListener('click', (e) => {
       const contentCountHiddenEl = e.currentTarget.parentElement.parentElement.parentElement.querySelector(`.content_count`);
       contentCountHiddenEl.value = parseInt(contentCountHiddenEl.value)+1;
@@ -248,7 +248,7 @@ const generateSubTopicHTMLInitial = () => {
       {'type': 'file'},
       {'name': `content_upload[${topicNum}][${contentCount}]`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx (Max upload size : 2MB)');
 
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [

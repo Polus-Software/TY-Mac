@@ -63,7 +63,7 @@ a#ChromelessStatusBar\.Options-Small14 {
         <ul class="nav nav-pills flex-column">
             <div class="row">
                 <li class="nav-item">
-                    <b style="color:#2C3443;">Course materials</b>
+                    <b style="color:#2C3443;">Study Materials</b>
                     <hr style="color:rgba(0,0,0,.125);margin:10px 0px 0px 0px !important;">
                 </li>
             </div>
@@ -75,7 +75,7 @@ a#ChromelessStatusBar\.Options-Small14 {
             </li>
             @if($topic['attendanceStatus'])
                 @foreach($topic['contents'] as $content)
-                <li class="nav-item material_contents study_materials" data-href="{{ url('/') }}/storage/study_material/{{ $content['topicContentDoc'] }}">
+                <li class="nav-item material_contents study_materials" data-href="{{ url('/') }}/storage/content_documents/{{ $content['topicContentDoc'] }}">
                         {{ $content['topicContentTitle'] }}
                 </li>
                 @endforeach
@@ -110,7 +110,7 @@ a#ChromelessStatusBar\.Options-Small14 {
             if(extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx") {
               document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
             } else if (extension == "pdf") {
-              document.getElementById('course_content_iframe').setAttribute('src', docUrl + '#toolbar=0');
+              document.getElementById('course_content_iframe').setAttribute('src', docUrl);
             }
 
             
