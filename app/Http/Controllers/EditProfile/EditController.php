@@ -67,11 +67,11 @@ class EditController extends Controller
             $detail = "personal detail";
         }
 
-        $data= [
-            'userName' => $request['firstname'] . ' ' . $request['lastname'],
+        $data = [
+            'studentName' => $request['firstname'] . ' ' . $request['lastname'],
             'detail' => $detail
          ];
- 
+
          Mail::mailer('smtp')->to($user->email)->send(new PersonalDetailsUpdatedMail($data));
 
          $notification = new Notification; 

@@ -571,6 +571,7 @@ class CourseController extends Controller
                 $validate_array['topic_title'. $i] = 'required';
                 for($j=1; $j <= $request->input('content_count_topic_' .$i);$j++){
                     $validate_array['content_title_'.$i.'_'. $j] = 'required';
+                    $validate_array['content_upload_'.$i.'_'.$j] = 'required|mimes:pdf,doc,docx,ppt,pptx';
                 }
             }
             $this->validate($request, $validate_array);
@@ -592,8 +593,8 @@ class CourseController extends Controller
                     //     'content_upload['.$i.']['.$j.']' => 'required'
                     // ]);
                     $external_links = $extension = $TopicFileName = '';
-                    if($request->file() && !empty($request->content_upload[$i][$j])){
-                        $subtopicFile = $request->content_upload[$i][$j];
+                    if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))){
+                        $subtopicFile = $request->file('content_upload_'.$i.'_'.$j);
                         $extension = $subtopicFile->extension();
                         $TopicFileName = $subtopicFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/study_material';

@@ -168,10 +168,15 @@ document.getElementById('batch').addEventListener('change', function(event) {
     }).then((response) => response.json()).then((data) => {
         if(data.status == "success") {
             let html = '<option value>Select a session</option>';
-            for(i=0;i<data.sessions.length;i++) {
+            if(data.sessions.length == 0) {
+              document.getElementById('live_session').innerHTML = '<option value="" disabled selected>No sessions scheduled</option>';
+            } else {
+              for(i=0;i<data.sessions.length;i++) {
                 html = html + '<option value="' + data.sessions[i].live_session_id + '">' + data.sessions[i].session_title + '</option>';
             }
             document.getElementById('live_session').innerHTML = html;
+            }
+            
         }
         
     });

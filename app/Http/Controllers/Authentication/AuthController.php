@@ -179,7 +179,6 @@ class AuthController extends Controller
 			$backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
 			$total_live_hours = 0;
             foreach($liveSessions as $session) {
-               
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
                 //Timezone change 
@@ -203,7 +202,7 @@ class AuthController extends Controller
 				if($currentBatchStartDate < $current_date){
 					$total_live_hours = $total_live_hours+$batch->value('duration');
 				}
-                if($currentBatchStartDate > $current_date) {
+                if($currentBatchStartDate >= $current_date) {
                     $session_title = $session->session_title;
                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
                   
@@ -218,28 +217,45 @@ class AuthController extends Controller
                         'enrolledCourses' => $enrolledCourses,
                         'date' => $date
                     ));
-                } elseif ($currentBatchStartDate < $current_date && $currentBatchStartDate > $backLimitDate) {
-                    $session_title = $session->session_title;
-                    $course = AssignedCourse::where('course_id', $session->course_id);
-                    $instructId = $course->value('user_id');
-                    $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
-                    $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
-
-                    $start_date = Carbon::createFromFormat('Y-m-d', $currentBatchStartDate)->format('m/d/Y');
-                    $date = new DateTime("now");
-                    $time_zone = $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T'); 
-                    $date = $start_date . ', ' . $start_time . ' ' . $time_zone . ' - ' . $end_time . ' ' . $time_zone;
-                    // $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
-                    // $start_time = Carbon::createFromFormat('H:i:s',$session->start_time)->format('h A');
-                   
-                    // $end_time = Carbon::createFromFormat('H:i:s',$batch->end_time)->format('h A');
-                    // $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
-                    array_push($recentSessionDetails, array (
-                        'session_title'=>  $session_title,
-                        'instructor' => $instructor,
-                        'enrolledCourses' => $enrolledCourses,
-                        'date' => $date
-                    ));
+                } elseif ($currentBatchStartDate <= $current_date && $currentBatchStartDate > $backLimitDate) {
+                    if($currentBatchStartDate == $current_date) {
+                        if($session->end_time < Carbon::now()->format('H:i:s')) {
+                            $session_title = $session->session_title;
+                            $course = AssignedCourse::where('course_id', $session->course_id);
+                            $instructId = $course->value('user_id');
+                            $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
+                            $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+        
+                            $start_date = Carbon::createFromFormat('Y-m-d', $currentBatchStartDate)->format('m/d/Y');
+                            $date = new DateTime("now");
+                            $time_zone = $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T'); 
+                            $date = $start_date . ', ' . $start_time . ' ' . $time_zone . ' - ' . $end_time . ' ' . $time_zone;
+                            array_push($recentSessionDetails, array (
+                                'session_title'=>  $session_title,
+                                'instructor' => $instructor,
+                                'enrolledCourses' => $enrolledCourses,
+                                'date' => $date
+                            ));
+                        }
+                    } else {
+                        $session_title = $session->session_title;
+                        $course = AssignedCourse::where('course_id', $session->course_id);
+                        $instructId = $course->value('user_id');
+                        $instructor = User::find($instructId)->firstname .' '. User::find($instructId)->lastname;
+                        $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+    
+                        $start_date = Carbon::createFromFormat('Y-m-d', $currentBatchStartDate)->format('m/d/Y');
+                        $date = new DateTime("now");
+                        $time_zone = $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T') . ")": $date->setTimeZone(new DateTimeZone($batch->value('time_zone')))->format('T'); 
+                        $date = $start_date . ', ' . $start_time . ' ' . $time_zone . ' - ' . $end_time . ' ' . $time_zone;
+                        array_push($recentSessionDetails, array (
+                            'session_title'=>  $session_title,
+                            'instructor' => $instructor,
+                            'enrolledCourses' => $enrolledCourses,
+                            'date' => $date
+                        ));
+                    }
+                    
                 }
             }
             return view('Auth.Dashboard', [

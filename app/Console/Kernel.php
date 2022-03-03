@@ -162,8 +162,8 @@ class Kernel extends ConsoleKernel
                     }
                 }
             }
-        })->everyThirtyMinutes();
-
+        })->everyThirtyMinutes()->appendOutputTo(storage_path().'/logs/laravel_output.log');
+        $schedule->command('queue:work --once')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path().'/logs/laravel_output.log');
         $schedule->call(function () {
             // Assignment Cron
 
@@ -204,7 +204,7 @@ class Kernel extends ConsoleKernel
                     }
                 }                   
             }
-        })->daily();
+        })->daily()->appendOutputTo(storage_path().'/logs/laravel_output.log');
     }
 
     /**

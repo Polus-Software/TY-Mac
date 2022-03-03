@@ -7,6 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:site" content="TY-Mac">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2V70BX74DV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2V70BX74DV');
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-W26GQCJ');</script>
+<!-- End Google Tag Manager -->
+
   <!--<meta property="og:type" content="website">
   <meta name="twitter:creator" id="twitter_creator" content="">
   <meta property="twitter:title" id="twitter_title" content="">
@@ -23,6 +40,8 @@
   <link rel="stylesheet" href="{{ asset('/assets/app.css') }}">
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <link rel="icon" href="{{ asset('/assets/favicon.png') }}">
+  <meta name="description" content="The education experience has not changed in over a century. Even to this day, the way students learn is through the one size fits all  model. However this method of learning is no longer effective since every student learns differently. At ThinkLit, we believe the solution to this problem is to completely rethink how courses are taught hence The ThinkLit Way.">
+  <meta name="keywords" content="ThinkLit, thinklit, live learning, online learning, interactive learning, education, online education">
   @stack('styles')
   <title>TY- MAC</title>
 </head>

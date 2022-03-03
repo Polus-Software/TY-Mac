@@ -54,6 +54,13 @@ class CoursesCatalogController extends Controller
         }
         
         $filters = Filter::all();
+        $allFiltersFlag = true;
+        foreach($filters as $filter) {
+            if($filter->is_enabled) {
+                $allFiltersFlag = false;
+            }
+        }
+
         $userType =  UserType::where('user_role', Config::get('common.ROLE_NAME_INSTRUCTOR'))->value('id');
         
         $instructors = User::where('role_id', $userType)->get();
@@ -104,7 +111,7 @@ class CoursesCatalogController extends Controller
             array_push($courseDetails, $courseData);
         }
         $courseDetailsObj = collect($courseDetails);
-        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => '']);
+        return view('Student.allCourses', ['courseDatas' => $courseDetailsObj, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => '', 'noFiltersFlag' => $allFiltersFlag]);
         
     }
         

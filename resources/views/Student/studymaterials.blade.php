@@ -49,6 +49,7 @@ a#ChromelessStatusBar\.Options-Small14 {
 </style>
 @extends('Layouts.app')
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- sidebar -->
 <section class="intro-section">
 <div class="container mb-3">
@@ -91,7 +92,7 @@ a#ChromelessStatusBar\.Options-Small14 {
         </div>
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9 col-12">
-        <iframe id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+        <iframe id="course_content_iframe" src="https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" width='100%' height='500px' frameborder='0'></iframe>
     </div>
 </div>
 </div>

@@ -27,6 +27,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
+        @if($noFiltersFlag != true && $noFiltersFlag != true)
         <div class="think-filters-sidebar filter m-4 p-4">
           <h6 class="fs-16">Filter</h6>
           <hr class="mb-2" style="background: #b7b7b7;">
@@ -230,6 +231,7 @@
             @endforeach
           </div>
         </div>
+        @endif
       </div>
 
       <div class="col-md-8">

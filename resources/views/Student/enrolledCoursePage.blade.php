@@ -485,9 +485,9 @@ small#assignment_table_batch {
                             </div>
                         </div>
 							<div class="border-top col-12 mt-4 py-4 text-center px-4">
-                            @if($feedbackCount == 0)
+                            
 								<a class="btn think-btn-transparent w-100" id="reviewButton" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Course Review</a>
-                            @endif
+                            
                             </div>
 							@endif
                     </div>
@@ -1565,6 +1565,14 @@ for(index = 0;index < replyEleCount;index++) {
 
 document.getElementById('submitStudentQuestion').addEventListener('click', function(e) {
     let question = document.getElementById('studentQuestion').value;
+    if(question == "") {
+        document.getElementById('studentQuestion').style.border = "1px solid red";
+        document.getElementById('question_error').style.display = "block";
+        return false
+    } else {
+        document.getElementById('studentQuestion').style.border = "1px solid #ced4da";
+        document.getElementById('question_error').style.display = "none";
+    }
     let path = "{{ route('ask.question') }}?question=" + question + '&course_id=' + document.getElementById('course_id').value;
      
         fetch(path, {

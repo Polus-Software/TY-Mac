@@ -48,7 +48,10 @@ span#ChromelessStatusBar\.RightDock {
     <input id="start_time" type="hidden" value="{{$recStartTime}}" />
     <div class="container" style="margin-top:10rem;margin-bottom:5rem;">
       <div class="row" style="padding:35px;box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
-        <div class="col-md-5 col-lg-5 col-5">
+      @if(Auth::user()->role_id == Config::get('common.ROLE_ID_STUDENT'))
+      <a style="width:10%;position:absolute;right: 8.5em;" class="btn btn-secondary think-btn-secondary" id="go-back" href="/enrolled-course/{{$courseId}}">Go back</a>
+      @endif  
+      <div class="col-md-5 col-lg-5 col-5">
           <h2 style="text-decoration:underline;">Session: {{$topic}}</h2>
           <small>Course: {{$course}}</small>
           <video class="mt-4 w-100" id="video" controls style="height:30rem;border: 1px solid #e4e4e4;" autoplay></video>

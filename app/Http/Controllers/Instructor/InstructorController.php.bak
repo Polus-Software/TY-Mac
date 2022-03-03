@@ -238,7 +238,6 @@ class InstructorController extends Controller
                     foreach($instructors as $instructor) {
                         $html = $html . '<tr id="' . $instructor->id .'">';
                         $html = $html . '<th class="align-middle" scope="row">' . $slNo . '</th>';
-                        $html = $html . '<td class="align-middle"><img src="/storage/images/'. $instructor->image .'" class="rounded-circle" alt="" style="width:40px; height:40px;"></td>';
                         $html = $html . '<td class="align-middle" colspan="2">' . $instructor->firstname . ' ' . $instructor->lastname . '</td>';
                         $html = $html . '<td class="align-middle">' . $instructor->email . '</th>';
                         $html = $html . '<td class="align-middle">' . Carbon::createFromFormat("Y-m-d H:i:s", $instructor->created_at)->format("m/d/Y") . '</td>';
