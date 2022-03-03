@@ -108,9 +108,9 @@ window.onload = function(event) {
       e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
       content_count++;
     });
-    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary','upload_btn'],[],'Upload audio/video');
+    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary','upload_btn'],[],'');
     colEl.appendChild(addContentbtnEl);
-    colEl.appendChild(uploadContentbtnEl);
+    // colEl.appendChild(uploadContentbtnEl);
     rowEl.appendChild(colEl);
     innercardEl.appendChild(contentCountEl);
     innercardEl.appendChild(addContentContainerEl);
@@ -145,7 +145,7 @@ window.onload = function(event) {
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
     const uploadFileEl = createNewElement('input', ['form-control'], [
       {'type': 'file'},
-      {'name': `content_upload[${topicNum}][${contentCount}]`}
+      {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
     const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx (Max upload size : 2MB)');
 

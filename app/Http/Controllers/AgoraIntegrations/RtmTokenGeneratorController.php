@@ -156,7 +156,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '10911' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '10919' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
@@ -577,11 +577,11 @@ class RtmTokenGeneratorController extends Controller
             $courseId = LiveSession::where('live_session_id', $sessionId)->value('course_id');
             $student =  $user->id;
             $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
-            if($attendance) {
-                $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
-            }
-            
-            $attendance->update(['attendance_time' => $timer, 'is_present' => false]);
+            // if($attendance) {
+            //     $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
+            // }
+
+            // $attendance->update(['attendance_time' => $timer, 'is_present' => false]);
 
             $attendanceSettings = GeneralSetting::where('setting', 'attendance_timer')->value('value');
 
@@ -739,7 +739,7 @@ class RtmTokenGeneratorController extends Controller
             
 
             $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
-            if($attendance) {
+            if($attendance->count() != 0) {
                 $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
             }
             
@@ -1231,7 +1231,7 @@ class RtmTokenGeneratorController extends Controller
         }
         
         $course = Course::where('id', $courseId)->value('course_title');
-        $session = "10911" . $session;
+        $session = "10919" . $session;
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         $expireTimeInSeconds = 1800;
@@ -1248,6 +1248,7 @@ class RtmTokenGeneratorController extends Controller
            'uid' => $user,
            'topic' => $topic,
            'course' => $course,
+           'courseId' => $courseId,
            'contents' => $contentsArray,
            'recommendation' => $recommendation,
            'recStartTime' => $recStartTime

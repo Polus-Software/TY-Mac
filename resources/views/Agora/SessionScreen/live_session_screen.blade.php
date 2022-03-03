@@ -1642,6 +1642,7 @@ $(document).ready(function(){
   setInterval(function() {
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
+      console.log(document.getElementById('timer').value);
       let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
         fetch(path, {
         method: 'POST',
@@ -1675,7 +1676,7 @@ window.addEventListener("beforeunload", function (e) {
   let timer = document.getElementById('timer').value;
 
   if(userType == "student") {
-    
+    alert(timer);
     let path = "{{ route('student-exit') }}?session=" + sessionId + "&timer=" + timer;
     fetch(path, {
       method: 'POST',

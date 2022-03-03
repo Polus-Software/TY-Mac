@@ -86,7 +86,7 @@
 						<div class="row">
 							<div class="col-12">
 								<a class="btn btn-sm me-2 btn-outline-secondary btn-sub-content" id="add_content_for_topic">Add content for subtopic</a>
-								<a class="btn btn-sm btn-outline-secondary upload_audio">Upload audio/video</a>
+								<!-- <a class="btn btn-sm btn-outline-secondary upload_audio">Upload audio/video</a> -->
 							</div>
 						</div>
 					</div>
@@ -198,18 +198,18 @@ window.onload = function(event) {
       e.currentTarget.parentElement.parentElement.previousElementSibling.appendChild(generateContentHTML(topicNum, contentCountHiddenEl.value));
       content_count++;
     });
-    const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary upload_audio'],[],'Upload audio/video');
-    colEl.appendChild(addContentbtnEl);
-    colEl.appendChild(uploadContentbtnEl);
-    rowEl.appendChild(colEl);
-    innercardEl.appendChild(contentCountEl);
-    innercardEl.appendChild(addContentContainerEl);
-    innercardEl.appendChild(rowEl);
-    cardbodyEl.appendChild(cardtitleEl);
-    cardbodyEl.appendChild(topictitleEl);
-    cardbodyEl.appendChild(innercardEl);
-    cardEl.appendChild(cardbodyEl);
-    return cardEl;
+    // const uploadContentbtnEl = createNewElement('a', ['btn', 'btn-sm', 'btn-outline-secondary upload_audio'],[],'Upload audio/video');
+    // colEl.appendChild(addContentbtnEl);
+    // colEl.appendChild(uploadContentbtnEl);
+    // rowEl.appendChild(colEl);
+    // innercardEl.appendChild(contentCountEl);
+    // innercardEl.appendChild(addContentContainerEl);
+    // innercardEl.appendChild(rowEl);
+    // cardbodyEl.appendChild(cardtitleEl);
+    // cardbodyEl.appendChild(topictitleEl);
+    // cardbodyEl.appendChild(innercardEl);
+    // cardEl.appendChild(cardbodyEl);
+    // return cardEl;
   }
 
 const generateSubTopicHTMLInitial = () => {

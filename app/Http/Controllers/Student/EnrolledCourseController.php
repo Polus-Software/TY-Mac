@@ -145,8 +145,13 @@ class EnrolledCourseController extends Controller
             
             // $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
             $cohort_batches = DB::table('live_sessions')->where('batch_id', $enrolledCourseObj->value('batch_id'))->where('start_date', '>=', $current_date)->get();
+
           if(count($cohort_batches)) {
-            $cohort_batches = $cohort_batches[0];
+            if($cohort_batches[0]->start_date == $current_date && $cohort_batches[0]->end_time < Carbon::now()->format('H:i:s') && isset($cohort_batches[1])) {
+                $cohort_batches = $cohort_batches[1];
+            } else {
+                $cohort_batches = $cohort_batches[0];
+            }
                 // Time setting
                 $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
                       
@@ -607,13 +612,19 @@ class EnrolledCourseController extends Controller
         $studentName = User::find($userId)->firstname.' '.User::find($userId)->lastname;
         $courseTitle = Course::where('id', $courseId)->value('course_title');
 
+        $existing = GeneralCourseFeedback::where('user_id', $userId)->where('course_id', $courseId);
        
-        $generalCourseFeedback = new GeneralCourseFeedback;
-        $generalCourseFeedback->user_id = $userId;
-        $generalCourseFeedback->course_id = $courseId;
-        $generalCourseFeedback->comment = $comment;
-        $generalCourseFeedback->rating = $rating;
-        $generalCourseFeedback->save();
+        if($existing->count() != 0) {
+            $existing->update(['comment' => $comment, 'rating' => $rating, 'is_moderated' => false]);
+        } else {
+            $generalCourseFeedback = new GeneralCourseFeedback;
+            $generalCourseFeedback->user_id = $userId;
+            $generalCourseFeedback->course_id = $courseId;
+            $generalCourseFeedback->comment = $comment;
+            $generalCourseFeedback->rating = $rating;
+            $generalCourseFeedback->save();
+        }
+        
 
         $finalRating = 0;
         $totalRatings = 0;
