@@ -702,11 +702,11 @@ small#assignment_table_batch {
                            
                             @if($userType == 'instructor')
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12 d-flex justify-content-lg-end justify-content-md-end mb-2">
-                            <form class="mb-2 mb-lg-0 mt-lg-0 d-flex mt-3 col-md-9 col-sm-9 col-6">
+                            <div id="name-search-form" class="mb-2 mb-lg-0 mt-lg-0 d-flex mt-3 col-md-9 col-sm-9 col-6">
                                 @csrf
-                                <input class="form-control me-2" type="search" placeholder="Search a name" aria-label="Search" id="search-box">
-                                <button class="btn btn-outline-dark" type="button" id="search-btn">Search</button>
-                            </form>
+                                <input class="form-control me-2" type="search" placeholder="Search a name" aria-label="Search" id="name-search-box">
+                                <button class="btn btn-outline-dark" type="button" id="name-search-btn">Search</button>
+                            </div>
                             </div>
                             @endif
                         </div>
@@ -755,13 +755,13 @@ small#assignment_table_batch {
 
                         <div class="row mt-3 mb-3">
                             
-                            <div class="accordion" id="accordionExample">
+                            <div class="accordion" id="recommendationAccordion">
                             @if(count($studentsEnrolled))
                                 @foreach($studentsEnrolled as $student)
                                 <div class="accordion-item border-0 bg-light">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_{{ $student->id }}" aria-expanded="true" aria-controls="collapseOne_{{ $student->id }}">
-                                        <img src="{{ asset('/storage/images/user.png') }}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
+                                        <img src="/storage/images/{{$student->image}}"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;object-fit: cover;"><p class="pt-3 card-title-4">{{ $student->firstname .' '. $student->lastname }}</p>
                                         <a data-student="{{$student->id}}" data-instructor={{$instructorId}} data-course="{{$courseId}}" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message
                                             ({{$generalCount = GeneralChat::where('student', $student->id)->where('instructor', $instructorId)->where('course_id', $courseId)->where('read_by_instructor', false)->count();}})
                                         </a>
@@ -872,7 +872,7 @@ small#assignment_table_batch {
 
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                            <p class="para-1">{{ $qa['question'] }}
+                                                            <p class="para-1 text-break">{{ $qa['question'] }}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -880,7 +880,7 @@ small#assignment_table_batch {
                                                     <div class="row" id="replyTextArea_{{ $qa['id'] }}">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                                             @csrf
-                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control autosize" placeholder="Type your reply.."></textarea>
+                                                            <textarea id="reply_{{ $qa['id'] }}" class="form-control autosize" placeholder="Type your reply.." maxlength="2000"></textarea>
                                                             <button data-id="{{ $qa['id'] }}" style="float:right;" class="btn btn-dark replyBtn mt-2">Reply</button>
                                                         </div>
                                                     </div>
@@ -913,7 +913,7 @@ small#assignment_table_batch {
 
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                <p class="para-1" id="replyContent_{{ $qa['id'] }}">{{ $qa['reply'] }}
+                                                                <p class="para-1 text-break" id="replyContent_{{ $qa['id'] }}">{{ $qa['reply'] }}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -1139,7 +1139,7 @@ small#assignment_table_batch {
                                                                                     <form action="{{ route('submit.assignment') }}" enctype="multipart/form-data" method="POST" class="row g-3 llp-form assignmentForm">
                                                                                     @csrf
                                                                                         <input type="hidden" name="assignment_id"  id ="assignment_id" value="{{ $assignment['id'] }}" />
-                                                                                        <textarea style="height: 110px;" class="form-control assignmentStudentComment" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                        <textarea style="height: 110px;" class="form-control assignmentStudentComment autosize" type="text" name="assignment_comment" placeholder="Type your comment here.." maxlength="2000"></textarea>
                                                                                         <small class="text-danger"></small>
                                                                                         @if ($errors->has('assignment_comment'))
                                                                                                             <span class="text-danger">{{ $errors->first('assignment_comment') }}</span>
@@ -1644,7 +1644,7 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         var button = event.relatedTarget
         var student = button.getAttribute('data-bs-student-id');
         var topic = button.getAttribute('data-bs-topic-id');
-        var course = document.getElementById('course_id');
+        var course = document.getElementById('course_id').value;
         
         let path = "{{ route('get-individual-student-chart') }}?student=" + student +"&topic=" + topic +"&course=" + course;
         fetch(path, {
@@ -1725,15 +1725,41 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
             location.replace('/instructor-chat/?student=' + this.getAttribute('data-student') + '&instructor=' + this.getAttribute('data-instructor') + '&course=' + this.getAttribute('data-course') + '&batch=' + document.getElementById('batch_id').value);
         })
     }
+
+    document.getElementById('name-search-box').addEventListener('keyup', function(e) {
+        if(e.which == 13) {
+            // document.getElementById('name-search-form').submit();
+            return false;
+        }
+    });
+
+    document.getElementById('name-search-btn').addEventListener('click', function(e) {
+        courseId = document.getElementById('course_id').value;
+        selectedBatch = document.getElementById('batch_id').value;
+        searchTerm = document.getElementById('name-search-box').value;
+
+        let path = "{{ route('recommendation-search') }}?courseId=" + courseId + "&selectedBatch=" + selectedBatch + "&searchTerm=" + searchTerm;
+        
+            fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                },
+            body: JSON.stringify({})
+            }).then((response) => response.json()).then((data) => {
+                console.log(data.html); 
+                document.getElementById('recommendationAccordion').innerHTML = data.html;
+            });
+    });
     </script>
 @else
 <script>
     document.getElementById('contact-instructor').addEventListener('click', function(e) {
         location.replace('/instructor-chat/?student=' + this.getAttribute('data-student') + '&instructor=' + this.getAttribute('data-instructor') + '&course=' + this.getAttribute('data-course'));
     });
-</script>
-@endif
-<script>
+
     document.querySelector('.assignmentForm').addEventListener('submit', (e) => {
         const commentEl = document.querySelector('.assignmentStudentComment');
         const commentErrorEl = commentEl.nextElementSibling;
@@ -1755,4 +1781,5 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
         }
     });
 </script>
+@endif
 @endpush

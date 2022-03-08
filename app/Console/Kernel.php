@@ -14,7 +14,7 @@ use App\Models\LiveSession;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LiveSessionReminderMail;
 use App\Mail\AssignmentReminder;
-use App\Mail\LiveSessionReminderMailInstructor;
+use App\Mail\LiveSessionReminderInstructor;
 use Carbon\Carbon;
 use App\Models\CustomTimezone;
 use App\Models\TopicAssignment;
@@ -103,7 +103,7 @@ class Kernel extends ConsoleKernel
                                     'course_name' => $course->value('course_title'),
                                     'reminder' => '72 hours'
                                 ];
-                                Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderMailInstructor($details));
+                                Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderInstructor($iDetails));
                             }
                         }
                         
@@ -111,6 +111,7 @@ class Kernel extends ConsoleKernel
                         if($liveSession->second_notification_sent == 0) {
                             if($liveSession->start_date == $current_date) {
                                 if(Carbon::now()->format('H:i') == date("H:i", strtotime($liveSession->start_time) - (60 * 60 * 8) + (60 * 0))) {
+                                    
                                     $enrolledCourseData = EnrolledCourse::where('batch_id', $batchId)->get();
                                     foreach($enrolledCourseData as $data) {
                                         
@@ -134,35 +135,38 @@ class Kernel extends ConsoleKernel
                         
                                         $startTime = date("H:i A", $sTime);
                                         $endTime = date("H:i A", $eTime);
-                                        $details = [
-                                            'firstname' => $student->value('firstname'),
-                                            'lastname' => $student->value('lastname'),
-                                            'session_name' => $liveSession->session_title,
-                                            'instructor_name' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                                        
+                                            $details = [
+                                                'firstname' => $student->value('firstname'),
+                                                'lastname' => $student->value('lastname'),
+                                                'session_name' => $liveSession->session_title,
+                                                'instructor_name' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                                                'course_name' => $course->value('course_title'),
+                                                'time' => date("m-d-Y", strtotime($liveSession->start_date)) . ', from ' . $startTime .' to '. $endTime,
+                                                'reminder' => '8 hours'
+                                            ];
+                                            
+                                            Mail::mailer('infosmtp')->to($student->value('email'))->send(new LiveSessionReminderMail($details));
+                                            $session = LiveSession::where('live_session_id', $liveSession->live_session_id)->update(['second_notification_sent' => true]);
+                                    }
+
+                                   
+                                        $iDetails = [
+                                            'instructorName' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                                            'sessionName' => $liveSession->session_title,
                                             'course_name' => $course->value('course_title'),
-                                            'time' => date("m-d-Y", strtotime($liveSession->start_date)) . ', from ' . $startTime .' to '. $endTime,
                                             'reminder' => '8 hours'
                                         ];
                                         
-                                        Mail::mailer('infosmtp')->to($student->value('email'))->send(new LiveSessionReminderMail($details));
-                                        $session = LiveSession::where('live_session_id', $liveSession->live_session_id)->update(['second_notification_sent' => true]);
-                                    }
-
-                                    $iDetails = [
-                                        'instructorName' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
-                                        'sessionName' => $liveSession->session_title,
-                                        'course_name' => $course->value('course_title'),
-                                        'reminder' => '8 hours'
-                                    ];
-                                    Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderMailInstructor($details));
-
+                                        Mail::mailer('infosmtp')->to($instructor->value('email'))->send(new LiveSessionReminderInstructor($iDetails));
+                                    
                                 }  
                             }
                         }
                     }
                 }
             }
-        })->everyThirtyMinutes()->appendOutputTo(storage_path().'/logs/laravel_output.log');
+        })->everyMinute()->appendOutputTo(storage_path().'/logs/laravel_output.log');
         $schedule->command('queue:work --once')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path().'/logs/laravel_output.log');
         $schedule->call(function () {
             // Assignment Cron
@@ -204,7 +208,7 @@ class Kernel extends ConsoleKernel
                     }
                 }                   
             }
-        })->daily()->appendOutputTo(storage_path().'/logs/laravel_output.log');
+        })->everyMinute()->appendOutputTo(storage_path().'/logs/laravel_output.log');
     }
 
     /**

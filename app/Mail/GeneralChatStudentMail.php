@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class LiveSessionReminderInstructor extends Mailable implements ShouldQueue
+class GeneralChatStudentMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class LiveSessionReminderInstructor extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('Reminder for ThinkLit course' . $this->details['course_name'])->markdown('Emails.LiveSessionReminderInstructor');
-        // return $this->subject('Reminder for ThinkLit course' . $this->iDetails['course_name'])->markdown('Emails.LiveSessionReminderInstructor');
+        return $this->subject('A new message from your instructor')
+                    ->markdown('Emails.GeneralChatStudentMail');
     }
 }

@@ -205,6 +205,7 @@ Route::get('/', function () {
     Route::post('/get-individual-student-chart', [EnrolledCourseController::class, 'getIndividualStudentChart'])->name('get-individual-student-chart');
     Route::post('/get-instructor-assignment-modal', [EnrolledCourseController::class, 'getAssignmentModal'])->name('get-instructor-assignment-modal');
     Route::post('/complete-assignment', [EnrolledCourseController::class, 'completeAssignment'])->name('complete-assignment');
+    Route::post('/recommendation-search', [EnrolledCourseController::class, 'recommendationSearch'])->name('recommendation-search');
 
     Route::post('/filter-course', [CoursesCatalogController::class, 'filterCourse'])->name('filter-course');
     Route::post('/course-drop-down', [CoursesCatalogController::class, 'courseDropDown'])->name('course-drop-down');

@@ -34,5 +34,15 @@ Route::group(['middleware' => ['auth:sanctum']],function() {
     Route::post('/submit-assignment', [ApiController::class, 'submitAssignmentApi']);
     Route::get('/get-badges', [ApiController::class, 'getBadgesApi']);
     Route::get('/get-notifications', [ApiController::class, 'getNotificationsApi']);
+    Route::get('/my-courses', [ApiController::class, 'showMyCoursesApi']);
+    Route::get('/assigned-courses', [ApiController::class, 'viewAssignedCoursesApi']);
+    Route::get('/student-recommendations/{courseId}', [ApiController::class, 'getStudentRecommendationsApi']);
+    Route::get('/instructor-recommendations/{courseId}/{batchId}', [ApiController::class, 'instructorRecommendationsApi']);
+    Route::get('/instructor-assignments/{courseId}/{batchId}', [ApiController::class, 'getInstructorAssignmentDataApi']);
+    Route::put('/review-assignment/{assignment}', [ApiController::class, 'completeAssignmentApi']);
+    Route::post('/ask-question', [ApiController::class, 'askQuestionApi']);
+    Route::put('/reply-question', [ApiController::class, 'replyToStudentApi']);
+    Route::get('/instructor-schedule/{courseId}/{batchId}', [ApiController::class, 'viewInstructorScheduleApi']);
+    Route::get('/student-schedule/{courseId}/{batchId}', [ApiController::class, 'viewStudentScheduleApi']);
 });
 

@@ -39,6 +39,8 @@ use App\Mail\MailAfterReplay;
 use App\Mail\MailAfterQuestion;
 use App\Mail\MailAfterAssignmentSubmission;
 use App\Mail\InstructorMailAfterFeedback;
+use App\Mail\GeneralChatStudentMail;
+use App\Mail\GeneralChatInstructorMail;
 use App\Models\Notification;
 use App\Mail\mailAfterAssignmentReview;
 
@@ -867,6 +869,16 @@ class EnrolledCourseController extends Controller
         return $studentsEnrolled;
     }
 
+    private function studentsEnrolledSearch($courseId, $batchId, $searchTerm) {
+        $studentsEnrolled = DB::table('enrolled_courses as a')
+                            ->join('users as b', 'a.user_id', '=', 'b.id')
+                            ->where('b.firstname', 'like', '%' . $searchTerm .'%')
+                            ->where('a.course_id', $courseId)
+                            ->where('a.batch_id', $batchId)
+                            ->get();
+        return $studentsEnrolled;
+    }
+
     private function instructorRecommendations($courseId, $batchId) {
         $singleRecommendation = [];
         $finalRecommendation = [];
@@ -894,6 +906,78 @@ class EnrolledCourseController extends Controller
             }
         }
         return $finalRecommendation;
+    }
+
+    public function recommendationSearch(Request $request) {
+        $html = "";
+        $courseId = $request->courseId;
+        $selectedBatch = $request->selectedBatch;
+        $searchTerm = $request->searchTerm == null ? "" : $request->searchTerm;
+        
+        $studentsEnrolled = $this->studentsEnrolledSearch($courseId, $selectedBatch, $searchTerm);
+
+        $assignedCourse = AssignedCourse::where('course_id', $courseId);
+
+        $instructorId = $assignedCourse->value('user_id');
+        $recommendations = $this->instructorRecommendations($courseId, $selectedBatch);
+        if(count($studentsEnrolled)){
+            foreach($studentsEnrolled as $student) {
+                $html = $html . '<div class="accordion-item border-0 bg-light">';
+                $html = $html . '<h2 class="accordion-header" id="headingOne">';
+                $html = $html . '<button class="accordion-button shadow-none text-capitalize mb-2p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_' . $student->id . '" aria-expanded="true" aria-controls="collapseOne_'. $student->id .'">';
+                $html = $html . '<img src="\storage\images\\'. $student->image .'"  class="rounded-circle me-3" alt="" style="width:40px; height:40px;object-fit: cover;"><p class="pt-3 card-title-4">'.$student->firstname .' '. $student->lastname .'</p>';
+                $html = $html . '<a data-student="' . $student->id .'" data-instructor='. $instructorId .' data-course="'. $courseId .'" href="#" class="btn btn-outline-secondary ms-auto messageStudent"><i class="fas fa-comments pe-2"></i>Message('. $generalCount = GeneralChat::where('student', $student->id)->where('instructor', $instructorId)->where('course_id', $courseId)->where('read_by_instructor', false)->count() .')</a>';
+                $html = $html . '</button></h2>';
+                $html = $html . '<div id="collapseOne_'.$student->id.'" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">';
+                $html = $html . '<div class="accordion-body bg-white ps-5 pe-5"><div class="row mt-3 mb-3">';
+                if(!empty($recommendations)) {
+                    foreach($recommendations as $recommendation) {
+                        if($recommendation['student_id'] == $student->user_id) {
+                            $html = $html . '<div class="col-lg-6 mb-3">';
+                            $html = $html . '<div class="card card-3" style="height: 550px;">';
+                            $html = $html . '<img src="/courselist/Illustration/Mask Group 2.jpg" class="card-img-top img-fluid" alt="...">';
+                            $html = $html . '<div class="card-body">';
+                            $html = $html . '<div class="row">';
+                            $html = $html . '<div class="col-lg-6">';
+                            $html = $html . '<button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#sessionModal"  data-bs-student-id="'. $recommendation['student_id'] .'"  data-bs-topic-id="' .$recommendation['content_id'] .'">1-on-1 Session</button>';
+                            $html = $html . '</div><div class="col-lg-6">';
+                            $html = $html . '<button type="button" class="btn btn-outline-secondary text-dark w-100" data-bs-toggle="modal" data-bs-target="#chartModal" data-bs-student-id="'.$recommendation['student_id'].'"  data-bs-topic-id="'.$recommendation['topic_id'].'">Chart</button>';
+                            $html = $html . '</div></div>';
+                            $html = $html . '<div class="row mt-3">';
+                            $html = $html . '<div class="col-lg-12">';
+                            $html = $html . '<div class="card card-4">';
+                            $html = $html . '<div class="card-body">The student did not understand this topic. We recommended the student to view this topic again.</div>';
+                            $html = $html . '</div></div></div>';
+                            $html = $html . '<div class="row">';
+                            $html = $html . '<div class="col-lg-12">';
+                            $html = $html . '<div class="card card-5">';
+                            $html = $html . '<div class="card-body">';
+                            $html = $html . '<h6 class="card-title">Session 1 - '. $recommendation['topic_title'] .'</h6>';
+                            $html = $html . '<ul class="list-group list-group-flush pb-3 mt-3">';
+                            $html = $html . '<li class="ms-3 border-0 pb-2">'. $recommendation['content_title'] .'</li>';
+                            $html = $html . '</ul>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            $html = $html . '</div>';
+                            }
+                        }
+                    } else {
+                        $html = $html . '<x-nodatafound message="No recommendations yet!"  notype=""/>';
+                    }
+                        $html = $html . '</div>';
+                        $html = $html . '</div>';
+                        $html = $html . '</div>';
+                        $html = $html . '</div>';           
+                    }
+                } else {
+                    $html = $html . '<x-nodatafound message="No data to show!"  notype=""/>';
+                }
+
+                return response()->json(['html' => $html]);
     }
 
     public function instructorGraph($courseId, $selectedBatch) {
@@ -1239,6 +1323,7 @@ class EnrolledCourseController extends Controller
         $loggedInId = $user->id;
 
         $courseId = $request->courseId;
+
         $studentId = $request->studentId;
         $instructorId = $request->instructorId;
         $message = $request->message;
@@ -1246,18 +1331,28 @@ class EnrolledCourseController extends Controller
         $generalChat = new GeneralChat;
         $generalChat->course_id = $courseId;
         $generalChat->student = $studentId;
+        $studentName = User::where('id', $studentId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
+        $studentEmail = User::where('id', $studentId)->value('email');
+        $instName = User::where('id', $instructorId)->value('firstname') .' '. User::where('id', $instructorId)->value('lastname');
+        $instructorEmail = User::where('id', $instructorId)->value('email');
+        $details= [
+            'studentName' => $studentName,
+            'instructorName' => $instName
+         ];
         if($loggedInId == $studentId) {
             $generalChat->read = true;
             $generalChat->read_by_instructor = false;
+             Mail::mailer('infosmtp')->to($instructorEmail)->send(new GeneralChatInstructorMail($details));
         } else if($loggedInId == $instructorId) {
             $generalChat->read = false;
-            $generalChat->read_by_instructor = true;
+            $generalChat->read_by_instructor = true;    
+             Mail::mailer('infosmtp')->to($studentEmail)->send(new GeneralChatStudentMail($details));
         }
         
         $generalChat->instructor = $instructorId;
-        $studentName = User::where('id', $studentId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
+        
         $generalChat->student_name = $studentName;
-        $instName = User::where('id', $instructorId)->value('firstname') .' '. User::where('id', $studentId)->value('lastname');
+        
         $generalChat->instructor_name = $instName;
         $generalChat->message = $message;
         if($loggedInId == $studentId) {

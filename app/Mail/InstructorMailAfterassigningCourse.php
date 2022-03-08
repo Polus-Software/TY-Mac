@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class InstructorMailAfterassigningCourse extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    Public $datas;
+    public $datas;
     /**
      * Create a new message instance.
      *
