@@ -25,6 +25,8 @@ use App\Models\GeneralCourseFeedback;
 use App\Models\AchievementBadge;
 use App\Models\StudentAchievement;
 use App\Models\AttendanceTracker;
+use App\Models\StudentFeedbackCount;
+use App\Models\CourseQA;
 
 use App\Mail\SignupMail;
 use App\Mail\AdminMailAfterSignUp;
@@ -33,6 +35,13 @@ use App\Mail\StudentMailAfterEnrolling;
 use App\Mail\InstructorMailAfterEnrolling;
 use App\Mail\InstructorMailAfterFeedback;
 use App\Mail\MailAfterAssignmentSubmission;
+use App\Mail\mailAfterAssignmentReview;
+use App\Mail\MailAfterQuestion;
+use App\Mail\MailAfterReplay;
+use App\Models\CustomTimezone;
+use App\Models\CohortBatch;
+use DateTime;
+use DateTimeZone;
 
 use Carbon\Carbon;
 use Config;
@@ -57,9 +66,9 @@ class ApiController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-
+        
         $credentials = $request->only('email', 'password');
-
+        
         $remember_me = (!empty($request->remember_me)) ? TRUE : FALSE;
         $redirectTo = '';
         if (Auth::attempt($credentials)) {
@@ -1002,5 +1011,590 @@ class ApiController extends Controller
             ]);
         }
         
+    }
+
+    public function showMyCoursesApi(Request $request){
+        $singleEnrolledCourseData = [];
+        $liveSessionDetails = [];
+        $upComingSessionDetails = [];
+        $user = Auth::user();
+        $current_date = Carbon::now()->format('Y-m-d');
+
+        $enrolledCourses = EnrolledCourse::where('user_id', $user->id)->get();
+         foreach($enrolledCourses as $enrolledCourse){
+           $courseId = $enrolledCourse->course_id;
+           $course = Course::where('id', $enrolledCourse->course_id);
+           $course_title = $course->value('course_title');
+           $description = $course->value('description');
+           $category_id = $course->value('category');
+           $course_image = $course->value('course_image');
+           $course_difficulty = $course->value('course_difficulty');
+           $courseCategory = CourseCategory::where('id', $category_id)->value('category_name');
+ 
+           $cohort_batches = DB::table('live_sessions')->where('batch_id', $enrolledCourse->batch_id)->where('start_date', '>=', $current_date)->get();
+           if(count($cohort_batches)) {
+                 $cohort_batches = $cohort_batches[0];
+                 // Time setting
+                 $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
+                       
+                 $offsetHours = intval($offset[1] . $offset[2]);
+                 $offsetMinutes = intval($offset[4] . $offset[5]);
+ 
+                 if($offset[0] == "+") {
+                     $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                     $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                 } else {
+                     $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                     $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                 }
+ 
+                 $startTime = date("H:i:s", $sTime);
+                 $endTime = date("H:i:s", $eTime);
+                 $date = new DateTime("now");
+ 
+                 $start_date =  $cohort_batches->start_date;
+                 $start_time =  $startTime;
+                 $end_time =  $endTime;
+                 $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+                 $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+             
+                 
+               } else {
+                 $nextCohort = "No live sessions scheduled";
+               }
+           
+           $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
+           $instructorfirstname = User::where('id', $assigned)->value('firstname');
+           $instructorlastname = User::where('id', $assigned)->value('lastname');
+           $progress = EnrolledCourse::where('course_id', $enrolledCourse->course_id)->where('user_id', $user->id)->value('progress');
+           
+                                                
+                                                
+           $enrolledCourseData = array(
+             'course_id' => $courseId,
+             'course_title' =>  $course_title,
+             'description' => $description,
+             'category_name' => $courseCategory,
+             'course_difficulty' => $course_difficulty,
+             'course_image' => $course_image,
+             'next_cohort' =>  $nextCohort,
+             'instructor_firstname' => $instructorfirstname,
+             'instructor_lastname' => $instructorlastname,
+             'progress' => (!is_null($progress)) ? $progress : 0
+           );
+         array_push($singleEnrolledCourseData, $enrolledCourseData);
+ 
+             $liveSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $enrolledCourse->batch_id)->get();
+             $current_date = Carbon::now()->format('Y-m-d');
+            
+             foreach($liveSessions as $session) {
+                 $batchId = $session->batch_id;
+                 $batch = CohortBatch::where('id', $batchId);
+ 
+                 $currentBatchStartDate = $session->start_date;
+                 if($currentBatchStartDate > $current_date) {
+                     $session_title = $session->session_title;
+                     $course = Course::where('id', $session->course_id);
+                     $courseDesc = $course->value('description');
+                     $courseDiff = $course->value('course_difficulty');
+                     $courseThumbnailImage = $course->value('course_thumbnail_image');
+                     $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                     $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+ 
+                     $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                     $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                     $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                     
+                     $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                     array_push($upComingSessionDetails, array(
+                         'session_title'=>  $session_title,
+                         'instructor' => $instructor,
+                         'course_desc' => $courseDesc,
+                         'course_diff' => $courseDiff,
+                         'course_thumbnail_image' => $courseThumbnailImage,
+                         'enrolledCourses' => $enrolledCourses,
+                         'date' => $date,
+                         'course_id' => $session->course_id,
+                         'batchId' => $session->batch_id
+                     ));
+                   
+                     
+                 } elseif ($currentBatchStartDate == $current_date) {
+                   if($session->start_time <= Carbon::now()->addMinutes(10)->format('H:i:s') && $session->end_time >= Carbon::now()->format('H:i:s')) {
+                     if($session->is_instructor_present) {
+                       $session_title = $session->session_title;
+                       $course = Course::where('id', $session->course_id);
+                       $courseDesc = $course->value('description');
+                       $courseDiff = $course->value('course_difficulty');
+                       $courseThumbnailImage = $course->value('course_thumbnail_image');
+                       $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                       $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+   
+                       $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                       $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                       $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                       
+                       $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                       array_push($liveSessionDetails, array(
+                           'session_title'=>  $session_title,
+                           'course_desc' => $courseDesc,
+                           'course_diff' => $courseDiff,
+                           'course_thumbnail_image' => $courseThumbnailImage,
+                           'instructor' => $instructor,
+                           'enrolledCourses' => $enrolledCourses,
+                           'date' => $date,
+                           'id' => $session->live_session_id,
+                           'batchId' => $session->batch_id
+                       ));
+                     }
+                   }
+                   
+                 }
+             }
+ 
+       }
+ 
+       return response()->json([
+        'singleEnrolledCourseData' => $singleEnrolledCourseData,
+        'upComingSessionDetails' => $upComingSessionDetails,
+        'liveSessionDetails' => $liveSessionDetails
+       ]);
+   }
+
+
+   public function viewAssignedCoursesApi(){
+        
+    $singleEnrolledCourseData = [];
+    $liveSessionDetails = [];
+    $upComingSessionDetails = [];
+    $current_date = Carbon::now()->format('Y-m-d');
+    $user = Auth::user();
+    if($user){
+     $enrolledCourses = AssignedCourse::where('user_id', $user->id)->get();
+     foreach($enrolledCourses as $enrolledCourse){
+       $nextCohort = "";
+       $bName = "";
+       $courseId = $enrolledCourse->course_id;
+       $course_title = Course::where('id', $enrolledCourse->course_id)->value('course_title');
+       $description = Course::where('id', $enrolledCourse->course_id)->value('description');
+       $category_id = Course::where('id', $enrolledCourse->course_id)->value('category');
+       $course_image = Course::where('id', $enrolledCourse->course_id)->value('course_image');
+       $course_difficulty = Course::where('id', $enrolledCourse->course_id)->value('course_difficulty');
+       $courseCategory = CourseCategory::where('id', $category_id)->value('category_name');
+       $start_date = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_date');
+    //    $start_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('start_time');
+    //    $end_time = DB::table('cohort_batches')->where('id', $enrolledCourse->batch_id)->value('end_time');
+       $assigned = DB::table('assigned_courses')->where('course_id', $enrolledCourse->course_id)->value('user_id');
+       $instructorfirstname = User::where('id', $assigned)->value('firstname');
+       $instructorlastname = User::where('id', $assigned)->value('lastname');
+
+    //    Timing setup
+
+    $cohort_batches = DB::table('live_sessions')->where('course_id', $enrolledCourse->course_id)->where('start_date', '>=', $current_date)->get();
+      if(count($cohort_batches)) {
+        $cohort_batches = $cohort_batches[0];
+            // Time setting
+            $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
+                  
+            $offsetHours = intval($offset[1] . $offset[2]);
+            $offsetMinutes = intval($offset[4] . $offset[5]);
+
+            if($offset[0] == "+") {
+                $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            } else {
+                $sTime = strtotime($cohort_batches->start_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                $eTime = strtotime($cohort_batches->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            }
+
+            $startTime = date("H:i:s", $sTime);
+            $endTime = date("H:i:s", $eTime);
+            $date = new DateTime("now");
+
+            $start_date =  $cohort_batches->start_date;
+            $start_time =  $startTime;
+            $end_time =  $endTime;
+
+            $batch = CohortBatch::where('id', $cohort_batches->batch_id);
+            
+            $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
+            $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+            $bName = '(' . $batch->value("batchname") . ' [' . $batch->value("title") . '])';
+          } else {
+            $nextCohort = "No live sessions scheduled";
+          }
+          $current_date = Carbon::now()->format('Y-m-d');
+          $progress = 0;
+          $totalSessions = LiveSession::where('course_id', $enrolledCourse->course_id)->count();
+          if($totalSessions != 0) {
+            $progressTracker = LiveSession::where('start_date', '<', $current_date)->count();
+            $progress = round($progressTracker * 100 / $totalSessions, 0); 
+          }
+          
+       $enrolledCourseData = array(
+         'course_id' => $courseId,
+         'course_title' =>  $course_title,
+         'description' => $description,
+         'category_name' => $courseCategory,
+         'course_difficulty' => $course_difficulty,
+         'course_image' => $course_image,
+         'start_date' => Carbon::parse($start_date)->format('m/d/Y'),
+         'nextCohort' => $nextCohort,
+         'batchName' => $bName,
+         'progress' => $progress,
+         'instructor_firstname' => $instructorfirstname,
+         'instructor_lastname' => $instructorlastname,
+       );
+      
+     array_push($singleEnrolledCourseData, $enrolledCourseData);
+   }
+
+  
+         $liveSessions = LiveSession::all();
+         $current_date = Carbon::now()->format('Y-m-d');
+        
+         foreach($liveSessions as $session) {
+            
+             $batchId = $session->batch_id;
+             $batch = CohortBatch::where('id', $batchId);
+
+            //  $currentBatchStartDate = $batch->value('start_date');
+             $currentBatchStartDate = $session->start_date;
+
+             if($currentBatchStartDate > $current_date) {
+                    $session_title = $session->session_title;
+                    $course = Course::where('id', $session->course_id);
+                    $courseDesc = $course->value('description');
+                    $courseDiff = $course->value('course_difficulty');
+                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+
+                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                    
+                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    array_push($upComingSessionDetails, array(
+                        'session_title'=>  $session_title,
+                        'instructor' => $instructor,
+                        'course_desc' => $courseDesc,
+                        'course_diff' => $courseDiff,
+                        'course_id' => $session->course_id,
+                        'enrolledCourses' => $enrolledCourses,
+                        'image' => $course->value('course_thumbnail_image'),
+                        'date' => $date,
+                        'session_id' => $session->live_session_id,
+                        'batchId' => $session->batch_id
+                    ));
+             } elseif ($currentBatchStartDate == $current_date) {
+                //  ->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))
+                if($session->start_time <= Carbon::now()->addMinutes(30)->format('H:i:s') && $session->end_time >= Carbon::now()->format('H:i:s')) {
+                    $session_title = $session->session_title;
+
+                    $course = Course::where('id', $session->course_id);
+                    $courseDesc = $course->value('description');
+                    $courseDiff = $course->value('course_difficulty');
+                    $instructor = User::find($session->instructor)->firstname .' '. User::find($session->instructor)->lastname;
+                    $enrolledCourses = EnrolledCourse::where('course_id', $session->course_id)->get()->count();
+
+                    $start_date = Carbon::createFromFormat('Y-m-d',$currentBatchStartDate)->format('M d');
+                    $start_time = Carbon::createFromFormat('H:i:s',$batch->value('start_time'))->format('h A');
+                    $end_time = Carbon::createFromFormat('H:i:s',$batch->value('end_time'))->format('h A');
+                    
+                    $date = $start_date . ', ' . $start_time . ' ' .$batch->value('time_zone') . ' - ' . $end_time . ' ' . $batch->value('time_zone');
+                    array_push($liveSessionDetails, array(
+                        'session_title'=>  $session_title,
+                        'course_desc' => $courseDesc,
+                        'course_diff' => $courseDiff,
+                        'instructor' => $instructor,
+                        'image' => $course->value('course_thumbnail_image'),
+                        'enrolledCourses' => $enrolledCourses,
+                        'date' => $date,
+                        'session_id' => $session->live_session_id,
+                        'id' => $session->live_session_id,
+                        'batchId' => $session->batch_id
+                    ));
+                }
+             }
+         }
+   return response()->json([
+     'singleEnrolledCourseData' => $singleEnrolledCourseData,
+     'upComingSessionDetails' => $upComingSessionDetails,
+     'liveSessionDetails' => $liveSessionDetails,
+   ]);
+ } else {
+   return redirect('/student-courses');
+ }
+}
+
+ public function getStudentRecommendationsApi($courseId) {
+    
+    $user = Auth::user();
+    $finalRec = [];
+    if($user) {
+        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $user->id)->get();
+        $total_review_count = count($studentFeedbackCounts);
+    
+        foreach($studentFeedbackCounts as $feedback) {
+            if($feedback->negative == 1) {
+                $topicId = $feedback->topic_id;
+                $topic = Topic::where('topic_id',  $topicId);
+                $contentId = $feedback->content_id;
+                $content = TopicContent::where('topic_content_id',  $contentId);
+    
+                $sessionView = LiveSession::where('topic_id', $topicId);
+    
+                $singleRec = array(
+                    'content_id' => $contentId,
+                    'content_title' => $content->value('topic_title'),
+                    'topic_id' => $topicId,
+                    'topic_title' => $topic->value('topic_title'),
+                    'student_id' => $feedback->value('student'),
+                    'likes' => $feedback->value('positive'),
+                    'dislikes' => $feedback->value('negative'),
+                    'sessionId' => $sessionView->value('live_session_id')
+                );
+    
+                array_push($finalRec, $singleRec);
+            }
+        }
+        return response()->json(['recommendations' => $finalRec]);
+    }
+    
+ }
+
+ public function instructorRecommendationsApi($courseId, $batchId) {
+    $singleRecommendation = [];
+    $finalRecommendation = [];
+    $studentsEnrolled = $this->studentsEnrolled($courseId, $batchId);
+    foreach($studentsEnrolled as $student) {
+        $student_name = User::where('id', $student->user_id)->get();
+        $studentFeedbackCounts = StudentFeedbackCount::where('course_id', $courseId)->where('student', $student->user_id)->get();
+        foreach($studentFeedbackCounts as $feedback) {
+            if($feedback->negative > $feedback->positive) {
+                $topicId = $feedback->topic_id;
+                $topic = Topic::where('topic_id',  $topicId);
+                $contentId = $feedback->content_id;
+                $content = TopicContent::where('topic_content_id',  $contentId);                    
+                $singleRecommendation = array(
+                    'content_id' => $contentId,
+                    'content_title' => $content->value('topic_title'),
+                    'topic_id' => $topicId,
+                    'topic_title' => $topic->value('topic_title'),
+                    'student_id' => $feedback->student,
+                    'likes' => $feedback->positive,
+                    'dislikes' => $feedback->negative
+                );
+                array_push($finalRecommendation, $singleRecommendation);
+            }
+        }
+    }
+    return response()->json(['recommendations' => $finalRecommendation]);
+}
+
+public function getInstructorAssignmentDataApi($courseId, $selectedBatch) {
+    $assignmentArr = [];
+    $assignments = TopicAssignment::where('course_id', $courseId)->get();
+
+    $students = $this->studentsEnrolled($courseId, $selectedBatch);
+    foreach($students as $student){
+        $assignmentStatus = [];
+        $studentName = $student->firstname . ' ' . $student->lastname;
+        $studentImg = $student->image;
+        $batchName = CohortBatch::where('id', $selectedBatch)->value('batchname');
+        foreach($assignments as $assignment) {
+            $status = "Submitted";
+            $stuAssignment = "";
+            $studentAssignment = Assignment::where('student_id' , $student->id)->where('topic_assignment_id', $assignment->id)->get();
+            if(count($studentAssignment) == 0) {
+                $status = "Pending";  
+            } elseif($studentAssignment[0]->is_submitted == false) {
+                $status = "Pending";
+                $stuAssignment = $studentAssignment[0]->assignment_id;
+            } elseif($studentAssignment[0]->is_completed == true) {
+                $status = "Completed";
+                $stuAssignment = $studentAssignment[0]->assignment_id;
+            } else {
+                $stuAssignment = $studentAssignment[0]->assignment_id;
+            }
+
+            array_push($assignmentStatus, array(
+                'status' => $status,
+                'assignment_id' => $assignment->id,
+                'stuAssignment' => $stuAssignment
+            ));
+        }
+        
+        array_push($assignmentArr, array(
+            'studentImg' => $studentImg,
+            'student_name' => $studentName,
+            'batch_name' => $batchName,
+            'assignment_data' => $assignmentStatus
+        ));
+    }  
+    
+    return response()->json(['assignmentData' => $assignmentArr, 'assignments' => $assignments]);
+}
+
+public function completeAssignmentApi($assignment) {
+
+    $user = Auth::user();
+    if($user) {
+        $assignmentObj = Assignment::where('assignment_id', $assignment)->update(['is_completed' => true]);
+    
+        $assignmentData = Assignment::where('assignment_id', $assignment);
+        $studentId = $assignmentData->value('student_id');
+        $courseId = $assignmentData->value('course_id');
+        $student = User::where('id', $studentId);
+        $studentName = $student->value('firstname').' '.$student->value('lastname');
+        $studentEmail = $student->value('email');
+        $courseTitle = Course::where('id', $courseId)->value('course_title');
+    
+        $details= [
+            'studentName' => $studentName,
+            'courseTitle' => $courseTitle
+        ];
+        
+        Mail::mailer('infosmtp')->to($studentEmail)->send(new mailAfterAssignmentReview($details));
+        $notification = new Notification; 
+        $notification->user = $user->id;
+        $notification->notification = "Hello ".$studentName." ,Your assignment for the course ".$courseTitle." has been reviewed by the instructor. 
+                                       To view the reviewed assignment, please log in to your account on ThinkLit.com";
+        $notification->is_read = false;
+        $notification->save();
+        
+        return response()->json(['status' => 200, 'message' => 'successfully reviewed']);
+    }
+    
+
+}
+
+    private function studentsEnrolled($courseId, $batchId) {
+        $studentsEnrolled = DB::table('enrolled_courses as a')
+                            ->join('users as b', 'a.user_id', '=', 'b.id')
+                            ->where('a.course_id', $courseId)
+                            ->where('a.batch_id', $batchId)
+                            ->get();
+        return $studentsEnrolled;
+    }
+
+    public function askQuestionApi(Request $request) {
+        try {
+
+            $question = $request->question;
+            $course_id = $request->course_id;
+            $student = 0;
+
+            $qa = new CourseQA;
+            $qa->course_id = $course_id;
+            $instructor = AssignedCourse::where('course_id', intval($course_id))->value('user_id');
+            $user = Auth::user();
+            $instructorName = User::find($instructor)->firstname.' '.User::find($instructor)->lastname;
+            $instructorEmail = User::where('id', $instructor)->value('email');
+            $studentName = $user->firstname.' '.$user->lastname;
+            if($user) {
+                $student = User::where('id', $user->id)->value('id');
+                
+                $enrolledCourse = EnrolledCourse::where('user_id', $user->id)->where('course_id', $course_id);
+                $batch = $enrolledCourse->value('batch_id');
+                
+                $badgeId = AchievementBadge::where('title', 'Q&A')->value('id');
+                $achievementCheck = StudentAchievement::where('student_id', $user->id)->where('course_id', $course_id)->where('badge_id', $badgeId)->count();
+                
+                if(!$achievementCheck) {
+                    $student_achievement = new StudentAchievement;
+                    $student_achievement->student_id = $user->id;
+                    $student_achievement->badge_id =  $badgeId;
+                    $student_achievement->course_id =  $course_id;
+                    $student_achievement->is_achieved = true;
+                    $student_achievement->save();
+                }
+                
+                $data = [
+                    'studentName' => $studentName,
+                    'instructorName' => $instructorName,
+                ];
+    
+                $qa->student = $student;
+                $qa->instructor = $instructor;
+                $qa->question = $question;
+                $qa->has_replied = false;
+                $qa->batch_id = $batch;
+    
+                $qa->save();
+    
+                Mail::mailer('infosmtp')->to($instructorEmail)->send(new MailAfterQuestion($data));
+    
+                $notification = new Notification; 
+                $notification->user = $instructor;
+                $notification->notification = "Hi ". $instructorName.",You have got a new message from your student ".$studentName." on ThinkLit. To view the message, please log in to your account on ThinkLit.com";
+                $notification->is_read = false;
+                $notification->save();
+    
+                return response()->json(['status' => 200, 'msg' => 'Saved successfully!', 'question' => $question, 'studentName' => $studentName, 'studentId' => $student]);
+            }
+
+        } catch (Exception $exception) {
+            return response()->json(['status' => 503, 'msg' => 'Some error']);
+        }
+    }
+
+    public function replyToStudentApi(Request $request) {
+        try{
+        $qaId = $request->qaId;
+        $reply = $request->replyContent;
+
+        $instructorId = Auth::user()->id;
+        $courseQA = CourseQA::find($qaId);
+        $studentId = $courseQA->value('student');
+        $courseTitle = Course::where('id', $courseQA->value('course_id'))->value('course_title');
+        $student = User::where('id', $studentId);
+        $studentEmail = $student->value('email');
+        $studentName = $student->value('firstname').' '.$student->value('lastname');
+        $instructorName = User::find($instructorId)->firstname.' '.User::find($instructorId)->lastname;
+        
+        $details= [
+            'studentName' => $studentName,
+            'instructorName' => $instructorName,
+            'courseTitle' => $courseTitle
+         ];
+   
+        $courseQA->reply = $reply;
+        $courseQA->has_replied = true;
+        $updatedAt = $courseQA->updated_at->format('d M H:m');
+        $courseQA->save();
+
+        Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterReplay($details));
+
+        $notification = new Notification; 
+        $notification->user = $studentId;
+        $notification->notification = "Hello ". $studentName.", You have got a reply to your message from your Instructor ". $instructorName."for the course ". $courseTitle." on ThinkLit. To view the message,
+         please log in to your account on ThinkLit.com";
+        $notification->is_read = false;
+        $notification->save();
+
+        return response()->json([
+            'status' => 200,
+            'reply' => $reply, 
+            'updatedAt' => $updatedAt,
+            'message' => 'Replied successfully'
+         ]);
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 503,
+                'message' => 'Some error'
+             ]);
+        } 
+    }
+
+    public function viewInstructorScheduleApi($courseId, $batchId) {
+        $liveSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $batchId)->orderby('start_date', 'asc')->get();
+        return response()->json(['status' => 200, 'liveSessions' => $liveSessions]);
+    }
+
+    public function viewStudentScheduleApi($courseId, $batchId) {
+        $liveSessions = LiveSession::where('course_id', $courseId)->where('batch_id', $batchId)->orderby('start_date', 'asc')->get();
+        return response()->json(['status' => 200, 'liveSessions' => $liveSessions]);
     }
 }

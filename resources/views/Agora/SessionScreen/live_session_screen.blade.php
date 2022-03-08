@@ -1676,7 +1676,6 @@ window.addEventListener("beforeunload", function (e) {
   let timer = document.getElementById('timer').value;
 
   if(userType == "student") {
-    alert(timer);
     let path = "{{ route('student-exit') }}?session=" + sessionId + "&timer=" + timer;
     fetch(path, {
       method: 'POST',

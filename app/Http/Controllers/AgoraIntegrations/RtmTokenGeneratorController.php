@@ -52,8 +52,6 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    // const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
-    // const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
     const appId = "0b40256a7d014ad981cf41e7b7d26910";
     const appCertificate = "a163ae4afd894f059c7dfceecddcdafe";
 
@@ -139,6 +137,7 @@ class RtmTokenGeneratorController extends Controller
                 $attendance->student = $userObj->id;
                 $attendance->start_time = (new DateTime("now", new DateTimeZone('UTC')));
                 $attendance->attendance_Status = true;
+                $attendance->is_present = true;
                 $attendance->save();
             } else {
                 $attendanceRec->update(['attendance_Status' => true, 'is_present' => true]);
@@ -166,7 +165,7 @@ class RtmTokenGeneratorController extends Controller
         $userType = UserType::where('user_role', 'instructor')->value('id');
         $user = Auth::user();
         $userTypeLoggedIn =  UserType::find($user->role_id)->user_role;
-        $courses = Course::all();
+        $courses = Course::where('is_published', true)->get();
         $sessions = LiveSession::all();
         $sessionsArray = [];
         $slNo = 1;
@@ -290,13 +289,29 @@ class RtmTokenGeneratorController extends Controller
                     $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
                     $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
                    
-                    $details=[
+                    $cohortTimezone = $selectedBatchObj->value('time_zone');
+
+                    // Time zone
+                    $offset = CustomTimezone::where('name', $cohortTimezone)->value('offset');
+                                
+                    $offsetHours = intval($offset[1] . $offset[2]);
+                    $offsetMinutes = intval($offset[4] . $offset[5]);
+                                
+                    if($offset[0] == "+") {
+                        $sTime = strtotime($batchStartTime) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+                    } else {
+                        $sTime = strtotime($batchStartTime) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+                    }
+                                
+                    $startTime = date("H:i A", $sTime);
+
+                    $details = [
                         'courseTitle' => $courseTitle,
                         'instructorName'=> $instructorName,
                         'batchname' =>$batchname,
                         'startDate' => $batchStartDate,
                         'endDate' => $batchEndDate,
-                        'startTime' => $batchStartTime,
+                        'startTime' => $startTime,
                         'sessionTitle'=> $topics[$topicsCounter]->topic_title
                      ];
                      
@@ -304,8 +319,7 @@ class RtmTokenGeneratorController extends Controller
     
                     $notification = new Notification; 
                     $notification->user = $sessionInstructor;
-                    $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for".
-                                                   $batchStartDate.".";
+                    $notification->notification = "Hi ". $instructorName.", Your live session " .$topics[$topicsCounter]->topic_title." is scheduled for ". $batchStartDate.".";
                     $notification->is_read = false;
                     $notification->save();
     
@@ -622,27 +636,6 @@ class RtmTokenGeneratorController extends Controller
             $percent = $attendedSessions * 100 / $topicsCount;
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
            
-            if($percent == 100){
-				$current_time = (new DateTime("now", new DateTimeZone('UTC')));
-				$completion_date = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['course_completion_date' => $current_time]);
-                $studentName = $user->firstname.' '.$user->lastname;
-                $studentEmail = $user->email;
-                $url = base_path() . "/enrolled-course/" . $courseId . "?feedback=true";
-                $courseTitle = Course::where('course_title', $courseId)->value('course_title');
-                $mailData = [
-                    'courseTitle' => $courseTitle,
-                    'studentName' => $studentName,
-                    'url' => $url
-                ];
-               
-                Mail::mailer('infosmtp')->to($studentEmail)->send(new mailAfterCourseCompletion($mailData));
-                
-                $notification = new Notification; 
-                $notification->user = $user->id;
-                $notification->notification = "Hello ". $studentName.", Thank you for completing the course .".$courseTitle." Please feel free to share your feedback by reviewing the course.";
-                $notification->is_read = false;
-                $notification->save();
-            }
 
             }
                 $attendance->update(['attendance_Status' => true ]);
@@ -736,8 +729,6 @@ class RtmTokenGeneratorController extends Controller
 
             $student =  $user->id;
 
-            
-
             $attendance = AttendanceTracker::where('student', $student)->where('live_session_id', $sessionId);
             if($attendance->count() != 0) {
                 $timer = $attendance->value('attendance_time') == NULL ? $newTime : $attendance->value('attendance_time') + $newTime;
@@ -783,6 +774,38 @@ class RtmTokenGeneratorController extends Controller
 
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
 
+            if($percent == 100){
+				$current_time = (new DateTime("now", new DateTimeZone('UTC')));
+				$completion_date = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['course_completion_date' => $current_time]);
+                $studentName = $user->firstname.' '.$user->lastname;
+                $studentEmail = $user->email;
+                $url = base_path() . "/enrolled-course/" . $courseId . "?feedback=true";
+                $courseTitle = Course::where('course_title', $courseId)->value('course_title');
+                $mailData = [
+                    'courseTitle' => $courseTitle,
+                    'studentName' => $studentName,
+                    'url' => $url
+                ];
+               
+                Mail::mailer('infosmtp')->to($studentEmail)->send(new mailAfterCourseCompletion($mailData));
+                
+                $notification = new Notification; 
+                $notification->user = $user->id;
+                $notification->notification = "Hello ". $studentName.", Thank you for completing the course .".$courseTitle." Please feel free to share your feedback by reviewing the course.";
+                $notification->is_read = false;
+                $notification->save();
+
+                $badgeId = AchievementBadge::where('title', 'Completion')->value('id');
+                $existing = StudentAchievement::where('student_id', $student)->where('course_id', $courseId)->where('badge_id', $badgeId)->count();
+                if(!$existing) {
+                    $student_achievement = new StudentAchievement;
+                    $student_achievement->student_id = $student;
+                    $student_achievement->badge_id =  $badgeId;
+                    $student_achievement->course_id =  $courseId;
+                    $student_achievement->is_achieved = true;
+                    $student_achievement->save();
+                }
+            }   
                 $attendance->update(['attendance_Status' => true ]);
             } else {
                 $attendance->update(['attendance_Status' => false ]);
