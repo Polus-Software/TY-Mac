@@ -828,7 +828,7 @@ class CourseController extends Controller
         $request->validate([
             'assignment_title'=>'required',
             'assignment_description' => 'required',
-            'document' =>'required',
+            'document' =>'required|max:2048',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -875,6 +875,7 @@ class CourseController extends Controller
         $request->validate([
             'assignment_title'=>'required',
             'assignment_description' => 'required',
+            'document' =>'required|max:2048',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -1043,6 +1044,7 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
+        // dd($request->input('cohortbatch_startdate'));
         $validatedData = $request->validate([
             'cohortbatch_title'=>'required',
             'batchname' => 'required',

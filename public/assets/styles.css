@@ -380,4 +380,27 @@ a.navbar-brand {
     color: var(--color-white);
     border: 1px solid var(--color-white);
 }
+.think-hr {
+    width: 60px;
+    height: 2px !important;
+}
+.think-icon-xs {
+    width: 20px;
+    height: 20px;
+}
+.think-icon-sm {
+    width: 40px;
+    height: 40px;
+}
+.think-icon-md {
+    width: 94px;
+    height: 94px;
+}
+.think-icon-mdlg {
+    width: 300px;
+    height: 94px;
+}
+.think-img-h {
+    height: 220px;
+}
  

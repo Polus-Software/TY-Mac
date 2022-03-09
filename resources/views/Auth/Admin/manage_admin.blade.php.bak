@@ -40,7 +40,7 @@
               <tr id="{{$admin->id}}">
                 <th class="align-middle" scope="row">{{  ($admins->currentpage() -1) * $admins->perpage() + $slno }}</th>
                 <td class="align-middle">
-                  <img src="{{ asset('/storage/images/'. $admin->image) }}"  class="rounded-circle think-icon-sm" alt="avatar">
+                  <img src="{{ asset('/storage/images/'. $admin->image) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
                 </td>
                 <td class="align-middle" colspan="2">{{$admin->firstname}} {{$admin->lastname}}</td>
                 <td class="align-middle">{{$admin->email}} </td>
@@ -62,7 +62,7 @@
               @endforeach
               @else
                  <tr>
-                     <td colspan="8"><h6 class="text-center">No admins added.</h6></td>
+                     <td colspan="8"><h6 style="text-align:center;">No admins added.</h6></td>
                  </tr>
               @endif
             </tbody>

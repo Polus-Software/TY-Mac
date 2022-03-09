@@ -28,7 +28,7 @@
     <div class="row align-items-center pb-5">
       <div class="col-md-6 intros text-start">
         <h1 class="display-2 lh-1">
-          <p class="welcome-text mb-0">Welcome to TY-Mac</p>
+          <p class="welcome-text mb-0">Welcome to ThinkLit</p>
           <span class="display-2--intro">Learn new skills <br>in a <span class="fw-bold think-personalized-way-text">personalized way.
               <div class="think-personalized-way-underline"><img class="img-fluid mx-auto d-block" src="courselist/images/Under-line.png" alt="marketing illustration"></div>
             </span></span>
@@ -81,7 +81,7 @@
 <section id="services" class="services mb-5 think-services-bg think-mt-75">
   <div class="container">
     <div class="row text-center think-mb-75">
-      <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">Why we are out of Ordinary<div class="think-services-underline">
+      <h1 class="display-3 fw-bold think-title-home"><span class="position-relative d-inline-block">The ThinkLit Way<div class="think-services-underline">
             <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
           </div></span></h1>
       <!-- <div class="mb-5">
@@ -141,7 +141,7 @@
         </div>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-5 text-start">
-        <div class="services__pic">
+        <div class="services__pic text-end">
           <img src="courselist/images/personalized_engine_avatar.svg" alt="web development illustration" class="img-fluid">
         </div>
       </div>

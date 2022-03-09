@@ -214,7 +214,7 @@
     </div>
     <div class="row mt-3 mb-4 text-center">
       <div class="col-md-12">
-        <a href="{{ route('student.courses.get') }}" class="btn think-btn-secondary-outline" type="button" style="text-decoration:none;">Explore all Courses</a>
+        <a href="{{ route('student.courses.get') }}" class="btn think-btn-secondary-outline" type="button">Explore all Courses</a>
       </div>
     </div>
   </div>

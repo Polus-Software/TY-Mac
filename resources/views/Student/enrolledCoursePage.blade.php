@@ -651,8 +651,8 @@ small#assignment_table_batch {
                                         <div class="row mt-3">
                                             <div class="col-lg-12">
                                                 <div class="card card-4">
-                                                    <div class="card-body">
-                                                        We recommend that you view this topic again.
+                                                    <div class="card-body text-center fw-bold">
+                                                        You have understood {{$recommendation['understoodPercent'] }}% of the topic. We recommend that you view these topics again.
                                                     </div>
                                                 </div>
                                             </div>
@@ -726,8 +726,8 @@ small#assignment_table_batch {
                                         <div class="row mt-3">
                                             <div class="col-lg-12">
                                                 <div class="card card-4">
-                                                    <div class="card-body">
-                                                        We recommend that you view this topic again.
+                                                    <div class="card-body text-center fw-bold">
+                                                    You have understood {{$recommendation['understoodPercent'] }}% of the topic. We recommend that you view these topics again.
                                                     </div>
                                                 </div>
                                             </div>

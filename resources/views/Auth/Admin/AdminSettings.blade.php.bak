@@ -142,7 +142,7 @@
                 
           </div>
           <div class="col-2 col-sm-2 col-md-2 p-3">
-                <label class="text-success" id="threshold-success-msg"></label> 
+                <label style="color:green;" id="threshold-success-msg"></label> 
                 <button class="btn btn-secondary mt-2 w-100" id="threshold-save">Save</button>
           </div>
         </div>

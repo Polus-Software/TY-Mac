@@ -44,9 +44,9 @@
                 <td class="align-middle">{{$courseData['instructor_firstname']}} {{$courseData['instructor_lastname']}}</td>
                 <td class="align-middle">{{$courseData['updated_at']}}</td>
                 @if($courseData['courseStatus'] == 0)
-                <td class="align-middle"><span id="publish-badge" class="badge bg-warning text-dark">Draft</span></td>
+                <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark">Draft</span></td>
                 @else
-                <td class="align-middle"><span id="publish-badge" class="badge bg-success text-dark">Published</span></td>
+                <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-success text-dark">Published</span></td>
                 @endif
                 <!-- <td style="vertical-align: middle;"><span id="publish-badge" class="badge bg-warning text-dark" class="badge bg-warning text-dark">Draft</span></td> -->
                 <td class="align-middle text-center">
@@ -61,7 +61,7 @@
               @endforeach
               @else
                  <tr>
-                     <td colspan="8"><h6 class="text-center">No courses added.</h6></td>
+                     <td colspan="8"><h6 style="text-align:center;">No courses added.</h6></td>
                  </tr>
               @endif
             </tbody>
@@ -282,12 +282,15 @@
 <div id="delete_course_modal" class="modal fade llp-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header pb-0 pe-5 ps-5 pt-3">
+      <div class="modal-header" style="padding: 1rem 3rem 0 3rem !important;">
         <h5 class="modal-title">Delete course</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-0 pt-3">
-        <table class="table table-borderless">          
+      <div class="modal-body" style="padding: 1rem 0rem 0rem 0rem !important;">
+        <table class="table table-borderless">
+          <!-- <tr>
+            <td class="text-center"><i class="fas fa-exclamation-triangle" style="font-size:24px;color:red;"></i></td>
+          </tr> -->
           <tr>
           </tr>
           <tr>

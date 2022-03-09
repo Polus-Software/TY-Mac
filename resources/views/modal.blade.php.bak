@@ -186,20 +186,20 @@
 <!-- question modal -->
 @if(Request::is('enrolled-course/*'))
 <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-container mx-auto p-3 rounded">
+    <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
-        <div class="modal-header border-0">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-center mb-2">
           <h5 class="modal-title mx-sm-5 mx-0 custom-form-header" id="questionModalLabel">Ask a question</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="container-overlay">
-            <form id="questionForm" class="form" method="POST" action="{{route('user.contact')}}">
+            <form id="questionForm" class="form">
               @csrf
               <div class="form-group mx-sm-5 mx-0">
                 <label for="studentQuestion" class="question-label">Question</label>
-                <textarea name="message" class="form-control mt-2 autosize" id="studentQuestion" placeholder="Type your question here" required></textarea>
-                <small id="question_error" style="color:red;"></small>
+                <textarea name="message" class="form-control mt-2 autosize" id="studentQuestion" placeholder="Type your question here" maxlength="2550" required></textarea>
+                <small id="question_error" style="color:red;visibility:visible;display:none;">Please enter the question!</small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
                 <button type="button" class="btn think-btn-secondary" id="submitStudentQuestion">Submit</button>
@@ -239,7 +239,7 @@
                 </div>
               </div>
               <div class="form-group mx-0">
-                <textarea class="form-control autosize" id="comment" placeholder="Add your review..." rows="4" maxlength="60"></textarea>
+                <textarea class="form-control autosize" id="comment" placeholder="Add your review..." rows="4" maxlength="1000"></textarea>
               </div>
               <div class="form-group mx-0">
               @csrf
