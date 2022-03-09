@@ -52,7 +52,7 @@ span#ChromelessStatusBar\.RightDock {
       <a style="width:10%;position:absolute;right: 8.5em;" class="btn btn-secondary think-btn-secondary" id="go-back" href="/enrolled-course/{{$courseId}}">Go back</a>
       @endif  
       <div class="col-md-5 col-lg-5 col-5">
-          <h2 class="text-decoration-underline">Session: {{$topic}}</h2>
+          <h2 style="text-decoration:underline;">Session: {{$topic}}</h2>
           <small>Course: {{$course}}</small>
           <video class="mt-4 w-100" id="video" controls style="height:30rem;border: 1px solid #e4e4e4;" autoplay></video>
         </div>

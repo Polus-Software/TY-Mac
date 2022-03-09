@@ -41,7 +41,7 @@
             <div class="col-3 mt-5">
                 
             </div>
-            <div class="col-3 mt-5" style="text-align:right;">
+            <div class="col-3 mt-5 text-end">
                 <button id="get_table" type="button" class="btn btn-outline-secondary">Get data</button>
             </div>
         </form>

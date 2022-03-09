@@ -15,7 +15,7 @@
         <section class="row g-3 llp-view">
         <div class="py-4"><h3 class="titles">Instructor details</h3></div>
           <div class="col-md-2">
-          <img src="{{ asset('/storage/images/'.$instructorDetails['instructor_image']) }}" class="img-fluid rounded-circle float-start think-icon-md" alt="avatar">
+          <img src="{{ asset('/storage/images/'.$instructorDetails['instructor_image']) }}" class="img-fluid rounded-circle float-start" alt="" style="width:94px; height:94px;">
        </div>
         <div class="col-md-3">
             <label>First Name</label>
@@ -67,7 +67,7 @@
                     <label>Signature</label>
                 </div>
                 <div class="col-lg-8">
-                <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start think-icon-mdlg" alt="">
+                <img src="{{ asset('/storage/signatures/'.$instructorDetails['instructor_signature']) }}" class="img-fluid float-start" alt="" style="width:300px; height:94px;">
                 </div>
               </div>
             </div>

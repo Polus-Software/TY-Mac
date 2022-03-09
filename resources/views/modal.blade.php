@@ -199,7 +199,7 @@
               <div class="form-group mx-sm-5 mx-0">
                 <label for="studentQuestion" class="question-label">Question</label>
                 <textarea name="message" class="form-control mt-2 autosize" id="studentQuestion" placeholder="Type your question here" maxlength="2550" required></textarea>
-                <small id="question_error" style="color:red;visibility:visible;display:none;">Please enter the question!</small>
+                <small id="question_error" class="text-danger" style="visibility:visible;display:none;">Please enter the question!</small>
               </div>
               <div class="d-grid form-group  mx-sm-5 mx-0 mt-2">
                 <button type="button" class="btn think-btn-secondary" id="submitStudentQuestion">Submit</button>

@@ -46,7 +46,7 @@
               <tr id="{{$studentData['id'] }}">
                 <td><b>{{ $slno }}</b></td>
                 <td class="align-middle text-center">
-                <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle think-icon-sm" alt="avatar">
+                <img src="{{ asset('/storage/images/'.$studentData['image']) }}"  class="rounded-circle" alt="" style="width:40px; height:40px;">
                 </td>
                 <td>{{$studentData['firstname'] }}</td>
                 <td>{{$studentData['lastname'] }}</td>
@@ -70,7 +70,7 @@
               @endforeach
               @else
                  <tr>
-                     <td colspan="8"><h6 class="text-center">No students registered.</h6></td>
+                     <td colspan="8"><h6 style="text-align:center;">No students registered.</h6></td>
                  </tr>
                  @endif
             </tbody>

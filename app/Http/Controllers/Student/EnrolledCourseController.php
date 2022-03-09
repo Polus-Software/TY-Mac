@@ -50,6 +50,7 @@ class EnrolledCourseController extends Controller
     public function afterEnrollView(Request $request, $courseId) {
         $selectedBatch = $request->batchId;
         
+        $dislikeCount = 0;
         $courseDetails =[];
         $topicDetails = [];
         $liveIdArr = [];
@@ -422,6 +423,13 @@ class EnrolledCourseController extends Controller
                 $contentId = $feedback->content_id;
                 $content = TopicContent::where('topic_content_id',  $contentId);
 
+
+                $dislikeCount = StudentFeedbackCount::where('topic_id', $topicId)->where('negative', true)->count();
+                $totalContents = TopicContent::where('topic_id',  $topicId)->count();
+                $understoodPercent = 0;
+                if($totalContents != 0) {
+                    $understoodPercent = round(($totalContents - $dislikeCount) * 100 / $totalContents, 1);
+                }
                 $sessionView = LiveSession::where('topic_id', $topicId);
 
                 $singleRec = array(
@@ -432,9 +440,9 @@ class EnrolledCourseController extends Controller
                     'student_id' => $feedback->value('student'),
                     'likes' => $feedback->value('positive'),
                     'dislikes' => $feedback->value('negative'),
-                    'sessionId' => $sessionView->value('live_session_id')
+                    'sessionId' => $sessionView->value('live_session_id'),
+                    'understoodPercent' => $understoodPercent
                 );
-
                 array_push($finalRec, $singleRec);
             }
         }
