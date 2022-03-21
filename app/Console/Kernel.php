@@ -169,44 +169,50 @@ class Kernel extends ConsoleKernel
         })->everyMinute()->appendOutputTo(storage_path().'/logs/laravel_output.log');
         $schedule->command('queue:work --once')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path().'/logs/laravel_output.log');
         $schedule->call(function () {
+            $oneDay = Carbon::now()->addDays(1)->format('Y-m-d');
+           
             // Assignment Cron
-
             $topicAssignment = TopicAssignment::all();
             foreach($topicAssignment as $assignment) {
-                $courseId = $assignment->course_id;
-                $course = Course::where('id', $courseId);
-                $enrolledCourseData = EnrolledCourse::where('course_id', $courseId)->get();
-                $instructorId = AssignedCourse::where('course_id', $liveSession->course_id)->value('user_id');
-                $instructor = User::where('id', $instructorId);
-                foreach($enrolledCourseData as $data) {
-                    $assignmentFlag = false;
-                    $student = User::where('id', $data->user_id);
-                    $studentAssignment = Assignment::where('student_id', $data->user_id)
-                                                ->where('course_id', $courseId);
-                                                
-                    if($studentAssignment->count() == 0) {
-                        $assignmentFlag = true;
-                    } else {
-                        if($studentAssignment->value('is_submitted') == false) {
+                if($assignment->notification_sent == 0 || $assignment->notification_sent == null){
+                    $courseId = $assignment->course_id;
+                    $course = Course::where('id', $courseId);
+                    $enrolledCourseData = EnrolledCourse::where('course_id', $courseId)->get();
+                    $instructorId = AssignedCourse::where('course_id', $courseId)->value('user_id');
+                    $instructor = User::where('id', $instructorId);
+   
+                    foreach($enrolledCourseData as $data) { 
+                        $assignmentFlag = false;
+                        $student = User::where('id', $data->user_id);
+                        $studentAssignment = Assignment::where('student_id', $data->user_id)
+                                                    ->where('course_id', $courseId);
+                                    
+                           
+                        if($studentAssignment->count() == 0) {
                             $assignmentFlag = true;
                         } else {
-                            $assignmentFlag = false;
+                            if($studentAssignment->value('is_submitted') == false) {
+                                $assignmentFlag = true;
+                            } else {
+                                $assignmentFlag = false;
+                            }
                         }
-                    }
+                        $data = [
+                            'firstname' => $student->value('firstname'),
+                            'lastname' => $student->value('lastname'),
+                            'link' => url('/') . "/enrolled-course/" . $courseId,
+                            'instructor_name' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
+                            'course_name' => $course->value('course_title'),
+                            'date' => date("m-d-Y", strtotime($assignment->due_date))
+                        ];
+                        
+                        if($assignmentFlag == true && $assignment->due_date == $oneDay) {
+                            Mail::mailer('infosmtp')->to($student->value('email'))->send(new AssignmentReminder($data));
+                            $assignmentNotif = TopicAssignment::where('id', $assignment->id)->update(['notification_sent' => true]);
+                        }
+                    }       
                     
-                    $details = [
-                        'firstname' => $student->value('firstname'),
-                        'lastname' => $student->value('lastname'),
-                        'link' => base_path() . '/enrolled-course/' . $courseId,
-                        'instructor_name' => $instructor->value('firstname') .' '.$instructor->value('lastname'),
-                        'course_name' => $course->value('course_title'),
-                        'date' => date("m-d-Y", strtotime($assignment->due_date))
-                    ];
-                    
-                    if($assignmentFlag == true && $assignment->due_date == $oneDay) {
-                        Mail::mailer('infosmtp')->to($student->value('email'))->send(new AssignmentReminder($details));
-                    }
-                }                   
+                }           
             }
         })->everyMinute()->appendOutputTo(storage_path().'/logs/laravel_output.log');
     }

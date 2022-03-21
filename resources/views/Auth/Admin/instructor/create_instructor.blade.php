@@ -125,6 +125,19 @@
                 <div class="invalid-feedback d-block">{{ $errors->first('youtube_social') }}</div>
                 @endif
               </div>
+              @if(!$isEdit)
+              <div class="col-md-6">
+                <label for="cohortbatch_timezone">Timezone</label>
+                <select name="cohortbatch_timezone" class="form-control">
+                  <option value="">Select Timezone</option>
+                  <!-- include timezones here -->
+                  @include('Course.admin.timezones')
+                </select>
+                @if ($errors->has('cohortbatch_timezone'))
+                <div class="invalid-feedback d-block">{{ $errors->first('cohortbatch_timezone') }}</div>
+                @endif
+              </div>
+              @endif
               <div class="col-md-12">
                 <label for="about">About*</label>
                 @if(!!$isEdit)

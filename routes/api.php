@@ -44,5 +44,7 @@ Route::group(['middleware' => ['auth:sanctum']],function() {
     Route::put('/reply-question', [ApiController::class, 'replyToStudentApi']);
     Route::get('/instructor-schedule/{courseId}/{batchId}', [ApiController::class, 'viewInstructorScheduleApi']);
     Route::get('/student-schedule/{courseId}/{batchId}', [ApiController::class, 'viewStudentScheduleApi']);
+    Route::put('/select-cohort/{courseId}', [ApiController::class, 'chooseCohortApi']);
+    Route::post('/push-feedbacks', [ApiController::class, 'pushFeedbacksApi']);
 });
 

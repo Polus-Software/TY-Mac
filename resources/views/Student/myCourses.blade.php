@@ -137,6 +137,7 @@
             </div>
             <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end">
                 <select name="" id="filter_courses" class="rounded pe-4" onchange="getcoursedata(this)">
+                    <option value="all" {{ $filter_course == "all" ? 'selected' : '' }}>All courses</option>
                     <option value="most-popular" {{ $filter_course == "most-popular" ? 'selected' : '' }}>Course in progress</option>
 
 					<option value="completed" {{ $filter_course == "completed" ? 'selected' : '' }}>Completed Courses</option>
@@ -193,9 +194,6 @@
                                         <p class="duration"><i class="far fa-clock pe-1"></i>Next cohort:
                                             <small> {{ $singleEnrolledCourse['next_cohort'] }} </small>
                                         </p>
-                                        
-
-
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +203,6 @@
                 @endforeach
                 @else
 					<x-nodatafound message="No courses to be shown!" notype="video" />
-                
                 @endif
             </div>
         </div>
@@ -243,10 +240,11 @@
 		const url = window.location.href.split('?')[0];
 		if(value == 'completed'){
 			window.location.href = url+'?courses=1';
-		}
-		else{
-			window.location.href = url;
-		}
+		} else if(value == 'all'){
+			window.location.href = url+'?courses=2';
+		} else {
+            window.location.href = url;
+        }
 	}
 </script>
 @endpush

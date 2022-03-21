@@ -38,6 +38,8 @@ return array(
     'App\\Mail\\AdminMailAfterStudentEnrolling' => $baseDir . '/app/Mail/AdminMailAfterStudentEnrolling.php',
     'App\\Mail\\AssignmentReminder' => $baseDir . '/app/Mail/AssignmentReminder.php',
     'App\\Mail\\ForgotPasswordMail' => $baseDir . '/app/Mail/ForgotPasswordMail.php',
+    'App\\Mail\\GeneralChatInstructorMail' => $baseDir . '/app/Mail/GeneralChatInstructorMail.php',
+    'App\\Mail\\GeneralChatStudentMail' => $baseDir . '/app/Mail/GeneralChatStudentMail.php',
     'App\\Mail\\InstructorMailAfterEnrolling' => $baseDir . '/app/Mail/InstructorMailAfterEnrolling.php',
     'App\\Mail\\InstructorMailAfterFeedback' => $baseDir . '/app/Mail/InstructorMailAfterFeedback.php',
     'App\\Mail\\InstructorMailAfterLiveSessionScheduled' => $baseDir . '/app/Mail/InstructorMailAfterLiveSessionScheduled.php',

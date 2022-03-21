@@ -11,16 +11,16 @@ class AssignmentReminder extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $details;
+    public $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($data)
     {
-        $this->details = $details;
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +30,6 @@ class AssignmentReminder extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('Your assignment for ' . $this->details['course_name'] .' is due soon!')->markdown('Emails.AssignmentReminder');;
+        return $this->subject('Your assignment for ' . $this->data['course_name'] .' is due soon!')->markdown('Emails.AssignmentReminder');
     }
 }

@@ -1,7 +1,51 @@
 @extends('Layouts.admin.master')
 @section('content')
 @include('Layouts.admin.header')
+<style>
+  #snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #74648C;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 4.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+  </style>
 <!-- container -->
+<div id="snackbar">Uploaded file must be less than 10 MB!</div>
 <div class="container-fluid llp-container">
   <div class="row">
   <div class="left_sidebar">
@@ -143,12 +187,13 @@ window.onload = function(event) {
 
     const uploadContainerEl = createNewElement('div', ['col-lg-5', 'col-12']);
     const uploadTextEl = createNewElement('label', [],[], 'Upload from device');
-    const uploadFileEl = createNewElement('input', ['form-control'], [
+    const uploadFileEl = createNewElement('input', ['form-control', 'uploadBtn'], [
       {'type': 'file'},
       {'name': `content_upload_${topicNum}_${contentCount}`}
     ]);
-    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx (Max upload size : 2MB)');
-
+    uploadFileEl.setAttribute('onchange', 'detectChange(this)');
+    const uploadTypeEl = createNewElement('small', ['fst-italic'],[], 'Supported File Formats are: .ppt, .pptx, .pdf, .doc, .docx (Max upload size : 10MB)');
+    
     const contentLinkContainerEl = createNewElement('div', ['col-lg-3', 'pt-4']);
     const externalLinkCountEl = createNewElement('input', ['externalLink_count'], [
       {'type': 'hidden'}, {'id': `externalLink_count_topic_${topicNum}_content_${contentCount}`},
@@ -199,6 +244,19 @@ window.onload = function(event) {
   }
 
 } 
+
+function detectChange(element) {
+  if(element.files.length >= 1) {
+    if(element.files.item(0).size > 10485760) {
+      element.style.color = 'red';
+      var x = document.getElementById("snackbar");
+      x.className = "show";
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+    } else {
+      element.style.color = 'black';
+    }
+  }
+}
   </script>
 
 

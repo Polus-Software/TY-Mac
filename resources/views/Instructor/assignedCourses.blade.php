@@ -143,14 +143,18 @@
                     <h3>My Courses</h3>
                 </div>
                 <div class="col-lg-6 col-sm-6 col-6 d-flex justify-content-end">
-                    <select name="" id="" class="rounded pe-4">
-                        <option value="most-popular">Course in progress</option>
+                    <select name="" id="" class="rounded pe-4" onchange="getcoursedata(this)">
+                    <option value="all" {{ $filter_course == "all" ? 'selected' : '' }}>All courses</option>
+                    <option value="most-popular" {{ $filter_course == "most-popular" ? 'selected' : '' }}>Course in progress</option>
+
+                    <option value="completed" {{ $filter_course == "completed" ? 'selected' : '' }}>Completed Courses</option>
                     </select>
                 </div>
             </div>
 
             <div class="row mb-5">
                 <div class="col-lg-12">
+                @if(!empty($singleEnrolledCourseData))
                     @foreach ($singleEnrolledCourseData as $singleEnrolledCourse)
                         <div class="card-2 mb-3 mt-4" data-id="{{ $singleEnrolledCourse['course_id'] }}">
                             <div class="row g-0">
@@ -210,6 +214,10 @@
                             </div>
                         </div>
                     @endforeach
+                    @else
+					<x-nodatafound message="No courses to be shown!" notype="video" />
+                
+                @endif
                 </div>
             </div>
 
@@ -248,5 +256,17 @@
         document.getElementById('upcoming').classList.remove('active', 'show');
         document.getElementById('live').classList.add('active', 'show');
     });
+
+    function getcoursedata(selectObject) {
+		var value = selectObject.value;  
+		const url = window.location.href.split('?')[0];
+		if(value == 'completed'){
+			window.location.href = url+'?courses=1';
+		} else if(value == 'all'){
+			window.location.href = url+'?courses=2';
+		} else{
+			window.location.href = url;
+		}
+	}
 </script>
 @endpush

@@ -2,7 +2,7 @@
 
 Hi {{$data['instructorName']}},
 
-You have got a new assignment submitted by {{$data['studentName']}} for the course {{$data['courseTitle']}}.
+You have got a new assignment submission by {{$data['studentName']}} for the course {{$data['courseTitle']}}.
 
 To view the submitted assignment, please log in to your account on ThinkLit.com
 

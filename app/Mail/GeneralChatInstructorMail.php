@@ -29,7 +29,7 @@ class GeneralChatInstructorMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('A new message from your instructor')
+        return $this->subject('A new message from your student')
         ->markdown('Emails.GeneralChatInstructorMail');
     }
 }

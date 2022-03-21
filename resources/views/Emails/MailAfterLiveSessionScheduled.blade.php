@@ -3,7 +3,7 @@
 <h1>Dear {{ $data['studentName']}},</h1>
 
 Thank you for your interest in {{ $data['courseTitle']}}. <br>
-Live sessions for {{ $data['courseTitle']}} have been scheduled from {{ $data['startDate']}} to {{ $data['endDate']}}.
+Live session - {{ $data['sessionTitle'] }} from {{ $data['courseTitle']}} has been scheduled on {{ $data['startDate']}}.
 We're excited to have you join our live session.<br>
 
 Please join the session a couple of minutes earlier to make sure everything's working properly.

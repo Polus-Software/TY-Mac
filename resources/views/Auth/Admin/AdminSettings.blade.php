@@ -130,7 +130,13 @@
           @foreach($filters as $filter)
             <div class="form-check form-switch">
                 <input class="form-check-input filter_switch" filter_id="{{$filter->id}}" type="checkbox" @if($filter->is_enabled == true) checked=checked @endif>
+                @if($filter->filter_name == 'Duration')
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Course Duration</label>
+                @elseif($filter->filter_name == 'Difficulty')
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Learning Levels</label>
+                @else
                 <label class="form-check-label" for="flexSwitchCheckDefault">{{$filter->filter_name}}</label>
+                @endif
             </div>
           @endforeach
         </div>

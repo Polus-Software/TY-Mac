@@ -232,8 +232,8 @@ class RtmTokenGeneratorController extends Controller
         $instructorfirstname = $user->value('firstname');
         $instructorlastname = $user->value('lastname');
         $instructor = $instructorfirstname. ' '.$instructorlastname;
-
-        $batches = CohortBatch::where('course_id', $course)->get();
+        $current_date = Carbon::now()->format('Y-m-d');
+        $batches = CohortBatch::where('course_id', $course)->where('end_date', '>=', $current_date)->get();
 
         foreach($batches as $batch) {
             $batchHtml = $batchHtml . "<option value=" . $batch->id . ">" . $batch->title . "</option>";
@@ -267,9 +267,10 @@ class RtmTokenGeneratorController extends Controller
         if($occurrences == "Daily") {
             $startDate = $selectedBatchObj->value('start_date');
             $endDate = $selectedBatchObj->value('end_date');
-            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
-            $date = $startDate;
+            // $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
+            $batchStartTime = $selectedBatchObj->value('start_time');
             
+            $date = $startDate;
             while($date <= $endDate) {
                 if(isset($topics[$topicsCounter])) {
                     // Save schedules here
@@ -286,13 +287,13 @@ class RtmTokenGeneratorController extends Controller
                     $date = date('Y-m-d',strtotime($date . "+1 days"));
     
     
-                    $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
+                    $batchStartDate = Carbon::createFromFormat('Y-m-d', $date)->format('m/d/Y');
                     $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
                    
                     $cohortTimezone = $selectedBatchObj->value('time_zone');
 
                     // Time zone
-                    $offset = CustomTimezone::where('name', $cohortTimezone)->value('offset');
+                    $offset = CustomTimezone::where('name', $instructor->value('timezone'))->value('offset');
                                 
                     $offsetHours = intval($offset[1] . $offset[2]);
                     $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -309,7 +310,7 @@ class RtmTokenGeneratorController extends Controller
                         'courseTitle' => $courseTitle,
                         'instructorName'=> $instructorName,
                         'batchname' =>$batchname,
-                        'startDate' => $batchStartDate,
+                        'startDate' => $liveSession->start_date,
                         'endDate' => $batchEndDate,
                         'startTime' => $startTime,
                         'sessionTitle'=> $topics[$topicsCounter]->topic_title
@@ -334,8 +335,9 @@ class RtmTokenGeneratorController extends Controller
                             'courseTitle' => $courseTitle,
                             'instructorName'=> $instructorName,
                             'studentName' => $studentName,
-                            'startDate' => $batchStartDate,
+                            'startDate' => $liveSession->start_date,
                             'endDate' => $batchEndDate,
+                            'sessionTitle'=> $topics[$topicsCounter]->topic_title
                         ];
                     
                         Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
@@ -358,7 +360,7 @@ class RtmTokenGeneratorController extends Controller
 
             $startDate = $selectedBatchObj->value('start_date');
             $endDate = $selectedBatchObj->value('end_date');
-            $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
+            $batchStartTime = $selectedBatchObj->value('start_time');
     
             $date = $startDate;
             while($date <= $endDate) {
@@ -380,15 +382,16 @@ class RtmTokenGeneratorController extends Controller
     
                     $batchStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('m/d/Y');
                     $batchEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('m/d/Y');
-                   
+                    $link = base_path() . '/session-view/' . $liveSession->live_session_id;
                     $details=[
                         'courseTitle' => $courseTitle,
                         'instructorName'=> $instructorName,
                         'batchname' =>$batchname,
-                        'startDate' => $batchStartDate,
+                        'startDate' => Carbon::parse($date)->format('Y-m-d'),
                         'endDate' => $batchEndDate,
                         'startTime' => $batchStartTime,
-                        'sessionTitle'=> $topics[$topicsCounter]->topic_title
+                        'sessionTitle'=> $topics[$topicsCounter]->topic_title,
+                        'link' => $link
                      ];
                      
                     Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterLiveSessionScheduled($details));
@@ -413,6 +416,7 @@ class RtmTokenGeneratorController extends Controller
                         'studentName' => $studentName,
                         'startDate' => $batchStartDate,
                         'endDate' => $batchEndDate,
+                        'link' => $link
                         ];
                     
                         Mail::mailer('infosmtp')->to($studentEmail)->send(new MailAfterLiveSessionScheduled($data));
@@ -634,6 +638,8 @@ class RtmTokenGeneratorController extends Controller
                 }
 
             $percent = $attendedSessions * 100 / $topicsCount;
+
+            $percent = $percent > 100 ? 100 : $percent;
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
            
 
@@ -742,14 +748,19 @@ class RtmTokenGeneratorController extends Controller
             $batch = CohortBatch::where('id', $batchId);
             $startTime = $batch->value('start_time');
             $endTime = $batch->value('end_time');
-            $startHour = intval($startTime[0] . $startTime[1]);
-            $startMinutes = intval($startTime[3] . $startTime[4]);
+            // $startHour = intval($startTime[0] . $startTime[1]);
+            // $startMinutes = intval($startTime[3] . $startTime[4]);
 
-            $endHour = intval($endTime[0] . $endTime[1]);
-            $endMinutes = intval($endTime[3] . $endTime[4]);
-            $totalSeconds = ((60 - $startMinutes) + $endMinutes) + ($endHour - ($startHour + 1)) * 3600;
+            // $endHour = intval($endTime[0] . $endTime[1]);
+            // $endMinutes = intval($endTime[3] . $endTime[4]);
+            // $totalSeconds = ((60 - $startMinutes) + $endMinutes) + ($endHour - ($startHour + 1)) * 3600;
             
-            if($attendance->value('attendance_time') * 100 / $totalSeconds >= $attendanceSettings) {
+            $firstTime=strtotime($startTime);
+            $lastTime=strtotime($endTime);
+            $timeDiff=$lastTime-$firstTime;
+            $totalSeconds = $timeDiff;
+
+            if(intval($attendance->value('attendance_time')) * 100 / $timeDiff >= intval($attendanceSettings)) {
                 $badgeId = AchievementBadge::where('title', 'Starter')->value('id');
                 $existing = StudentAchievement::where('student_id', $student)->where('course_id', $courseId)->where('badge_id', $badgeId)->count();
                 if(!$existing) {
@@ -772,9 +783,11 @@ class RtmTokenGeneratorController extends Controller
 
             $percent = $attendedSessions * 100 / $topicsCount;
 
+            $percent = $percent > 100 ? 100 : $percent;
+
             $progress = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['progress' => $percent]);
 
-            if($percent == 100){
+            if($percent >= 95){
 				$current_time = (new DateTime("now", new DateTimeZone('UTC')));
 				$completion_date = EnrolledCourse::where('course_id', $courseId)->where('user_id', $student)->update(['course_completion_date' => $current_time]);
                 $studentName = $user->firstname.' '.$user->lastname;
