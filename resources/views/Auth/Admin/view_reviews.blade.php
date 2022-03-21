@@ -27,6 +27,7 @@
 					<div class="col-md-3 m-lg-1">
 						<select name="rating" class="form-control">
 							<option value="">Rating</option>
+							<option value="0" @if($rating == '0') selected @endif>0</option>
 							<option value="1" @if($rating == '1') selected @endif>1</option>
 							<option value="2" @if($rating == '2') selected @endif>2</option>
 							<option value="3" @if($rating == '3') selected @endif>3</option>

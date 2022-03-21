@@ -28,6 +28,14 @@
                 @endif
               </div>
               <div class="form-group mx-0">
+                <label for="cohortbatch_timezone">Timezone</label>
+                <select name="cohortbatch_timezone" class="form-control">
+                  <option value="">Select Timezone</option>
+        <!-- include timezones here -->
+                  @include('Course.admin.timezones')
+                </select>
+              </div>
+              <div class="form-group mx-0">
               <label for="email" class="email-label">Email</label>
                 <input type="email" name="email" class="form-control" id="email" placeholder="Eg: xyz@domainname.com" value="{{old('email')}}">
                 <small>Error message</small>

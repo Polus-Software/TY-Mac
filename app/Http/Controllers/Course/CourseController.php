@@ -505,6 +505,9 @@ class CourseController extends Controller
                 $validate_array['topic_title'. $i] = 'required';
                 for($j=0; $j < $request->input('content_count_topic_' .$i);$j++){
                     $validate_array['content_title_'.$i.'_'. $j] = 'required';
+                    if($request->file('content_upload_'.$i.'_'.$j) != null) {
+                        $validate_array['content_upload_'.$i.'_'.$j] = 'mimes:pdf,doc,docx,ppt,pptx,bin|max:10240';
+                    }
                 }
             }
             $this->validate($request, $validate_array);
@@ -519,8 +522,8 @@ class CourseController extends Controller
                 $content_count = $request->input('content_count_topic_'.$i);
                 for($j = 0; $j<$content_count; $j++) {
                     $TopicFileName = $extension = $external_links = '';
-                    if($request->file() && !empty($request->content_upload[$i][$j])){
-                        $subtopicFile = $request->content_upload[$i][$j];
+                    if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))){
+                        $subtopicFile = $request->file('content_upload_'.$i.'_'.$j);
                         $extension = $subtopicFile->extension();
                         $TopicFileName = $subtopicFile->getClientOriginalName();
                         $destinationPath = public_path().'/storage/study_material';
@@ -571,7 +574,10 @@ class CourseController extends Controller
                 $validate_array['topic_title'. $i] = 'required';
                 for($j=1; $j <= $request->input('content_count_topic_' .$i);$j++){
                     $validate_array['content_title_'.$i.'_'. $j] = 'required';
-                    $validate_array['content_upload_'.$i.'_'.$j] = 'required|mimes:pdf,doc,docx,ppt,pptx';
+                    if($request->file('content_upload_'.$i.'_'.$j) != null) {
+                        $validate_array['content_upload_'.$i.'_'.$j] = 'required|mimes:pdf,doc,docx,ppt,pptx,bin|max:10240';
+                    }
+                    
                 }
             }
             $this->validate($request, $validate_array);
@@ -828,7 +834,7 @@ class CourseController extends Controller
         $request->validate([
             'assignment_title'=>'required',
             'assignment_description' => 'required',
-            'document' =>'required|max:2048',
+            'document' =>'required|max:10240|mimes:pdf,doc,docx,ppt,pptx,bin',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -875,7 +881,7 @@ class CourseController extends Controller
         $request->validate([
             'assignment_title'=>'required',
             'assignment_description' => 'required',
-            'document' =>'required|max:2048',
+            'document' =>'max:10240|mimes:pdf,doc,docx,ppt,pptx,bin',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -941,9 +947,9 @@ class CourseController extends Controller
             'cohortbatch_title'=>'required',
             'batchname' => 'required',
             'cohortbatch_startdate' =>'required',
-            'cohortbatch_enddate' => 'required|after_or_equal:cohortbatch_startdate',
+            'cohortbatch_enddate' => 'required',
             'cohortbatch_starttime' =>'required',
-            'cohortbatch_endtime' =>'required|after:cohortbatch_starttime',
+            'cohortbatch_endtime' =>'required',
             'cohortbatch_timezone' =>'required',
             'students_count' =>'required',  
             'cohortbatch_batchname' => 'required'
@@ -1044,14 +1050,13 @@ class CourseController extends Controller
     }
 
     public function updateCohortbatches(Request $request){
-        // dd($request->input('cohortbatch_startdate'));
         $validatedData = $request->validate([
             'cohortbatch_title'=>'required',
             'batchname' => 'required',
             'cohortbatch_startdate' =>'required',
-            'cohortbatch_enddate' => 'required|after_or_equal:cohortbatch_startdate',
+            'cohortbatch_enddate' => 'required',
             'cohortbatch_starttime' =>'required',
-            'cohortbatch_endtime' =>'required|after:cohortbatch_starttime',
+            'cohortbatch_endtime' =>'required',
             'cohortbatch_timezone' =>'required',
             'students_count' =>'required',  
             'cohortbatch_batchname' => 'required'

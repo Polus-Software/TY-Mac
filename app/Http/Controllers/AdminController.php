@@ -536,6 +536,7 @@ class AdminController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'timezone' => 'required'
         ]);
         $userType = UserType::where('user_role', 'admin')->value('id');
         $admin = new User;
@@ -544,7 +545,7 @@ class AdminController extends Controller
         $admin->email = $request->input('email');
         $admin->password = Hash::make($request->input('password'));
         $admin->role_id = $userType;
-        $admin->timezone = "UTC";
+        $admin->timezone = $request->timezone;
         $admin->save();
         return redirect()->route('manage-admin');
     }
@@ -746,7 +747,7 @@ class AdminController extends Controller
 			'rating' => $rating,
 			'userType' => $userType,
 			'totalCount' => $totalCount,
-            'start_from' => 0
+            'start_from' => 1
         ]);
 	}
 	public function publishReview(Request $request){

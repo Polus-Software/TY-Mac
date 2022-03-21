@@ -41,7 +41,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="{{ asset('/assets/loginModal.css') }}">
   <link rel="icon" href="{{ asset('/assets/favicon.png') }}">
   <meta name="description" content="The education experience has not changed in over a century. Even to this day, the way students learn is through the one size fits all  model. However this method of learning is no longer effective since every student learns differently. At ThinkLit, we believe the solution to this problem is to completely rethink how courses are taught hence The ThinkLit Way.">
-  <meta name="keywords" content="ThinkLit, thinklit, live learning, online learning, interactive learning, education, online education">
+  <meta name="keywords" content="ThinkLit, thinklit, live learning, online learning, interactive learning, education, online education, learn new skills, skills based learning, personalized learning, personalized live learning, cohort based learning, job skills">
   @stack('styles')
   <title>TY- MAC</title>
 </head>

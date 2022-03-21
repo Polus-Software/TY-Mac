@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; 
+use Hash;
 
 class UserTypesSeeder extends Seeder
 {
@@ -35,6 +36,19 @@ class UserTypesSeeder extends Seeder
 
        DB::table('user_types')->insert([
         'user_role' => 'content_creator',
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+       ]);
+
+       DB::table('users')->insert([
+        'firstname' => 'Enlilt',
+        'lastname' => 'Admin',
+        'email' => 'support@enlilt.com',
+        'password' => Hash::make('enlilt@123'),
+        'role_id' => 1,
+        'deleted_at' => null,
+        'image' => 'user.png',
+        'timezone' => 'UTC',
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
        ]);

@@ -28,7 +28,7 @@ class MailAfterQuestion extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('You have got a new  message.')
+        return $this->subject('You have got a new Question.')
                     ->markdown('Emails.MailAfterQuestion');
     }
 }

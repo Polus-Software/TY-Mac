@@ -67,6 +67,19 @@
               </div>
               @if(!$isEdit)
               <div class="col-12">
+                <label for="timezone">Timezone</label>
+                  <select name="timezone" class="form-control">
+                    <option value="">Select Timezone</option>
+                    <!-- include timezones here -->
+                    @include('Course.admin.timezones')
+                  </select>
+                  @if ($errors->has('timezone'))
+                    <div class="invalid-feedback d-block">{{ $errors->first('timezone') }}</div>
+                  @endif
+              </div>
+              @endif
+              @if(!$isEdit)
+              <div class="col-12">
                 <label for="admin_password" class="col-form-label">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for creating a new password."></i></label>
                 <input type="password" class="form-control has-validation" id="admin_password" name="password"></input>
                 <span><i class="fas fa-eye-slash" id="adminTogglePass" onClick="adminViewPassword()"></i></span>

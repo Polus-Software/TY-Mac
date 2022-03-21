@@ -588,6 +588,8 @@ small#assignment_table_batch {
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                                     @if($userType == 'student')
                                         <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}" style="white-space:nowrap;">Go to course materials</a>
+                                    @elseif($userType == 'instructor')
+                                        <a class="btn btn-secondary think-btn-secondary" href="{{ route('study.materials') }}?course={{$course['id']}}&batchId={{$selectedBatch}}" style="white-space:nowrap;">Go to course materials</a>
                                     @endif
                                     </div>
                                 </div>
@@ -1430,14 +1432,16 @@ document.getElementById('assign_completed').addEventListener('click', function(e
 const userTypes = document.getElementById('userType').value;
 if(userTypes === 'student') {
     let cancelAssignmentEl = document.querySelector('.cancelAssignment');
-
-cancelAssignmentEl.addEventListener('click', function(e) {
+if(cancelAssignmentEl != null) {
+    cancelAssignmentEl.addEventListener('click', function(e) {
     e.preventDefault();
     let id = this.getAttribute('data-id');
     document.getElementById('cardbody_'+id).style.display = 'none';
     // e.currentTarget.closest('.assignmentCard').style.display = 'none';
     document.getElementById('cardbody_'+id).parentElement.nextElementSibling.firstElementChild.style.display = 'block';
 });
+}
+
 }
     
 
@@ -1759,8 +1763,8 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
     document.getElementById('contact-instructor').addEventListener('click', function(e) {
         location.replace('/instructor-chat/?student=' + this.getAttribute('data-student') + '&instructor=' + this.getAttribute('data-instructor') + '&course=' + this.getAttribute('data-course'));
     });
-
-    document.querySelector('.assignmentForm').addEventListener('submit', (e) => {
+    if(document.querySelector('.assignmentForm') != null) {
+        document.querySelector('.assignmentForm').addEventListener('submit', (e) => {
         const commentEl = document.querySelector('.assignmentStudentComment');
         const commentErrorEl = commentEl.nextElementSibling;
         const studentFileEl = document.querySelector('.assignmentStudentFile');
@@ -1780,6 +1784,8 @@ document.getElementById('submitStudentQuestion').addEventListener('click', funct
             fileErrorEl.innerText = '';
         }
     });
+    }
+    
 </script>
 @endif
 @endpush

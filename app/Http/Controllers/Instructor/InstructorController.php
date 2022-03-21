@@ -56,7 +56,8 @@ class InstructorController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'description' => 'required',
-            'signature' => 'required'
+            'signature' => 'required',
+            'cohortbatch_timezone' => 'required'
         ]);
 
         $userType = UserType::where('user_role', 'instructor')->value('id');
@@ -79,10 +80,11 @@ class InstructorController extends Controller
         $instructor->linkedin_social = $request->input('linkedin_social');
         $instructor->youtube_social = $request->input('youtube_social');
         $instructor->description = $request->input('description');
+        $instructor->timezone = $request->input('cohortbatch_timezone');
        
         $instructor->signature = $signatureFileName;
         $instructor->role_id = $userType;
-        $instructor->timezone = "UTC";
+        // $instructor->timezone = "UTC";
         $instructor->save();
         return redirect()->route('manage-instructors');
     }

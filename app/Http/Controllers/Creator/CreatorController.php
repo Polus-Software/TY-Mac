@@ -53,6 +53,7 @@ class CreatorController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'cohortbatch_timezone' => 'required'
         ]);
         $userType = UserType::where('user_role', 'content_creator')->value('id');
         $creator = new User;
@@ -61,7 +62,7 @@ class CreatorController extends Controller
         $creator->email = $request->input('email');
         $creator->password = Hash::make($request->input('password'));
         $creator->role_id = $userType;
-        $creator->timezone = "UTC";
+        $creator->timezone = $request->cohortbatch_timezone;
         $creator->save();
         return redirect()->route('manage-creators');
     }

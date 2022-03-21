@@ -65,6 +65,17 @@
                 <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div>
                 @endif
               </div>
+              <div class="col-12">
+                <label for="cohortbatch_timezone">Timezone</label>
+                <select name="cohortbatch_timezone" class="form-control">
+                  <option value="">Select Timezone</option>
+                  <!-- include timezones here -->
+                  @include('Course.admin.timezones')
+                </select>
+                @if ($errors->has('cohortbatch_timezone'))
+                <div class="invalid-feedback d-block">{{ $errors->first('cohortbatch_timezone') }}</div>
+                @endif
+              </div>
               @if(!$isEdit)
               <div class="col-12">
                 <label for="creator_password" class="col-form-label">Password*<i class="far fa-question-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="This field is for creating a new password."></i></label>

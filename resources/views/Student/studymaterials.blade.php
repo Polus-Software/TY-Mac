@@ -55,7 +55,11 @@ a#ChromelessStatusBar\.Options-Small14 {
 <div class="container mb-3">
 <div class="row mb-2">
    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-       <a href="/enrolled-course/{{$courseId}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+       @if($userType == 'student')
+        <a href="/enrolled-course/{{$courseId}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+       @else
+        <a href="/enrolled-course/{{$courseId}}?batchId={{$batchId}}"class="btn btn-dark w-100 backbtn"><i class="fas fa-arrow-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;Back to my course</a>
+       @endif
    </div>
 </div>
 <div class="row">
@@ -74,6 +78,7 @@ a#ChromelessStatusBar\.Options-Small14 {
             <p class="link-dark studymaterial_topic text-center">
                 {{ $topic['topicTitle'] }}</p>
             </li>
+            @if($userType == 'student')
             @if($topic['attendanceStatus'])
                 @foreach($topic['contents'] as $content)
                 <li class="nav-item material_contents study_materials" data-href="{{ url('/') }}/storage/study_material/{{ $content['topicContentDoc'] }}">
@@ -86,13 +91,24 @@ a#ChromelessStatusBar\.Options-Small14 {
                 <p>Attachment not available</p>
             </li>
             @endif
+            @else
+            @foreach($topic['contents'] as $content)
+                <li class="nav-item material_contents study_materials" data-href="{{ url('/') }}/storage/study_material/{{ $content['topicContentDoc'] }}">
+                        {{ $content['topicContentTitle'] }}
+                </li>
+                @endforeach
+            @endif
             </div>
             @endforeach
         </ul>
         </div>
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9 col-12">
-        <iframe id="course_content_iframe" src="https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" width='100%' height='500px' frameborder='0'></iframe>
+    @if($flag == 0 && $userType == 'student')
+        <x-nodatafound message="No data to show!" style="height:100%;"  notype=""/>
+    @else
+        <iframe id="course_content_iframe" src="" width='100%' height='500px' frameborder='0'></iframe>
+    @endif
     </div>
 </div>
 </div>

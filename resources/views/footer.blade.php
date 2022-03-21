@@ -21,8 +21,9 @@
           <h5 class="text-capitalize fw-bold">Connect us</h5>
           <hr class="bg-white d-inline-block mb-4 think-hr">
           <div class="col-12 footer-sm">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
+           <a href="https://www.facebook.com/ThinkLitInc" target="_blank"><i class="fab fa-facebook"></i></a>
+           <a href="https://twitter.com/thinklit" target="_blank"><i class="fab fa-twitter"></i></a>
+           <a href="https://www.linkedin.com/company/thinklit" target="_blank"><i class="fab fa-linkedin"></i></a> 
           </div>
         </div>
       </div>

@@ -44,7 +44,7 @@
           <label>Attach file</label>  
           <input type="file" class="form-control mb-3" id="document" name="document" placeholder="Upload from device" value="{{$assignment_details['document']}}">
           <label>Uploaded File: (<a href="{{url('/')}}/storage/assignmentAttachments/{{ $assignment_details['document'] }}">{{ $assignment_details['document'] }}</a>)</label><br>
-          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx (Max upload size : 2MB)</small><br>
+          <small class="fst-italic">Supported File Formats are:  ppt, pdf, doc, docx (Max upload size : 10MB)</small><br>
           @if ($errors->has('document'))
             <span class="text-danger">{{ $errors->first('document') }}</span>
           @endif
