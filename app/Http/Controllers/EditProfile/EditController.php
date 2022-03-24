@@ -100,8 +100,8 @@ class EditController extends Controller
     {
         try{        
         $user = $request->validate([
-            'currentPassword'=>'required',
-            'newPassword' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|same:confirm_password',
+            'currentPassword'=>'required',          
+            'newPassword' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|same:confirm_password',
             'confirm_password' =>'required',
         ]);
         $user = Auth::user();
