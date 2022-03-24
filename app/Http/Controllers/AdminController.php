@@ -321,6 +321,12 @@ class AdminController extends Controller
         $courses = Course::where('course_title', 'LIKE', '%' . $searchTerm . '%')->get();
 
         $filters = Filter::all();
+        $allFiltersFlag = true;
+        foreach($filters as $filter) {
+            if($filter->is_enabled) {
+                $allFiltersFlag = false;
+            }
+        }
         $userType =  UserType::where('user_role', 'instructor')->value('id');
 
         $instructors = User::where('role_id', $userType)->get();
@@ -376,7 +382,7 @@ class AdminController extends Controller
         $courseDetailsObj = collect($courseDetails);
         $courseDatas = $this->paginate($courseDetailsObj);
         $courseDatas->withPath('');
-        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => $searchTerm]);
+        return view('Student.allCourses', ['courseDatas' => $courseDatas, 'allCourseCategory' => $allCourseCategory, 'filters' => $filters, 'instructors' => $instructors, 'searchTerm' => $searchTerm, 'noFiltersFlag' => $allFiltersFlag]);
 
     }
     

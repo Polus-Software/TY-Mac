@@ -964,7 +964,7 @@ class CourseController extends Controller
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       
-        if($offset == "-") {
+        if($offset[0] == "-") {
             $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
             $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
         } else {
@@ -1070,8 +1070,8 @@ class CourseController extends Controller
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
-      
-        if($offset == "-") {
+        
+        if($offset[0] == "-") {
             $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
             $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
         } else {
