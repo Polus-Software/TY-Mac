@@ -804,14 +804,18 @@ class CoursesCatalogController extends Controller
             $assigned = CourseService::getInstructorByCourse($courseId);
             $instructorName = UserService::getUserFullName($assigned);
             $instructorEmail = UserService::getUserEmail($assigned);
+
+            $courseName = Course::where('id', $courseId)->value('course_title');
      
             $details = [
                 'name' => $name,
                 'message' => $message,
                 'email' => $email,
-                'instructorName' => $instructorName
+                'instructorName' => $instructorName,
+                'courseName' => $courseName
             ];
-            
+
+            Mail::mailer('infosmtp')->to('info@thinklit.com')->send(new InstructorMailAfterStudentConcern($details));
             Mail::mailer('infosmtp')->to($instructorEmail)->send(new InstructorMailAfterStudentConcern($details));
 
             $notification = new Notification; 

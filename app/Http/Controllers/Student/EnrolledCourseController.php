@@ -827,7 +827,7 @@ class EnrolledCourseController extends Controller
         try{
             $validatedData = $request->validate([
                 'assignment_comment' => 'required',
-                'assignment_upload' => 'required|mimes:pdf,doc,docx'
+                'assignment_upload' => 'mimes:pdf,doc,docx'
             ]);
         $user = Auth::user();
         $userId = $user->id;
@@ -835,18 +835,12 @@ class EnrolledCourseController extends Controller
         $topic_assignment_id = $request->assignment_id;
         $comment = $request->input('assignment_comment');
         
-        $timestamp = time();
-        $file = $request->assignment_upload;
-        $tFileName = $_FILES['assignment_upload']['name'];
-        $dotPos = strpos($tFileName,'.');
-        $name = substr($tFileName, 0, $dotPos - 1);
-        $ext = substr($tFileName, $dotPos + 1, strlen($tFileName));
-        $assignementFile = $name . $timestamp . '.' . $ext;
+        
         
         // $file->storeAs('assignmentAnswers', $assignementFile,'public');
 
         $destinationPath = public_path().'/storage/assignmentAnswers';
-        $file->move($destinationPath,$assignementFile);
+        
 
         $topicAssignment = TopicAssignment::where('id', $topic_assignment_id);
         $courseId = $topicAssignment->value('course_id');
@@ -857,8 +851,20 @@ class EnrolledCourseController extends Controller
         $instructorEmail = User::find($instructorId)->email;
 
         $assignment = Assignment::where('topic_assignment_id', $topic_assignment_id);
-       
-        $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
+
+        if($request->file()) {
+            $timestamp = time();
+            $file = $request->assignment_upload;
+            $tFileName = $_FILES['assignment_upload']['name'];
+            $dotPos = strpos($tFileName,'.');
+            $name = substr($tFileName, 0, $dotPos - 1);
+            $ext = substr($tFileName, $dotPos + 1, strlen($tFileName));
+            $assignementFile = $name . $timestamp . '.' . $ext;
+            $assignment->update(['assignment_answer' => $assignementFile, 'comment' => $comment, 'is_submitted' => true]);
+            $file->move($destinationPath,$assignementFile);
+        } else {
+            $assignment->update(['comment' => $comment, 'is_submitted' => true]);
+        }
 
         $badgeId = AchievementBadge::where('title', 'Assignment')->value('id');
 

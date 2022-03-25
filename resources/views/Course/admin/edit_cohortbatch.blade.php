@@ -198,8 +198,8 @@ use App\Models\CustomTimezone;
             </div>
           </div>
           @endif
-          <div class="col-lg-4 col-md-4 col-sm-5 col-10">
-            <label for="duration">Start time</label>
+          <!-- <div class="col-lg-4 col-md-4 col-sm-5 col-10">
+            <label for="duration">Start time</label> -->
             @php 
              
 
@@ -218,23 +218,98 @@ use App\Models\CustomTimezone;
 
               $startTime = date("H:i:s", $sTime);
               $endTime = date("H:i:s", $eTime);
-
+              $startHours = date("H", $sTime);
+              $startAMPM = "";
+              if($startHours == "00") {
+                $startHours = 12;
+                $startAMPM = "AM";
+              } else if($startHours == "12") {
+                $startHours = 12;
+                $startAMPM = "PM";
+              } else if($startHours > 12) {
+                $startHours = $startHours - 12;
+                $startAMPM = "PM";
+              } else {
+                $startHours = $startHours;
+                $startAMPM = "AM";
+              }
+              $startMins = date("i", $sTime);
+              $endHours = date("H", $eTime);
+              $endAMPM = "";
+              if($endHours == "00") {
+                $endHours = 12;
+                $endAMPM = "AM";
+              } else if($endHours == "12") {
+                $endHours = 12;
+                $endAMPM = "PM";
+              } else if($endHours > 12) {
+                $endHours = $endHours - 12;
+                $endAMPM = "PM";
+              } else {
+                $endHours = $endHours;
+                $endAMPM = "AM";
+              }
+              $endMins = date("i", $eTime);
             @endphp
-            <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly value="{{$startTime}}">
+            <!-- <input type="text" class="form-control" id="duration" name="cohortbatch_starttime" readonly value="{{$startTime}}">
             @if ($errors->has('cohortbatch_starttime'))
               <span class="text-danger">The batch start time is required</span>
             @endif
+          </div> -->
+          <label for="duration">Start time</label>
+          <div class="col-md-2">
+            <label for="duration">Hour</label>
+            <input type="number" class="form-control" id="starttime_hour" name="starttime_hour" min="1" max="12" value="{{$startHours}}">
+            @if ($errors->has('starttime_hour'))
+              <span class="text-danger">The batch start hour is required</span>
+            @endif
           </div>
-         
-          <div class="col-lg-4 col-md-4 col-sm-5 col-10">
+          <div class="col-md-2">
+            <label for="duration">Minutes</label>
+            <input type="number" class="form-control" id="starttime_minutes" name="starttime_minutes" min="0" max="59" value="{{$startMins}}">
+            @if ($errors->has('starttime_minutes'))
+              <span class="text-danger">The batch start minutes is required</span>
+            @endif
+          </div>
+          <div class="col-md-1">
+            <label for="duration">AM/PM</label>
+            <select class="form-control" name="starttime_ampm">
+              <option {{ $startAMPM == 'AM' ? 'selected' : ''}} value="AM">AM</option>
+              <option {{ $startAMPM == 'PM' ? 'selected' : ''}} value="PM">PM</option>
+            </select>
+          </div>
+          <!-- <div class="col-lg-4 col-md-4 col-sm-5 col-10">
             <label for="duration">End time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_endtime" readonly value="{{$endTime}}">
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
+          </div> -->
+
+          <label for="duration">End time</label>
+          <div class="col-md-2">
+            <label for="duration">Hour</label>
+            <input type="number" class="form-control" id="endtime_hour" name="endtime_hour" min="1" max="12" value="{{$endHours}}">
+            @if ($errors->has('endtime_hour'))
+              <span class="text-danger">The batch end hour is required</span>
+            @endif
+          </div>
+          <div class="col-md-2">
+            <label for="duration">Minutes</label>
+            <input type="number" class="form-control" id="endtime_minutes" name="endtime_minutes" min="0" max="59" value="{{$endMins}}">
+            @if ($errors->has('endtime_minutes'))
+              <span class="text-danger">The batch end minutes is required</span>
+            @endif
+          </div>
+          <div class="col-md-1">
+            <label for="duration">AM/PM</label>
+            <select class="form-control" name="endtime_ampm">
+              <option {{ $endAMPM == 'AM' ? 'selected' : ''}} value="AM">AM</option>
+              <option {{ $endAMPM == 'PM' ? 'selected' : ''}} value="PM">PM</option>
+            </select>
           </div>
           
-          <div class="col-md-4">
+          <div class="col-md-5">
             <label for="duration">Timezone</label>
             <select id="cohortbatch_timezone" name="cohortbatch_timezone" class="form-control" checked value="{{$cohortbatch->time_zone}}">
     <!-- include timezones here -->
@@ -243,6 +318,8 @@ use App\Models\CustomTimezone;
             @if ($errors->has('cohortbatch_timezone'))
               <span class="text-danger">The time zone is required</span>
             @endif
+          </div>
+          <div class="col-md-2">
           </div>
           <div class="col-md-4">
             <label for="students_count">Number of students allowed to enroll in a Cohort</label>

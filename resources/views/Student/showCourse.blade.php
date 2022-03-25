@@ -167,7 +167,7 @@
             @foreach($courseContents as $courseContent)
             @php ($slno = $slno + 1)
             <h6 class="card-subtitle mt-3"> Session {{$slno}} - {{$courseContent['topic_title']}}</h6>
-            <ul class="list-group list-group-flush border-bottom pb-3 mt-3">
+            <ul class="list-group list-group-flush @if(!$loop->last) border-bottom @endif pb-3 mt-3">
               @foreach($courseContent['contentsData'] as $content)
               <li class="ms-3 border-0 pb-2" style="list-style:circle;" id="{{$content['topic_content_id']}}">{{$content['topic_title']}}</li>
               @endforeach

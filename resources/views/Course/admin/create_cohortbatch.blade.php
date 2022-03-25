@@ -128,23 +128,68 @@
             </div>
           </div>
           
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <label for="duration">Start time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_starttime"  placeholder="Ex: 09" readonly>
             @if ($errors->has('cohortbatch_starttime'))
               <span class="text-danger">The batch start time is required</span>
             @endif
+          </div> -->
+          <label for="duration">Start time</label>
+          <div class="col-md-2">
+            <label for="duration">Hour</label>
+            <input type="number" class="form-control" id="starttime_hour" name="starttime_hour" min="1" max="12">
+            @if ($errors->has('starttime_hour'))
+              <span class="text-danger">The batch start hour is required</span>
+            @endif
+          </div>
+          <div class="col-md-2">
+            <label for="duration">Minutes</label>
+            <input type="number" class="form-control" id="starttime_minutes" name="starttime_minutes" min="0" max="59">
+            @if ($errors->has('starttime_minutes'))
+              <span class="text-danger">The batch start minutes is required</span>
+            @endif
+          </div>
+          <div class="col-md-1">
+            <label for="duration">AM/PM</label>
+            <select class="form-control" name="starttime_ampm">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
           </div>
           
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <label for="duration">End time</label>
             <input type="text" class="form-control" id="duration" name="cohortbatch_endtime"placeholder="Ex: 11" readonly>
             @if ($errors->has('cohortbatch_endtime'))
               <span class="text-danger">The batch end time is required</span>
             @endif
+          </div> -->
+
+          <label for="duration">End time</label>
+          <div class="col-md-2">
+            <label for="duration">Hour</label>
+            <input type="number" class="form-control" id="endtime_hour" name="endtime_hour" min="1" max="12">
+            @if ($errors->has('endtime_hour'))
+              <span class="text-danger">The batch end hour is required</span>
+            @endif
+          </div>
+          <div class="col-md-2">
+            <label for="duration">Minutes</label>
+            <input type="number" class="form-control" id="endtime_minutes" name="endtime_minutes" min="0" max="59">
+            @if ($errors->has('endtime_minutes'))
+              <span class="text-danger">The batch end minutes is required</span>
+            @endif
+          </div>
+          <div class="col-md-1">
+            <label for="duration">AM/PM</label>
+            <select class="form-control" name="endtime_ampm">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
           </div>
          
-          <div class="col-md-4">
+          <div class="col-md-5">
             <label for="duration">Timezone</label>
             <select name="cohortbatch_timezone" class="form-control">
               <option value="">Select Timezone</option>
@@ -154,6 +199,8 @@
             @if ($errors->has('cohortbatch_timezone'))
               <span class="text-danger">The time zone is required</span>
             @endif
+          </div>
+          <div class="col-md-2">
           </div>
           <div class="col-md-4">
             <label for="students_count">Number of students allowed to enroll in a Cohort</label>
@@ -192,12 +239,12 @@
   enddate = new dtsel.DTS('input[name="cohortbatch_enddate"]', {
     paddingX: 15, paddingY: 15
   });
-  starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {
-    paddingX: 15, paddingY: 15,showTime: true, showDate: false
-  });
-  endtime = new dtsel.DTS('input[name="cohortbatch_endtime"]', {
-    paddingX: 15, paddingY: 15,showTime: true, showDate: false
-  });
+  // starttime = new dtsel.DTS('input[name="cohortbatch_starttime"]', {
+  //   paddingX: 15, paddingY: 15,showTime: true, showDate: false
+  // });
+  // endtime = new dtsel.DTS('input[name="cohortbatch_endtime"]', {
+  //   paddingX: 15, paddingY: 15,showTime: true, showDate: false
+  // });
 
   const cohortbatchdailyEl = document.querySelector('#cohortbatchdaily');
   const cohortbatchdayElList =  document.querySelectorAll('.cohortbatchday');
@@ -233,6 +280,22 @@
         document.querySelector('#batch_name').value = customValue;
     });
   })
+
+  document.getElementById('starttime_hour').addEventListener('keyup', function(e) {
+    if(document.getElementById('starttime_hour').value > 12) {
+      document.getElementById('starttime_hour').value = 12;
+    } else if(document.getElementById('starttime_hour').value < 1) {
+      document.getElementById('starttime_hour').value = 1;
+    }
+  });
+
+  document.getElementById('starttime_minutes').addEventListener('keyup', function(e) {
+    if(document.getElementById('starttime_minutes').value > 59) {
+      document.getElementById('starttime_minutes').value = 59;
+    } else if(document.getElementById('starttime_minutes').value < 0) {
+      document.getElementById('starttime_minutes').value = 0;
+    }
+  });
 
 </script>
 

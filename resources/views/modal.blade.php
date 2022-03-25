@@ -515,7 +515,6 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
 <script>
     const contactNameCourse = document.getElementById('contactNameCourse');
     const contactEmailCourse = document.getElementById('contactEmailCourse');
-    const contactPhoneCourse = document.getElementById('contactPhoneCourse');
     const contactMessageCourse = document.getElementById('contactMessageCourse');
     document.querySelector('#contactFormCourse').addEventListener('submit', (e) => {
       if (contactNameCourse.value === '') {
@@ -529,12 +528,6 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
         showError(contactEmailCourse, 'Email is required');
       } else {
         removeError(contactEmailCourse)
-      }
-      if (contactPhoneCourse.value === '') {
-        e.preventDefault();
-        showError(contactPhoneCourse, 'Phone number is required');
-      } else {
-        removeError(contactPhoneCourse)
       }
       if (contactMessageCourse.value === '') {
         e.preventDefault();
