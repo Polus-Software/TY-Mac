@@ -121,7 +121,7 @@
       </div>
     </div>
     <div class="text-center">
-      <a type="button" class="btn think-btn-secondary-outline" href="#">Learn more</a>
+      <a type="button" class="btn think-btn-secondary-outline" href="/thinklitway">Learn more</a>
     </div>
   </section>
   <!-- recommendation feature -->

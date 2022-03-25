@@ -834,7 +834,7 @@ class CourseController extends Controller
         $request->validate([
             'assignment_title'=>'required',
             'assignment_description' => 'required',
-            'document' =>'required|max:10240|mimes:pdf,doc,docx,ppt,pptx,bin',
+            'document' =>'max:10240|mimes:pdf,doc,docx,ppt,pptx,bin',
             'due-date' =>'required',
             'assignment_topic_id' =>'required'
         ]);
@@ -948,28 +948,87 @@ class CourseController extends Controller
             'batchname' => 'required',
             'cohortbatch_startdate' =>'required',
             'cohortbatch_enddate' => 'required',
-            'cohortbatch_starttime' =>'required',
-            'cohortbatch_endtime' =>'required',
+            'starttime_hour' =>'required',
+            'starttime_minutes' =>'required',
+            'endtime_hour' =>'required',
+            'endtime_minutes' =>'required',
             'cohortbatch_timezone' =>'required',
             'students_count' =>'required',  
             'cohortbatch_batchname' => 'required'
         ],
         [
-         'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date',
-         'cohortbatch_endtime.after'=> 'Time should be after start time',
+         'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date'
         ]
      );
+     // Start time
+        $startHour = "";
+        $startMin = "";
+        
+        if($request->input('starttime_ampm') == "PM") {
+            if($request->input('starttime_hour') != 12) {
+                $startHour = 12 + intval($request->input('starttime_hour'));
+                if ($startHour < 10) {
+                    $startHour = "0" . $startHour;
+                }
+            } else {
+                $startHour = 12;
+            }
+        } else if($request->input('starttime_ampm') == "AM") {
+            if($request->input('starttime_hour') == 12) {
+                $startHour = "0" . 0;
+            } else {
+                if ($request->input('starttime_hour') < 10) {
+                    $startHour = "0" . $request->input('starttime_hour');
+                } else {
+                    $startHour = $request->input('starttime_hour');
+                }
+            }
+        }
+        if($request->input('starttime_minutes') < 10) {
+            $startMin = "0" . $request->input('starttime_minutes');
+        } else {
+            $startMin = $request->input('starttime_minutes');
+        }
+        $finalStartTime = $startHour . ":" . $startMin . ":00"; 
 
+        // End time
+
+
+        $endHour = "";
+        $endMin = "";
+        
+        if($request->input('endtime_ampm') == "PM") {
+            if($request->input('endtime_hour') != 12) {
+                $endHour = 12 + intval($request->input('endtime_hour'));
+                if ($endHour < 10) {
+                    $endHour = "0" . $endHour;
+                }
+            } else {
+                $endHour = 12;
+            }
+        } else if($request->input('endtime_ampm') == "AM") {
+            if($request->input('endtime_hour') == 12) {
+                $endHour = "0" . 0;
+            }
+        }
+        if($request->input('endtime_minutes') < 10) {
+            $endMin = "0" . $request->input('endtime_minutes');
+        } else {
+            $endMin = $request->input('endtime_minutes');
+        }
+        $finalEndTime = $endHour . ":" . $endMin . ":00";
+
+        
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
       
         if($offset[0] == "-") {
-            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
-            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $sTime = strtotime($finalStartTime) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($finalEndTime) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
         } else {
-            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
-            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $sTime = strtotime($finalStartTime) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($finalEndTime) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
         }
 
         $startTime = date("H:i:s", $sTime);
@@ -1055,28 +1114,87 @@ class CourseController extends Controller
             'batchname' => 'required',
             'cohortbatch_startdate' =>'required',
             'cohortbatch_enddate' => 'required',
-            'cohortbatch_starttime' =>'required',
-            'cohortbatch_endtime' =>'required',
+            'starttime_hour' =>'required',
+            'starttime_minutes' =>'required',
+            'endtime_hour' =>'required',
+            'endtime_minutes' =>'required',
             'cohortbatch_timezone' =>'required',
             'students_count' =>'required',  
             'cohortbatch_batchname' => 'required'
         ],
         [
             'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date',
-            'cohortbatch_endtime.after'=> 'Time should be after start time',
         ]
      );
+
+     // Start time
+     $startHour = "";
+     $startMin = "";
+     
+     if($request->input('starttime_ampm') == "PM") {
+         if($request->input('starttime_hour') != 12) {
+             $startHour = 12 + intval($request->input('starttime_hour'));
+             if ($startHour < 10) {
+                 $startHour = "0" . $startHour;
+             }
+         } else {
+            $startHour = 12;
+         }
+     } else if($request->input('starttime_ampm') == "AM") {
+         if($request->input('starttime_hour') == 12) {
+             $startHour = "0" . 0;
+         } else {
+             if ($request->input('starttime_hour') < 10) {
+                 $startHour = "0" . $request->input('starttime_hour');
+             } else {
+                 $startHour = $request->input('starttime_hour');
+             }
+         }
+     }
+     if($request->input('starttime_minutes') < 10) {
+         $startMin = "0" . $request->input('starttime_minutes');
+     } else {
+         $startMin = $request->input('starttime_minutes');
+     }
+     $finalStartTime = $startHour . ":" . $startMin . ":00"; 
+
+     // End time
+
+
+     $endHour = "";
+     $endMin = "";
+     
+     if($request->input('endtime_ampm') == "PM") {
+         if($request->input('endtime_hour') != 12) {
+             $endHour = 12 + intval($request->input('endtime_hour'));
+             if ($endHour < 10) {
+                 $endHour = "0" . $endHour;
+             }
+         } else {
+            $endHour = 12;
+         }
+     } else if($request->input('endtime_ampm') == "AM") {
+         if($request->input('endtime_hour') == 12) {
+             $endHour = "0" . 0;
+         }
+     }
+     if($request->input('endtime_minutes') < 10) {
+         $endMin = "0" . $request->input('endtime_minutes');
+     } else {
+         $endMin = $request->input('endtime_minutes');
+     }
+     $finalEndTime = $endHour . ":" . $endMin . ":00";
 
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
         
         if($offset[0] == "-") {
-            $sTime = strtotime($request->input('cohortbatch_starttime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
-            $eTime = strtotime($request->input('cohortbatch_endtime')) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $sTime = strtotime($finalStartTime) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
+            $eTime = strtotime($finalEndTime) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
         } else {
-            $sTime = strtotime($request->input('cohortbatch_starttime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
-            $eTime = strtotime($request->input('cohortbatch_endtime')) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $sTime = strtotime($finalStartTime) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
+            $eTime = strtotime($finalEndTime) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
         }
 
         $startTime = date("H:i:s", $sTime);

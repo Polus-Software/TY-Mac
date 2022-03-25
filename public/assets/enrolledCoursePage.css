@@ -12,6 +12,9 @@
     background: #F8F7FC;
     /* height: 500px; */
 }
+#v-pills-achievements-tab {
+    width: auto !important;
+}
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: #2C3443;
     background-color: #F1EEFD;

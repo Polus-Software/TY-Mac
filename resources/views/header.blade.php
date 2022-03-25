@@ -64,7 +64,7 @@
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item {{ (request()->is('thinklitway')) ? 'active': '' }}">
-          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The Thinklit Way</a>
+          <a class="nav-link" aria-current="page" href="{{ route('thinklitway') }}">The ThinkLit Way</a>
         </li>
         <li class="nav-item {{ (request()->is('student-courses')) ? 'active': '' }}">
           <a class="nav-link" href="{{ route('student.courses.get') }}">Courses</a>
@@ -89,7 +89,7 @@
         @else
         @if(Auth::user()->role_id != Config::get('common.ROLE_ID_ADMIN') && Auth::user()->role_id != 4)
         <li class="nav-item {{ (request()->is('my-courses')) ? 'active': '' }}">
-          <a class="nav-link" href="{{ route('my-courses') }}">My courses</a>
+          <a class="nav-link" href="{{ route('my-courses') }}">My Courses</a>
         </li>
         @endif
         @endif
