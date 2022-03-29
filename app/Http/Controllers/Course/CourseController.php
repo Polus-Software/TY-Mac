@@ -961,62 +961,86 @@ class CourseController extends Controller
         ]
      );
      // Start time
-        $startHour = "";
-        $startMin = "";
-        
-        if($request->input('starttime_ampm') == "PM") {
-            if($request->input('starttime_hour') != 12) {
-                $startHour = 12 + intval($request->input('starttime_hour'));
-                if ($startHour < 10) {
-                    $startHour = "0" . $startHour;
-                }
-            } else {
-                $startHour = 12;
-            }
-        } else if($request->input('starttime_ampm') == "AM") {
-            if($request->input('starttime_hour') == 12) {
-                $startHour = "0" . 0;
-            } else {
+     $startHour = "";
+     $startMin = "";
+     
+     if($request->input('starttime_ampm') == "PM") {
+         if($request->input('starttime_hour') != 12) {
+             $startHour = 12 + intval($request->input('starttime_hour'));
+             if ($startHour < 10) {
+                 $startHour = "0" . $startHour;
+             }
+         } else {
+            $startHour = 12;
+         }
+     } else if($request->input('starttime_ampm') == "AM") {
+         if($request->input('starttime_hour') == 12) {
+             $startHour = "0" . 0;
+         } else {
+             if(strlen($request->input('starttime_hour')) <= 1) {
                 if ($request->input('starttime_hour') < 10) {
                     $startHour = "0" . $request->input('starttime_hour');
                 } else {
                     $startHour = $request->input('starttime_hour');
                 }
-            }
-        }
+             } else {
+                $startHour = $request->input('starttime_hour');
+             }
+         }
+     }
+     if(strlen($request->input('starttime_minutes')) <= 1) {
         if($request->input('starttime_minutes') < 10) {
             $startMin = "0" . $request->input('starttime_minutes');
         } else {
             $startMin = $request->input('starttime_minutes');
         }
-        $finalStartTime = $startHour . ":" . $startMin . ":00"; 
+     } else {
+        $startMin = $request->input('starttime_minutes');
+     }
+     
+     $finalStartTime = $startHour . ":" . $startMin . ":00"; 
+     // End time
 
-        // End time
 
-
-        $endHour = "";
-        $endMin = "";
-        
-        if($request->input('endtime_ampm') == "PM") {
-            if($request->input('endtime_hour') != 12) {
-                $endHour = 12 + intval($request->input('endtime_hour'));
-                if ($endHour < 10) {
-                    $endHour = "0" . $endHour;
+     $endHour = "";
+     $endMin = "";
+     
+     if($request->input('endtime_ampm') == "PM") {
+         if($request->input('endtime_hour') != 12) {
+             $endHour = 12 + intval($request->input('endtime_hour'));
+             if ($endHour < 10) {
+                 $endHour = "0" . $endHour;
+             }
+         } else {
+            $endHour = 12;
+         }
+     } else if($request->input('endtime_ampm') == "AM") {
+         if($request->input('endtime_hour') == 12) {
+             $endHour = "0" . 0;
+         } else {
+            if(strlen($request->input('endtime_hour')) <= 1) {
+                if ($request->input('endtime_hour') < 10) {
+                    $endHour = "0" . $request->input('endtime_hour');
+                } else {
+                    $endHour = $request->input('endtime_hour');
                 }
-            } else {
-                $endHour = 12;
-            }
-        } else if($request->input('endtime_ampm') == "AM") {
-            if($request->input('endtime_hour') == 12) {
-                $endHour = "0" . 0;
-            }
-        }
+             } else {
+                $endHour = $request->input('endtime_hour');
+             }
+         }
+     }
+
+     if(strlen($request->input('starttime_minutes')) <= 1) {
         if($request->input('endtime_minutes') < 10) {
             $endMin = "0" . $request->input('endtime_minutes');
         } else {
             $endMin = $request->input('endtime_minutes');
         }
-        $finalEndTime = $endHour . ":" . $endMin . ":00";
+     } else {
+        $endMin = $request->input('endtime_minutes');
+     }
+     
+     $finalEndTime = $endHour . ":" . $endMin . ":00";
 
         
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
@@ -1144,20 +1168,28 @@ class CourseController extends Controller
          if($request->input('starttime_hour') == 12) {
              $startHour = "0" . 0;
          } else {
-             if ($request->input('starttime_hour') < 10) {
-                 $startHour = "0" . $request->input('starttime_hour');
+             if(strlen($request->input('starttime_hour')) <= 1) {
+                if ($request->input('starttime_hour') < 10) {
+                    $startHour = "0" . $request->input('starttime_hour');
+                } else {
+                    $startHour = $request->input('starttime_hour');
+                }
              } else {
-                 $startHour = $request->input('starttime_hour');
+                $startHour = $request->input('starttime_hour');
              }
          }
      }
-     if($request->input('starttime_minutes') < 10) {
-         $startMin = "0" . $request->input('starttime_minutes');
+     if(strlen($request->input('starttime_minutes')) <= 1) {
+        if($request->input('starttime_minutes') < 10) {
+            $startMin = "0" . $request->input('starttime_minutes');
+        } else {
+            $startMin = $request->input('starttime_minutes');
+        }
      } else {
-         $startMin = $request->input('starttime_minutes');
+        $startMin = $request->input('starttime_minutes');
      }
+     
      $finalStartTime = $startHour . ":" . $startMin . ":00"; 
-
      // End time
 
 
@@ -1176,13 +1208,29 @@ class CourseController extends Controller
      } else if($request->input('endtime_ampm') == "AM") {
          if($request->input('endtime_hour') == 12) {
              $endHour = "0" . 0;
+         } else {
+            if(strlen($request->input('endtime_hour')) <= 1) {
+                if ($request->input('endtime_hour') < 10) {
+                    $endHour = "0" . $request->input('endtime_hour');
+                } else {
+                    $endHour = $request->input('endtime_hour');
+                }
+             } else {
+                $endHour = $request->input('endtime_hour');
+             }
          }
      }
-     if($request->input('endtime_minutes') < 10) {
-         $endMin = "0" . $request->input('endtime_minutes');
+
+     if(strlen($request->input('starttime_minutes')) <= 1) {
+        if($request->input('endtime_minutes') < 10) {
+            $endMin = "0" . $request->input('endtime_minutes');
+        } else {
+            $endMin = $request->input('endtime_minutes');
+        }
      } else {
-         $endMin = $request->input('endtime_minutes');
+        $endMin = $request->input('endtime_minutes');
      }
+     
      $finalEndTime = $endHour . ":" . $endMin . ":00";
 
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');

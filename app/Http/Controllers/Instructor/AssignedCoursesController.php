@@ -36,9 +36,10 @@ class AssignedCoursesController extends Controller
         $singleEnrolledCourseData = [];
         $liveSessionDetails = [];
         $upComingSessionDetails = [];
-        $current_date = Carbon::now()->format('Y-m-d');
+        
         $user = Auth::user();
         if($user){
+            $current_date = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'), 'UTC')->setTimezone($user->timezone)->format('Y-m-d');
             $enrolledCourses = AssignedCourse::where('user_id', $user->id)->get();
             
             if($request->courses && $request->courses == 1){

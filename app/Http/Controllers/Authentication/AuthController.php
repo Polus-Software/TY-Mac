@@ -178,12 +178,13 @@ class AuthController extends Controller
             $students_registered = DB::table('users')->where('role_id', '=', 2)->count();
             //$students_registered = User::where('role_id', 2)->count();
             $liveSessions = LiveSession::all();
-            $current_date = Carbon::now()->format('Y-m-d');
+             
 			$backLimitDate =  Carbon::now()->subDays(10)->format('Y-m-d');
 			$total_live_hours = 0;
             foreach($liveSessions as $session) {
                 $batchId = $session->batch_id;
                 $batch = CohortBatch::where('id', $batchId);
+                $current_date = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'), 'UTC')->setTimezone($batch->value('time_zone'))->format('Y-m-d');
                 //Timezone change 
                 $offset = CustomTimezone::where('name', $batch->value('time_zone'))->value('offset');
                         
@@ -198,14 +199,14 @@ class AuthController extends Controller
                     $eTime = strtotime($session->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
                 }
                     
-                $start_time = date("H:i A", $sTime);
-                $end_time = date("H:i A", $eTime);
+                $start_time = date("h:i A", $sTime);
+                $end_time = date("h:i A", $eTime);
                                     
                 $currentBatchStartDate = $session->start_date;
 				if($currentBatchStartDate < $current_date){
 					$total_live_hours = $total_live_hours+$batch->value('duration');
 				}
-                if ($currentBatchStartDate < $current_date && $currentBatchStartDate > $backLimitDate) { 
+                if ($currentBatchStartDate < $current_date && $currentBatchStartDate > $backLimitDate) {
                         $session_title = $session->session_title;
                         $course = AssignedCourse::where('course_id', $session->course_id);
                         $instructId = $course->value('user_id');

@@ -49,7 +49,7 @@ class EnrolledCourseController extends Controller
 
     public function afterEnrollView(Request $request, $courseId) {
         $selectedBatch = $request->batchId;
-        
+        $nextDayFlag = false;
         $dislikeCount = 0;
         $courseDetails =[];
         $topicDetails = [];
@@ -103,10 +103,59 @@ class EnrolledCourseController extends Controller
         $instructorYoutube = $instructor->value('youtube_social');
         $instructorSignature = $instructor->value('signature');
         $date_of_issue = Carbon::now();
-        $current_date = Carbon::now()->format('Y-m-d');
+    
+        $current_date = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'), 'UTC')->setTimezone($user->timezone)->format('Y-m-d');
+        
         $next_live_cohort = "No sessions scheduled";
         $course_completion = '';
         if($userType === 'instructor') {
+
+            // Scheduled time
+            $cBatchTZ = CohortBatch::where('id', $selectedBatch)->value('time_zone');
+            $cStart = CohortBatch::where('id', $selectedBatch)->value('start_time');
+            $cEnd = CohortBatch::where('id', $selectedBatch)->value('end_time');
+            
+            $coffset = CustomTimezone::where('name', $cBatchTZ)->value('offset');
+
+            $coffsetHours = intval($coffset[1] . $coffset[2]);
+            $coffsetMinutes = intval($coffset[4] . $coffset[5]);
+
+            if($coffset[0] == "+") {
+                $csTime = strtotime($cStart) + (60 * 60 * $coffsetHours) + (60 * $coffsetMinutes);
+            } else {
+                $csTime = strtotime($cStart) - (60 * 60 * $coffsetHours) - (60 * $coffsetMinutes);
+            }
+            $cStartTime = date("H:i:s", $csTime);
+
+            //User time
+            $uStart = CohortBatch::where('id', $selectedBatch)->value('start_time');
+            
+            $uoffset = CustomTimezone::where('name', $user->timezone)->value('offset');
+    
+            $uoffsetHours = intval($uoffset[1] . $uoffset[2]);
+            $uoffsetMinutes = intval($uoffset[4] . $uoffset[5]);
+
+            if($uoffset[0] == "+") {
+                $usTime = strtotime($uStart) + (60 * 60 * $uoffsetHours) + (60 * $uoffsetMinutes);
+            } else {
+                $usTime = strtotime($uStart) - (60 * 60 * $uoffsetHours) - (60 * $uoffsetMinutes);
+            }
+            $uStartTime = date("H:i:s", $usTime);
+
+            if(date("Y-m-d", $csTime) != date("Y-m-d", $usTime)) {
+                if(date("Y-m-d", $csTime) < date("Y-m-d", $usTime)) {
+                    if($cEnd < Carbon::now()->format('H:i:s')) {
+                        $current_date = $current_date;
+                    } else {
+                        $current_date = date("Y-m-d", $csTime);
+                        $nextDayFlag = true;
+                    }
+                } elseif(date("Y-m-d", $csTime) > date("Y-m-d", $usTime)) {
+                    $current_date = date("Y-m-d", $usTime);
+                }
+            }
+            
+
             $cohort_batches = DB::table('live_sessions')->where('batch_id', $selectedBatch)->where('start_date', '>=', $current_date)->get();
             if(count($cohort_batches)) {
                 if($cohort_batches[0]->end_time < Carbon::now()->format('H:i:s')) {
@@ -136,7 +185,7 @@ class EnrolledCourseController extends Controller
                   $start_time =  $startTime;
                   $end_time =  $endTime;
                   $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                  $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                  $next_live_cohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
                     }
                    
                 } else {
@@ -163,7 +212,7 @@ class EnrolledCourseController extends Controller
                   $start_time =  $startTime;
                   $end_time =  $endTime;
                   $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                  $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                  $next_live_cohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
                 }
               
                   
@@ -180,10 +229,55 @@ class EnrolledCourseController extends Controller
             }
             
             
-            // $selectedBatchObj = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'));
-            $cohort_batches = DB::table('live_sessions')->where('batch_id', $enrolledCourseObj->value('batch_id'))->where('start_date', '>=', $current_date)->get();
+            // Scheduled time
+            $cBatchTZ = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'))->value('time_zone');
+            $cStart = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'))->value('start_time');
+            $cEnd = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'))->value('end_time');
             
+            $coffset = CustomTimezone::where('name', $cBatchTZ)->value('offset');
+    
+            $coffsetHours = intval($coffset[1] . $coffset[2]);
+            $coffsetMinutes = intval($coffset[4] . $coffset[5]);
+
+            if($coffset[0] == "+") {
+                $csTime = strtotime($cStart) + (60 * 60 * $coffsetHours) + (60 * $coffsetMinutes);
+            } else {
+                $csTime = strtotime($cStart) - (60 * 60 * $coffsetHours) - (60 * $coffsetMinutes);
+            }
+            $cStartTime = date("H:i:s", $csTime);
+
+            //User time
+            $uStart = CohortBatch::where('id', $enrolledCourseObj->value('batch_id'))->value('start_time');
+           
+            $uoffset = CustomTimezone::where('name', $user->timezone)->value('offset');
+            
+            $uoffsetHours = intval($uoffset[1] . $uoffset[2]);
+            $uoffsetMinutes = intval($uoffset[4] . $uoffset[5]);
+
+            if($uoffset[0] == "+") {
+                $usTime = strtotime($uStart) + (60 * 60 * $uoffsetHours) + (60 * $uoffsetMinutes);
+            } else {
+                $usTime = strtotime($uStart) - (60 * 60 * $uoffsetHours) - (60 * $uoffsetMinutes);
+            }
+            $uStartTime = date("H:i:s", $usTime);
+            
+            if(date("Y-m-d", $csTime) != date("Y-m-d", $usTime)) {
+                if(date("Y-m-d", $csTime) < date("Y-m-d", $usTime)) {
+                    if($cEnd < Carbon::now()->format('H:i:s')) {
+                        $current_date = $current_date;
+                    } else {
+                        $current_date = date("Y-m-d", $csTime);
+                        $nextDayFlag = true;
+                    }
+                } elseif(date("Y-m-d", $csTime) > date("Y-m-d", $usTime)) {
+                    $current_date = date("Y-m-d", $usTime);
+                }
+            }
+            
+            $cohort_batches = DB::table('live_sessions')->where('batch_id', $enrolledCourseObj->value('batch_id'))->where('start_date', '>=', $current_date)->get();
+    
           if(count($cohort_batches)) {
+              
             if($cohort_batches[0]->start_date == $current_date && $cohort_batches[0]->end_time < Carbon::now()->format('H:i:s') && isset($cohort_batches[1])) {
                 $cohort_batches = $cohort_batches[1];
                  // Time setting
@@ -208,17 +302,17 @@ class EnrolledCourseController extends Controller
                  $start_time =  $startTime;
                  $end_time =  $endTime;
                  $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                 $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                 $next_live_cohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
             } elseif($cohort_batches[0]->start_date == $current_date && $cohort_batches[0]->end_time < Carbon::now()->format('H:i:s') && !isset($cohort_batches[1])) {
                 $next_live_cohort = "All sessions have ended!";
             } else {
                 $cohort_batches = $cohort_batches[0];
                  // Time setting
                  $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
-                      
+                  
                  $offsetHours = intval($offset[1] . $offset[2]);
                  $offsetMinutes = intval($offset[4] . $offset[5]);
- 
+                 
                  if($offset[0] == "+") {
                      $sTime = strtotime($cohort_batches->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
                      $eTime = strtotime($cohort_batches->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
@@ -230,12 +324,13 @@ class EnrolledCourseController extends Controller
                  $startTime = date("H:i:s", $sTime);
                  $endTime = date("H:i:s", $eTime);
                  $date = new DateTime("now");
- 
+                 
                  $start_date =  $cohort_batches->start_date;
                  $start_time =  $startTime;
                  $end_time =  $endTime;
                  $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                 $next_live_cohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                 $next_live_cohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                 
             }
            } else {
                 $next_live_cohort = "No live sessions scheduled";
@@ -306,7 +401,7 @@ class EnrolledCourseController extends Controller
                 $scheduled = false;
                 $liveId = "";
                 $courseId =  $topic->course_id;
-                $topicId = $topic->topic_id;
+                $topicId = $topic->topic_id; 
                 $topic_title =  $topic->topic_title;
                 $topicContents = TopicContent::where('topic_id', $topicId)->get();
                 $assignmentsArray = TopicAssignment::where('topic_id', array($topicId))->get();
@@ -314,15 +409,16 @@ class EnrolledCourseController extends Controller
                 if($userType == 'instructor') {
                     $studentBatch = $selectedBatch;
                 }
+                
                 $liveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->orderby('start_date', 'asc')->get();
-
+                
                 if(count($liveSessions) != 0) {
                     if($userType == 'instructor') {
                         $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->addMinutes(30)->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                     } else {
                         $todaysLiveSessions = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->where('start_date', '=', $current_date)->where('start_time', '<=', Carbon::now()->addMinutes(10)->format('H:i:s'))->where('end_time', '>=', Carbon::now()->format('H:i:s'))->orderby('start_date', 'asc')->get();
                     }
-                    
+
                     if(count($todaysLiveSessions) != 0) {
                         if($userType == 'instructor' || ($userType == 'student'  && $liveSessions[0]->is_instructor_present == true)) {
                             $liveId = $liveSessions[0]->live_session_id;
@@ -363,7 +459,7 @@ class EnrolledCourseController extends Controller
                                 $start_time =  $startTime;
                                 $end_time =  $endTime;
                                 $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                                $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                                $nextCohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
                                 $scheduled = true;
                                 $liveId = Null;
                             }
@@ -396,7 +492,7 @@ class EnrolledCourseController extends Controller
                         $start_time =  $startTime;
                         $end_time =  $endTime;
                         $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                        $nextCohort = Carbon::parse($start_date)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
+                        $nextCohort = ($nextDayFlag == false ? Carbon::parse($start_date)->format('m/d/Y') : Carbon::parse($start_date)->addDays(1)->format('m/d/Y')) . "-" . Carbon::createFromFormat('H:i:s',$start_time)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$end_time)->format('h:i A') . " " . $time_zone;
                         $scheduled = true;
                         $liveId = Null;
                     } else {
@@ -441,7 +537,6 @@ class EnrolledCourseController extends Controller
                     'isAssignmentSubmitted' => $isAssignmentSubmitted
                 ));
             }
-            
         $singleCourseData =  array (
             'id' => $course->id,
             'course_title' => $course->course_title,

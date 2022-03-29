@@ -217,7 +217,7 @@ class CoursesCatalogController extends Controller
         $instructorfirstname = User::where('id', $assigned)->value('firstname');
         $instructorlastname = User::where('id', $assigned)->value('lastname');
 
-        $current_date = Carbon::now()->format('Y-m-d');
+        $current_date = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'), 'UTC')->setTimezone($user->timezone)->format('Y-m-d');
         $batches = DB::table('cohort_batches')->where('course_id', $course->id)->where('start_date', '>=', $current_date)->get();
 
         $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
@@ -229,7 +229,8 @@ class CoursesCatalogController extends Controller
         $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
 
         foreach($batches as $batch){
-            $available_count = $batch->students_count;
+            if($batch->end_time > Carbon::now()->format('H:i:s')) {
+                $available_count = $batch->students_count;
             if($offset[0] == "+") {
                 $sTime = strtotime($batch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
                 $eTime = strtotime($batch->end_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
@@ -259,6 +260,7 @@ class CoursesCatalogController extends Controller
             );
         
         array_push($singleCourseDetails, $singleCourseData);
+            }
       }
 
       $duration = $course->course_duration;
