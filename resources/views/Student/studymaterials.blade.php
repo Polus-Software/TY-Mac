@@ -139,7 +139,9 @@ a#ChromelessStatusBar\.Options-Small14 {
     }
 
     function get_url_extension(url){
-        return url.split(/[#?]/)[0].split('.').pop().trim();
+        let dotPos = url.lastIndexOf(".");
+        let urlLength = url.length;
+        return url.substring(dotPos + 1, urlLength);
     }
 </script>
 <!-- sidebar ends -->
