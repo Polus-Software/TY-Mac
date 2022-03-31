@@ -52,8 +52,12 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    const appId = "0b40256a7d014ad981cf41e7b7d26910";
-    const appCertificate = "a163ae4afd894f059c7dfceecddcdafe";
+    //const appId = "0b40256a7d014ad981cf41e7b7d26910";
+    //const appCertificate = "a163ae4afd894f059c7dfceecddcdafe";
+
+    const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
+    const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+
 
 
     public function index(Request $request, $session) {
@@ -188,15 +192,33 @@ class RtmTokenGeneratorController extends Controller
                 $eTime = strtotime($session->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
             }
                         
-            $startTime = date("H:i A", $sTime);
-            $endTime = date("H:i A", $eTime);
+            $startTime = date("h:i A", $sTime);
+            $endTime = date("h:i A", $eTime);
             $date = new DateTime("now");
             $time_zone = $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($cohortTimezone))->format('T');
             $instructor = User::find($session->instructor)->firstname . ' ' . User::find($session->instructor)->lastname;
+            $batchObj = CohortBatch::where('id', $session->batch_id);
             $batch = CohortBatch::where('id', $session->batch_id)->value('title');
             $sessionCourse = Course::where('id', $session->course_id)->value('course_title');
             $sesionTitle = $session->session_title;
-            $time = Carbon::createFromFormat('Y-m-d',$session->start_date)->format('m/d/Y') . ' - ' . $startTime . '-' . $endTime . ' ' . $time_zone;
+
+            
+            //Timezone calculations
+            
+            $batchTimeZone = $batchObj->value('time_zone');
+            $batchDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->setTimezone($batchTimeZone)->format('Y-m-d');
+            $currentUTC = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->format('Y-m-d');
+
+            if($batchDate > $currentUTC) {
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->addDays(1)->format('Y-m-d');
+            } elseif($batchDate < $currentUTC) {
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->subDays(1)->format('Y-m-d');
+            } elseif($batchDate == $currentUTC) {
+                $startDate = $session->start_date;
+            }
+
+
+            $time = $startDate . ' - ' . $startTime . '-' . $endTime . ' ' . $time_zone;
 
             array_push($sessionsArray, array (
                 'slNo' => $slNo,
@@ -262,11 +284,28 @@ class RtmTokenGeneratorController extends Controller
         
         $topics = Topic::where('course_id', $sessionCourse)->get();
         $selectedBatchObj = CohortBatch::where('id', $sessionBatch);
+
+        //Timezone calculations
+
+        $batchTimeZone = $selectedBatchObj->value('time_zone');
+        $batchDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->setTimezone($batchTimeZone)->format('Y-m-d');
+        $currentUTC = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->format('Y-m-d');
+        if($batchDate > $currentUTC) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $selectedBatchObj->value('start_date'), 'UTC')->subDays(1)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $selectedBatchObj->value('end_date'), 'UTC')->subDays(1)->format('Y-m-d');
+        } elseif($batchDate < $currentUTC) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $selectedBatchObj->value('start_date'), 'UTC')->addDays(1)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $selectedBatchObj->value('end_date'), 'UTC')->addDays(1)->format('Y-m-d');
+        } elseif($batchDate == $currentUTC) {
+            $startDate = $selectedBatchObj->value('start_date');
+            $endDate = $selectedBatchObj->value('end_date');
+        }
+
         $batchname = $selectedBatchObj->value('batchname');
         $occurrences = $selectedBatchObj->value('occurrence');
         if($occurrences == "Daily") {
-            $startDate = $selectedBatchObj->value('start_date');
-            $endDate = $selectedBatchObj->value('end_date');
+            // $startDate = $selectedBatchObj->value('start_date');
+            // $endDate = $selectedBatchObj->value('end_date');
             // $batchStartTime = $start_time = Carbon::createFromFormat('H:i:s',$selectedBatchObj->value('start_time'))->format('h A');
             $batchStartTime = $selectedBatchObj->value('start_time');
             
@@ -283,6 +322,8 @@ class RtmTokenGeneratorController extends Controller
                     $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
                     $liveSession->start_time = $selectedBatchObj->value('start_time');
                     $liveSession->end_time = $selectedBatchObj->value('end_time');
+                    $liveSession->startdatetime = Carbon::parse($date)->format('Y-m-d') .' '. $selectedBatchObj->value('start_time');
+                    $liveSession->enddatetime = Carbon::parse($date)->format('Y-m-d') .' '. $selectedBatchObj->value('end_time');
                     $liveSession->save();
                     $date = date('Y-m-d',strtotime($date . "+1 days"));
     
@@ -358,8 +399,8 @@ class RtmTokenGeneratorController extends Controller
         } else {
             $occArr = explode(',', $occurrences);
 
-            $startDate = $selectedBatchObj->value('start_date');
-            $endDate = $selectedBatchObj->value('end_date');
+            // $startDate = $selectedBatchObj->value('start_date');
+            // $endDate = $selectedBatchObj->value('end_date');
             $batchStartTime = $selectedBatchObj->value('start_time');
     
             $date = $startDate;
@@ -375,6 +416,8 @@ class RtmTokenGeneratorController extends Controller
                     $liveSession->start_date = Carbon::parse($date)->format('Y-m-d');
                     $liveSession->start_time = $selectedBatchObj->value('start_time');
                     $liveSession->end_time = $selectedBatchObj->value('end_time');
+                    $liveSession->startdatetime = Carbon::parse($date)->format('Y-m-d') .' '. $selectedBatchObj->value('start_time');
+                    $liveSession->enddatetime = Carbon::parse($date)->format('Y-m-d') .' '. $selectedBatchObj->value('end_time');
                     $liveSession->save();
                     
                     $date = date('Y-m-d',strtotime($date . "+1 days"));
