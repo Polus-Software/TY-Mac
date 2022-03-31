@@ -1150,7 +1150,7 @@ class CourseController extends Controller
             'cohortbatch_enddate.after_or_equal'=> 'Date should be after start date',
         ]
      );
-
+     
      // Start time
      $startHour = "";
      $startMin = "";
@@ -1232,7 +1232,7 @@ class CourseController extends Controller
      }
      
      $finalEndTime = $endHour . ":" . $endMin . ":00";
-
+     
         $offset = CustomTimezone::where('name', $request->input('cohortbatch_timezone')) ->value('offset');
         $offsetHours = intval($offset[1] . $offset[2]);
         $offsetMinutes = intval($offset[4] . $offset[5]);
@@ -1247,7 +1247,7 @@ class CourseController extends Controller
 
         $startTime = date("H:i:s", $sTime);
         $endTime = date("H:i:s", $eTime);
-        
+
         $cohort_batch_id = intval($request->input('cohort_batch_id'));
         $course_id = $request->input('course_id');
   

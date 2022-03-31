@@ -218,7 +218,7 @@ class CoursesCatalogController extends Controller
         $instructorlastname = User::where('id', $assigned)->value('lastname');
 
         $current_date = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'), 'UTC')->setTimezone($user->timezone)->format('Y-m-d');
-        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->where('start_date', '>=', $current_date)->get();
+        $batches = DB::table('cohort_batches')->where('course_id', $course->id)->get();
 
         $offset = CustomTimezone::where('name', $user->timezone)->value('offset');
 
@@ -239,8 +239,8 @@ class CoursesCatalogController extends Controller
                 $eTime = strtotime($batch->end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
             }
                     
-            $startTime = date("H:i A", $sTime);
-            $endTime = date("H:i A", $eTime);
+            $startTime = date("h:i A", $sTime);
+            $endTime = date("h:i A", $eTime);
 
             $booked_slotes = DB::table('enrolled_courses')
                                ->where([['course_id','=',$course->id],['batch_id','=',$batch->id]])
