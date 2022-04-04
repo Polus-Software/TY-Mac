@@ -1459,6 +1459,7 @@
                                                                                 @csrf
                                                                                 <input type="hidden" name="assignment_id" id="assignment_id" value="{{ $assignment['id'] }}" />
                                                                                     <small class="text-danger"></small>
+                                                                                    <textarea style="width:97% !important;height: 100px !important;margin:10px 20px 10px 11px !important;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
                                                                                     @if ($errors->has('assignment_comment'))
                                                                                         <span class="text-danger">{{ $errors->first('assignment_comment') }}</span>
                                                                                     @endif
@@ -1478,7 +1479,7 @@
                                                                                     </div>
                                                                                     <div class="col-12 text-end mt-4">
                                                                                             <a data-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-outline-secondary me-3 cancelAssignment">Cancel</a>
-                                                                                            <button type="submit" style="font-size: 14px;font-weight: 100;color: #ffffff;" class="btn btn-sm btn-dark">Submit</button>
+                                                                                            <button type="submit" style="font-size: 14px;width:69px;color: #ffffff;padding:6px;font-weight:600;" class="btn btn-sm btn-dark">Submit</button>
                                                                                     </div>
                                                                             </form>
                                                                                                 </div>

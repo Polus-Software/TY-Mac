@@ -102,7 +102,7 @@ class RtmTokenGeneratorController extends Controller
                 'batchId' => $batchId
             ]);
         } else {
-            return redirect('/403?session=true&sessionId=' . $session);
+            return redirect('/403');
         }
     }
 
@@ -210,15 +210,15 @@ class RtmTokenGeneratorController extends Controller
             $currentUTC = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->format('Y-m-d');
 
             if($batchDate > $currentUTC) {
-                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->addDays(1)->format('m/d/Y');
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->addDays(1)->format('Y-m-d');
             } elseif($batchDate < $currentUTC) {
-                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->subDays(1)->format('m/d/Y');
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->subDays(1)->format('Y-m-d');
             } elseif($batchDate == $currentUTC) {
                 $startDate = $session->start_date;
             }
 
 
-            $time = $startDate . ' - ' . $startTime .' '. $time_zone. '-' . $endTime . ' ' . $time_zone;
+            $time = $startDate . ' - ' . $startTime . '-' . $endTime . ' ' . $time_zone;
 
             array_push($sessionsArray, array (
                 'slNo' => $slNo,

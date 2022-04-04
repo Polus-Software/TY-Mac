@@ -5,7 +5,7 @@
         @else
         <img src="/storage/courseThumbnailImages/{{ $course['course_thumbnail_image'] }}" class="card-img-top think-img-h" alt="...">
         @if($cardtype === 'live')
-        <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
+        <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3 bg-white">Live</span>
         @endif
         @endif
         <div class="card-body">

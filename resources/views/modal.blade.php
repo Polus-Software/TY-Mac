@@ -86,6 +86,7 @@
               </p>                
               </div>
               <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
+              <input type="hidden" name="session_id" id="session_id" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -129,6 +130,8 @@
               <span class="forgotpwd"><a href="{{ route('forget.password.get')}}"> Forgot password? </a></span>
               </div>
               <div class="form-group mx-0 d-grid">
+              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
+              <input type="hidden" name="session_id" id="session_id" class="redirect_page" value="">
               <button type="submit" class="btn loginBtn think-btn-secondary">Login</button>
               <span class="login-error-message mt-2 text-center text-danger"></span>
               </div>
@@ -138,7 +141,6 @@
                 </span>
                 <span class="login"><a href="" id="signup_link">&nbsp;Sign up</a></p></span>
               </div>
-              <input type="hidden" name="redirect_page" id="redirect_page" class="redirect_page" value="">
             </form>
           </div>
         </div>
@@ -427,13 +429,14 @@ document.querySelector('#signupForm').addEventListener('submit', (e) => {
         removeError(loginpassword)
       }
       if(!validLogin) return;
-      redirect_to = document.getElementById('redirect_page').value;
-      submitLogin(email, password,redirect_to,loginrememberme);
+      redirect_to = document.getElementById('loginForm').elements['redirect_page'].value;
+      session_id = document.getElementById('loginForm').elements['session_id'].value
+      submitLogin(email, password,redirect_to,session_id,loginrememberme);
     });
 
-    const submitLogin = (email, password,redirect,rememberme) => {
+    const submitLogin = (email, password,redirect,session_id,rememberme) => {
       const errorEl = document.querySelector('.login-error-message');
-      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}&remember_me=${rememberme}`;
+      let path = `{{route('user.login')}}?email=${email}&password=${password}&redirect=${redirect}&session_id=${session_id}&remember_me=${rememberme}`;
       fetch(path, {
           method: 'POST',
           headers: {
