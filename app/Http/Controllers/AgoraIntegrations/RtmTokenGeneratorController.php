@@ -210,9 +210,9 @@ class RtmTokenGeneratorController extends Controller
             $currentUTC = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->format('Y-m-d H:i:s'), 'UTC')->format('Y-m-d');
 
             if($batchDate > $currentUTC) {
-                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->addDays(1)->format('m/d/Y');
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->addDays(1)->format('Y-m-d');
             } elseif($batchDate < $currentUTC) {
-                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->subDays(1)->format('m/d/Y');
+                $startDate = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->subDays(1)->format('Y-m-d');
             } elseif($batchDate == $currentUTC) {
                 $startDate = $session->start_date;
             }
