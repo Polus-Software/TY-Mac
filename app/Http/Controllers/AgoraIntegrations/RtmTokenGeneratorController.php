@@ -876,6 +876,18 @@ class RtmTokenGeneratorController extends Controller
             $session = $request->session;
             $html = "";
 
+            //Instructors name
+
+            $liveSession = LiveSession::where('live_session_id', $session);
+
+            if($liveSession->value('is_instructor_present')) {
+                $instructor = User::where('id', $liveSession->value('instructor'));
+                $instructorName = $instructor->value('firstname') . ' ' . $instructor->value('lastname');
+                $html = $html . '<div class="think-participant-container"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $instructor->value('image') .'" alt="error">';
+                $html = $html . '</span>';
+                $html = $html . '<span class="think-participant-name">'. $instructorName .'</span><img style="height:18px;width:15px;margin-bottom:5px;margin-left:10px;" class="me-1 think-w-14_5" src="/storage/icons/icon-feather-user.svg" alt="error"><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>';
+            }
+            
             $attendanceRec = AttendanceTracker::where('live_session_id', $session)->where('attendance_Status', true)->where('is_present', true)->get();
             
             foreach($attendanceRec as $rec) {
@@ -1220,7 +1232,7 @@ class RtmTokenGeneratorController extends Controller
             $name = $user->value('firstname') . ' ' . $user->value('lastname');
             $html = $html . '<div class="think-participant-container instructor"><span class="think-participant-wrapper"><span class="img-container"><img src="/storage/images/'. $user->value('image') .'" alt="error">';
             $html = $html . '</span>';
-            $html = $html . '<span class="think-participant-name">'. $name .'</span><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
+            $html = $html . '<span class="think-participant-name">'. $name .'</span><img style="height:18px;width:15px;margin-bottom:5px;margin-left:10px;" src="/storage/icons/icon-feather-user.svg" alt="error"><span class="status-container-outer"><span class="think-online-status-light-container online-status-green"></span>online</span></div>'; 
         }
         if($singleSessionUser[0]->student_present == true) {
             $user = User::where('id', $singleSessionUser[0]->student);

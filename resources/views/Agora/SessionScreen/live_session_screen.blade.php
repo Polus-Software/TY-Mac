@@ -1195,6 +1195,10 @@ body {
               document.getElementById('negative').classList.remove('pulsate');
               document.getElementById('positive').classList.remove('pulsate');
               document.getElementById('positive').classList.add('active');
+              document.getElementById('thumbs_i_' + content).classList.remove('far');
+              document.getElementById('thumbs_i_' + content).classList.remove('fa-circle');
+              document.getElementById('thumbs_i_' + content).classList.add('fa');
+              document.getElementById('thumbs_i_' + content).classList.add('fa-thumbs-up');
             });
         });
         </script>
@@ -1220,6 +1224,10 @@ body {
         document.getElementById('negative').classList.remove('pulsate');
         document.getElementById('negative').classList.add('active');
         document.getElementById('positive').classList.remove('pulsate');
+        document.getElementById('thumbs_i_' + content).classList.remove('far');
+        document.getElementById('thumbs_i_' + content).classList.remove('fa-circle');
+        document.getElementById('thumbs_i_' + content).classList.add('fa');
+        document.getElementById('thumbs_i_' + content).classList.add('fa-thumbs-down');
         
     });
   });
@@ -1934,12 +1942,6 @@ document.getElementById('close_content').addEventListener('click', function(e) {
         
       });
 });
-
-
-
-
-  
-
 
 function get_url_extension(url){
     let dotPos = url.lastIndexOf(".");

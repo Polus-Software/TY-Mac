@@ -116,7 +116,7 @@ class CourseService {
      */
     public static function getLiveSessionDetails(int $batchId) {
         $current_date = Carbon::now()->format('Y-m-d');
-        return LiveSession::where('batch_id', $batchId)->where('start_date', '>', $current_date)->orderby('start_date', 'asc')->get();
+        return LiveSession::where('batch_id', $batchId)->where('start_date', '>=', $current_date)->orderby('start_date', 'asc')->get();
     }
 
     /**
@@ -127,7 +127,6 @@ class CourseService {
     public static function getBatchDetails($id, $userId) {
         $batchDetails = [];
         $batches = self::getCohortBatchesByCourse($id);
-        
         foreach($batches as $batch){
             $batchname = $batch->batchname;
             $batch_start_date = $batch->start_date;
@@ -167,10 +166,10 @@ class CourseService {
                $latest = $liveSession[0];               
                array_push($batchDetails, array(
                     'batchname' => $batchname,
-                    'batch_start_date' => Carbon::createFromFormat('Y-m-d',$batch_start_date)->format('m/d/Y'),
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date)->format('Y/m/d'),
                     'batch_start_time' => $startTime,
                     'batch_end_time' => $endTime,
-                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
+                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('Y/m/d'),
                     'batch_time_zone' => $time_zone,
                     'latest' =>  $latest
                 ));
