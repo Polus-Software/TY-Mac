@@ -218,7 +218,7 @@ class RtmTokenGeneratorController extends Controller
             }
 
 
-            $time = $startDate . ' - ' . $startTime .' '. $time_zone. '-' . $endTime . ' ' . $time_zone;
+            $time = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->format('m-d-Y') . ' - ' . $startTime .' '. $time_zone. '-' . $endTime . ' ' . $time_zone;
 
             array_push($sessionsArray, array (
                 'slNo' => $slNo,
