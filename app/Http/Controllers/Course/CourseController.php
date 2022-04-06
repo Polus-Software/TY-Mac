@@ -521,13 +521,17 @@ class CourseController extends Controller
                     ->update($updateDetails);
                 $content_count = $request->input('content_count_topic_'.$i);
                 for($j = 0; $j<$content_count; $j++) {
+                    $content_title = str_replace('?', '_',$request->input('content_title_'.$i.'_'.$j));
+                    $content_title = str_replace('&', 'and', $content_title);
                     $TopicFileName = $extension = $external_links = '';
                     if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))){
                         $subtopicFile = $request->file('content_upload_'.$i.'_'.$j);
                         $extension = $subtopicFile->extension();
                         $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $FileNameExtension = $subtopicFile->getClientOriginalExtension();
+                        
                         $destinationPath = public_path().'/storage/study_material';
-                        $subtopicFile->move($destinationPath,$TopicFileName);
+                        $subtopicFile->move($destinationPath, $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension);
                     }
                     $external_link_count = $request->input('externalLink_count_topic_'.$i.'_content_'.$j);
                     for($k =0; $k <= $external_link_count; $k++) {
@@ -544,17 +548,25 @@ class CourseController extends Controller
                                 $extension = $content['content_type'];
                             if($TopicFileName == '')
                                 $TopicFileName = $content['document'];
-                            $updateDetails = [
-                                'topic_title' => $request->input('content_title_'.$i.'_'.$j),
-                                'content_type' => $extension,
-                                'external_link'=>$external_links,
-                                'document'=>$TopicFileName,
-                            ];
+                            if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))) {
+                                $updateDetails = [
+                                    'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                    'content_type' => $extension,
+                                    'external_link'=>$external_links,
+                                    'document'=> $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension,
+                                ];
+                            } else {
+                                $updateDetails = [
+                                    'topic_title' => $request->input('content_title_'.$i.'_'.$j),
+                                    'content_type' => $extension,
+                                    'external_link'=>$external_links
+                                ];
+                            }
+                            
                             TopicContent::where('topic_content_id', $request->input('content_topic_'.$i.'_'.$j))
                                         ->update($updateDetails);
                         }
-                    }
-                    else{
+                    } else {
                         if($request->input('content_status_'.$i.'_'.$j) != '0' && $request->input('content_title_'.$i.'_'.$j) != ''){
                             $content = new TopicContent;
                             $content->topic_title = $request->input('content_title_'.$i.'_'.$j);
@@ -562,7 +574,9 @@ class CourseController extends Controller
                             $content->description = "";
                             $content->content_type = $extension;
                             $content->external_link = $external_links;
-                            $content->document = $TopicFileName;
+                            if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))) {
+                                $content->document = $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension;
+                            }
                             $content->save();
                         }
                     }
@@ -598,13 +612,16 @@ class CourseController extends Controller
                     //     'content_title_'.$i.'_'.$j => 'required',
                     //     'content_upload['.$i.']['.$j.']' => 'required'
                     // ]);
+                    $content_title = str_replace('?', '_',$request->input('content_title_'.$i.'_'.$j));
+                    $content_title = str_replace('&', 'and', $content_title);
                     $external_links = $extension = $TopicFileName = '';
                     if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))){
                         $subtopicFile = $request->file('content_upload_'.$i.'_'.$j);
                         $extension = $subtopicFile->extension();
                         $TopicFileName = $subtopicFile->getClientOriginalName();
+                        $FileNameExtension = $subtopicFile->getClientOriginalExtension();
                         $destinationPath = public_path().'/storage/study_material';
-                        $subtopicFile->move($destinationPath,$TopicFileName);
+                        $subtopicFile->move($destinationPath, $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension);
                     }
                     if($request->missing('externalLink_count_topic_'.$i.'_content_'.$j)) {
                         continue;
@@ -620,7 +637,7 @@ class CourseController extends Controller
                     $content->description = "";
                     $content->content_type = $extension;
                     $content->external_link = $external_links;
-                    $content->document = $TopicFileName;
+                    $content->document = $request->file() && !empty($request->file('content_upload_'.$i.'_'.$j)) ? $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension : '';
                     $content->save();
                 }
             }

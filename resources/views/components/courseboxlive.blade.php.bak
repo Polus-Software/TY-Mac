@@ -1,9 +1,9 @@
 <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">
     <div class="card-1">
         @if($page ==='assigned')
-        <img src="/storage/courseThumbnailImages/{{ $course['image'] }}" class="card-img-top" alt="..." style="height: 220px;">
+        <img src="/storage/courseThumbnailImages/{{ $course['image'] }}" class="card-img-top think-img-h" alt="...">
         @else
-        <img src="/storage/courseThumbnailImages/{{ $course['course_thumbnail_image'] }}" class="card-img-top" alt="..." style="height: 220px;">
+        <img src="/storage/courseThumbnailImages/{{ $course['course_thumbnail_image'] }}" class="card-img-top think-img-h" alt="...">
         @if($cardtype === 'live')
         <span class="badge text-danger border border-1 border-danger position-absolute start-0 top-0 ms-3 mt-3">Live</span>
         @endif

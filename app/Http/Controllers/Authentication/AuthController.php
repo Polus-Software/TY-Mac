@@ -96,7 +96,9 @@ class AuthController extends Controller
             $notification->notification = "We are excited to have you learn new skills in a personalized way!At ThinkLit, we make learning fun, interactive, & simple. Get started by exploring our courses";
             $notification->is_read = false;
             $notification->save();
-            if($request->redirect_page != ''){
+            if($request->redirect_page != '') {
+
+            } else if($request->redirect_page != ''){
                 return redirect($request->redirect_page)->with('message', 'Successfully registered!');
             }
             else{
@@ -138,7 +140,9 @@ class AuthController extends Controller
             if ($userType == Config::get('common.ROLE_NAME_STUDENT')) {
                 $redirectTo = '/';
             }
-            if($request->redirect != ''){
+            if($request->redirect == 'session') {
+                $redirectTo = url('/') . '/session-view/' . $request->session_id;
+            } else if($request->redirect != ''){
                 $redirectTo = $request->redirect;
             }  
             if ($userType == Config::get('common.ROLE_NAME_INSTRUCTOR')) {

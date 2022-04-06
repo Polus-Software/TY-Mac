@@ -1195,10 +1195,6 @@ body {
               document.getElementById('negative').classList.remove('pulsate');
               document.getElementById('positive').classList.remove('pulsate');
               document.getElementById('positive').classList.add('active');
-              document.getElementById('thumbs_i_' + content).classList.remove('far');
-              document.getElementById('thumbs_i_' + content).classList.remove('fa-circle');
-              document.getElementById('thumbs_i_' + content).classList.add('fa');
-              document.getElementById('thumbs_i_' + content).classList.add('fa-thumbs-up');
             });
         });
         </script>
@@ -1224,10 +1220,6 @@ body {
         document.getElementById('negative').classList.remove('pulsate');
         document.getElementById('negative').classList.add('active');
         document.getElementById('positive').classList.remove('pulsate');
-        document.getElementById('thumbs_i_' + content).classList.remove('far');
-        document.getElementById('thumbs_i_' + content).classList.remove('fa-circle');
-        document.getElementById('thumbs_i_' + content).classList.add('fa');
-        document.getElementById('thumbs_i_' + content).classList.add('fa-thumbs-down');
         
     });
   });
@@ -1826,7 +1818,7 @@ setInterval(function () {
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         let extension = get_url_extension(document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href'));
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
-        if(extension == "ppt" || extension == "pptx" || extension == "doc" || extension == "docx" || extension == "bin") {
+        if(extension == "ppt" || extension == "pptx" || extension == "doc" || extension == "docx") {
           document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
         } else if(extension == "pdf") {
           document.getElementById('course_content_iframe').setAttribute('src', docUrl + '#toolbar=0');
@@ -1871,7 +1863,7 @@ for(index = 0; index < length;index++) {
       if(document.getElementById('user_type').value == "Instructor") {
         document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
       }
-      if (extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx" || extension == "bin") {
+      if (extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx") {
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');
@@ -1943,10 +1935,14 @@ document.getElementById('close_content').addEventListener('click', function(e) {
       });
 });
 
+
+
+
+  
+
+
 function get_url_extension(url){
-    let dotPos = url.lastIndexOf(".");
-    let urlLength = url.length;
-    return url.substring(dotPos + 1, urlLength);
+    return url.split(/[#?]/)[0].split('.').pop().trim();
 }
   </script>
 
