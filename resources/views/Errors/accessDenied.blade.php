@@ -3,11 +3,11 @@
 <div class="container" style="height:80vh;padding-top: 10%;">
     <div class="row bg-white mt-5 mb-5">
         <div class="col-lg-12 d-flex justify-content-center">
-            <h1 class="pt-5">Access Denied!</h1>
+            <h1 class="pt-5">Please login!</h1>
         </div>
 
         <div class="col-lg-12 d-flex justify-content-center">
-            <h5 class="">You dont have permission to view this page.</h5>
+            <h5 class="">Click on the button below to login.</h5>
         </div>
 
         <div class="col-lg-12 d-flex justify-content-center mb-5">
