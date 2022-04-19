@@ -498,7 +498,6 @@ class CourseController extends Controller
         $external_links = '';
         $topic_count  = $request->topic_count;
         $course_id = $request->course_id;
-        
         if(isset($request->topic_id) && !empty($request->topic_id)){
             $validate_array = [];
             for($i = 1; $i<= $request->topic_count; $i++) {
@@ -576,6 +575,8 @@ class CourseController extends Controller
                             $content->external_link = $external_links;
                             if($request->file() && !empty($request->file('content_upload_'.$i.'_'.$j))) {
                                 $content->document = $content_title.'_'.$course_id.'_'.date('Y-m-d_H-i-s').'.'. $FileNameExtension;
+                            } else {
+                                $content->document = '';
                             }
                             $content->save();
                         }

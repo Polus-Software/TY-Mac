@@ -1148,7 +1148,7 @@ body {
         <div class="custom-menubar-container">
           <ul>
             <li class="custom-nav-item"><a class="custom-nav-link" href="/">Home</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The Thinklit Way</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The ThinkLit Way</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('student.courses.get') }}">Courses</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('my-courses') }}">My Courses</a></li>
             <li class="nav-item">

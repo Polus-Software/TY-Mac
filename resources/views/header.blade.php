@@ -29,7 +29,7 @@
     outline: 1px solid white;
 }
   </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-3 mb-5 bg-body think-navbar">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm p-2 mb-5 bg-body think-navbar">
     <div class="container">
     @if(Auth::check())  
     

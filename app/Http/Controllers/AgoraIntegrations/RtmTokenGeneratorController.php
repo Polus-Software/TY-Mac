@@ -52,11 +52,8 @@ class RtmTokenGeneratorController extends Controller
     const RolePublisher = 1;
     const RoleSubscriber = 2;
     const RoleAdmin = 101;
-    //const appId = "0b40256a7d014ad981cf41e7b7d26910";
-    //const appCertificate = "a163ae4afd894f059c7dfceecddcdafe";
-
-    const appId = "88a4d4d0cb874afd82ada960cdcc1b1f";
-    const appCertificate = "3b0fc46ccb5c4fc68fd98bd0d9e60131";
+    const appId = "70df359f3a72437eb52c93b2de43be84";
+    const appCertificate = "0d91d0e8b1954f249beab1c1b73c8797";
 
 
 
@@ -218,7 +215,7 @@ class RtmTokenGeneratorController extends Controller
             }
 
 
-            $time = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->format('m-d-Y') . ' - ' . $startTime .' '. $time_zone. '-' . $endTime . ' ' . $time_zone;
+            $time = Carbon::createFromFormat('Y-m-d', $session->start_date, 'UTC')->format('m-d-Y') . ' - ' . $startTime .' '. $time_zone. ' - ' . $endTime . ' ' . $time_zone;
 
             array_push($sessionsArray, array (
                 'slNo' => $slNo,
@@ -553,12 +550,24 @@ class RtmTokenGeneratorController extends Controller
         return response()->json(['status' => 'success']);
     }
 
+    public function showHideContent(Request $request) {
+        $contentId = $request->content_id;
+        $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId);
+        if($pushRecord->value('minimized') == true) {
+            $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->update(['minimized' => false]);
+        } else {
+            $pushRecord = LiveFeedbacksPushRecord::where('topic_content_id', $contentId)->update(['minimized' => true]);
+        }
+        return response()->json(['status' => 'success']);
+    }
+
     public function getLiveRecord(Request $request) {
         $flag = 0;
         
         $session = LiveSession::where('live_session_id', $request->session);
 
         $topicId = $session->value('topic_id');
+        $presenting = $session->value('presenting');
         $push = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('live_session', $request->session)->where('is_expired', false);
         $topicContentId = $push->value('topic_content_id');
 
@@ -577,7 +586,8 @@ class RtmTokenGeneratorController extends Controller
 
         $presentingContent = LiveFeedbacksPushRecord::where('topic_id', $topicId)->where('live_session', $request->session)->where('presenting', true);
         $presentingContentId = $presentingContent->value('topic_content_id');
-        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag, 'presentingContentId' => $presentingContentId]);
+        $minimized = $presentingContent->value('minimized');
+        return response()->json(['content_id' => $topicContentId, 'content_title' => $contentTitle, 'flag' => $flag, 'presentingContentId' => $presentingContentId, 'minimized' => $minimized, 'screenShare' => $presenting]);
     }
 
     public function pushFeedbacks(Request $request) {
@@ -874,9 +884,16 @@ class RtmTokenGeneratorController extends Controller
     public function getAttendanceList(Request $request) {
             
             $session = $request->session;
+            $sharing = $request->sharing;
             $html = "";
 
             //Instructors name
+
+            if($sharing == "true") {
+                $liveSession = LiveSession::where('live_session_id', $session)->update(['presenting' => false]);
+            } else {
+                $liveSession = LiveSession::where('live_session_id', $session)->update(['presenting' => true]);
+            }
 
             $liveSession = LiveSession::where('live_session_id', $session);
 
@@ -964,11 +981,13 @@ class RtmTokenGeneratorController extends Controller
         $session = $request->sessionId;
         $chats = LiveSessionChat::where('live_session', $session)->get();
 
+        $messageCount = count($chats);
+
         foreach($chats as $chat) {
             $sameUser = $user->id == $chat->student ? 'same_user' :  '';
             $html = $html . "<p class='chat-message-body ". $sameUser ."'><b class='participant-name'>". $chat->user_name .": </b><span class='participant-msg'>" . $chat->message . "</span></p>";
         }
-        return response()->json(['html' => $html]);
+        return response()->json(['html' => $html, 'messageCount' => $messageCount]);
     }
 
     public function getSessionChart(Request $request) {

@@ -195,6 +195,7 @@
             <label>Course image</label>
             <div class="row">
               @if(isset($course_details['image']))
+              <strong id="course-image-file">Uploaded image: <span id="course-image-file-text" style="font-weight:normal !important;">{{$course_details['image']}}</span></strong>
               <div class="col-12"><img src="{{ asset('storage/courseImages/'.$course_details['image']) }}" class="img-thumbnail no-image-border" alt="Course image"  style="width:600px; height:285px;"></div>
               @else
               <div class="col-12"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="Course image"  style="width:600px; height:285px;"></div>
@@ -202,10 +203,11 @@
                 <p>Important guidelines: <b>600x285</b> pixels</p>
                 <p>Image must be less than <b>500kb</b> </p>
                 <p> supported file formats: jpg, jpeg, png, .svg.</p>
+                <strong id="course-image-file" style="display:none;">Uploaded image: <span style="font-weight:normal !important;" id="course-image-file-text"></span></strong>
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
-             
+              
               <input type="file" class="form-control mb-2" id="course-image" name="course_image">
 
               <label class="input-group-text mb-2 left_right_padding" for="course-image">Upload Image</label>
@@ -219,6 +221,7 @@
             <label>Course thumbnail image</label>
             <div class="row">
             @if(isset($course_details['thumbnail']))
+            <strong id="course-thumbnail-file">Uploaded image: <span style="font-weight:normal !important;" id="course-thumbnail-file-text">{{$course_details['thumbnail']}}</span></strong>
             <div class="col-12"><img src="{{ asset('storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" class="img-thumbnail no-image-border" alt="Course thumbnail image" style="width:395px; height:186px;"></div>
             @else
             <div class="col-12"><img src="{{ asset('storage/images/placeholder.png') }}" class="img-thumbnail no-image-border" alt="Course thumbnail image" style="width:395px; height:186px;"></div>
@@ -226,6 +229,7 @@
                 <p>Important guidelines: <b>395x186 pixels</b></p>
                 <p>Image must be less than <b>100kb</b> </p>
                 <p> supported file formats: jpg, jpeg, png, .svg.</p>
+                <strong id="course-thumbnail-file" style="display:none;">Uploaded image: <span style="font-weight:normal !important;" id="course-thumbnail-file-text"></span></strong>
               </div>
               @endif
             <div class="input-group mt-3 mb-3">
@@ -285,6 +289,19 @@
   });
   }
 
+  document.getElementById('course-image').addEventListener('change', function(event) {
+      let fileUrl = this.value;
+      let fileName = fileUrl.split("\\").pop();
+      document.getElementById('course-image-file').style.display = "block";
+      document.getElementById('course-image-file-text').innerHTML = fileName;
+  });
+
+  document.getElementById('course-thumbnail-image').addEventListener('change', function(event) {
+      let fileUrl = this.value;
+      let fileName = fileUrl.split("\\").pop();
+      document.getElementById('course-thumbnail-file').style.display = "block";
+      document.getElementById('course-thumbnail-file-text').innerHTML = fileName;
+  });
 
 </script>
 @endsection('content')

@@ -59,12 +59,18 @@
           </div>
           <div class="col-12">
             <label>Course image</label>
+            <div>
+              <strong>Uploaded image: <span style="font-weight:normal !important;">{{$course_details['image']}}</span></strong>
+            </div>
             <div style="margin-top:15px;">
                 <img src="{{ asset('/storage/courseImages/'.$course_details['image']) }}" alt="Course image" class="img-thumbnail" style="width:600px; height:285px;">
             </div>
           </div>
           <div class="col-12">
             <label>Course thumbnail image</label>
+            <div>
+              <strong>Uploaded image: <span style="font-weight:normal !important;">{{$course_details['thumbnail']}}</span></strong>
+            </div>
             <div style="margin-top:15px;">
                 <img src="{{ asset('/storage/courseThumbnailImages/'.$course_details['thumbnail']) }}" alt="Course thumbnail image" class="img-thumbnail" style="width:395px; height:186px;">
             </div>

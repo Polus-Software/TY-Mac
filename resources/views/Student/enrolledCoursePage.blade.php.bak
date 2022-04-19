@@ -1288,7 +1288,7 @@ small#assignment_table_batch {
                                                                         <img src="/storage/icons/ty_mac__transparent__1000.png" alt="" class="img-fluid" style="width:180px; height:180px;">
                                                                         <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                                         <div style="background:#FFFEF5;">
-                                                                            <h3 class="card-title-1-certificate">Certificate of completion</h3>
+                                                                            <h3 class="card-title-1-certificate">Certificate of Completion</h3>
                                                                             <p class="card-text-2-certificate">@foreach($singleCourseDetails as $course)
                                                                                         {{ $course['student_firstname'] }} {{ $course['student_lastname'] }}
                                                                                         @endforeach</p>

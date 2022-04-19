@@ -157,8 +157,8 @@ class CourseService {
                 $eTime = strtotime($batch_end_time) - (60 * 60 * $offsetHours) - (60 * $offsetMinutes);
             }
                     
-            $startTime = date("H:i A", $sTime);
-            $endTime = date("H:i A", $eTime);
+            $startTime = date("h:i A", $sTime);
+            $endTime = date("h:i A", $eTime);
             
             
             $liveSession = self::getLiveSessionDetails($batch->id);
@@ -166,10 +166,10 @@ class CourseService {
                $latest = $liveSession[0];               
                array_push($batchDetails, array(
                     'batchname' => $batchname,
-                    'batch_start_date' => Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date)->format('Y/m/d'),
+                    'batch_start_date' => Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date)->format('m/d/Y'),
                     'batch_start_time' => $startTime,
                     'batch_end_time' => $endTime,
-                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('Y/m/d'),
+                    'batch_end_date' =>  Carbon::createFromFormat('Y-m-d',$batch_end_date)->format('m/d/Y'),
                     'batch_time_zone' => $time_zone,
                     'latest' =>  $latest
                 ));

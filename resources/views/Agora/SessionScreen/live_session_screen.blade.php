@@ -1089,6 +1089,47 @@ body {
   color: #494949 !important;
   font-weight: 500;
 }
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: 26.8rem;
+  background-color: #74648C;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 </style>
 
 @if($userType == 'student')
@@ -1098,7 +1139,7 @@ body {
 }
 </style>
 @endif
-
+<div id="snackbar">New messages!</div>
   <input id="session_hidden_id" type="hidden" value="{{ $session }}" />
   <input id="user_type" type="hidden" value="{{ $userType }}" />
   <input id="course_id" type="hidden" value="{{ $courseId }}" />
@@ -1116,7 +1157,7 @@ body {
         <div class="custom-menubar-container">
           <ul>
             <li class="custom-nav-item"><a class="custom-nav-link" href="/">Home</a></li>
-            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The Thinklit Way</a></li>
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The ThinkLit Way</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('student.courses.get') }}">Courses</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('my-courses') }}">My Courses</a></li>
             <li class="nav-item">
@@ -1167,7 +1208,9 @@ body {
     <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
       @if($userType == 'instructor')
-      <button style="margin-left:-29em;" id="close_content" content-id="" class="think-btn-secondary-outline-live nodisplay">Close content</button>
+      <button style="margin-left:-9em;" id="close_content" content-id="" class="think-btn-secondary-outline-live nodisplay">End topic</button>
+      <button style="margin-left:-9em;" id="toggle_content" content-id="" class="think-btn-secondary-outline-live nodisplay">Show/Hide content</button>
+      <button id="stop_sharing" style="margin-right: -6rem;" class="think-btn-secondary-outline-live nodisplay" type="button">Stop sharing</button>
       <button id="offcanvasButton" class="think-btn-secondary-outline-live" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">View live feedbacks</button>
       @endif
       
@@ -1561,9 +1604,14 @@ div#graph {
 .feedback-modal {
 z-index: 100;
 }
+
+.rtc-video {
+  z-index: 1 !important;
+}
+
 </style>
   <script type="text/javascript">
-
+    navigator.mediaDevices.getUserMedia({audio:true, video:true})
     let appId = '';
     let roomId = '';
     let token = '';
@@ -1573,6 +1621,8 @@ z-index: 100;
       $('#offcanvasBottom').removeClass('show');
       $('#offcanvasBottom').css('visibility', 'hidden');
     });
+    
+        let loaderFlag = 0;
         let session = document.getElementById('session_hidden_id').value;
         
         let path = "/generate-token/" + session;
@@ -1590,6 +1640,7 @@ z-index: 100;
             AgoraEduSDK.config({
            // Here pass in the Agora App ID you have got
             appId: data.appId,
+            region: "NA"
            })
     AgoraEduSDK.launch(
       document.querySelector("#root1"), {
@@ -1606,13 +1657,33 @@ z-index: 100;
         language: "en",
         startTime: new Date().getTime(),
         duration: data.duration,
+        region: "NA",
         courseWareList: [],
         listener: (evt, params) => {
-          if (evt === 1 && data.rolename == "Instructor") {
-            appId = data.appId;
-            roomId = data.roomid;
-            token = data.token;
-            uid = data.uid;
+          if (evt === 1) {
+            if(data.rolename == "Instructor") {
+              appId = data.appId;
+              roomId = data.roomid;
+              token = data.token;
+              uid = data.uid;
+            }
+            let macInterval = setInterval(function(){
+                              if(document.getElementsByClassName('rtc-video').length != 0){
+                                    if(document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player').length != 0){
+                                      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && loaderFlag == 0) {
+                                        loaderFlag++;
+                                        navigator.mediaDevices.getUserMedia({audio:true, video:true}).then( stream => {
+                                          videoEle = document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player')[0];
+                                          videoEle.srcObject = stream;
+                                          videoEle.play();
+                                        });
+					                              clearInterval(macInterval);
+                                      }
+                                      
+                                    }
+                                }
+                              }, 1000);
+
           }
         }
       }
@@ -1643,15 +1714,19 @@ document.getElementById('chat_box').addEventListener('keyup', function(e) {
 
     
 let timer = 0;
+let messageCount = 0;
 
 $(document).ready(function(){
   var start = new Date;
   let sessionId = document.getElementById('session_hidden_id').value;
   setInterval(function() {
+      let sharing = "false";
+      if (document.getElementById('stop_sharing')) {
+          sharing = document.getElementById('stop_sharing').classList.contains('nodisplay');
+      }  
       timer = Math.round((new Date - start) / 1000);
       document.getElementById('timer').value = timer;
-      console.log(document.getElementById('timer').value);
-      let path = "{{ route('get-attendance-list') }}?session=" + sessionId;
+      let path = "{{ route('get-attendance-list') }}?session=" + sessionId + "&sharing=" + sharing;
         fetch(path, {
         method: 'POST',
         headers: {
@@ -1673,6 +1748,12 @@ $(document).ready(function(){
         },
       }).then((response) => response.json()).then((data) => {
         document.getElementById('chat_messages').innerHTML = data.html;
+        if(messageCount != data.messageCount) {
+          messageCount = data.messageCount;
+          var x = document.getElementById("snackbar");
+          x.className = "show";
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
       });
   }, 1000);
 });
@@ -1717,10 +1798,17 @@ window.addEventListener("beforeunload", function (e) {
 });
 
 $(document).on('click', '.cabinet-item', function(e) {
-    $('.screen-share-player-container').appendTo('.big-class-teacher');
     $('#stop_sharing').removeClass('nodisplay');
+    $('#toggle_content').addClass('nodisplay');
 });
 
+$(document).on('click', '#stop_sharing', function(e) {
+    $('.screen-share-player-container').css('display', 'none');
+    $('#stop_sharing').addClass('nodisplay');
+    if(!$('#close_content').hasClass('nodisplay')) {
+      $('#toggle_content').removeClass('nodisplay');
+    }
+});
 
 $(document).on('click', '.btn:contains("Finish")', function() {
     $('.tab-contents').removeClass('nodisplay');
@@ -1799,7 +1887,6 @@ jQuery(".nav-tabs li").click(function(e) {
       jQuery(".nav-tabs li").removeClass('active');
       jQuery(this).addClass('active');
       let tid=  jQuery(this).find('a').attr('href');
-      console.log("ID:"+tid);
       jQuery('.tab-pane').removeClass('active in');
       jQuery(tid).addClass('active in');
   });
@@ -1816,14 +1903,35 @@ setInterval(function () {
         "X-CSRF-Token": document.querySelector('input[name=_token]').value
       },
     }).then((response) => response.json()).then((data) => {
+      if(data.screenShare == true || data.screenShare == 1 || data.screenShare == "1") {
+        $('.screen-share-player-container').appendTo('.big-class-teacher');
+$('.screen-share-player-container').css('display', 'flex');
+$('.rtc-video .agora_video_player').css('opacity', 0);
+$('.rtc-video').css('opacity', 0);
+      } else {
+$('.screen-share-player-container').css('display', 'none');
+$('.rtc-video .agora_video_player').css('opacity', 1);
+$('.rtc-video').css('opacity', 1);
+      }
       if(userType == 'student') {
         if(data.presentingContentId) {
+        if(data.minimized == true || data.minimized == 1 || data.minimized == "1") {
+          document.getElementById('course_content_iframe').classList.add('nodisplay');
+        } else {
+          document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        }
+
         if(presentingFlag != data.presentingContentId && $(".big-class-teacher").length) {
         // if(document.getElementById('course_content_iframe').getElementsByClassName('big-class-teacher')[0].length) {
           document.getElementById('thumbs_' + data.presentingContentId).style.color = "#000";
           presentingFlag = data.presentingContentId;
         $('#course_content_iframe').appendTo('.big-class-teacher');
-        document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        if(data.minimized == true || data.minimized == 1 || data.minimized == "1") {
+          document.getElementById('course_content_iframe').classList.add('nodisplay');
+        } else {
+          document.getElementById('course_content_iframe').classList.remove('nodisplay');
+        }
+        
         let extension = get_url_extension(document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href'));
         let docUrl = document.getElementById('thumbs_'+data.presentingContentId).getAttribute('href');
         if(extension == "ppt" || extension == "pptx" || extension == "doc" || extension == "docx" || extension == "bin") {
@@ -1872,9 +1980,11 @@ for(index = 0; index < length;index++) {
         document.getElementsByClassName('board-section')[0].classList.add('nodisplay');
       }
       if (extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx" || extension == "bin") {
+        $('#course_content_iframe').css('z-index', 1);
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');
+        document.getElementById('toggle_content').classList.remove('nodisplay');
         let docUrl = this.getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
         this.classList.add('in_progress');
@@ -1888,6 +1998,7 @@ for(index = 0; index < length;index++) {
         $('#course_content_iframe').appendTo('.big-class-teacher');
         document.getElementById('course_content_iframe').classList.remove('nodisplay');
         document.getElementById('close_content').classList.remove('nodisplay');
+        document.getElementById('toggle_content').classList.remove('nodisplay');
         let docUrl = this.getAttribute('href');
         document.getElementById('course_content_iframe').setAttribute('src', docUrl);
         this.classList.add('in_progress');
@@ -1901,6 +2012,7 @@ for(index = 0; index < length;index++) {
       
       let path = "{{ route('push-live-record') }}?content_id=" + topicContentId + "&contentOrder=" + contentOrder + "&timestamp=" + startSecond;
       document.getElementById('close_content').classList.remove('nodisplay');
+      document.getElementById('toggle_content').classList.remove('nodisplay');
       document.getElementById('close_content').setAttribute('content-id', topicContentId);
       fetch(path, {
         method: 'POST',
@@ -1918,8 +2030,29 @@ for(index = 0; index < length;index++) {
     });
 }
 
+document.getElementById('toggle_content').addEventListener('click', function(e) {
+      let topicContentId = document.getElementById('close_content').getAttribute('content-id');
+      let path = "{{ route('show-hide-content') }}?content_id=" + topicContentId;
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('input[name=_token]').value
+        },
+      }).then((response) => response.json()).then((data) => {
+        
+      });
+    if(document.getElementById('course_content_iframe').classList.contains('nodisplay')) {
+      document.getElementById('course_content_iframe').classList.remove('nodisplay');
+    } else {
+      document.getElementById('course_content_iframe').classList.add('nodisplay');
+    }
+});
+
 document.getElementById('close_content').addEventListener('click', function(e) {
     document.getElementById('close_content').classList.add('nodisplay');
+    document.getElementById('toggle_content').classList.add('nodisplay');
     document.getElementById('course_content_iframe').classList.add('nodisplay');
     let topicContentId = document.getElementById('close_content').getAttribute('content-id');
     document.getElementById('content_title_' + topicContentId).style.color = "#bdbebe";
