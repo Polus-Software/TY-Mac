@@ -13,6 +13,6 @@ To view registered students, please log in to your account on ThinkLit.com
 
 
 Regards,<br>
-Thinklit Team
+ThinkLit Team
 
 @endcomponent

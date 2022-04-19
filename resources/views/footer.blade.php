@@ -37,7 +37,7 @@
             <div class="footer-bottom__copyright">
               &COPY; Copyright 
               @php echo date('Y'); @endphp
-              <a href="#">Thinklit</a>
+              <a href="#">ThinkLit</a>
             </div>
           </div>
         </div>

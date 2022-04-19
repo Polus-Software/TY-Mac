@@ -70,14 +70,14 @@
             <div class="card text-center" style="margin: auto; width: 100%; border: 1px solid grey; margin-bottom:30px;">
                 <div class="card-body">
                     @foreach($courseDetails as $courseDetail)
-                    <small style="position: absolute; left: 0px; top:20px; left:15px;">Thinklit</small>
+                    <small style="position: absolute; left: 0px; top:20px; left:15px;">ThinkLit</small>
                     <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :</small>
-                    <small style="position: absolute; right: 45px; top:40px;">{{$courseDetail['date_of_issue']}}</small>
+                    <small style="position: absolute; right: 45px; top:40px;">{{$courseDetail['course_completion']}}</small>
                     <!-- <h1 class="card-title">ThinkLit</h1> -->
                     <img src="{{'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/storage/icons/ty_mac__transparent__1000.png')))}}" alt="" class="img-fluid" style="width:180px; height:180px; display: block;
     margin: 0 auto;">
                     <div style="background:#FFF9E8; padding-bottom:5px; margin-bottom:20px; margin-left:20px; margin-right:20px;">
-                    <h3 class="card-title-1">Certificate of completion</h3>
+                    <h3 class="card-title-1">Certificate of Completion</h3>
                     <p class="card-text-2">{{$courseDetail['student_firstname']}} {{$courseDetail['student_lastname']}}</p>
                   <div class="row">
                     <div class="col-lg-12">
@@ -101,26 +101,5 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script> -->
 </body>
 </html>

@@ -168,6 +168,7 @@ Route::get('/', function () {
     Route::post('push-live-record', [RtmTokenGeneratorController::class, 'pushLiveRecord'])->name('push-live-record');
     Route::post('push-session-live-record', [RtmTokenGeneratorController::class, 'pushSessionLiveRecord'])->name('push-session-live-record');
     Route::post('stop-presenting', [RtmTokenGeneratorController::class, 'stopPresenting'])->name('stop-presenting');
+    Route::post('show-hide-content', [RtmTokenGeneratorController::class, 'showHideContent'])->name('show-hide-content');
     Route::post('stop-content-presenting', [RtmTokenGeneratorController::class, 'stopContentPresenting'])->name('stop-content-presenting');
     Route::post('get-push-record', [RtmTokenGeneratorController::class, 'getLiveRecord'])->name('get-push-record');
     Route::post('push-feedbacks', [RtmTokenGeneratorController::class, 'pushFeedbacks'])->name('push-feedbacks');

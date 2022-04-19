@@ -125,7 +125,8 @@ a#ChromelessStatusBar\.Options-Small14 {
             let extension = get_url_extension(docUrl);
             
             if(extension == "pptx" || extension == "ppt" || extension == "doc" || extension == "docx") {
-              document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+            //   document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=' + docUrl);
+                document.getElementById('course_content_iframe').setAttribute('src', 'https://view.officeapps.live.com/op/embed.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx');
             } else if (extension == "pdf") {
               document.getElementById('course_content_iframe').setAttribute('src', docUrl + '#toolbar=0');
             }
@@ -143,6 +144,11 @@ a#ChromelessStatusBar\.Options-Small14 {
         let urlLength = url.length;
         return url.substring(dotPos + 1, urlLength);
     }
+
+    
+    $(document).on('click', '#ButtonFastFwd-Small14', function() {
+        alert('works');
+    });
 </script>
 <!-- sidebar ends -->
 

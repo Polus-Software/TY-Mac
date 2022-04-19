@@ -8,7 +8,7 @@ You have got a new student enrolled in your {{ $mailData['course_title']}} cours
 To view enrolled students, please log in to your account on ThinkLit.com
 
 Regards,<br>
-Thinklit Team
+ThinkLit Team
 
 @endcomponent
 <h1>

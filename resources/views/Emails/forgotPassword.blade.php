@@ -10,6 +10,6 @@ Reset Password
 @endcomponent
 
 Regards,<br>
-Thinklit Team
+ThinkLit Team
 
 @endcomponent

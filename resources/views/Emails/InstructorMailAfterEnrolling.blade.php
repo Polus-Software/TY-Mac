@@ -8,7 +8,7 @@
 
 
 Regards,<br>
-Thinklit Team
+ThinkLit Team
 
 @endcomponent
 

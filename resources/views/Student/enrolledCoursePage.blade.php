@@ -1459,7 +1459,8 @@
                                                                                 @csrf
                                                                                 <input type="hidden" name="assignment_id" id="assignment_id" value="{{ $assignment['id'] }}" />
                                                                                     <small class="text-danger"></small>
-                                                                                    <textarea style="width:97% !important;height: 100px !important;margin:10px 20px 10px 11px !important;" class="form-control" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                    <textarea style="width:97% !important;height: 100px !important;margin:10px 20px 10px 11px !important;" class="form-control assignment_comment" type="text" name="assignment_comment" placeholder="Type your comment here.."></textarea>
+                                                                                    <span class="text-danger assignment_comment_error" style="display:none;">Please enter the required field</span>
                                                                                     @if ($errors->has('assignment_comment'))
                                                                                         <span class="text-danger">{{ $errors->first('assignment_comment') }}</span>
                                                                                     @endif
@@ -1479,7 +1480,7 @@
                                                                                     </div>
                                                                                     <div class="col-12 text-end mt-4">
                                                                                             <a data-id="{{ $topicDetail['topic_id'] }}" class="btn btn-sm btn-outline-secondary me-3 cancelAssignment">Cancel</a>
-                                                                                            <button type="submit" style="font-size: 14px;width:69px;color: #ffffff;padding:6px;font-weight:600;" class="btn btn-sm btn-dark">Submit</button>
+                                                                                            <button type="submit" style="font-size: 14px;width:69px;color: #ffffff;padding:6px;font-weight:600;" class="btn btn-sm btn-dark assignmentSubmitBtn">Submit</button>
                                                                                     </div>
                                                                             </form>
                                                                                                 </div>
@@ -1611,14 +1612,14 @@
                                                         style="margin: auto; width: 100%;">
                                                         <div class="card-body">
                                                             <small
-                                                                style="position: absolute; left: 0px; top:20px; left:40px;">Thinklit</small>
+                                                                style="position: absolute; left: 0px; top:20px; left:40px;">ThinkLit</small>
                                                             <small
                                                                 style="position: absolute; right: 40px; top:20px;text-align:left;">
                                                                 <span style="color:#6E7687;">DATE OF ISSUE :</span>
                                                                 <span class="date_of_issue">
-                                                                    @foreach ($singleCourseDetails as $course)
-                                                                        {{ $course['date_of_issue'] }}
-                                                                    @endforeach
+                                                                    <!-- @foreach ($singleCourseDetails as $course) -->
+                                                                    {{ $course_completion }}
+                                                                    <!-- @endforeach -->
                                                                 </span>
                                                             </small>
                                                             <small
@@ -1628,7 +1629,7 @@
                                                             <!-- <h1 class="card-title-certificate" style="margin-top:20px;">ThinkLit</h1> -->
                                                             <div style="background:#FFFEF5;">
                                                                 <h3 class="card-title-1-certificate">Certificate of
-                                                                    completion</h3>
+                                                                    Completion</h3>
                                                                 <p class="card-text-2-certificate">
                                                                     @foreach ($singleCourseDetails as $course)
                                                                         {{ $course['student_firstname'] }}
@@ -2144,6 +2145,24 @@
                         return false;
                     } else {
                         commentErrorEl.innerText = '';
+                    }
+                });
+            }
+
+            assignmentSubmitBtn = document.getElementsByClassName('assignmentSubmitBtn');
+            assBtnLength = assignmentSubmitBtn.length;
+                for (index = 0; index < assBtnLength; index++) {
+                    assignmentSubmitBtn[index].addEventListener('click', function(e) {
+                    let form = this.parentElement.parentElement.parentElement;
+                    let commentBox = form.getElementsByClassName('assignment_comment')[0];
+                    let assignment_comment_error = form.getElementsByClassName('assignment_comment_error')[0];
+                    if (commentBox.value == "") {
+                        e.preventDefault();
+                        commentBox.style.borderColor = "red";
+                        assignment_comment_error.style.display = "block";
+                    } else {
+                        commentBox.style.borderColor = "#ced4da";
+                        assignment_comment_error.style.display = "none";
                     }
                 });
             }
