@@ -236,9 +236,8 @@ class EnrolledCourseController extends Controller
                     }
                 } elseif($userType == 'student') {
                     $liveSession = LiveSession::where('topic_id', $topicId)->where('batch_id', $studentBatch)->get();
-                   
+
                     if(count($liveSession) != 0) {
-                        
                         if($liveSession[0]->startdatetime <= Carbon::createFromFormat('Y-m-d H:i:s', $current_date, 'UTC')->addMinutes(10)->format('Y-m-d H:i:s') && $liveSession[0]->enddatetime >= $current_date) {
                             if($liveSession[0]->is_instructor_present) {
                                 $liveId = $liveSession[0]->live_session_id;

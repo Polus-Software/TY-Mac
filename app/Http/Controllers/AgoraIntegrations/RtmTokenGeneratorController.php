@@ -156,7 +156,7 @@ class RtmTokenGeneratorController extends Controller
         $Privileges = AccessToken::Privileges;
         $token->addPrivilege($Privileges["kRtmLogin"], $privilegeExpiredTs);
         $generatedToken = $token->build();
-        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '10919' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
+        return response()->json(['token' => $generatedToken, 'appId' => self::appId, 'uid' => $user, 'rolename' => $roleName, 'roomid' => '22' . $session, 'channel' => $sessionTitle, 'role' => $role , 'duration' => ($expireTimeInSeconds + 1800)]);
         
     }
 
@@ -980,8 +980,8 @@ class RtmTokenGeneratorController extends Controller
         $user = Auth::user();
         $session = $request->sessionId;
         $chats = LiveSessionChat::where('live_session', $session)->get();
-
-        $messageCount = count($chats);
+        $chatCount = LiveSessionChat::where('live_session', $session)->where('student', '!=', $user->id)->get();
+        $messageCount = count($chatCount);
 
         foreach($chats as $chat) {
             $sameUser = $user->id == $chat->student ? 'same_user' :  '';
@@ -1341,7 +1341,7 @@ class RtmTokenGeneratorController extends Controller
         }
         
         $course = Course::where('id', $courseId)->value('course_title');
-        $session = "10919" . $session;
+        $session = "22" . $session;
         $userObj = Auth::user();
         $user = "1005" . strval($userObj->id);
         $expireTimeInSeconds = 1800;
