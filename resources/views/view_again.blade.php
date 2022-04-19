@@ -80,7 +80,7 @@ span#ChromelessStatusBar\.RightDock {
     let uid = document.getElementById('uid').value;
 
 
-    let getRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records";
+    let getRecordPath = "https://api.agora.io/na/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records";
     fetch(getRecordPath, {
       method: 'GET',
       headers: {

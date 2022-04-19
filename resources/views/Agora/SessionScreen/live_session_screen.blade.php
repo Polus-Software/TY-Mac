@@ -1158,8 +1158,12 @@ body {
           <ul>
             <li class="custom-nav-item"><a class="custom-nav-link" href="/">Home</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('thinklitway') }}">The ThinkLit Way</a></li>
+            @if($userType == "student")
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('student.courses.get') }}">Courses</a></li>
             <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('my-courses') }}">My Courses</a></li>
+            @elseif($userType == "instructor")
+            <li class="custom-nav-item"><a class="custom-nav-link" href="{{ route('assigned-courses') }}">Assigned Courses</a></li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('edituser') }}" style="display: flex;">
                 <img src="{{ asset('/storage/images/'.Auth::user()->image) }}" class="img-fluid rounded-circle float-start me-2" alt="" style="width:20px; height:20px;margin-right:10px;border-radius:50%;">{{Auth::user()->firstname}}</a>
@@ -1208,9 +1212,9 @@ body {
     <div id="back_to_course_div" class="think-cohort-actions-container nodisplay">
       <button id="back_to_course" class="think-btn-secondary-outline-live">Back to course</button>
       @if($userType == 'instructor')
-      <button style="margin-left:-9em;" id="close_content" content-id="" class="think-btn-secondary-outline-live nodisplay">End topic</button>
-      <button style="margin-left:-9em;" id="toggle_content" content-id="" class="think-btn-secondary-outline-live nodisplay">Show/Hide content</button>
-      <button id="stop_sharing" style="margin-right: -6rem;" class="think-btn-secondary-outline-live nodisplay" type="button">Stop sharing</button>
+      <button style="margin-left:0em;position:relative;left: 30px;" id="close_content" content-id="" class="think-btn-secondary-outline-live nodisplay">End topic</button>
+      <button style="margin-left:11.5em;" id="toggle_content" content-id="" class="think-btn-secondary-outline-live nodisplay">Show/Hide content</button>
+      <button id="stop_sharing" style="margin-right: 1rem;" class="think-btn-secondary-outline-live nodisplay" type="button">Stop sharing</button>
       <button id="offcanvasButton" class="think-btn-secondary-outline-live" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">View live feedbacks</button>
       @endif
       
@@ -1605,8 +1609,20 @@ div#graph {
 z-index: 100;
 }
 
-.rtc-video {
+.big-class-aside .rtc-video {
   z-index: 1 !important;
+}
+
+.popover-hidden {
+    display: block;
+    pointer-events: all !important;
+}
+.popover.video-player-tools-popover.popover-placement-bottom {
+    display: block;
+}
+
+.video-player-tools.host {
+    border-radius: 0px;
 }
 
 </style>
@@ -1667,22 +1683,22 @@ z-index: 100;
               token = data.token;
               uid = data.uid;
             }
-            let macInterval = setInterval(function(){
-                              if(document.getElementsByClassName('rtc-video').length != 0){
-                                    if(document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player').length != 0){
-                                      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && loaderFlag == 0) {
-                                        loaderFlag++;
-                                        navigator.mediaDevices.getUserMedia({audio:true, video:true}).then( stream => {
-                                          videoEle = document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player')[0];
-                                          videoEle.srcObject = stream;
-                                          videoEle.play();
-                                        });
-					                              clearInterval(macInterval);
-                                      }
+            // let macInterval = setInterval(function(){
+            //                   if(document.getElementsByClassName('rtc-video').length != 0){
+            //                         if(document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player').length != 0){
+            //                           if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && loaderFlag == 0) {
+            //                             loaderFlag++;
+            //                             navigator.mediaDevices.getUserMedia({audio:true, video:true}).then( stream => {
+            //                               videoEle = document.getElementsByClassName('rtc-video')[0].getElementsByClassName('agora_video_player')[0];
+            //                               videoEle.srcObject = stream;
+            //                               videoEle.play();
+            //                             });
+					  //                             clearInterval(macInterval);
+            //                           }
                                       
-                                    }
-                                }
-                              }, 1000);
+            //                         }
+            //                     }
+            //                   }, 1000);
 
           }
         }
@@ -1777,7 +1793,7 @@ window.addEventListener("beforeunload", function (e) {
 
     });
   } else if(userType == "instructor") {
-    let stopRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
+    let stopRecordPath = "https://api.agora.io/na/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
                       fetch(stopRecordPath , {
                         method: 'PUT',
                         headers: {
@@ -1818,7 +1834,7 @@ $(document).on('click', '.btn:contains("Finish")', function() {
     $('#exit_session').removeClass('nodisplay');
 
     setTimeout(() => {
-            let recordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/1";
+            let recordPath = "https://api.agora.io/na/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/1";
             fetch(recordPath, {
                     method: 'PUT',
                     headers: {
@@ -1864,7 +1880,7 @@ toggleModal();
     
   } else {
 
-    let stopRecordPath = "https://api.agora.io/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
+    let stopRecordPath = "https://api.agora.io/na/edu/apps/"+appId+"/v2/rooms/"+roomId+"/records/states/0";
                       fetch(stopRecordPath , {
                         method: 'PUT',
                         headers: {
@@ -1905,13 +1921,15 @@ setInterval(function () {
     }).then((response) => response.json()).then((data) => {
       if(data.screenShare == true || data.screenShare == 1 || data.screenShare == "1") {
         $('.screen-share-player-container').appendTo('.big-class-teacher');
-$('.screen-share-player-container').css('display', 'flex');
-$('.rtc-video .agora_video_player').css('opacity', 0);
-$('.rtc-video').css('opacity', 0);
+        if(!$('#stop_sharing').hasClass('nodisplay')) {
+          $('.screen-share-player-container').css('display', 'flex');
+        }
+        $('.big-class-aside .rtc-video .agora_video_player').css('opacity', 0);
+        $('.big-class-aside .rtc-video').css('opacity', 0);
       } else {
-$('.screen-share-player-container').css('display', 'none');
-$('.rtc-video .agora_video_player').css('opacity', 1);
-$('.rtc-video').css('opacity', 1);
+        $('.screen-share-player-container').css('display', 'none');
+        $('.big-class-aside .rtc-video .agora_video_player').css('opacity', 1);
+        $('.big-class-aside .rtc-video').css('opacity', 1);
       }
       if(userType == 'student') {
         if(data.presentingContentId) {
@@ -1973,7 +1991,11 @@ for(index = 0; index < length;index++) {
     contentEle[index].addEventListener('click', function(event) {
       let topicContentId = this.getAttribute('data-id');
       let contentOrder = this.getAttribute('data-topic-number');
-      let startSecond = document.getElementsByClassName('big-class-teacher')[0].getElementsByTagName('video')[0].currentTime;
+      let startSecond = 0;
+      if(document.getElementsByClassName('big-class-teacher')[0].getElementsByTagName('video')[0]) {
+        startSecond = document.getElementsByClassName('big-class-teacher')[0].getElementsByTagName('video')[0].currentTime;
+      }
+      
       if(!this.classList.contains('not_started')) {
       let extension = get_url_extension(this.getAttribute('href'));
       if(document.getElementById('user_type').value == "Instructor") {
