@@ -1,3 +1,46 @@
+<!--contact modal-->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+<div class="modal-dialog think-modal-max-w-600">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
+          <h5 class="modal-title custom-form-header" id="contactModalLabel">Contact us</h5>
+          <button type="button" class="btn-close think-modal-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-overlay">
+          <form id="contactForm" class="form" method="POST" action="{{route('user.contact')}}">
+              @csrf
+              <div class="form-group mx-0">
+              <label for="name" class="name-label">Name</label>
+                <input type="text" name="name" class="form-control" id="contactName" placeholder="Eg: Andrew Bernard">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-0">
+              <label for="email" class="email-label">Email</label>
+                <input type="email" name="email" class="form-control" id="contactEmail" placeholder="Eg: xyz@domainname.com">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-0">
+              <label for="phone" class="phone-label">Phone</label>
+                <input type="tel" name="phone" class="form-control" id="contactPhone" placeholder="Eg: +1 202-555-0257">
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-0">
+              <label for="message" class="message-label">Message</label>
+                <textarea name="message" class="form-control autosize" id="contactMessage" placeholder="Type your message here"></textarea>
+                <small>Error message</small>
+              </div>
+              <div class="form-group mx-0 d-grid">
+              <button type="submit" class="btn think-btn-secondary sendContactInfo">Submit</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--contact modal ends-->
 <footer class="footer">
 <div class="container">
       <div class="row text-white justify-content-center mt-3 pb-3">
@@ -14,7 +57,11 @@
           <hr class="bg-white d-inline-block mb-4 think-hr">
           <ul class="list-inline campany-list">
           <li><a href="#">Privacy policy</a></li>
-            <li class="ms-3"><a href="#">Terms & conditions</a></li>
+          <li class="ms-3"><a href="#">Terms & conditions</a></li>
+          </ul>
+          <ul class="list-inline campany-list">
+            <li><a href="/aboutus">About Us</a></li>
+            <li class="ms-3"><a type="button" data-bs-toggle="modal" data-bs-target="#contactModal">Apply to be an instructor</a></li>
           </ul>
         </div>
         <div class="col-12 col-sm-3 col-lg-3 mx-auto">
@@ -47,3 +94,36 @@
 <!-- signup modal -->
 @include('modal')
 <!-- signup modal ends -->
+<script>
+  const contactName = document.getElementById('contactName');
+  const contactEmail = document.getElementById('contactEmail');
+  const contactPhone = document.getElementById('contactPhone');
+  const contactMessage = document.getElementById('contactMessage');
+  
+    document.querySelector('#contactForm').addEventListener('submit', (e) => {
+      if (contactName.value === '') {
+        e.preventDefault();
+        showError(contactName, 'Name is required');
+      } else {
+        removeError(contactName)
+      }
+      if (contactEmail.value === '') {
+        e.preventDefault();
+        showError(contactEmail, 'Email is required');
+      } else {
+        removeError(contactEmail)
+      }
+      if (contactPhone.value === '') {
+        e.preventDefault();
+        showError(contactPhone, 'Phone number is required');
+      } else {
+        removeError(contactPhone)
+      }
+      if (contactMessage.value === '') {
+        e.preventDefault();
+        showError(contactMessage, 'Message is required');
+      } else {
+        removeError(contactMessage)
+      }
+    });
+    </script>

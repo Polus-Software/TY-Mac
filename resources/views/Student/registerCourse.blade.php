@@ -75,13 +75,17 @@ section .card-2:hover, .card-2:active, .card-2.active-batch{
         </div>
         @endforeach
         @else
-        <x-nodatafound message="All batches have started!"  notype="" />
+        <x-nodatafound message="No batches available"  notype="" />
         @endif
     </div>
     <div class="row mt-4 mb-4">
         <div class="buttons d-flex justify-content-end mt-2">
             @csrf
+            @if(empty($singleCourseDetails))
+            <button type="submit" id="registerNowButton" class="btn btn-secondary think-btn-secondary disabled">Register Now</button>
+            @else
             <button type="submit" id="registerNowButton" class="btn btn-secondary think-btn-secondary">Register Now</button>
+            @endif
             <input type="hidden" id="course_id" value="{{$courseDetails['course_id']}}">
         </div>
     </div>

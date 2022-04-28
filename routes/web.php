@@ -219,6 +219,10 @@ Route::get('/', function () {
     Route::get('/thinklitway', function () {
         return view('thinklitway');
     })->name('thinklitway');
+
+    Route::get('/aboutus', function () {
+        return view('aboutus');
+    })->name('aboutus');
     Route::get('/view-again/{session}', [RtmTokenGeneratorController::class, 'viewVideoAgain'])->name('view.again');
 });
 Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

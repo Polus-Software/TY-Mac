@@ -149,7 +149,7 @@
   </div>
   <!-- login modal ends -->
 <!-- contact modal -->
-@if(Request::is('/'))
+
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
 <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
@@ -191,7 +191,7 @@
       </div>
     </div>
   </div>
-  @endif 
+ 
   <!-- contact modal ends -->
 <!-- question modal -->
 @if(Request::is('enrolled-course/*'))
@@ -264,7 +264,7 @@
 <!-- review modal ends -->
 <!-- Have a question modal -->
 @if(Request::is('show-course/*'))
-<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+<div class="modal fade" id="haveaquestionModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog think-modal-max-w-600">
       <div class="modal-content border-0">
         <div class="modal-header border-0 flex-column justify-content-start align-items-start mb-2">
@@ -551,6 +551,19 @@ myModalEl.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
     var recipient = button.getAttribute('data-bs-id')
     var modalBodyButton = contactModal.querySelector('.modal-body .course_id');
+    modalBodyButton.value = recipient;
+
+  });
+  }
+
+  var hAQModal = document.getElementById('haveaquestionModal');
+  if(hAQModal){
+    hAQModal.addEventListener('show.bs.modal', function(event) {
+      
+  
+    var button = event.relatedTarget;
+    var recipient = button.getAttribute('data-bs-id');
+    var modalBodyButton = hAQModal.querySelector('.modal-body .course_id');
     modalBodyButton.value = recipient;
 
   });
