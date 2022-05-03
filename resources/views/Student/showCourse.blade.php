@@ -107,7 +107,7 @@
             @endif
           </div>
           @endif
-          <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#contactModal" data-bs-id="{{$singleCourseDetail['id']}}"><span>Have a question?</span></a></div>
+          <div class="col-md-auto"><a class="btn think-btn-tertiary-outline think-h-48" type="button" data-bs-toggle="modal" data-bs-target="#haveaquestionModal" data-bs-id="{{$singleCourseDetail['id']}}"><span>Have a question?</span></a></div>
           @endunless
         </div>
         <div class="row mt-2">

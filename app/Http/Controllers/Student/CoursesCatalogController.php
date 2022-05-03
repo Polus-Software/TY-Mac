@@ -258,8 +258,10 @@ class CoursesCatalogController extends Controller
                 'time_zone' => $time_zone,
                 'available_count' => $available_count
             );
+            if($available_count != 0){
+                array_push($singleCourseDetails, $singleCourseData);
+            }
         
-        array_push($singleCourseDetails, $singleCourseData);
             }
       }
 

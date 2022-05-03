@@ -1617,6 +1617,9 @@ z-index: 100;
     display: block;
     pointer-events: all !important;
 }
+.popover.expand-tools-popover.popover-placement-right.popover-hidden {
+  display: none;
+}
 .popover.video-player-tools-popover.popover-placement-bottom {
     display: block;
 }
