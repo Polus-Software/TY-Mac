@@ -29,7 +29,7 @@ class LiveSessionReminderInstructor extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('Reminder for ThinkLit course' . $this->details['course_name'])->markdown('Emails.LiveSessionReminderInstructor');
+        return $this->subject('Reminder for ThinkLit course ' . $this->details['course_name'])->markdown('Emails.LiveSessionReminderInstructor');
         // return $this->subject('Reminder for ThinkLit course' . $this->iDetails['course_name'])->markdown('Emails.LiveSessionReminderInstructor');
     }
 }

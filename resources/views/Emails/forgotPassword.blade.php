@@ -1,15 +1,15 @@
 @component('mail::message')
 
 
-<h1>Forget Password Email</h1>
+<h1>Forgot Password Email</h1>
    
-You can reset password from bellow link:
+You can reset password from the link below
 
 @component('mail::button', ['url' => route('reset.password.get', $details['token'])])
 Reset Password
 @endcomponent
 
-Regards,<br>
+Regarding,<br>
 ThinkLit Team
 
 @endcomponent
