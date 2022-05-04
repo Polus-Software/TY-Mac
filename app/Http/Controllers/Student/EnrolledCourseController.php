@@ -113,7 +113,7 @@ class EnrolledCourseController extends Controller
             if(count($cohort_batches) != 0) {
                 $date = new DateTime("now");
                 $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                $next_live_cohort = Carbon::createFromFormat('Y-m-d', $cohort_batches[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('Y-m-d') . "-" . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->start_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->end_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone;
+                $next_live_cohort = Carbon::createFromFormat('Y-m-d', $cohort_batches[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->start_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->end_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone;
             } else {
                 $scheduledSession = DB::table('live_sessions')->where('batch_id', $selectedBatch)->get();
                 if(count($scheduledSession) != 0) {
@@ -134,7 +134,7 @@ class EnrolledCourseController extends Controller
             if(count($cohort_batches) != 0) {
                 $date = new DateTime("now");
                 $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                $next_live_cohort = Carbon::createFromFormat('Y-m-d', $cohort_batches[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('Y-m-d') . "-" . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->start_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->end_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone;
+                $next_live_cohort = Carbon::createFromFormat('Y-m-d', $cohort_batches[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->start_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s',$cohort_batches[0]->end_time)->setTimezone($user->timezone)->format('h:i A') . " " . $time_zone;
             } else {
                 $scheduledSession = DB::table('live_sessions')->where('batch_id', $selectedBatch)->get();
                 if(count($scheduledSession) != 0) {
@@ -226,7 +226,7 @@ class EnrolledCourseController extends Controller
                             $scheduled = true;
                             $date = new DateTime("now");
                             $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                            $nextCohort =  Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('Y-m-d') . "-" . Carbon::createFromFormat('H:i:s', $liveSession[0]->start_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s', $liveSession[0]->end_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone;
+                            $nextCohort =  Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s', $liveSession[0]->start_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s', $liveSession[0]->end_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone;
                         } elseif ($liveSession[0]->enddatetime <= $current_date) {
                             $liveId = "Over";
                             $overId = $liveSession[0]->live_session_id;
@@ -248,7 +248,7 @@ class EnrolledCourseController extends Controller
                             $scheduled = true;
                             $date = new DateTime("now");
                             $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
-                            $nextCohort =  Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('Y-m-d') . "-" . Carbon::createFromFormat('H:i:s', $liveSession[0]->start_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s', $liveSession[0]->end_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone;
+                            $nextCohort =  Carbon::createFromFormat('Y-m-d', $liveSession[0]->start_date, 'UTC')->setTimezone($user->timezone)->format('m/d/Y') . "-" . Carbon::createFromFormat('H:i:s', $liveSession[0]->start_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone . " - " . Carbon::createFromFormat('H:i:s', $liveSession[0]->end_time)->setTimeZone($user->timezone)->format('h:i A') . " " . $time_zone;
                         } elseif ($liveSession[0]->enddatetime <= $current_date) {
                             $liveId = "Over";
                             $overId = $liveSession[0]->live_session_id;

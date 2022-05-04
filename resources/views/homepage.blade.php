@@ -91,7 +91,7 @@
     <div class="row pt-2 pb-2 mt-0 mb-3">
       <div class="col-md-4 border-right think-feature-box">
         <div class="p-3 text-center">
-          <img src="courselist/images/setting-lines.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
+          <img src="courselist/images/setting-lines.svg" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
           <h2 class="fw-bold text-capitalize text-center mb-4">Personalized learning</h2>
           <p class="fw-light mb-4">
             Small class sizes create a personalized learning experience
@@ -101,7 +101,7 @@
       </div>
       <div class="col-md-4 border-right think-feature-box">
         <div class="p-3 text-center">
-          <img src="courselist/images/simple_icon.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
+          <img src="courselist/images/simple_icon.svg" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
           <h2 class="fw-bold text-capitalize text-center mb-4">Simple</h2>
           <p class="fw-light mb-4">
             Our teaching format makes it easy and fun to learn any new skill!
@@ -111,10 +111,10 @@
       </div>
       <div class="col-md-4 think-feature-box">
         <div class="p-3 text-center">
-          <img src="courselist/images/interactive.png" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
+          <img src="courselist/images/interactive.svg" alt="marketing illustration" class="img-fluid mb-4 mx-auto d-block">
           <h2 class="fw-bold text-capitalize text-center mb-4">Interactive</h2>
           <p class="fw-light mb-4">
-            Courses are not just taught, they are made to be interactive between the teacher and student
+            Courses are not just taught, they are designed to be interactive between the teacher and student
           </p>
           <!-- <a href="">learn more</a> -->
         </div>
@@ -251,7 +251,7 @@
     <div class="row text-center">
       <h1 class="display-3 fw-bold think-title-home">
         <span class="position-relative d-inline-block">
-          What's our learners mind
+           What our learners think
           <div class="think-testimonial-underline">
             <img src="courselist/images/Under-line.png" alt="marketing illustration" class="img-fluid mx-auto d-block">
           </div>
