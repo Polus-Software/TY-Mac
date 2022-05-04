@@ -754,7 +754,7 @@
                                                     <a style="background-color: #74648C;color: white;" type="button"
                                                         class="btn"
                                                         href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">
-                                                        <img src="/storage/icons/session_icon_1.svg" alt="" class="img-fluid" style="width:30px; height:15px;margin-bottom: 4px;margin-right: 10px;">Start live session</a>
+                                                        <img src="/storage/icons/session_icon_1.svg" alt="" class="img-fluid" style="width:30px; height:15px;margin-bottom: 4px;margin-right: 10px;">{{ $userType == 'instructor' ? "Start live session" : "Join live session" }}</a>
                                                     @if ($userType == 'instructor')
                                                         <a id="copy-link"
                                                             data-href="{{ url('/') }}/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">Copy
