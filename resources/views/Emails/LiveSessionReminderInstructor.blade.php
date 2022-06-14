@@ -3,10 +3,12 @@
 
 <h1>Hello, {{$details['instructorName']}}</h1>
 
-This is a reminder that you are scheduled to teach {{$details['sessionName']}} in {{$details['reminder']}}.
+<strong>This is a reminder that you are scheduled to teach {{$details['sessionName']}} in {{$details['reminder']}}.</strong>
 
-Regards,
-<p>ThinkLit team</p>
+<p class="regards">
+Regards,<br>
+ThinkLit Team
+</p>
 
 
 @endcomponent

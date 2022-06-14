@@ -2,10 +2,12 @@
 
 <h1>Hi {{ $data['studentName']}},</h1>
 
-You've successfully changed your {{ $data['detail']}}.
+<strong>You've successfully changed your {{ $data['detail']}}</strong>.
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
+ThinkLit Team
+</p>
 
 
 @endcomponent

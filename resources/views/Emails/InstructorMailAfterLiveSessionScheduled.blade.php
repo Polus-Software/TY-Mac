@@ -2,10 +2,12 @@
 
 <h1>Hi {{ $details['instructorName']}},</h1>
 
-Your live session {{ $details['sessionTitle']}} is scheduled for {{ $details['startDate'] }}, {{ $details['startTime']}}
+Your <strong>live session {{ $details['sessionTitle']}} is scheduled for {{ $details['startDate'] }}, {{ $details['startTime']}}</strong>
 
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
+ThinkLit Team
+</p>
 
 @endcomponent

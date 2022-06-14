@@ -14,6 +14,7 @@ use Hash;
 use App\Mail\ForgotPasswordMail;
 use App\Mail\PersonalDetailsUpdatedMail;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 
 class ForgotPasswordController extends Controller
 {
@@ -64,7 +65,7 @@ class ForgotPasswordController extends Controller
         try{
       $request->validate([
          'email' => 'required|email|exists:users',
-         'password' => 'required|string|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|confirmed',
+         'password' => 'required|min:5|max:12|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!-_:$#%]).*$/|confirmed',
          'password_confirmation' => 'required'
 
       ]);
@@ -83,13 +84,15 @@ class ForgotPasswordController extends Controller
          'detail' => 'password'
       ];
 
-      if(!$updatePassword)
-      {
-         return back()->withInput()->with('error', 'Invalid token!');
-      }
+      //if(!$updatePassword)
+      //{
+        // return back()->with('message', 'This user does not exist!');
+      //}
         
       $user = User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
-
+     if($user == 0) {
+          return back()->with('message', 'This user does not exist!');
+     }
       DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
       Mail::mailer('smtp')->to($request->email)->send(new PersonalDetailsUpdatedMail($data));

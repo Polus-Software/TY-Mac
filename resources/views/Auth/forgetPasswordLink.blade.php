@@ -1,7 +1,15 @@
 
 @extends('Layouts.app')
 @section('content')
-
+<style>
+.alert-success {
+    color: #b80000;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    margin-left: 40px;
+    width: 20rem;
+}
+</style>
 <body class="bg-secondary">
     <div class="container-overlay pt-5">
         <div class="custom-container mx-auto p-3 border rounded">

@@ -2,12 +2,13 @@
 
 <h1>Hi {{ $data['instructorName'] }},<h1>
 
-You have got a new question from your student {{$data['studentName']}} on ThinkLit.
+<strong>You have got a new question from your student {{$data['studentName']}} on ThinkLit</strong>.
 
 To view the message, follow this <a href="{{$data['link']}}">link</a> after logging in to your account on ThinkLit.com
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
-
+ThinkLit Team
+</p>
 
 @endcomponent

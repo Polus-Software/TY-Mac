@@ -975,8 +975,7 @@ class EnrolledCourseController extends Controller
 
         $notification = new Notification; 
         $notification->user = $studentId;
-        $notification->notification = "Hello ". $studentName.", You have got a reply to your message from your Instructor ". $instructorName."for the course ". $courseTitle." on ThinkLit. To view the message,
-         please log in to your account on ThinkLit.com";
+        $notification->notification = "Hello ". $studentName.", You have got a reply to your message from your Instructor ". $instructorName."for the course ". $courseTitle." on ThinkLit. To view the message, please log in to your account on ThinkLit.com";
         $notification->is_read = false;
         $notification->save();
 
@@ -1211,7 +1210,6 @@ class EnrolledCourseController extends Controller
 
     public function instructorChatView(Request $request) {
         $user = Auth::user();
-
         $studentId = $request->student;
         $instructorId = $request->instructor;
         $courseId = $request->course;
@@ -1266,7 +1264,6 @@ class EnrolledCourseController extends Controller
     }
 
     public function saveGeneralChat(Request $request) {
-
         $user = Auth::user();
         $loggedInId = $user->id;
 
@@ -1275,7 +1272,6 @@ class EnrolledCourseController extends Controller
         $studentId = $request->studentId;
         $instructorId = $request->instructorId;
         $message = $request->message;
-        
         $generalChat = new GeneralChat;
         $generalChat->course_id = $courseId;
         $generalChat->student = $studentId;

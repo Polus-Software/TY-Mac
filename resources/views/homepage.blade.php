@@ -267,7 +267,7 @@
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 services d-flex flex-column justify-content-center">
         <div class="services__content">
           <div><i class="fas fa-quote-left fa-3x"></i></div>
-          <h3 class="fw-bold text-capitalize text-center mt-1">TY-Mac makes learning new skills incredibly simple & interactive</h3>
+          <h3 class="fw-bold text-capitalize text-center mt-1">ThinkLit Makes Learning New Skills Incredibly Simple & Interactive</h3>
           <p class="lh-lg my-5">
             I signed up for the Fundamentals of Quality Analysis course without having any prior knowledge in the field, but by the time I completed the course, I became proficient in functional QA & got a job in the field! The instructor did a wonderful job at teaching the subjects in a simple way!
           </p>

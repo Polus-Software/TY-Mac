@@ -229,7 +229,7 @@ class CoursesCatalogController extends Controller
         $time_zone = $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "+" || $date->setTimeZone(new DateTimeZone($user->timezone))->format('T')[0] == "-" ? "(UTC " .$date->setTimeZone(new DateTimeZone($user->timezone))->format('T') . ")": $date->setTimeZone(new DateTimeZone($user->timezone))->format('T');
 
         foreach($batches as $batch){
-            if($batch->end_time > Carbon::now()->format('H:i:s')) {
+            if($batch->start_date > Carbon::now()->format('Y-m-d') || $batch->start_date == Carbon::now()->format('Y-m-d') && $batch->end_time > Carbon::now()->format('H:i:s')) {
                 $available_count = $batch->students_count;
             if($offset[0] == "+") {
                 $sTime = strtotime($batch->start_time) + (60 * 60 * $offsetHours) + (60 * $offsetMinutes);
@@ -258,6 +258,7 @@ class CoursesCatalogController extends Controller
                 'time_zone' => $time_zone,
                 'available_count' => $available_count
             );
+
             if($available_count != 0){
                 array_push($singleCourseDetails, $singleCourseData);
             }
@@ -306,7 +307,7 @@ class CoursesCatalogController extends Controller
         'ratingsCount' => $ratingsCount,
         'duration' => $duration
       );
-     
+
         return view('Student.registerCourse', [
             'singleCourseDetails' => $singleCourseDetails,
             'courseDetails' => $courseDetails

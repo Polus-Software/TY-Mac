@@ -2,10 +2,11 @@
 
 <h1>Hi {{$details['instructorName']}},</h1>
 
-You have new feedback from your student {{$details['studentName']}} on your course {{$details['courseTitle']}}.
+<strong>You have new feedback from your student {{$details['studentName']}} on your course {{$details['courseTitle']}}</strong>.
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
-
+ThinkLit Team
+</p>
 
 @endcomponent

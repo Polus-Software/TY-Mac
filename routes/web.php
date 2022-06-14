@@ -223,6 +223,13 @@ Route::get('/', function () {
     Route::get('/aboutus', function () {
         return view('aboutus');
     })->name('aboutus');
+Route::get('/terms', function () {
+        return view('terms');
+    })->name('terms');
+
+    Route::get('/privacy', function () {
+        return view('privacy');
+    })->name('privacy');
     Route::get('/view-again/{session}', [RtmTokenGeneratorController::class, 'viewVideoAgain'])->name('view.again');
 });
 Route::get('/certificate/{course}', [EnrolledCourseController::class, 'generateCertificate'])->name('generate-certificate');

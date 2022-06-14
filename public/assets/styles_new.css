@@ -74,7 +74,7 @@
   }
   .footer {
     padding-top: 1rem;
-    background-color: #2C3443;
+    background-color: #000000;
   }
   
   .footer-bottom {
@@ -96,8 +96,8 @@
     text-decoration: underline;
   }
   .footer .campany-list {
-    display: flex;
-    flex-direction: row;
+    /* display: flex; */
+    /* flex-direction: row; */
     list-style-type: none;
     position: relative;
   }
@@ -110,12 +110,25 @@
   .footer .campany-list li a {
     color: #fff;
     text-decoration: none;
+    
   }
   
   .footer .campany-list li a:hover {
     color: var(--color-primary);
   }
-
+  .ty-footer-logo{
+    height: 40px !important;;
+  }
+.ty-divider{
+  display: inline-block;
+    width: 1px;
+    height: 35px;
+    background-color: #444444;
+    margin: 0 10px 0 0;
+}
+.footer h5 {
+  color: #6c757d;
+}
 .think-nodata-box {
     /* background-color: #FFFDF7; */
     border: 1px solid #dee2e6;

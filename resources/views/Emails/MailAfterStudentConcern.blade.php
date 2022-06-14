@@ -2,7 +2,7 @@
 
 <h1>Hi {{ $details['instructorName'] }},</h1>
 
-You have got a new concern from a student {{ $details['name'] }} for the course {{ $details['courseName'] }}
+<strong>You have got a new concern from a student {{ $details['name'] }} for the course {{ $details['courseName'] }}</strong>
 
 Message is as follows,
 
@@ -11,7 +11,9 @@ Message is as follows,
 Click <a href="mailto:{{ $details['email'] }}">here</a> to reply.
 
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
+ThinkLit Team
+</p>
 
 @endcomponent
