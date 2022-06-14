@@ -3,12 +3,13 @@
 
 <h1>Hello, {{$recDetails['studentName']}}</h1>
 
-We recommend you to review the following {{$recDetails['topic']}} to improve your understanding of the subject.
+<strong>We recommend you to review the following {{$recDetails['topic']}} to improve your understanding of the subject.</strong>
 
 Please log in to your account on ThinkLit.com & view the Personalized Recommendations in your student portal.
 
+<p class="regards">
 Regards,<br>
-<p>ThinkLit team</p>
-
+ThinkLit Team
+</p>
 
 @endcomponent

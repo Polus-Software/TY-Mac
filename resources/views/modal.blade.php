@@ -65,10 +65,10 @@
                 @endif
               </div>
               <div class="form-group mx-0">
-              <label class="form-check-label checkbox-text fw-normal" id="chechbox-text">
+              <label class="form-check-label checkbox-text fw-normal" id="chechbox-text" style="font-size:14px;">
                   <input class="form-check-input" name="privacy_policy" type="checkbox" id="checkbox"> 
                   By creating an account, you agree to the
-                  <a href="#">Terms of Service</a> and Privacy Policy <br>
+                  <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a><br>
                   <small>Error message</small>
                 </label>
                  

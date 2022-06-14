@@ -43,51 +43,35 @@
 <!--contact modal ends-->
 <footer class="footer">
 <div class="container">
-      <div class="row text-white justify-content-center mt-3 pb-3">
-
-        <div class="col-12 col-sm-6 col-lg-6 mx-auto ms-0">
-          <h5 class="text-capitalize fw-bold">About Us</h5>
-          <hr class="bg-white d-inline-block mb-4 think-hr">
-          <p class="lh-lg">
-          Our teaching format makes it easy and fun to learn any new skill! Tag along with us on this personalized learning experience.
-          </p>          
-        </div>
-        <div class="col-12 col-sm-3 col-lg-3 mx-auto">
-          <h5 class="text-capitalize fw-bold">Quick links</h5>
-          <hr class="bg-white d-inline-block mb-4 think-hr">
-          <ul class="list-inline campany-list">
-          <li><a href="#">Privacy policy</a></li>
-          <li class="ms-3"><a href="#">Terms & conditions</a></li>
-          </ul>
-          <ul class="list-inline campany-list">
-            <li><a href="/aboutus">About Us</a></li>
-            <li class="ms-3"><a type="button" data-bs-toggle="modal" data-bs-target="#contactModal">Apply to be an instructor</a></li>
-          </ul>
-        </div>
-        <div class="col-12 col-sm-3 col-lg-3 mx-auto">
-          <h5 class="text-capitalize fw-bold">Connect us</h5>
-          <hr class="bg-white d-inline-block mb-4 think-hr">
-          <div class="col-12 footer-sm">
-           <a href="https://www.facebook.com/ThinkLitInc" target="_blank"><i class="fab fa-facebook"></i></a>
-           <a href="https://twitter.com/thinklit" target="_blank"><i class="fab fa-twitter"></i></a>
-           <a href="https://www.linkedin.com/company/thinklit" target="_blank"><i class="fab fa-linkedin"></i></a> 
-          </div>
-        </div>
+  <div class="row text-white justify-content-center mt-3 pb-3"> 
+    <div class="col-12 col-sm-3 col-lg-3">
+      <h5 class="text-uppercase mb-4">Quick links</h5>
+      <ul class="campany-list p-0">
+        <li><a href="/aboutus">About Us</a></li>
+        <li><a type="button" data-bs-toggle="modal" data-bs-target="#contactModal">Apply to be an instructor</a></li>
+        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href="/terms">Terms & conditions</a></li>
+      </ul>
+    </div>
+    <div class="col-12 col-sm-4 col-lg-3">
+      <h5 class="text-uppercase mb-4">Connect with us</h5>
+      <div class="col-12 footer-sm">
+        <a href="https://www.facebook.com/ThinkLitInc" target="_blank"><i class="fab fa-facebook m-0"></i></a>
+        <a href="https://twitter.com/thinklit" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.linkedin.com/company/thinklit" target="_blank"><i class="fab fa-linkedin"></i></a> 
       </div>
     </div>
-
-    <!-- START THE COPYRIGHT INFO  -->
-    <div class="footer-bottom pt-3 pb-3">
-      <div class="container">
-        <div class="row text-center text-white">
-          <div class="col-12">
-            <div class="footer-bottom__copyright">
-              &COPY; Copyright 
-              @php echo date('Y'); @endphp
-              <a href="#">ThinkLit</a>
-            </div>
+      <div class="col-12 col-sm-5 col-lg-6 align-items-end d-flex justify-content-end">
+        <span>
+        <div class="footer-bottom__copyright align-items-center d-flex justify-content-center">
+          <a class="navbar-brand mr-0" href="/"><img src="/storage/logo/ty_mac__vector__white.svg" class="mb-2 ty-footer-logo"></img></a>
+          <span class="ty-divider"></span>
+          <span> &COPY;
+            @php echo date('Y'); @endphp
+            <a href="#">ThinkLit</a>, Inc.</span>
           </div>
-        </div>
+        </span>
+      </div>
       </div>
     </div>
   </footer>

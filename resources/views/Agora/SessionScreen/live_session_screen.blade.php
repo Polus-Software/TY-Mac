@@ -1110,6 +1110,12 @@ body {
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
+#graph text {
+    font-size: 12px;
+    font-family: 'Roboto';
+    font-style: normal;
+    fill: #757575;
+}
 
 @-webkit-keyframes fadein {
   from {bottom: 0; opacity: 0;} 
@@ -2148,9 +2154,11 @@ buttonOpenClose.addEventListener('click', () => {
           
             document.getElementById('live_chart_table_body').innerHTML = data.html;
 
-            google.charts.load('current', {
-              'packages': ['bar']
-            });
+            // google.charts.load('current', {
+            //   'packages': ['bar']
+            // });
+            google.charts.load('current', {packages:['corechart']});
+
             google.charts.setOnLoadCallback(function() {
               drawChart(data.graphData);
             });
@@ -2207,21 +2215,52 @@ buttonOpenClose.addEventListener('click', () => {
               ]);
 
               }
+
+                // var options = {
+                //     chart: {
+                //         title: 'Participant Activities',
+                //         subtitle: '',
+                //         width: 600,
+                //         height: 400
+                //     },
+                //     colors: ['#A26B05','#F5BC29']
+                // };
+                var options = {
+                    theme: 'material',
+                    title: 'Participant Activities',
+                    subtitle: '',
+                    width: 800,
+                    height: 400,
+                    tooltip: {isHtml: true},
+           
+                    chartArea: {
+                        height: '100%',
+                        width: '100%',
+                        top: 50,
+                        left: 50,
+                        right: 100,
+                        bottom: 50
+                    },
+            
+                    bar: {groupWidth: '70%'},
+                    vAxis: { 
+                      gridlines: { count: 4 } ,
+                      format: '#',       
+                    },
+                    hAxis:{
+                      title: 'Subtopics'
+                    },
+                    colors: ['#A26B05', '#F5BC29']
+                    
+                  };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('graph'));
+                chart.draw(gdata, options);
                 
 
-                var options = {
-                    chart: {
-                        title: 'Participant Activities',
-                        subtitle: '',
-                        width: 600,
-                        height: 400
-                    },
-                    colors: ['#A26B05','#F5BC29']
-                };
+                // var chart = new google.charts.Bar(document.getElementById('graph'));
 
-                var chart = new google.charts.Bar(document.getElementById('graph'));
-
-                chart.draw(gdata, google.charts.Bar.convertOptions(options));
+                // chart.draw(gdata, google.charts.Bar.convertOptions(options));
               }
         });
 

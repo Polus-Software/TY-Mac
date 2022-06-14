@@ -14,7 +14,7 @@ class UserService {
      * @output - fullname
      */
     public static function getUserFullName($userId) {
-        return User::find($userId)->firstname.' '.User::find($userId)->lastname;
+        return User::find($userId) ? User::find($userId)->firstname.' '.User::find($userId)->lastname : "";
     }
 
     /**

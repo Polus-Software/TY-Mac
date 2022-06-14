@@ -28,7 +28,7 @@ width: 100% !important;
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td align="center">
-<table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<table class="content email-header" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 {{ $header ?? '' }}
 
 <!-- Email Body -->
@@ -38,6 +38,7 @@ width: 100% !important;
 <!-- Body content -->
 <tr>
 <td class="content-cell">
+<img src="https://enliltdev.fibiweb.com/storage/images/alarm_updated_gif.png" alt="alarm" class="alarm">
 {{ Illuminate\Mail\Markdown::parse($slot) }}
 
 {{ $subcopy ?? '' }}

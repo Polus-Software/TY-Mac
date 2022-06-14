@@ -2,7 +2,7 @@
 
 <h1>Hi {{$details['adminFirstName']}} {{$details['adminLastName']}},</h1>
 
-You have got a new query from the student {{$details['name']}}<br>
+<strong>You have got a new query from the student {{$details['name']}}</strong><br>
 
 Details as follows,<br>
 
@@ -11,7 +11,9 @@ Details as follows,<br>
 <a href="mailto:{{ $details['email'] }}"><b>Click<b> here to reply</a>
 
 
+<p class="regards">
 Regards,<br>
-The ThinkLit Team
+ThinkLit Team
+</p>
 
 @endcomponent

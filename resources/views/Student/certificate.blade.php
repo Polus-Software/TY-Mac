@@ -71,8 +71,8 @@
                 <div class="card-body">
                     @foreach($courseDetails as $courseDetail)
                     <small style="position: absolute; left: 0px; top:20px; left:15px;">ThinkLit</small>
-                    <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE :</small>
-                    <small style="position: absolute; right: 45px; top:40px;">{{$courseDetail['course_completion']}}</small>
+                    <small style="position: absolute; right: 35px; top:20px;">DATE OF ISSUE</small>
+                    <small style="position: absolute; right: 42px; top:40px;">{{$courseDetail['course_completion']}}</small>
                     <!-- <h1 class="card-title">ThinkLit</h1> -->
                     <img src="{{'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/storage/icons/ty_mac__transparent__1000.png')))}}" alt="" class="img-fluid" style="width:180px; height:180px; display: block;
     margin: 0 auto;">

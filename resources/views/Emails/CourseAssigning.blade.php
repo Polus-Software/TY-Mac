@@ -2,9 +2,11 @@
 
 <h1>Hi {{ $datas['instructorName'] }},</h1>
 
-You have been assigned a new course {{ $datas['courseTitle'] }}.
+<strong>You have been assigned a new course {{ $datas['courseTitle'] }}</strong>.
 
+<p class="regards">
 Regards,<br>
 ThinkLit Team
+</p>
 
 @endcomponent

@@ -754,7 +754,7 @@
                                                     <a style="background-color: #74648C;color: white;" type="button"
                                                         class="btn"
                                                         href="/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">
-                                                        <img src="/storage/icons/session_icon_1.svg" alt="" class="img-fluid" style="width:30px; height:15px;margin-bottom: 4px;margin-right: 10px;">{{ $userType == 'instructor' ? "Start live session" : "Join live session" }}</a>
+                                                        <img src="/storage/icons/session_icon_1.svg" alt="" class="img-fluid" style="width:30px; height:15px;margin-bottom: 4px;margin-right: 10px;">Join live session</a>
                                                     @if ($userType == 'instructor')
                                                         <a id="copy-link"
                                                             data-href="{{ url('/') }}/session-view/{{ $topicDetail['liveId'] }}?batchId={{ isset($selectedBatch) ? $selectedBatch : '' }}">Copy
@@ -1979,7 +1979,12 @@
                     height: 470,
                     colors: ['#A26B05'],
                     vAxis: {
-                        format: '0'
+                        format: '0',
+                        
+                        
+                    
+                       
+                        
                     },
                 };
                 var chart = new google.charts.Line(document.getElementById('graph_div'));
@@ -2053,14 +2058,12 @@
         </script>
 
         <script>
-            google.charts.load('current', {
-                'packages': ['bar']
-            });
-            google.charts.setOnLoadCallback(drawChartFirst);
+             google.charts.load('current', {packages:['corechart']});
+           google.charts.setOnLoadCallback(drawChartFirst);
 
             function drawChartFirst() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Sub content', 'Likes', 'Dislikes'],
+               var data = google.visualization.arrayToDataTable([
+                    ['Subtopics', 'Likes', 'Dislikes'],
                     <?php
                     if (isset($graph)) {
                         foreach ($graph as $gr) {
@@ -2071,20 +2074,58 @@
                     ?>
                 ]);
 
-
                 var options = {
-                    chart: {
-                        title: 'Session wise Likes and Dislikes',
-                        subtitle: '',
-                        width: 600,
-                        height: 400
+                    theme: 'material',
+                    title: 'Session wise Likes and Dislikes',
+                    subtitle: '',
+                    width: 800,
+                    height: 500,
+                    tooltip: {isHtml: true},
+                    chartArea: {
+                            height: '100%',
+                            width: '100%',
+                            top: 50,
+                            left: 50,
+                            right: 100,
+                            bottom: 50
+                        },
+                    bar: {groupWidth: '80%'},
+                    vAxis: { 
+                        gridlines: { count: 4 } ,
+                        format: '#',
+                        },
+                    hAxis:{
+                        title: 'Subtopics'
                     },
-                    colors: ['#A26B05', '#F5BC29']
+                        colors: ['#A26B05', '#F5BC29']
                 };
+                // var data = google.visualization.arrayToDataTable([
+                //     ['Subtopics', 'Likes', 'Dislikes'],
+                //     <?php
+                //     if (isset($graph)) {
+                //         foreach ($graph as $gr) {
+                //             echo '["' . $gr['topic_title'] . '",' . $gr['likes'] . ',' . $gr['dislikes'] . '],';
+                //         }
+                //     }
+                    
+                //     ?>
+                // ]);
+               
 
-                var chart = new google.charts.Bar(document.getElementById('chart_div'));
+                // var options = {
+                //     chart: {
+                //         title: 'Session wise Likes and Dislikes',
+                //         subtitle: '',
+                //         width: 600,
+                //         height: 400,       
+                //     },
+                //     colors: ['#A26B05', '#F5BC29']
+                // };
 
-                chart.draw(data, google.charts.Bar.convertOptions(options));
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+                // var chart = new google.charts.Bar(document.getElementById('chart_div'));
+                // chart.draw(data, google.charts.Bar.convertOptions(options));
             }
         </script>
         <script>
