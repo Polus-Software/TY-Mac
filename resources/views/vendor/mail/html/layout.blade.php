@@ -37,7 +37,7 @@ width: 100% !important;
 <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
 <!-- Body content -->
 <tr>
-<td class="content-cell" align="center">
+<td class="content-cell" align="center" style="padding:12px 30px !important;">
 <img src="https://enliltdev.fibiweb.com/storage/images/alarm_updated_gif.png" alt="alarm" class="alarm">
 {{ Illuminate\Mail\Markdown::parse($slot) }}
 
