@@ -13,12 +13,12 @@ class CreateCourseFeedbackTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_feedback', function (Blueprint $table) {
+        Schema::create('course_feedbacks', function (Blueprint $table) {
             $table->id('course_feedback_id');
             $table->unsignedBigInteger('live_session_id');
-            $table->foreign('live_session_id')->references('live_session_id')->on('live_session');
+            $table->foreign('live_session_id')->references('live_session_id')->on('live_sessions')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('topic_id');
-            $table->foreign('topic_id')->references('topic_id')->on('topic');
+            $table->foreign('topic_id')->references('topic_id')->on('topics')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('positive_ratings');
             $table->unsignedBigInteger('negative_ratings');
             $table->timestamps();

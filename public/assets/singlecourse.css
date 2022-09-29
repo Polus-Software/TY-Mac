@@ -1,0 +1,160 @@
+.ty-mac-header-bg {
+    min-height: 394px;
+    background:#2C3443;
+    color: #FFFFFF;
+}
+.course-picture{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 604px;
+    height: 287px;
+    border-radius: 30px;
+    object-fit: cover;
+}
+.text-content-wrapper p{
+    font-size: 30px;
+    color: #FFFFFF;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}
+/* .enroll-button, .review-button{
+    color:#2C3443;
+    background:#FFFFFF ;
+    border-radius: 10px;
+    width: 145px;
+    font-size: 14x;
+    font-weight:bold ;
+    font-family: 'Roboto', sans-serif;
+}
+.question-btn {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    background: #2C3443;
+    border-radius: 10px;
+    width: 190px;
+    height: 40px;
+    font-size: 14x;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+.question-btn:hover {
+    border: 1px solid #FFFFFF;
+    color: #2C3443;
+    background: #FFFFFF;
+} */
+.fa-clock{
+    color: #FFFFFF;
+}
+.fa-clock:before{
+    padding-right: 10px;
+ }
+.fa-check-circle{
+    color: #F5BC29;
+    /* font-size: 18px;
+    border-radius: 15px;
+    border:0.5px solid #F5BC29; */
+}
+.row-1 p{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+.para-1{
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+.para-2{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+.para-3{
+    border-right: 1px solid #FFFFFF;
+}
+.card{
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    height: max-content;
+}
+.card-2 h6{
+    color: #2C3443;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+.card-2 li{
+    color: #6E7687;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    list-style-type: circle;
+    line-height: 26px;
+    
+}
+.card-3 h5{
+    color:#2C3443;
+    font-size:24px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+.card-3 img{
+    border: 1px solis #707070;
+}
+.card-4 h5{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+    font-size: 18px;
+}
+.course-time{
+    color: #6E7687;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+}
+
+.card-title{
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+}
+.card-text-1{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #6E7687;
+    line-height: 1.62em;
+}
+.fa-twitter, .fa-linkedin-in, .fa-youtube{
+    /* color: #6E7687; */
+}
+.fa-twitter:before, .fa-linkedin-in:before, .fa-youtube:before{
+    padding-right:10px;
+}
+
+.review{
+    line-height: 36px;
+}
+.rating> .fa-star{
+    font-size:30px;
+}
+.btn a{
+    text-decoration: none;
+    color: inherit;
+}
+.active-stars{
+    color:#F5BC29; 
+}
+.rateCourse{
+    color:#F5BC29; 
+}
+
+
+@media only screen and (max-width: 992px) {
+  .para-3{
+      border: hidden ;
+  }
+}

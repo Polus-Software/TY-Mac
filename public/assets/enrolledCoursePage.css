@@ -1,0 +1,306 @@
+.sidebar h3{
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+   font-size: 20px;
+   color: #2C3443;
+}
+.sidebar .achievements-badge-container img{
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 40px;
+}
+.vertcalNav{
+    background: #F8F7FC;
+    /* height: 500px; */
+}
+#v-pills-achievements-tab {
+    width: auto !important;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #2C3443;
+    background-color: #F1EEFD;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+.nav-pills .nav-link {
+    color: #2C3443;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+.card-1{
+    box-shadow: 0px 1px 8px #00000029;
+    border-radius: 20px;
+}
+.card-1 .course-image{
+    border-radius:20px;
+}
+.card-1 h5{
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: #2C3443;
+    font-size: 16px;
+}
+.card-1 .card-text, .card-7 .card-text-1, .card-8 .card-text-1{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color:#6E7687;  
+} 
+.progress{
+    background: #F1EEFD;
+    height: 20px;
+}
+.progress-bar{
+    background: #74648C;
+}
+.card-1 .para-1 , .card-6 .para-1{
+    color: #6E7687;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+.card-1 .para-2{
+    color: #6E7687;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: 900; */
+}
+.card-1 .duration{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+
+}
+.duration small{
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.28px;
+   
+}
+.card-2{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+}
+.card-2 h5 , .card-6 h5 ,.card-7 h5,.heading-1, .card-8 h5{
+    color: #2C3443;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+}
+.achievement{
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color:#6E7687;  
+}
+.card-6 .card-title{
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+.card-2 h6 , .card-5 h6{
+    color: #2C3443;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+.card-title-4{
+    color: #2C3443;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+
+}
+.card-2 li , .card-5 li{
+    color: #6E7687;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    list-style-type: circle;
+    line-height: 26px;
+}
+
+/* .card-2 button{
+    color: #6E7687;
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+    border-radius: 5px;
+    font-size: 16px;
+    letter-spacing: 0.32px;
+} */
+.card-6 button{
+    background: #F8F7FC;
+    color: #6E7687;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    border-radius: 5px;
+    font-size: 16px;
+    letter-spacing: 0.32px;
+}
+.card-6 .time{
+    color: #868E96;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}
+.card-3 .go-live{
+    background: #FCF7F9;
+}
+.card-3{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #AF7E00;
+    border-radius: 10px;
+}
+.card-3 img{
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.card-4{
+    background: #FFF9E8 0% 0% no-repeat padding-box;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    color: #AF7E00;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.28px;
+}
+.card-3 .btn-primary{
+    color: #fff;
+    background-color: #2C3443;
+    border-color: #2C3443;
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 0.32px;
+}
+
+.card-5{
+    border: none;
+}
+
+.card-4 .card-text{
+    color: #AF7E00;
+}
+.fa-twitter, .fa-linkedin-in, .fa-youtube{
+    /* color: #6E7687; */
+}
+
+.card-title-2{
+    font-size: 11px;
+    color: #2C3443;
+    font-weight: 900;
+    font-family: 'Roboto', sans-serif;
+}
+.card-text-2{
+    font-size: 10px;
+    color: #868E96;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card-8 img{
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 40px;
+}
+.card-8 .instructor-name{
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+   font-size: 24px;
+   color: #2C3443;
+}
+.card .earned-badges{
+    background: #F8F7FC;
+}
+.badges{
+    color: #2C3443;
+    font-weight: 900;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+.card-8 small{
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color:#868E96;
+    font-weight: 400;
+
+}
+
+.rating> .fa-star{
+    font-size:30px;
+}
+.modal-body input{
+    display: none;
+}
+.modal-body textarea{
+    resize: none;    
+}
+.active-stars{
+    color:#F5BC29; 
+}
+.rateCourse{
+    color:#F5BC29; 
+}
+
+
+
+
+
+
+/* .container {
+    display: flex;
+} */
+
+.badge-shadow {
+    box-shadow: -4px 0px 6px #00000029;
+    border-radius: 50%;
+    height: 69px;
+    width: 69px;
+}
+
+/* Utilities */
+.left-0 {
+    position: relative;
+    left: 0px;
+}
+
+.left--15 {
+    position: relative;
+    left: -15px;
+}
+
+.left--30 {
+    position: relative;
+    left: -30px;
+}
+
+.left--45 {
+    position: relative;
+    left: -45px;
+}
+
+.llp-countbox {
+background-color: #FFF9E8;
+border-color: #FFF9E8;
+border-radius: 10px;
+}
+
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.accordion-button::after{
+    margin-left:20px;
+}
+.plus::after{
+    margin-left:auto;
+
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+.plus:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}

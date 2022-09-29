@@ -13,12 +13,12 @@ class CreateEmailLogTable extends Migration
      */
     public function up()
     {
-        Schema::create('email_log', function (Blueprint $table) {
+        Schema::create('email_logs', function (Blueprint $table) {
             $table->id('email_id');
             $table->string('email_content');
             $table->index('user_id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('is_sent');
             $table->timestamps();
         });

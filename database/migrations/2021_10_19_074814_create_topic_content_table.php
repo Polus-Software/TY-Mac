@@ -13,12 +13,12 @@ class CreateTopicContentTable extends Migration
      */
     public function up()
     {
-        Schema::create('topic_content', function (Blueprint $table) {
+        Schema::create('topic_contents', function (Blueprint $table) {
             $table->id('topic_content_id');
             $table->unsignedBigInteger('topic_id');
-            $table->foreign('topic_id')->references('topic_id')->on('topic');
-            $table->string('topic_title');
-            $table->string('description');
+            $table->foreign('topic_id')->references('topic_id')->on('topics')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('topic_title', 2000);
+            $table->string('description', 2000);
             $table->string('content_type');
             $table->string('document');
             $table->timestamps();
