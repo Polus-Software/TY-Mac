@@ -13,13 +13,13 @@ class CreateChatLogTable extends Migration
      */
     public function up()
     {
-        Schema::create('chat_log', function (Blueprint $table) {
+        Schema::create('chat_logs', function (Blueprint $table) {
             $table->id('chat_log_id');
             $table->unsignedBigInteger('student_id');
-            $table->foreign('student_id')->references('id')->on('users');
+            $table->foreign('student_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('instructor_id');
-            $table->foreign('instructor_id')->references('id')->on('users');
-            $table->string('message');
+            $table->foreign('instructor_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('message', 2000);
             $table->boolean('isFromInstructor');
             $table->timestamps();
         });

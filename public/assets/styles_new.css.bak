@@ -1,0 +1,193 @@
+
+/* all courses */
+.think-banner-allcourses li{
+    list-style-type: none;
+    text-align: left;
+   font-weight: 400;
+    color: var(--color-grey);
+    font-size: 20px;
+  }
+  
+  .think-banner-allcourses i:before {
+    padding-right: 15px;
+  }
+  
+  .think-banner-allcourses i{
+    color: var(--color-grey);
+  }
+  .think-banner-allcourses p{
+    font-weight:bold ;
+    letter-spacing: 1.6px;
+    font-size:20px;
+    color: var(--color-tertiary);
+  }
+  .think-banner-allcourses h1{
+    font-weight:bold ;
+    color: var(--color-secondary);
+  }
+  .think-filters-sidebar h6 {
+    font-weight: 700;
+  }
+  
+  .think-course-small .card-1 {
+    max-width: 396px;
+    box-shadow: 0 1px 8px #d4d4d4;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+.think-filters-sidebar .accordion-body {
+    padding-left: 0px;
+}
+.filter{
+    background:#f8f7fc;
+}
+
+.filter-button {
+    color: #000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0px;
+}
+.filter-item {
+  background-color: transparent !important;
+  border:none !important;
+  border-bottom: 1px solid rgba(0,0,0,.125) !important;
+}
+  /* footer section */
+  .footer-sm a {
+    color: #fff;
+  }
+  
+  .footer-sm a i {
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+  
+  @media (min-width: 576px) {
+    .footer-sm a i {
+      font-size: 1.6rem;
+    }
+  }
+  
+  .footer-sm a:hover {
+    color: var(--color-primary);
+  }
+  .footer {
+    padding-top: 1rem;
+    background-color: #2C3443;
+  }
+  
+  .footer-bottom {
+    background-color: var(--color-black);
+  }
+  
+  .footer-bottom__copyright {
+    color: #6c757d;
+    font-weight: 400;
+  }
+  
+  .footer-bottom__copyright a {
+    color: #dee2e6;
+    text-decoration: none;
+  }
+  
+  .footer-bottom__copyright a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+  .footer .campany-list {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    position: relative;
+  }
+  
+  .footer .campany-list li {
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+  }
+  
+  .footer .campany-list li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .footer .campany-list li a:hover {
+    color: var(--color-primary);
+  }
+
+.think-nodata-box {
+    /* background-color: #FFFDF7; */
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+}
+.think-nodata-box img {
+  height: 120px;
+}
+.think-filters-sidebar i.fas.fa-star.filter-star, 
+.think-filters-sidebar i.far.fa-star.filter-no-star {  
+  color: var(--color-primary) !important;
+}
+.think-filters-sidebar .form-check-input:checked {  
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+/* home page */
+.think-testimonial-writer {
+  position: relative;
+}
+.think-testimonial-writer::before {
+  content: "";
+    position: absolute;
+    left: 50%;
+    width: 10px;
+    top: -20px;
+    height: 1.25px;
+    background-color: var(--color-black);
+    margin-left: -5px;
+}
+/* my courses */
+.think-truncated-text {
+  position: relative;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 2.6em; /* (Number of lines you want visible) * (line-height) */
+  line-height: 1.3em;
+  text-align:justify;
+}
+.think-review {
+  border-radius: 50% !important;
+    border: 0.325rem solid var(--color-primary);
+    padding: 10px;
+    color: var(--color-primary);
+}
+.think-toast {
+  background-color: #74648C;
+}
+/* style by jibi for enrolled-course certification starts */
+.card-body .date_of_issue{
+  display: block;
+}
+/* style by jibi for enrolled-course certification ends */
+.think-tab-btn-rounded .nav-item{
+  margin-bottom: -1px;
+  margin-right: -1px;
+}
+.think-tab-btn-rounded .nav-item:first-child .nav-link.active {
+  border-radius: 8px 0px 0px 8px !important;
+}
+
+.think-tab-btn-rounded .nav-item:last-child .nav-link.active {
+  border-radius: 0px 8px 8px 0px !important;
+}
+.think-tab-btn-rounded .nav-item .nav-link:hover {
+  border-color: transparent !important;
+  color: var(--color-secondary);
+}
+.think-tab-btn-rounded .nav-item:first-child .nav-link.active:hover, 
+.think-tab-btn-rounded .nav-item:last-child .nav-link.active:hover {
+  color: var(--color-white);
+}
+.think-bg {background: var(--color-grey-bg);}
+.think-br {border-radius:10px 10px 0px 0px;}

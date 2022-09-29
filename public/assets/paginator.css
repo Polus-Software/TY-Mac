@@ -1,0 +1,26 @@
+.page-item.active .page-link{
+    z-index: 3;
+    color: #fff;
+    background-color:#F5BC29;
+    
+}
+.page-link {
+    position: relative;
+    display: block;
+    color: #2C3443;
+    text-decoration: none;
+    background-color: #fff;
+}
+.page-link:hover{
+    color:#2C3443;
+}
+.page-item.active .page-link {
+    border-color:#F5BC29 ;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    text-decoration: none;
+    background-color: #F5BC29;
+    border-color: #F5BC29;
+}
