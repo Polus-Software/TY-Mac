@@ -69,7 +69,7 @@ class CourseController extends Controller
         }
 
         $courseDetailsObj = collect($courseDetails);
-        $courseDatas = $this->paginate($courseDetailsObj);
+        $courseDatas = $this->paginate($courseDetailsObj, 10);
         $courseDatas->withPath('');
 
         return view('Course.manage_courses', [

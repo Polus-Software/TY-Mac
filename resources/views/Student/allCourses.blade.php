@@ -301,7 +301,8 @@
         }
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const search = urlParams.get('search');
+        let search = urlParams.get('search');
+        if(!search){ search = '';}
         let path = "{{ route('filter-course')}}?categories=" + categoryFilters + "&levels=" + levelFilters + "&ratings=" + ratingFilter + "&duration=" + durationFilter + "&instructors=" + instructorFilter + "&search=" + search;
         fetch(path, {
           method: 'POST',
@@ -322,8 +323,9 @@
       let filterValue = this.value;
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      const search = urlParams.get('search');
-      let path = "{{ route('course-drop-down')}}?filterValue=" + filterValue + "&search=" + search;
+      let search = urlParams.get('search');
+        if(!search){ search = '';}      
+        let path = "{{ route('course-drop-down')}}?filterValue=" + filterValue + "&search=" + search;
         fetch(path, {
           method: 'POST',
           headers: {
