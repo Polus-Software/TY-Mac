@@ -35,7 +35,6 @@
               </tr>
             </thead>
             <tbody id="course_tbody">
-            {{$courseDatas}}
               @php ($slno = 0)
               @if(!empty($courseDatas))
               @foreach ($courseDatas as $courseData)
