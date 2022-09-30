@@ -41,6 +41,7 @@ class CourseController extends Controller
                 ->where('role_id', '=', $userType)
                 ->get();
         $courseDetails = [];
+        
         $courseCategories = CourseCategory::all();
         $courses = Course::all();
         foreach ($courses as $course) {
